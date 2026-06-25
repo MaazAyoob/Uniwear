@@ -7,9 +7,11 @@
 // Always call API helpers for writes/reads that need persistence.
 // ==========================================
 
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5000/api'
-  : '/api'; // Relative path works when served from same origin on Render/Hostinger
+const API_BASE =
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000/api'
+    : 'https://uniwear-api.onrender.com/api';
 
 // ─── Token Management ────────────────────────────────────────────────────────
 
