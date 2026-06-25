@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Consultation Request | UNIWEAR</title>
+  <meta name="description" content="Get in touch with UNIWEAR. Request uniform design consultation, fabric sampling sessions, or support services at our Jayanagar Bengaluru headquarters.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://uniwear.co/contact.html">
+  <meta property="og:title" content="Contact & Consultation Request | UNIWEAR">
+  <meta property="og:description" content="Get in touch with UNIWEAR. Request uniform design consultation, fabric sampling sessions, or support services at our Jayanagar Bengaluru headquarters.">
+  <meta property="og:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://uniwear.co/contact.html">
+  <meta property="twitter:title" content="Contact & Consultation Request | UNIWEAR">
+  <meta property="twitter:description" content="Get in touch with UNIWEAR. Request uniform design consultation, fabric sampling sessions, or support services at our Jayanagar Bengaluru headquarters.">
+  <meta property="twitter:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+
+  <!-- Canonical Link -->
+  <link rel="canonical" href="https://uniwear.co/contact.html">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#B91C1C',
+            primaryHover: '#991B1B',
+            darkBg: '#111827',
+            lightBg: '#FFFFFF',
+            lightCard: '#F9FAFB',
+            mutedText: '#4B5563',
+            charcoal: '#111827',
+            lightBorder: 'rgba(0, 0, 0, 0.08)'
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+  
+  <style>
+    /* Premium Typography & Hierarchy System */
+    h1, h2, .font-display {
+      font-family: 'Clash Display', sans-serif !important;
+    }
+    h3, h4, h5, h6, nav a, .mobile-nav-link, button, .btn, .font-heading {
+      font-family: 'Outfit', sans-serif !important;
+    }
+    body, input, textarea, select, label, p, span, li, .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hierarchy, Line Height, and Letter Spacing Adjustments */
+    h1 {
+      font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important; /* Responsive fluid text scaling */
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.02em !important;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h3, .card-title {
+      line-height: 1.3 !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Section & Container Breathing Room */
+    section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+      padding-top: clamp(4rem, 8vw, 8rem);
+      padding-bottom: clamp(4rem, 8vw, 8rem);
+    }
+    
+    /* Navigation & CTA Optimization */
+    nav a, .mobile-nav-link {
+      letter-spacing: -0.01em;
+    }
+    button, .btn {
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    input, textarea, select {
+      font-family: 'Inter', sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F9FAFB;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E5E7EB;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B91C1C;
+    }
+
+
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    /* Mobile optimizations */
+    @media (max-width: 640px) {
+      .marquee-content { gap: 32px !important; }
+      h1, h2 { overflow-wrap: break-word; word-break: break-word; }
+      .grid-cols-2 .border-r { border-right: none; }
+    }
+    * { -webkit-tap-highlight-color: transparent; }
+    img { max-width: 100%; }
+  </style>
+</head>
+<body class="bg-lightBg text-charcoal font-body overflow-x-hidden antialiased">
+
+
+
+  <!-- Sweep Curtain -->
+  <div id="transition-overlay" class="fixed inset-0 bg-primary z-[9999] transform translate-y-full flex items-center justify-center pointer-events-none">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-t-4 border-r-4 border-white rounded-full animate-spin"></div>
+      <div class="mt-4 font-heading text-xl uppercase tracking-widest text-white">UNIWEAR</div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5 z-50">
+        <img src="logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
+      </a>
+      
+      <nav class="hidden lg:flex items-center lg:gap-3 xl:gap-6 glass-card py-2 lg:px-4 xl:px-6 rounded-full border border-lightBorder">
+        <a href="index.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Home</a>
+        <a href="about.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">About Us</a>
+        <a href="uniforms.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Uniforms</a>
+        <a href="gifts.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Gifting</a>
+        <a href="catalog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Catalog</a>
+        <a href="clientele.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Clientele</a>
+        <a href="blog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Blog</a>
+        <a href="contact.html" class="nav-link lg:text-xs xl:text-sm font-semibold hover:text-primary transition-colors text-charcoal">Contact</a>
+      </nav>
+
+      <div class="hidden lg:flex items-center lg:gap-3 xl:gap-4">
+        <a href="login.html" class="lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Client Portal</a>
+        <button class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+          <i class="ri-moon-line text-lg"></i>
+        </button>
+        <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white lg:px-4 xl:px-6 py-2 lg:py-2 xl:py-2.5 rounded-full lg:text-xs xl:text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-primary/20">
+          Request Consultation
+        </a>
+      </div>
+
+      <!-- Mobile CTAs / Toggle -->
+      <div class="flex items-center gap-3 lg:hidden z-50">
+        <button class="theme-toggle-btn w-9 h-9 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+          <i class="ri-moon-line text-base"></i>
+        </button>
+        <button id="mobile-menu-btn" class="text-charcoal focus:outline-none">
+          <i class="ri-menu-line text-2xl" id="menu-icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div id="mobile-nav" class="fixed inset-0 bg-white/95 backdrop-blur-lg flex flex-col justify-start items-center gap-6 pt-28 pb-12 z-40 transform translate-x-full transition-transform duration-500 ease-in-out lg:hidden overflow-y-auto">
+      <a href="index.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Home</a>
+      <a href="about.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">About Us</a>
+      <a href="uniforms.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Uniforms</a>
+      <a href="gifts.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Gifting</a>
+      <a href="catalog.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Catalog</a>
+      <a href="clientele.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Clientele</a>
+      <a href="blog.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Blog</a>
+      <a href="contact.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Contact</a>
+      <div class="h-[1px] w-24 bg-charcoal/10 my-2 shrink-0"></div>
+      <a href="login.html" class="mobile-nav-link font-heading text-lg font-medium text-mutedText hover:text-primary transition-colors">Client Portal</a>
+      <button class="theme-toggle-btn w-12 h-12 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors my-2" title="Toggle Theme">
+        <i class="ri-moon-line text-xl"></i>
+      </button>
+      <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white px-8 py-3 rounded-full text-base font-semibold transition-all duration-300 shrink-0">
+        Request Consultation
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main>
+    <!-- Page Hero Banner -->
+    <section class="relative h-[75vh] min-h-[520px] flex items-end overflow-hidden">
+      <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80" alt="UNIWEAR Consultation Office" class="w-full h-full object-cover scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
+      </div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-10 sm:pb-14 z-10">
+        <span class="text-xs uppercase tracking-widest text-primary font-bold">GET IN TOUCH</span>
+        <h1 class="font-heading text-3xl sm:text-5xl md:text-7xl font-bold mt-2 text-charcoal leading-tight">Commence<br>a Project</h1>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+      <!-- Split Layout -->
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-16 sm:mb-24">
+        <!-- Contact details (Left) -->
+        <div class="lg:col-span-5 space-y-12">
+          <div>
+            <h3 class="font-heading text-2xl font-bold mb-6 text-charcoal">Contact Information</h3>
+            <ul class="space-y-6">
+              <li class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <i class="ri-map-pin-line text-lg"></i>
+                </div>
+                <div>
+                  <h5 class="text-xs uppercase font-bold tracking-widest text-gray-400">Corporate Office</h5>
+                  <p class="text-sm font-semibold mt-1 text-charcoal company-address">No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <i class="ri-phone-line text-lg"></i>
+                </div>
+                <div>
+                  <h5 class="text-xs uppercase font-bold tracking-widest text-gray-400">Phone Support</h5>
+                  <p class="text-sm font-semibold mt-1 text-charcoal flex flex-wrap gap-x-2">
+                    <a href="tel:+919108765831" class="company-phone hover:text-primary transition-colors">+91 91087 65831</a>
+                    <span class="text-gray-300">/</span>
+                    <a href="tel:+919845932201" class="company-phone hover:text-primary transition-colors">+91 98459 32201</a>
+                  </p>
+                </div>
+              </li>
+              <li class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <i class="ri-mail-line text-lg"></i>
+                </div>
+                <div>
+                  <h5 class="text-xs uppercase font-bold tracking-widest text-gray-400">Email Address</h5>
+                  <p class="text-sm font-semibold mt-1 text-charcoal flex flex-wrap gap-x-2">
+                    <a href="mailto:sales@uniwear.co" class="company-sales-email hover:text-primary transition-colors">sales@uniwear.co</a>
+                    <span class="text-gray-300">/</span>
+                    <a href="mailto:support@uniwear.co" class="company-support-email hover:text-primary transition-colors">support@uniwear.co</a>
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Operations center showcase card -->
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder">
+            <h4 class="font-heading text-lg font-bold mb-3 text-charcoal">Our Operations Center</h4>
+            <p class="text-xs text-mutedText leading-relaxed mb-4">Located in Bengaluru's core garment zone, Jayanagar and JP Nagar facilities feature 150+ embroidery systems and 3D prototyping scanners.</p>
+            <div class="h-44 rounded-xl overflow-hidden relative border border-lightBorder">
+              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=500&q=80" alt="Corporate Office Tower" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-charcoal/60 flex items-center justify-center p-4">
+                <div class="text-center text-white">
+                  <i class="ri-building-2-line text-3xl text-primary mb-1"></i>
+                  <p class="text-xs font-bold uppercase tracking-wider">UNIWEAR MANUFACTURING HQ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lead Form (Right) -->
+        <div class="lg:col-span-7">
+          <div class="bg-lightCard p-5 sm:p-8 md:p-10 rounded-3xl border border-lightBorder relative shadow-sm">
+            <h3 class="font-heading text-2xl sm:text-3xl font-bold mb-2 text-charcoal">Request Consultation</h3>
+            <p class="text-sm text-mutedText mb-8">Fill out the details below to initialize sampling parameters with our styling consultants.</p>
+            
+            <form id="client-lead-form" onsubmit="submitLeadForm(event)" class="space-y-6">
+              <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Full Name *</label>
+                  <input type="text" id="lead-name" required placeholder="John Doe" class="w-full bg-white border border-lightBorder rounded-lg py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+                </div>
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Corporate Email *</label>
+                  <input type="email" id="lead-email" required placeholder="john@toyota.in" class="w-full bg-white border border-lightBorder rounded-lg py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+                </div>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Phone Number *</label>
+                  <input type="tel" id="lead-phone" required placeholder="+91 98765 43210" class="w-full bg-white border border-lightBorder rounded-lg py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+                </div>
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Company Name *</label>
+                  <input type="text" id="lead-company" required placeholder="Toyota India" class="w-full bg-white border border-lightBorder rounded-lg py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+                </div>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Apparel Category *</label>
+                  <select id="lead-category" required class="w-full bg-white border border-lightBorder rounded-lg py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+                    <option value="Industrial Uniforms">Industrial Uniforms</option>
+                    <option value="Corporate Uniforms">Corporate Uniforms</option>
+                    <option value="Hospitality Uniforms">Hospitality Uniforms</option>
+                    <option value="Institutional Uniforms">Institutional Uniforms</option>
+                    <option value="Corporate Gifting">Corporate Gifting</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Estimated Volume (Units)</label>
+                  <input type="number" id="lead-volume" placeholder="e.g. 500" class="w-full bg-white border border-lightBorder rounded-lg py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Requirement Details</label>
+                <textarea id="lead-details" rows="4" placeholder="Mention sizing standards, safety parameters or fabric requirements..." class="w-full bg-white border border-lightBorder rounded-lg py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors"></textarea>
+              </div>
+
+              <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-4 rounded-xl font-bold uppercase tracking-wider transition-colors shadow-lg shadow-primary/20">
+                Submit Consultation Request
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Accordions -->
+      <div class="max-w-4xl mx-auto py-10 sm:py-16 border-t border-lightBorder px-0 sm:px-0">
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center text-charcoal">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          
+          <div class="bg-lightCard rounded-2xl border border-lightBorder overflow-hidden">
+            <button onclick="toggleFaq(1)" class="w-full flex items-center justify-between p-6 focus:outline-none text-left">
+              <span class="font-heading text-lg font-semibold text-charcoal">What is your Minimum Order Quantity (MOQ)?</span>
+              <i class="ri-add-line text-xl text-primary transition-transform duration-300" id="faq-icon-1"></i>
+            </button>
+            <div class="px-6 pb-6 text-sm text-mutedText hidden bg-white" id="faq-ans-1">
+              Our standard MOQ is 100 units per design. However, for specialized industrial garments or custom bespoke fabric orders, our MOQ varies. Get in touch with our sales office for tailored pricing tiers.
+            </div>
+          </div>
+
+          <div class="bg-lightCard rounded-2xl border border-lightBorder overflow-hidden">
+            <button onclick="toggleFaq(2)" class="w-full flex items-center justify-between p-6 focus:outline-none text-left">
+              <span class="font-heading text-lg font-semibold text-charcoal">Do you provide physical product samples?</span>
+              <i class="ri-add-line text-xl text-primary transition-transform duration-300" id="faq-icon-2"></i>
+            </button>
+            <div class="px-6 pb-6 text-sm text-mutedText hidden bg-white" id="faq-ans-2">
+              Yes. Once custom specifications and quotation sheets are aligned, we craft a physical sample for fittings and pattern evaluations. Sampling takes approximately 7-10 working days from approval of design blueprints.
+            </div>
+          </div>
+
+          <div class="bg-lightCard rounded-2xl border border-lightBorder overflow-hidden">
+            <button onclick="toggleFaq(3)" class="w-full flex items-center justify-between p-6 focus:outline-none text-left">
+              <span class="font-heading text-lg font-semibold text-charcoal">What fabric technologies do you offer?</span>
+              <i class="ri-add-line text-xl text-primary transition-transform duration-300" id="faq-icon-3"></i>
+            </button>
+            <div class="px-6 pb-6 text-sm text-mutedText hidden bg-white" id="faq-ans-3">
+              We supply an array of functional fabric finishes including Flame Retardant (FR), Oil & Water Repellent, Anti-Static carbon mesh, WRINKLE-FREE cotton linings, high-visibility reflex patterns, and antimicrobial scrubs.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="global-footer" class="bg-darkBg border-t border-lightBorder py-16 relative z-30 text-white mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 mb-12">
+      <div class="lg:col-span-2 space-y-6">
+        <a href="index.html">
+          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
+        </a>
+        <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
+          Headquartered in Bengaluru. Crafting premium, certified uniforms for multi-scale industrial setups and corporate giants since 1992.
+        </p>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-linkedin-box-line"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-instagram-line"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-facebook-box-line"></i></a>
+        </div>
+      </div>
+      <div>
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Collections</h5>
+        <ul class="space-y-3 text-sm">
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Industrial Wear</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Executive Blouse & Suit</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Fine Dining Kitchen Wear</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">School & University Sets</a></li>
+          <li><a href="gifts.html" class="text-gray-400 hover:text-primary transition-colors">Corporate Gifting Options</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Corporate</h5>
+        <ul class="space-y-3 text-sm">
+          <li><a href="about.html" class="text-gray-400 hover:text-primary transition-colors">Our Story</a></li>
+          <li><a href="clientele.html" class="text-gray-400 hover:text-primary transition-colors">Enterprise Clientele</a></li>
+          <li><a href="catalog.html" class="text-gray-400 hover:text-primary transition-colors">Locked Catalog Library</a></li>
+          <li><a href="blog.html" class="text-gray-400 hover:text-primary transition-colors">Fabric Research Hub</a></li>
+          <li><a href="contact.html" class="text-gray-400 hover:text-primary transition-colors">Consultation Office</a></li>
+          <li><a href="login.html" class="text-gray-400 hover:text-primary transition-colors">Business Login</a></li>
+        </ul>
+      </div>
+      <div class="space-y-6">
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Subscribe</h5>
+        <p class="text-xs text-gray-400 leading-relaxed">Join our mailing registry for periodic updates on fabric technologies.</p>
+        <form onsubmit="event.preventDefault(); document.getElementById('newsletter-success').classList.remove('hidden');" class="relative">
+          <input type="email" required placeholder="Enter work email..." class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-xs text-white focus:outline-none focus:border-primary">
+          <button type="submit" class="absolute right-1 top-1 w-9 h-9 bg-primary hover:bg-primaryHover text-white rounded-full flex items-center justify-center transition-colors">
+            <i class="ri-arrow-right-line"></i>
+          </button>
+        </form>
+        <span id="newsletter-success" class="text-xs text-green-500 hidden font-bold">Successfully joined the registry.</span>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-gray-500">Copyright © 2026 <span class="company-name">UNIWEAR</span>. Premium Uniform Manufacturing partner, Bengaluru.</p>
+    </div>
+  </footer>
+
+  <!-- Premium Success Modal -->
+  <div id="success-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-charcoal/60 backdrop-blur-md opacity-0 transition-opacity duration-300">
+    <div id="success-modal-card" class="bg-white rounded-3xl p-8 max-w-md w-full border border-lightBorder shadow-2xl transform scale-90 transition-all duration-300">
+      <div class="flex flex-col items-center text-center">
+        <!-- Animated Icon Container -->
+        <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center text-primary mb-6 animate-pulse">
+          <i class="ri-mail-send-line text-3xl"></i>
+        </div>
+        
+        <h3 class="font-heading text-2xl font-bold text-charcoal mb-3">Request Successfully Routed</h3>
+        
+        <p class="text-sm text-mutedText leading-relaxed mb-6">
+          Consultation request successfully routed to <span id="modal-routed-email" class="font-semibold text-primary">sales@uniwear.co</span>!
+        </p>
+        
+        <div class="w-full bg-lightCard rounded-xl p-4 mb-6 border border-lightBorder text-left">
+          <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Lead Database Record</div>
+          <div class="text-xs text-charcoal space-y-1.5">
+            <p><strong>Name:</strong> <span id="modal-lead-name"></span></p>
+            <p><strong>Company:</strong> <span id="modal-lead-company"></span></p>
+            <p><strong>Category:</strong> <span id="modal-lead-category"></span></p>
+            <p><strong>Volume:</strong> <span id="modal-lead-volume"></span> units</p>
+          </div>
+        </div>
+        
+        <p class="text-xs text-gray-400 mb-6">
+          This submission is saved in the database. You can inspect it in the Admin Control Room.
+        </p>
+        
+        <button onclick="closeSuccessModal()" class="w-full bg-charcoal hover:bg-charcoal/90 text-white py-3.5 rounded-xl font-bold uppercase tracking-wider transition-colors">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="shared.js"></script>
+  
+  <script>
+    // Form submission writes lead directly into backend database
+    async function submitLeadForm(event) {
+      event.preventDefault();
+      const btn = event.target.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+      
+      const newLead = {
+        name: document.getElementById('lead-name').value,
+        company: document.getElementById('lead-company').value,
+        email: document.getElementById('lead-email').value,
+        phone: document.getElementById('lead-phone').value,
+        category: document.getElementById('lead-category').value,
+        volume: parseInt(document.getElementById('lead-volume').value) || 0,
+        details: document.getElementById('lead-details').value,
+        stage: "New Lead",
+        source: "Contact Form"
+      };
+
+      try {
+        // Create lead in DB (which automatically triggers notification and email on backend)
+        await window.api.createLead(newLead);
+
+        // Fetch company settings to show target email in the modal
+        let salesEmail = "connect@uniwear.co";
+        try {
+          const settingsRes = await window.api.getSettings();
+          if (settingsRes && settingsRes.data) {
+            salesEmail = settingsRes.data.salesEmail || salesEmail;
+          }
+        } catch (settingsErr) {
+          console.warn("Failed to fetch settings from API, using default email", settingsErr);
+        }
+
+        // Open success modal
+        openSuccessModal(newLead, salesEmail);
+        
+        // Reset Form
+        document.getElementById('client-lead-form').reset();
+      } catch (err) {
+        alert(err.message || 'Failed to submit form. Please check your connection and try again.');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function openSuccessModal(lead, targetEmail) {
+      const modal = document.getElementById('success-modal');
+      const card = document.getElementById('success-modal-card');
+      
+      // Fill text
+      document.getElementById('modal-routed-email').innerText = targetEmail;
+      document.getElementById('modal-lead-name').innerText = lead.name;
+      document.getElementById('modal-lead-company').innerText = lead.company;
+      document.getElementById('modal-lead-category').innerText = lead.category;
+      document.getElementById('modal-lead-volume').innerText = lead.volume || '0';
+      
+      // Display and animate
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        card.classList.remove('scale-90');
+      }, 50);
+    }
+
+    function closeSuccessModal() {
+      const modal = document.getElementById('success-modal');
+      const card = document.getElementById('success-modal-card');
+      
+      modal.classList.add('opacity-0');
+      card.classList.add('scale-90');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Portal | UNIWEAR</title>
+  <meta name="description" content="Secure customer dashboard for UNIWEAR clients to track order statuses, request quotations, submit branding samples, and manage support tickets.">
+  
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#B91C1C',
+            primaryHover: '#991B1B',
+            darkBg: '#111827',
+            lightBg: '#FFFFFF',
+            lightCard: '#F9FAFB',
+            mutedText: '#4B5563',
+            charcoal: '#111827',
+            lightBorder: 'rgba(0, 0, 0, 0.08)'
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <style>
+    /* Premium Typography & Hierarchy System */
+    h1, h2, .font-display {
+      font-family: 'Clash Display', sans-serif !important;
+    }
+    h3, h4, h5, h6, nav a, .mobile-nav-link, button, .btn, .font-heading {
+      font-family: 'Outfit', sans-serif !important;
+    }
+    body, input, textarea, select, label, p, span, li, .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hierarchy, Line Height, and Letter Spacing Adjustments */
+    h1 {
+      font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important; /* Responsive fluid text scaling */
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.02em !important;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h3, .card-title {
+      line-height: 1.3 !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Section & Container Breathing Room */
+    section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+      padding-top: clamp(4rem, 8vw, 8rem);
+      padding-bottom: clamp(4rem, 8vw, 8rem);
+    }
+    
+    /* Navigation & CTA Optimization */
+    nav a, .mobile-nav-link {
+      letter-spacing: -0.01em;
+    }
+    button, .btn {
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    input, textarea, select {
+      font-family: 'Inter', sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+
+    /* Dashboard Metrics & Numbers Overrides */
+    .metric-value, .stat-value, [id^="stat-"], .metric-number, [id^="dash-widget-"] {
+      font-family: 'Outfit', sans-serif !important;
+      font-size: clamp(2rem, 3.5vw, 3.25rem) !important; /* Larger display */
+      font-weight: 800 !important;
+      letter-spacing: -0.03em !important;
+      line-height: 1.1 !important;
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+    .metric-label, .stat-label {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.75rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.05em !important;
+      text-transform: uppercase;
+      color: #4B5563 !important; /* Slate 600 */
+    }
+  </style>
+
+</head>
+<body class="bg-lightCard text-charcoal font-body overflow-x-hidden antialiased min-h-screen flex">
+
+
+
+  <!-- Sweep Overlay -->
+  <div id="transition-overlay" class="fixed inset-0 bg-primary z-[9999] transform translate-y-full flex items-center justify-center pointer-events-none">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-t-4 border-r-4 border-white rounded-full animate-spin"></div>
+      <div class="mt-4 font-heading text-xl uppercase tracking-widest text-white">UNIWEAR</div>
+    </div>
+  </div>
+
+  <!-- Sidebar Overlay for Mobile -->
+  <div id="sidebar-overlay" onclick="toggleSidebar(false)" class="fixed inset-0 bg-charcoal/30 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0"></div>
+
+  <!-- PORTAL SIDEBAR -->
+  <aside id="portal-sidebar" class="w-64 bg-white border-r border-lightBorder flex flex-col justify-between shrink-0 fixed inset-y-0 left-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:flex">
+    <div>
+      <div class="p-6 border-b border-lightBorder flex items-center justify-between">
+        <a href="index.html" class="flex items-center">
+          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-7 w-auto object-contain">
+        </a>
+        <span class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-bold uppercase">Client</span>
+      </div>
+      
+      <nav class="p-4 space-y-1">
+        <button onclick="setPortalTab('cust-dash')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors bg-primary text-white" id="cust-tab-cust-dash">
+          <i class="ri-dashboard-line"></i> Dashboard
+        </button>
+        <button onclick="setPortalTab('cust-quotes')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-quotes">
+          <i class="ri-file-list-3-line"></i> Quotations
+        </button>
+        <button onclick="setPortalTab('cust-orders')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-orders">
+          <i class="ri-truck-line"></i> Orders & Samples
+        </button>
+        <button onclick="setPortalTab('cust-support')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-support">
+          <i class="ri-customer-service-line"></i> Support Tickets
+        </button>
+        <button onclick="setPortalTab('cust-profile')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-profile">
+          <i class="ri-settings-4-line"></i> Profile Settings
+        </button>
+      </nav>
+    </div>
+    
+    <div class="p-4 border-t border-lightBorder space-y-2">
+      <div class="flex items-center gap-3 px-4 py-2">
+        <div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold" id="sidebar-avatar-char">C</div>
+        <div>
+          <p class="text-xs font-bold text-charcoal truncate max-w-[140px]" id="sidebar-rep-name">Sarah Andrews</p>
+          <p class="text-[10px] text-mutedText font-mono truncate max-w-[140px]" id="sidebar-company-name">Taj Resorts</p>
+        </div>
+      </div>
+      <button onclick="handleLogout()" class="w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
+        <i class="ri-logout-box-r-line"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN WORKSPACE -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <header class="bg-white border-b border-lightBorder py-4 px-8 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar(true)" class="md:hidden text-charcoal focus:outline-none hover:text-primary transition-colors">
+          <i class="ri-menu-2-line text-2xl"></i>
+        </button>
+        <h2 class="font-heading text-lg md:text-xl font-extrabold text-charcoal" id="portal-title">Client Dashboard</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <!-- Theme Switcher -->
+        <button class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-mutedText hover:text-charcoal focus:outline-none" title="Toggle Theme">
+          <i class="ri-moon-line text-lg"></i>
+        </button>
+        <!-- Notification bell trigger -->
+        <button onclick="togglePortalNotifications()" class="relative w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-mutedText hover:text-charcoal focus:outline-none">
+          <i class="ri-notification-3-line"></i>
+          <span class="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-primary rounded-full hidden" id="cust-noti-dot"></span>
+        </button>
+        <button onclick="handleLogout()" class="md:hidden text-red-500 text-sm font-semibold px-3 py-1.5 rounded hover:bg-red-50">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- Notifications popover -->
+    <div id="cust-notifications-popover" class="fixed right-8 top-16 w-80 bg-white border border-lightBorder rounded-2xl shadow-lg z-50 p-4 hidden">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b border-lightBorder">
+        <span class="font-bold text-xs uppercase tracking-wider text-mutedText">Notification Center</span>
+        <button onclick="clearPortalNotifications()" class="text-[10px] text-primary hover:underline">Clear all</button>
+      </div>
+      <div class="space-y-3 max-h-60 overflow-y-auto" id="cust-notifications-list">
+        <!-- Dynamically injected notifications -->
+      </div>
+    </div>
+
+    <!-- Active Views container -->
+    <div class="p-4 sm:p-8 flex-1">
+      
+      <!-- TAB 1: DASHBOARD -->
+      <div id="cust-dash" class="cust-portal-view space-y-8">
+        <!-- Banner Info -->
+        <div class="p-8 bg-gradient-to-r from-red-50 to-transparent rounded-3xl border border-primary/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div>
+            <h3 class="font-heading text-2xl font-bold text-charcoal" id="dash-welcome-text">Welcome, Taj Resorts Group</h3>
+            <p class="text-sm text-mutedText mt-1">Manage active stitching pipelines, approve pre-production samples, and verify quotations.</p>
+          </div>
+          <button onclick="setPortalTab('cust-quotes')" class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+            Request Custom Quote
+          </button>
+        </div>
+
+        <!-- Metric widgets -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div class="bg-white p-3.5 sm:p-5 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Pending Quotes</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="dash-widget-pending-quotes">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Awaiting review</p>
+          </div>
+          <div class="bg-white p-3.5 sm:p-5 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Approved Quotes</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-green-600" id="dash-widget-approved-quotes">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Ready to order</p>
+          </div>
+          <div class="bg-white p-3.5 sm:p-5 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Active Orders</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="dash-widget-active-orders">0</h4>
+            <p class="text-[9px] text-green-600 mt-1 flex items-center gap-0.5 font-semibold"><i class="ri-checkbox-circle-line"></i> In stitching</p>
+          </div>
+          <div class="bg-white p-3.5 sm:p-5 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Sample Requests</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="dash-widget-samples">0</h4>
+            <p class="text-[9px] text-primary mt-1 flex items-center gap-0.5 font-semibold"><i class="ri-flask-line"></i> Prototypes</p>
+          </div>
+          <div class="bg-white p-3.5 sm:p-5 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Notifications</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="dash-widget-alerts">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Recent alerts</p>
+          </div>
+          <div class="bg-white p-3.5 sm:p-5 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Support Tickets</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="dash-widget-tickets">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Open queries</p>
+          </div>
+        </div>
+
+        <!-- Dashboard Core Layout -->
+        <div class="grid lg:grid-cols-12 gap-8">
+          <!-- Left Column: Quotation & Progress -->
+          <div class="lg:col-span-8 space-y-8">
+            
+            <!-- Latest Quotation Widget -->
+            <div class="bg-white p-6 rounded-3xl border border-lightBorder shadow-sm hidden" id="dash-latest-quote-box">
+              <div class="flex justify-between items-center mb-6 pb-4 border-b border-lightBorder">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm font-bold"><i class="ri-file-list-3-line"></i></span>
+                  <h4 class="font-heading text-lg font-bold text-charcoal">Latest Quotation Mandate</h4>
+                </div>
+                <span id="dash-quote-status-badge" class="px-3 py-1 rounded-full text-[10px] font-bold uppercase font-mono">Awaiting Review</span>
+              </div>
+              <div class="space-y-4">
+                <div class="grid md:grid-cols-3 gap-6 text-xs">
+                  <div>
+                    <span class="text-gray-400 block uppercase tracking-wider font-semibold">Product Class</span>
+                    <span class="font-bold text-charcoal mt-1 block" id="dash-quote-product">Corporate Blazer</span>
+                  </div>
+                  <div>
+                    <span class="text-gray-400 block uppercase tracking-wider font-semibold">Volume Requested</span>
+                    <span class="font-bold text-charcoal mt-1 block" id="dash-quote-volume">1,200 Sets</span>
+                  </div>
+                  <div>
+                    <span class="text-gray-400 block uppercase tracking-wider font-semibold">Quoted Estimate</span>
+                    <span class="font-extrabold text-primary mt-1 block text-base font-heading" id="dash-quote-value">₹21,60,000</span>
+                  </div>
+                </div>
+                <div class="p-4 bg-lightCard border border-lightBorder rounded-xl text-xs text-mutedText">
+                  <span class="font-bold text-charcoal block mb-1">Specifications & Material Selection:</span>
+                  <p id="dash-quote-specs">Bespoke wool blazer, custom branding.</p>
+                </div>
+                <div class="flex justify-between items-center border-t border-lightBorder pt-4 mt-2">
+                  <span class="text-[10px] text-gray-400 font-mono" id="dash-quote-id">Quote ID: UW-Quote-721</span>
+                  <div class="flex gap-2" id="dash-quote-actions">
+                    <!-- Dynamic Approve/Decline actions -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stepper Tracker for most recent order -->
+            <div class="bg-white p-6 rounded-3xl border border-lightBorder shadow-sm hidden" id="dash-stepper-box">
+              <div class="flex justify-between items-center mb-6 pb-4 border-b border-lightBorder">
+                <h4 class="font-heading text-lg font-bold text-charcoal">Live Stitching Progress</h4>
+                <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase" id="dash-stepper-ord-id">Order #UW-ORD-831</span>
+              </div>
+              <div class="grid md:grid-cols-3 gap-6 mb-8 text-sm">
+                <div>
+                  <span class="text-xs text-mutedText block uppercase font-semibold">Product Line</span>
+                  <span class="font-semibold text-charcoal mt-1 block" id="dash-stepper-prod-name">Executive Wool Blazer</span>
+                </div>
+                <div>
+                  <span class="text-xs text-mutedText block uppercase font-semibold">Volume Ordered</span>
+                  <span class="font-semibold text-charcoal mt-1 block" id="dash-stepper-qty">150 Sets</span>
+                </div>
+                <div>
+                  <span class="text-xs text-mutedText block uppercase font-semibold">Expected Handover</span>
+                  <span class="font-semibold text-charcoal mt-1 block" id="dash-stepper-date">July 20, 2026</span>
+                </div>
+              </div>
+              
+              <h5 class="text-xs uppercase tracking-widest text-mutedText font-bold mb-4">Production Timeline Steps</h5>
+              <div class="relative py-6">
+                <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-200 -translate-y-1/2 z-0"></div>
+                <div class="absolute top-1/2 left-0 h-1 bg-primary -translate-y-1/2 z-0 transition-all duration-500" id="dash-stepper-progress-line" style="width: 0%"></div>
+                
+                <div class="relative z-10 flex justify-between" id="dash-stepper-steps-container">
+                  <!-- Stepper circles inject here -->
+                </div>
+              </div>
+              <div class="p-3 bg-lightCard border border-lightBorder rounded-xl text-xs text-mutedText mt-4 font-mono text-center" id="dash-stepper-text">
+                Status: Initializing order metrics.
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Recent Activity & Tickets Summary -->
+          <div class="lg:col-span-4 space-y-8">
+            
+            <!-- Tickets summary widget -->
+            <div class="bg-white p-6 rounded-3xl border border-lightBorder shadow-sm">
+              <h4 class="font-heading text-base font-bold text-charcoal mb-4 flex items-center justify-between">
+                <span>Support Overview</span>
+                <span class="text-[10px] text-primary hover:underline cursor-pointer font-bold uppercase tracking-wider" onclick="setPortalTab('cust-support')">View All</span>
+              </h4>
+              <div class="space-y-3" id="dash-tickets-summary-list">
+                <!-- Support tickets inject here -->
+              </div>
+            </div>
+
+            <!-- Recent activity widget -->
+            <div class="bg-white p-6 rounded-3xl border border-lightBorder shadow-sm">
+              <h4 class="font-heading text-base font-bold text-charcoal mb-4 flex items-center gap-1.5"><i class="ri-history-line text-primary"></i> Recent Account Activity</h4>
+              <div class="space-y-4 text-xs font-body" id="dash-activity-log">
+                <!-- Injected activity log items -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: QUOTATIONS -->
+      <div id="cust-quotes" class="cust-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Quotations & Price Requests</h3>
+          <button onclick="toggleModal('cust-quote-modal', true)" class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+            Request Custom Quote
+          </button>
+        </div>
+        
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse min-w-[800px]">
+            <thead>
+              <tr class="bg-lightCard border-b border-lightBorder text-xs uppercase text-mutedText tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Quote ID</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product/Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Volume</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Request Date</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Quoted Estimate</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="cust-quotes-table-body">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: ORDERS & SAMPLES -->
+      <div id="cust-orders" class="cust-portal-view hidden space-y-8">
+        <!-- Section 1: Active Orders List -->
+        <div>
+          <h3 class="font-heading text-2xl font-bold text-charcoal mb-6">Active Stitching Contracts</h3>
+          <div class="grid md:grid-cols-2 gap-6" id="cust-orders-list-container">
+            <!-- Active order cards dynamic insertion -->
+          </div>
+        </div>
+
+        <!-- Section 2: Sample Requests Workflow -->
+        <div class="border-t border-lightBorder pt-8">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-heading text-2xl font-bold text-charcoal">Product Samples & Branding Approvals</h3>
+            <button onclick="toggleModal('cust-sample-modal', true)" class="bg-charcoal hover:bg-black text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              Request Sample Prototype
+            </button>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6" id="cust-samples-list-container">
+            <!-- Dynamic sample request list -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: SUPPORT TICKETS -->
+      <div id="cust-support" class="cust-portal-view hidden space-y-8">
+        <div class="grid lg:grid-cols-12 gap-8">
+          <!-- Tickets List (Left) -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-heading text-lg font-bold text-charcoal">Support Tickets</h3>
+              <button onclick="toggleModal('cust-ticket-modal', true)" class="text-xs bg-primary hover:bg-primaryHover text-white px-4 py-2 rounded-full font-bold uppercase transition-all shadow-sm">
+                Open Ticket
+              </button>
+            </div>
+            <div class="space-y-3 overflow-y-auto max-h-[500px]" id="cust-tickets-list-container">
+              <!-- Dynamically injected tickets list -->
+            </div>
+          </div>
+
+          <!-- Active Ticket Chat Thread (Right) -->
+          <div class="lg:col-span-7 bg-white rounded-3xl border border-lightBorder flex flex-col justify-between shadow-sm overflow-hidden h-[450px] sm:h-[560px]" id="ticket-chat-empty">
+            <div class="flex-1 flex flex-col items-center justify-center p-8 text-center text-mutedText">
+              <i class="ri-customer-service-2-line text-5xl text-gray-300 mb-4 animate-bounce"></i>
+              <h4 class="font-heading text-lg font-bold text-charcoal">Support Communications Hub</h4>
+              <p class="text-xs max-w-sm mt-2">Select an open ticket from the panel list to view responses, attach sizing files, or message the factory manager.</p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 bg-white rounded-3xl border border-lightBorder flex flex-col justify-between shadow-sm overflow-hidden h-[450px] sm:h-[560px] hidden" id="ticket-chat-active">
+            <div class="p-4 bg-lightCard border-b border-lightBorder flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold font-heading">SR</div>
+                <div>
+                  <h4 class="font-heading text-sm font-bold text-charcoal" id="chat-header-subject">Sizing variance in sample blazers</h4>
+                  <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 text-[9px] font-bold uppercase" id="chat-header-status">Open</span>
+                </div>
+              </div>
+              <button onclick="closeCurrentTicket()" class="text-xs font-bold text-red-500 hover:underline">Close Ticket</button>
+            </div>
+
+            <!-- Messages lists -->
+            <div class="flex-1 p-6 space-y-4 overflow-y-auto text-xs" id="chat-messages-scroll-area">
+              <!-- Messages injected here -->
+            </div>
+
+            <!-- Message input -->
+            <form onsubmit="sendChatMessage(event)" class="p-4 border-t border-lightBorder flex gap-2 bg-lightCard">
+              <input type="hidden" id="chat-active-ticket-id">
+              <input type="text" id="chat-message-input" required placeholder="Type reply message..." class="flex-1 bg-white border border-lightBorder rounded-xl px-4 py-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <button type="submit" class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white hover:bg-primaryHover transition-colors">
+                <i class="ri-send-plane-fill"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: PROFILE SETTINGS -->
+      <div id="cust-profile" class="cust-portal-view hidden space-y-8">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Profile & Company Parameters</h3>
+        
+        <div class="bg-white p-8 rounded-3xl border border-lightBorder shadow-sm max-w-3xl">
+          <form onsubmit="submitProfileUpdate(event)" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Corporate Representative Name</label>
+                <input type="text" id="prof-rep-name" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Company Name (Database Body)</label>
+                <input type="text" id="prof-comp-name" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Registered Email Address</label>
+                <input type="email" id="prof-email" disabled class="w-full bg-gray-100 border border-lightBorder rounded-xl py-3 px-4 text-xs text-gray-500 cursor-not-allowed">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Contact Telephone</label>
+                <input type="text" id="prof-phone" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Corporate Delivery Address (SLA Drop-off)</label>
+              <textarea id="prof-address" rows="3" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+            </div>
+
+            <div class="flex justify-end pt-4">
+              <button type="submit" class="bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest transition-colors shadow-lg shadow-primary/20">
+                Save Profile Changes
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Change Password Section -->
+        <div class="bg-white p-8 rounded-3xl border border-lightBorder shadow-sm max-w-3xl mt-8">
+          <h4 class="font-heading text-lg font-bold text-charcoal mb-4">Change Security Password</h4>
+          <form onsubmit="submitChangePassword(event)" class="space-y-4">
+            <div class="grid md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Current Password</label>
+                <input type="password" id="change-pass-current" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">New Password</label>
+                <input type="password" id="change-pass-new" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Confirm New Password</label>
+                <input type="password" id="change-pass-confirm" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div class="flex justify-end pt-2">
+              <button type="submit" class="bg-charcoal hover:bg-black text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-colors shadow-md">
+                Update Password
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <!-- 1. Request Custom Quote Modal -->
+  <div id="cust-quote-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('cust-quote-modal', false)"></div>
+    <div class="relative w-full max-w-lg max-h-[calc(100vh-3rem)] overflow-y-auto bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 font-body">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Request Custom Quote</h3>
+        <button onclick="toggleModal('cust-quote-modal', false)" class="text-gray-400 hover:text-charcoal"><i class="ri-close-line text-xl"></i></button>
+      </div>
+      
+      <form onsubmit="submitClientQuoteRequest(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product Category / Apparel Base</label>
+          <select id="quote-req-cat" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+            <option value="Corporate Blazer">Corporate Executive Blazer</option>
+            <option value="Industrial Boiler Suit">Heavy Industrial Boiler Suit</option>
+            <option value="Hospitality Kitchen Suit">Hospitality Kitchen Chef Sets</option>
+            <option value="Institutional Uniforms">Institutional College Coordinates</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Required Volume Quantity</label>
+          <input type="number" id="quote-req-qty" required placeholder="e.g. 500" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Additional specifications & notes</label>
+          <textarea id="quote-req-specs" rows="3" placeholder="Sizing hierarchies, fabric blend notes, double stitching requirements, etc..." class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Submit Quote Parameters
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Request Sample Prototype Modal -->
+  <div id="cust-sample-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('cust-sample-modal', false)"></div>
+    <div class="relative w-full max-w-lg max-h-[calc(100vh-3rem)] overflow-y-auto bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 font-body">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Request Sample Prototype</h3>
+        <button onclick="toggleModal('cust-sample-modal', false)" class="text-gray-400 hover:text-charcoal"><i class="ri-close-line text-xl"></i></button>
+      </div>
+      
+      <form onsubmit="submitClientSampleRequest(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Select Active Contract/Apparel Base</label>
+          <select id="sample-req-product" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+            <option value="Executive Wool Blazer">Executive Wool Blazer (Contract Approved)</option>
+            <option value="AeroGuard Boiler Suit">AeroGuard Boiler Suit (Prototype Option)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Branding Requirements & Logo Text</label>
+          <textarea id="sample-req-specs" required rows="2" placeholder="Position of embroidery logo, badge patterns, exact branding colors..." class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Branding Logo Reference (Mock File / URL)</label>
+          <input type="text" id="sample-req-logo-url" placeholder="corporate_blazer_detail.png" value="corporate_blazer_detail.png" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Submit Sample Mandate
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Open Support Ticket Modal -->
+  <div id="cust-ticket-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('cust-ticket-modal', false)"></div>
+    <div class="relative w-full max-w-lg max-h-[calc(100vh-3rem)] overflow-y-auto bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 font-body">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Open Support Ticket</h3>
+        <button onclick="toggleModal('cust-ticket-modal', false)" class="text-gray-400 hover:text-charcoal"><i class="ri-close-line text-xl"></i></button>
+      </div>
+      
+      <form onsubmit="submitClientTicket(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Subject Title *</label>
+          <input type="text" id="ticket-req-subject" required placeholder="Sizing adjustment or sample query" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Category Category</label>
+            <select id="ticket-req-cat" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Sampling Fit">Sampling & Fit</option>
+              <option value="Stitching Status">Stitching Status</option>
+              <option value="Billing & SLA">Billing & SLA Mandates</option>
+              <option value="Logistics">Logistics Drop-off</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Urgency Priority</label>
+            <select id="ticket-req-priority" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Normal">Normal</option>
+              <option value="High">High Urgency</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Detailed description of ticket query *</label>
+          <textarea id="ticket-req-desc" required rows="4" placeholder="Explain the variance or issue clearly so our Jayanagar design lead can analyze..." class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Publish Support Ticket
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="shared.js"></script>
+  
+  <script>
+    // Sync customer specific data from server
+    async function syncCustomerData() {
+      const email = localStorage.getItem('uniwear_auth_email');
+      if (!email) return;
+
+      try {
+        const [quotesRes, ordersRes, ticketsRes, notisRes, settingsRes] = await Promise.all([
+          window.api.getQuotations(email),
+          window.api.getOrders(email),
+          window.api.getTickets(email),
+          window.api.getNotifications(email),
+          window.api.getSettings()
+        ]);
+
+        if (quotesRes.success) localStorage.setItem('uniwear_quotations', JSON.stringify(quotesRes.data));
+        if (ordersRes.success) localStorage.setItem('uniwear_orders', JSON.stringify(ordersRes.data));
+        if (ticketsRes.success) localStorage.setItem('uniwear_tickets', JSON.stringify(ticketsRes.data));
+        if (notisRes.success) localStorage.setItem('uniwear_notifications', JSON.stringify(notisRes.data));
+        if (settingsRes.success) localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsRes.data));
+      } catch (err) {
+        console.error("Failed to sync customer data:", err);
+      }
+    }
+
+    // Guard authentication check
+    window.addEventListener('DOMContentLoaded', async () => {
+      const role = localStorage.getItem('uniwear_auth_role');
+      if (role !== 'client') {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      try {
+        await syncCustomerData();
+      } catch (err) {
+        console.error("Failed to sync customer data on load", err);
+      }
+      
+      // Initialize profile settings inputs from DB
+      const profile = JSON.parse(localStorage.getItem('uniwear_profile')) || defaultProfile;
+      document.getElementById('prof-rep-name').value = profile.representative || '';
+      document.getElementById('prof-comp-name').value = profile.companyName || '';
+      document.getElementById('prof-email').value = profile.email || '';
+      document.getElementById('prof-phone').value = profile.phone || '';
+      document.getElementById('prof-address').value = profile.address || '';
+
+      updateCustomerPortal();
+    });
+
+    function setPortalTab(tabId) {
+      document.querySelectorAll('.cust-portal-view').forEach(view => view.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.cust-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('text-mutedText', 'hover:bg-lightCard', 'hover:text-charcoal');
+      });
+
+      const activeBtn = document.getElementById(`cust-tab-${tabId}`);
+      activeBtn.classList.remove('text-mutedText', 'hover:bg-lightCard', 'hover:text-charcoal');
+      activeBtn.classList.add('bg-primary', 'text-white');
+
+      const titles = {
+        'cust-dash': 'Client Dashboard',
+        'cust-quotes': 'Quotations Program',
+        'cust-orders': 'Orders & Samples Tracker',
+        'cust-support': 'Communications Support Desk',
+        'cust-profile': 'Profile Settings'
+      };
+      document.getElementById('portal-title').innerText = titles[tabId];
+      updateCustomerPortal();
+      
+      // Auto-collapse sidebar on mobile tab navigation selection
+      if (window.innerWidth < 768) {
+        toggleSidebar(false);
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('uniwear_auth_role');
+      window.location.href = 'login.html';
+    }
+
+    function togglePortalNotifications() {
+      const popover = document.getElementById('cust-notifications-popover');
+      popover.classList.toggle('hidden');
+      document.getElementById('cust-noti-dot').classList.add('hidden');
+    }
+
+    function clearPortalNotifications() {
+      const profile = JSON.parse(localStorage.getItem('uniwear_profile')) || defaultProfile;
+      let notis = JSON.parse(localStorage.getItem('uniwear_notifications')) || [];
+      notis = notis.filter(n => n.recipient !== profile.email);
+      localStorage.setItem('uniwear_notifications', JSON.stringify(notis));
+      updateCustomerPortal();
+    }
+
+    function toggleModal(modalId, show) {
+      const modal = document.getElementById(modalId);
+      if (show) {
+        modal.classList.remove('hidden');
+        gsap.from(modal.querySelector('.relative'), { scale: 0.95, opacity: 0, duration: 0.25 });
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    // Main Update Function binding storage to templates
+    function updateCustomerPortal() {
+      const profile = JSON.parse(localStorage.getItem('uniwear_profile')) || defaultProfile;
+      const quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const orders = JSON.parse(localStorage.getItem('uniwear_orders')) || [];
+      const samples = JSON.parse(localStorage.getItem('uniwear_samples')) || [];
+      const tickets = JSON.parse(localStorage.getItem('uniwear_tickets')) || [];
+      const notis = JSON.parse(localStorage.getItem('uniwear_notifications')) || [];
+
+      // Update sidebar headers
+      document.getElementById('sidebar-rep-name').innerText = profile.representative;
+      document.getElementById('sidebar-company-name').innerText = profile.companyName;
+      document.getElementById('sidebar-avatar-char').innerText = profile.representative.charAt(0);
+      document.getElementById('dash-welcome-text').innerText = `Welcome, ${profile.companyName}`;
+
+      // Update dashboard widget counters
+      const clientQuotes = quotes.filter(q => q.clientEmail === profile.email);
+      const clientOrders = orders.filter(o => o.clientEmail === profile.email);
+      const clientSamples = samples.filter(s => s.clientEmail === profile.email);
+      const openTickets = tickets.filter(t => t.clientEmail === profile.email && t.status === 'Open');
+      const clientTickets = tickets.filter(t => t && t.clientEmail === profile.email);
+      const clientNotis = notis.filter(n => n.recipient === profile.email);
+
+      const pendingQuotesCount = clientQuotes.filter(q => q.status === 'Awaiting Admin Review' || q.status === 'Revised').length;
+      const approvedQuotesCount = clientQuotes.filter(q => q.status === 'Approved').length;
+      const activeOrdersCount = clientOrders.filter(o => o.statusStep < 5).length;
+
+      document.getElementById('dash-widget-pending-quotes').innerText = pendingQuotesCount;
+      document.getElementById('dash-widget-approved-quotes').innerText = approvedQuotesCount;
+      document.getElementById('dash-widget-active-orders').innerText = activeOrdersCount;
+      document.getElementById('dash-widget-samples').innerText = clientSamples.length;
+      document.getElementById('dash-widget-alerts').innerText = clientNotis.length;
+      document.getElementById('dash-widget-tickets').innerText = openTickets.length;
+
+      if (clientNotis.length > 0) {
+        document.getElementById('cust-noti-dot').classList.remove('hidden');
+      } else {
+        document.getElementById('cust-noti-dot').classList.add('hidden');
+      }
+
+      // Render Notifications List
+      const notiList = document.getElementById('cust-notifications-list');
+      notiList.innerHTML = "";
+      if (clientNotis.length === 0) {
+        notiList.innerHTML = `<p class="text-[10px] text-mutedText text-center py-4">No notifications present.</p>`;
+      } else {
+        clientNotis.slice().reverse().forEach(n => {
+          const div = document.createElement('div');
+          div.className = "p-2.5 rounded-lg bg-lightCard border border-lightBorder text-[11px] font-body";
+          div.innerHTML = `
+            <p class="font-bold text-charcoal">${n.title}</p>
+            <p class="text-mutedText mt-0.5">${n.text}</p>
+            <span class="text-[9px] text-gray-400 mt-1 block">${n.time}</span>
+          `;
+          notiList.appendChild(div);
+        });
+      }
+
+      // Render Stepper Tracker for most recent active order
+      const stepperBox = document.getElementById('dash-stepper-box');
+      if (clientOrders.length > 0) {
+        stepperBox.classList.remove('hidden');
+        const latestOrder = clientOrders[clientOrders.length - 1];
+        
+        document.getElementById('dash-stepper-ord-id').innerText = `Order #${latestOrder.id}`;
+        document.getElementById('dash-stepper-prod-name').innerText = latestOrder.productName;
+        document.getElementById('dash-stepper-qty').innerText = `${latestOrder.volume} Sets`;
+        document.getElementById('dash-stepper-date').innerText = latestOrder.deliveryDate;
+        document.getElementById('dash-stepper-text').innerText = `Status Details: ${latestOrder.statusText}`;
+
+        // Stepper Progress line percent
+        const percent = ((latestOrder.statusStep - 1) / 4) * 100;
+        document.getElementById('dash-stepper-progress-line').style.width = `${percent}%`;
+
+        // Render circles
+        const stepLabels = ["Ordered", "Sample OK", "Production", "Quality QA", "Handover"];
+        const stepsContainer = document.getElementById('dash-stepper-steps-container');
+        stepsContainer.innerHTML = "";
+        
+        stepLabels.forEach((lbl, idx) => {
+          const stepNum = idx + 1;
+          let circleHtml = "";
+          
+          if (stepNum < latestOrder.statusStep) {
+            // Completed
+            circleHtml = `
+              <div class="text-center flex flex-col items-center">
+                <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold shadow-lg shadow-primary/20">
+                  <i class="ri-check-line"></i>
+                </div>
+                <span class="text-[9px] font-bold text-charcoal mt-2 block uppercase tracking-wide">${lbl}</span>
+              </div>
+            `;
+          } else if (stepNum === latestOrder.statusStep) {
+            // Current Active
+            circleHtml = `
+              <div class="text-center flex flex-col items-center">
+                <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold border-2 border-primary ring-4 ring-primary/10">
+                  ${stepNum}
+                </div>
+                <span class="text-[9px] font-bold text-primary mt-2 block uppercase tracking-wide animate-pulse">${lbl}</span>
+              </div>
+            `;
+          } else {
+            // Not reached
+            circleHtml = `
+              <div class="text-center flex flex-col items-center">
+                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center text-xs font-bold">
+                  ${stepNum}
+                </div>
+                <span class="text-[9px] font-bold text-gray-400 mt-2 block uppercase tracking-wide">${lbl}</span>
+              </div>
+            `;
+          }
+          stepsContainer.insertAdjacentHTML('beforeend', circleHtml);
+        });
+      } else {
+        stepperBox.classList.add('hidden');
+      }
+
+      // Render Latest Quotation Box
+      const quoteBox = document.getElementById('dash-latest-quote-box');
+      if (clientQuotes.length > 0) {
+        quoteBox.classList.remove('hidden');
+        const latestQuote = clientQuotes[clientQuotes.length - 1];
+        
+        document.getElementById('dash-quote-id').innerText = `Quote ID: ${latestQuote.id}`;
+        document.getElementById('dash-quote-product').innerText = latestQuote.productClass;
+        document.getElementById('dash-quote-volume').innerText = `${latestQuote.volume} Sets`;
+        document.getElementById('dash-quote-value').innerText = latestQuote.value;
+        document.getElementById('dash-quote-specs').innerText = latestQuote.specs || "Standard custom stitching coordinates.";
+
+        // Status Badge Style
+        const badge = document.getElementById('dash-quote-status-badge');
+        badge.innerText = latestQuote.status;
+        badge.className = "px-3 py-1 rounded-full text-[10px] font-bold uppercase font-mono ";
+        if (latestQuote.status === 'Approved') badge.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
+        else if (latestQuote.status === 'Revised') badge.classList.add('bg-blue-50', 'text-blue-700', 'border', 'border-blue-200');
+        else if (latestQuote.status === 'Declined' || latestQuote.status === 'Rejected') badge.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+        else badge.classList.add('bg-yellow-50', 'text-yellow-700', 'border', 'border-yellow-200');
+
+        // Actions buttons
+        const actionsContainer = document.getElementById('dash-quote-actions');
+        actionsContainer.innerHTML = "";
+        if (latestQuote.status === 'Approved' || latestQuote.status === 'Revised') {
+          actionsContainer.innerHTML = `
+            <button onclick="declineQuotation('${latestQuote.id}')" class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors">Decline</button>
+            <button onclick="acceptQuotation('${latestQuote.id}')" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">Approve & Sign SLA</button>
+          `;
+        } else {
+          actionsContainer.innerHTML = `<span class="text-gray-400 italic text-[10px]">No immediate action required</span>`;
+        }
+      } else {
+        quoteBox.classList.add('hidden');
+      }
+
+      // Render Support Tickets Overview Summary
+      const summaryList = document.getElementById('dash-tickets-summary-list');
+      summaryList.innerHTML = "";
+      if (clientTickets.length === 0) {
+        summaryList.innerHTML = `<p class="text-gray-400 text-center py-4 text-xs font-medium">No support tickets found.</p>`;
+      } else {
+        clientTickets.slice(0, 3).forEach(t => {
+          const item = document.createElement('div');
+          item.onclick = () => { setPortalTab('cust-support'); openTicketChat(t.id); };
+          item.className = "flex justify-between items-center p-3 rounded-xl bg-lightCard border border-lightBorder text-[11px] hover:border-primary/45 hover:shadow-sm cursor-pointer transition-all";
+          let statColor = t.status === 'Open' ? 'text-green-600 bg-green-50' : 'text-gray-500 bg-gray-100';
+          item.innerHTML = `
+            <div>
+              <span class="text-[8px] uppercase tracking-wider text-mutedText block font-mono font-bold">${t.category}</span>
+              <span class="font-bold text-charcoal line-clamp-1">${t.subject}</span>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase shrink-0 ${statColor}">${t.status}</span>
+          `;
+          summaryList.appendChild(item);
+        });
+      }
+
+      // Render Recent Account Activity
+      const activityContainer = document.getElementById('dash-activity-log');
+      activityContainer.innerHTML = "";
+      const activityList = [];
+      
+      clientQuotes.forEach(q => {
+        activityList.push({
+          icon: "ri-file-list-3-line text-blue-600 bg-blue-50",
+          text: `Quotation ${q.id} (${q.productClass}) status: "${q.status}"`,
+          time: q.date
+        });
+      });
+      clientOrders.forEach(o => {
+        activityList.push({
+          icon: "ri-truck-line text-green-600 bg-green-50",
+          text: `Order ${o.id} progress: "${o.statusText}"`,
+          time: o.deliveryDate
+        });
+      });
+      clientTickets.forEach(t => {
+        activityList.push({
+          icon: "ri-customer-service-line text-purple-600 bg-purple-50",
+          text: `Support ticket ${t.id} ("${t.subject}") is ${t.status}`,
+          time: t.date
+        });
+      });
+
+      // Sort by date descending
+      activityList.sort((a,b) => b.time.localeCompare(a.time));
+
+      if (activityList.length === 0) {
+        activityContainer.innerHTML = `<p class="text-gray-400 text-center py-4">No recent activity detected.</p>`;
+      } else {
+        activityList.slice(0, 4).forEach(act => {
+          const item = document.createElement('div');
+          item.className = "flex items-start gap-3 border-b border-lightBorder last:border-b-0 pb-3 last:pb-0";
+          item.innerHTML = `
+            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${act.icon}">
+              <i class="ri-history-line text-xs"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-charcoal font-medium leading-normal break-words">${act.text}</p>
+              <span class="text-[9px] text-gray-400 block mt-0.5">${act.time}</span>
+            </div>
+          `;
+          activityContainer.appendChild(item);
+        });
+      }
+
+      // Render Quotations Table
+      const quotesTbody = document.getElementById('cust-quotes-table-body');
+      quotesTbody.innerHTML = "";
+      if (clientQuotes.length === 0) {
+        quotesTbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs">No quotation requests found. Submit one above to begin.</td></tr>`;
+      } else {
+        clientQuotes.forEach(q => {
+          const tr = document.createElement('tr');
+          tr.className = "border-b border-lightBorder hover:bg-lightCard text-xs font-body transition-colors";
+          
+          let statusStyle = "";
+          if (q.status === 'Approved') statusStyle = "bg-green-50 text-green-700 border border-green-200";
+          else if (q.status === 'Revised') statusStyle = "bg-blue-50 text-blue-700 border border-blue-200";
+          else if (q.status === 'Declined' || q.status === 'Rejected') statusStyle = "bg-red-50 text-red-700 border border-red-200";
+          else statusStyle = "bg-yellow-50 text-yellow-700 border border-yellow-200";
+
+          let actionButtons = "";
+          if (q.status === 'Approved' || q.status === 'Revised') {
+            actionButtons = `
+              <div class="flex justify-end gap-2">
+                <button onclick="acceptQuotation('${q.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-1.5 rounded-lg text-[10px] transition-colors uppercase tracking-wider">Accept & Order</button>
+                <button onclick="declineQuotation('${q.id}')" class="bg-charcoal hover:bg-black text-white font-bold px-3 py-1.5 rounded-lg text-[10px] transition-colors uppercase tracking-wider">Decline</button>
+              </div>
+            `;
+          } else {
+            actionButtons = `<span class="text-gray-400 italic">No Action Needed</span>`;
+          }
+
+          tr.innerHTML = `
+            <td class="p-4 font-mono font-bold text-charcoal">${q.id}</td>
+            <td class="p-4 font-semibold">${q.productClass}</td>
+            <td class="p-4">${q.volume} Sets</td>
+            <td class="p-4 font-mono text-gray-400">${q.date}</td>
+            <td class="p-4 text-primary font-extrabold text-sm">${q.value}</td>
+            <td class="p-4">
+              <span class="px-2.5 py-1 rounded-full text-[9px] font-bold uppercase ${statusStyle}">${q.status}</span>
+            </td>
+            <td class="p-4 text-right">${actionButtons}</td>
+          `;
+          quotesTbody.appendChild(tr);
+        });
+      }
+
+      // Render Active Orders Lists
+      const ordersContainer = document.getElementById('cust-orders-list-container');
+      ordersContainer.innerHTML = "";
+      if (clientOrders.length === 0) {
+        ordersContainer.innerHTML = `<div class="bg-white p-6 rounded-2xl border border-lightBorder text-center text-xs text-mutedText col-span-2">No active uniform production contracts.</div>`;
+      } else {
+        const stateProducts = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+        clientOrders.forEach(o => {
+          const matchedProduct = stateProducts.find(p => p.name === o.productName) || {};
+          const imgUrl = matchedProduct.img || 'corporate_blazer_detail.png';
+          
+          const statusMap = {
+            1: { text: "Ordered", classes: "bg-yellow-100 text-yellow-800 border border-yellow-200" },
+            2: { text: "Sample OK", classes: "bg-blue-100 text-blue-800 border border-blue-200" },
+            3: { text: "Production", classes: "bg-orange-100 text-orange-800 border border-orange-200" },
+            4: { text: "Quality QA", classes: "bg-purple-100 text-purple-800 border border-purple-200" },
+            5: { text: "Delivered", classes: "bg-green-100 text-green-800 border border-green-200" }
+          };
+          const statusObj = statusMap[o.statusStep] || { text: "Processing", classes: "bg-gray-100 text-gray-800 border border-gray-200" };
+
+          const card = document.createElement('div');
+          card.className = "bg-white p-5 rounded-3xl border border-lightBorder shadow-sm flex flex-col sm:flex-row gap-5 font-body";
+          card.innerHTML = `
+            <div class="w-full sm:w-28 h-28 rounded-2xl overflow-hidden relative border border-lightBorder shrink-0 bg-lightCard">
+              <img src="${imgUrl}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start gap-2 flex-wrap">
+                  <div>
+                    <span class="text-[9px] uppercase tracking-wider text-mutedText font-semibold font-mono">${o.id}</span>
+                    <h4 class="font-heading text-base font-bold text-charcoal leading-snug">${o.productName}</h4>
+                  </div>
+                  <span class="px-2.5 py-0.5 rounded text-[8px] font-bold uppercase ${statusObj.classes}">${statusObj.text}</span>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-lightBorder text-xs">
+                <div>
+                  <span class="text-gray-400 block text-[10px] uppercase font-semibold">Quantity</span>
+                  <span class="font-bold text-charcoal mt-0.5 block">${o.volume} Sets</span>
+                </div>
+                <div>
+                  <span class="text-gray-400 block text-[10px] uppercase font-semibold">Value</span>
+                  <span class="font-bold text-primary mt-0.5 block">${o.value}</span>
+                </div>
+                <div>
+                  <span class="text-gray-400 block text-[10px] uppercase font-semibold">Delivery</span>
+                  <span class="font-bold text-charcoal mt-0.5 block font-mono">${o.deliveryDate}</span>
+                </div>
+              </div>
+            </div>
+          `;
+          ordersContainer.appendChild(card);
+        });
+      }
+
+      // Render Sample Requests
+      const samplesContainer = document.getElementById('cust-samples-list-container');
+      samplesContainer.innerHTML = "";
+      if (clientSamples.length === 0) {
+        samplesContainer.innerHTML = `<div class="bg-white p-6 rounded-2xl border border-lightBorder text-center text-xs text-mutedText col-span-2">No product prototypes requested. Request one above.</div>`;
+      } else {
+        clientSamples.forEach(s => {
+          const card = document.createElement('div');
+          card.className = "bg-white p-6 rounded-3xl border border-lightBorder shadow-sm flex flex-col md:flex-row gap-6 font-body";
+          
+          let badgeColor = "";
+          if (s.status === 'Approved') badgeColor = "bg-green-100 text-green-800";
+          else if (s.status === 'Rejected' || s.status === 'Declined') badgeColor = "bg-red-100 text-red-800";
+          else if (s.status === 'Revision Requested') badgeColor = "bg-orange-100 text-orange-800";
+          else badgeColor = "bg-blue-100 text-blue-800";
+
+          card.innerHTML = `
+            <div class="w-full md:w-32 h-32 rounded-2xl overflow-hidden relative border border-lightBorder shrink-0">
+              <img src="${s.logoUrl || 'corporate_blazer_detail.png'}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start gap-2">
+                  <div>
+                    <span class="text-[9px] uppercase tracking-wider text-mutedText font-semibold">${s.date}</span>
+                    <h4 class="font-heading text-base font-bold text-charcoal mt-0.5">${s.productName}</h4>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${badgeColor}">${s.status}</span>
+                </div>
+                <p class="text-xs text-mutedText mt-2 leading-relaxed"><strong class="text-charcoal">Branding:</strong> ${s.specs}</p>
+              </div>
+              
+              <div class="mt-4 pt-3 border-t border-lightBorder flex justify-between items-center text-[10px] text-gray-400 font-mono">
+                <span>Sample ID: ${s.id}</span>
+                <span>Role: Representative</span>
+              </div>
+            </div>
+          `;
+          samplesContainer.appendChild(card);
+        });
+      }
+
+      // Render Support Tickets
+      const ticketsContainer = document.getElementById('cust-tickets-list-container');
+      ticketsContainer.innerHTML = "";
+      if (clientTickets.length === 0) {
+        ticketsContainer.innerHTML = `<p class="text-xs text-mutedText text-center py-8">No communication tickets logged.</p>`;
+      } else {
+        clientTickets.forEach(t => {
+          const activeId = document.getElementById('chat-active-ticket-id').value;
+          const isActive = (t.id === activeId);
+
+          const card = document.createElement('button');
+          card.onclick = () => openTicketChat(t.id);
+          card.className = `w-full text-left p-4 rounded-2xl border text-xs font-body transition-all flex flex-col justify-between ${isActive ? 'bg-lightCard border-primary shadow-sm' : 'bg-white border-lightBorder hover:bg-lightCard'}`;
+          
+          let statColor = t.status === 'Open' ? 'text-green-600 bg-green-50' : 'text-gray-500 bg-gray-100';
+
+          card.innerHTML = `
+            <div class="flex justify-between items-start w-full">
+              <div>
+                <span class="text-[9px] uppercase tracking-wider text-mutedText block">${t.category} • ${t.date}</span>
+                <h4 class="font-bold text-charcoal text-sm mt-0.5 line-clamp-1">${t.subject}</h4>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statColor}">${t.status}</span>
+            </div>
+            <div class="mt-3 flex justify-between items-center text-[10px] text-gray-400">
+              <span class="font-mono font-semibold">${t.id}</span>
+              <span>${t.messages.length} messages</span>
+            </div>
+          `;
+          ticketsContainer.appendChild(card);
+        });
+      }
+    }
+
+    // Accept / Decline Quotations Workflows
+    async function acceptQuotation(quoteId) {
+      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const q = quotes.find(item => item.id === quoteId);
+      if (!q) return;
+
+      try {
+        await window.api.updateQuotation(q._id, { status: 'Approved' });
+
+        // Trigger automatic sample setup in local storage (local-only mock data)
+        let samples = JSON.parse(localStorage.getItem('uniwear_samples')) || [];
+        samples.push({
+          id: "UW-SMP-" + Math.floor(100 + Math.random() * 900),
+          clientEmail: q.clientEmail,
+          productName: q.productClass,
+          specs: "Initial sample setup automatically generated from approved quotation specifications.",
+          logoUrl: "corporate_blazer_detail.png",
+          date: new Date().toISOString().split('T')[0],
+          status: "Awaiting Review"
+        });
+        localStorage.setItem('uniwear_samples', JSON.stringify(samples));
+
+        await syncCustomerData();
+        alert(`Quote approved! Pre-production sample setup has been automatically queued.`);
+        updateCustomerPortal();
+      } catch (err) {
+        alert(err.message || 'Failed to approve quotation.');
+      }
+    }
+
+    async function declineQuotation(quoteId) {
+      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const q = quotes.find(item => item.id === quoteId);
+      if (!q) return;
+
+      try {
+        await window.api.updateQuotation(q._id, { status: 'Rejected' });
+        await syncCustomerData();
+        alert("Quotation declined.");
+        updateCustomerPortal();
+      } catch (err) {
+        alert(err.message || 'Failed to decline quotation.');
+      }
+    }
+
+    // Submit Custom Quote Form
+    async function submitClientQuoteRequest(event) {
+      event.preventDefault();
+      const cat = document.getElementById('quote-req-cat').value;
+      const qty = parseInt(document.getElementById('quote-req-qty').value);
+      const specs = document.getElementById('quote-req-specs').value;
+      const profile = JSON.parse(localStorage.getItem('uniwear_profile')) || defaultProfile;
+
+      const randomId = "UW-Quote-" + Math.floor(100 + Math.random() * 900);
+      const newQuote = {
+        id: randomId,
+        clientEmail: profile.email,
+        productClass: cat,
+        volume: qty,
+        date: new Date().toISOString().split('T')[0],
+        value: "Reviewing...",
+        status: "Awaiting Admin Review",
+        specs: specs
+      };
+
+      try {
+        await window.api.createQuotation(newQuote);
+        await syncCustomerData();
+        toggleModal('cust-quote-modal', false);
+        alert(`Quote request ${randomId} submitted to admin control room!`);
+        event.target.reset();
+        updateCustomerPortal();
+      } catch (err) {
+        alert(err.message || 'Failed to submit quote request.');
+      }
+    }
+
+    // Submit Sample Form
+    function submitClientSampleRequest(event) {
+      event.preventDefault();
+      const product = document.getElementById('sample-req-product').value;
+      const specs = document.getElementById('sample-req-specs').value;
+      const logoUrl = document.getElementById('sample-req-logo-url').value;
+      const profile = JSON.parse(localStorage.getItem('uniwear_profile')) || defaultProfile;
+
+      const randomId = "UW-SMP-" + Math.floor(100 + Math.random() * 900);
+      const newSample = {
+        id: randomId,
+        clientEmail: profile.email,
+        productName: product,
+        specs: specs,
+        logoUrl: logoUrl || "corporate_blazer_detail.png",
+        date: new Date().toISOString().split('T')[0],
+        status: "Awaiting Review"
+      };
+
+      let samples = JSON.parse(localStorage.getItem('uniwear_samples')) || [];
+      samples.push(newSample);
+      localStorage.setItem('uniwear_samples', JSON.stringify(samples));
+
+      toggleModal('cust-sample-modal', false);
+      alert(`Prototype request ${randomId} successfully captured!`);
+      event.target.reset();
+      updateCustomerPortal();
+    }
+
+    // Submit Support Ticket Form
+    async function submitClientTicket(event) {
+      event.preventDefault();
+      const subject = document.getElementById('ticket-req-subject').value;
+      const cat = document.getElementById('ticket-req-cat').value;
+      const desc = document.getElementById('ticket-req-desc').value;
+      const profile = JSON.parse(localStorage.getItem('uniwear_profile')) || defaultProfile;
+
+      const payload = {
+        clientEmail: profile.email,
+        subject: subject,
+        category: cat,
+        message: desc
+      };
+
+      try {
+        await window.api.createTicket(payload);
+        await syncCustomerData();
+        toggleModal('cust-ticket-modal', false);
+        alert(`Support ticket successfully submitted!`);
+        event.target.reset();
+        updateCustomerPortal();
+      } catch (err) {
+        alert(err.message || 'Failed to submit ticket.');
+      }
+    }
+
+    // Support Chat Engine
+    function openTicketChat(ticketId) {
+      document.getElementById('chat-active-ticket-id').value = ticketId;
+      document.getElementById('ticket-chat-empty').classList.add('hidden');
+      document.getElementById('ticket-chat-active').classList.remove('hidden');
+
+      const tickets = JSON.parse(localStorage.getItem('uniwear_tickets')) || [];
+      const ticket = tickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+
+      document.getElementById('chat-header-subject').innerText = ticket.subject;
+      document.getElementById('chat-header-status').innerText = ticket.status;
+      
+      let statColor = ticket.status === 'Open' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-gray-100 text-gray-500 border border-gray-200';
+      document.getElementById('chat-header-status').className = `px-2.5 py-0.5 rounded bg-green-100 text-green-700 text-[9px] font-bold uppercase ${statColor}`;
+
+      renderChatMessages(ticket);
+    }
+
+    function renderChatMessages(ticket) {
+      const chatArea = document.getElementById('chat-messages-scroll-area');
+      chatArea.innerHTML = "";
+
+      ticket.messages.forEach(m => {
+        const wrap = document.createElement('div');
+        wrap.className = m.sender === 'client' ? "flex justify-end" : "flex justify-start";
+        
+        let bubbleStyle = m.sender === 'client' 
+          ? "bg-primary text-white p-3 rounded-2xl max-w-xs shadow-sm" 
+          : "bg-lightCard border border-lightBorder text-mutedText p-3 rounded-2xl max-w-xs shadow-sm";
+
+        wrap.innerHTML = `
+          <div>
+            <div class="${bubbleStyle}">${m.text}</div>
+            <span class="text-[9px] text-gray-400 mt-1 block ${m.sender === 'client' ? 'text-right' : 'text-left'}">${m.time}</span>
+          </div>
+        `;
+        chatArea.appendChild(wrap);
+      });
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    async function sendChatMessage(event) {
+      event.preventDefault();
+      const ticketId = document.getElementById('chat-active-ticket-id').value;
+      const input = document.getElementById('chat-message-input');
+      const text = input.value.trim();
+      if (text === "" || !ticketId) return;
+
+      let tickets = JSON.parse(localStorage.getItem('uniwear_tickets')) || [];
+      const ticket = tickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+
+      if (ticket.status !== 'Open') {
+        alert("This ticket is closed. Reopen it or submit a new one to communicate.");
+        return;
+      }
+
+      try {
+        // Persist the new message to the backend
+        const result = await window.api.updateTicket(ticket._id, {
+          message: text,
+          sender: 'client'
+        });
+
+        input.value = "";
+        // Update local cache with the returned data
+        const updatedTicket = result.data;
+        const cachedTickets = JSON.parse(localStorage.getItem('uniwear_tickets')) || [];
+        const idx = cachedTickets.findIndex(t => t._id === updatedTicket._id);
+        if (idx !== -1) cachedTickets[idx] = updatedTicket;
+        localStorage.setItem('uniwear_tickets', JSON.stringify(cachedTickets));
+        renderChatMessages(updatedTicket);
+      } catch (err) {
+        alert(err.message || 'Failed to send message.');
+      }
+    }
+
+    async function closeCurrentTicket() {
+      const ticketId = document.getElementById('chat-active-ticket-id').value;
+      if (!ticketId) return;
+
+      let tickets = JSON.parse(localStorage.getItem('uniwear_tickets')) || [];
+      const ticket = tickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+
+      try {
+        await window.api.updateTicket(ticket._id, { status: 'Closed' });
+        await syncCustomerData();
+        alert(`Support ticket has been successfully closed.`);
+        openTicketChat(ticketId);
+        updateCustomerPortal();
+      } catch (err) {
+        alert(err.message || 'Failed to close ticket.');
+      }
+    }
+
+    // Submit Profile Update
+    async function submitProfileUpdate(event) {
+      event.preventDefault();
+      const userId = localStorage.getItem('uniwear_auth_id');
+      if (!userId) {
+        alert("Not authenticated.");
+        return;
+      }
+
+      const updated = {
+        companyName: document.getElementById('prof-comp-name').value.trim(),
+        representative: document.getElementById('prof-rep-name').value.trim(),
+        email: document.getElementById('prof-email').value.trim().toLowerCase(),
+        phone: document.getElementById('prof-phone').value.trim(),
+        address: document.getElementById('prof-address').value.trim()
+      };
+
+      try {
+        await window.api.updateUser(userId, updated);
+        
+        // Update local profile cache
+        localStorage.setItem('uniwear_profile', JSON.stringify({ _id: userId, ...updated }));
+        
+        alert("Settings updated successfully!");
+        await syncCustomerData();
+        updateCustomerPortal();
+      } catch (err) {
+        alert(err.message || 'Failed to update profile.');
+      }
+    }
+
+    async function submitChangePassword(event) {
+      event.preventDefault();
+      const newPass = document.getElementById('change-pass-new').value;
+      const confirm = document.getElementById('change-pass-confirm').value;
+      const userId = localStorage.getItem('uniwear_auth_id');
+
+      if (!userId) {
+        alert("Not authenticated.");
+        return;
+      }
+
+      if (newPass !== confirm) {
+        alert("New passwords do not match.");
+        return;
+      }
+
+      try {
+        await window.api.updateUser(userId, { password: newPass });
+        alert("Password updated successfully!");
+        event.target.reset();
+      } catch (err) {
+        alert(err.message || 'Failed to change password.');
+      }
+    }
+  </script>
+</body>
+</html>
+

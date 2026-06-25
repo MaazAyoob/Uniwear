@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | UNIWEAR | Premium Workwear Partner</title>
+  <meta name="description" content="Discover the 30-year legacy of UNIWEAR uniform manufacturing, leadership, JP Nagar production facilities, and standard SA8000 compliance guidelines.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://uniwear.co/about.html">
+  <meta property="og:title" content="About Us | UNIWEAR | Premium Workwear Partner">
+  <meta property="og:description" content="Discover the 30-year legacy of UNIWEAR uniform manufacturing, leadership, JP Nagar production facilities, and standard SA8000 compliance guidelines.">
+  <meta property="og:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://uniwear.co/about.html">
+  <meta property="twitter:title" content="About Us | UNIWEAR | Premium Workwear Partner">
+  <meta property="twitter:description" content="Discover the 30-year legacy of UNIWEAR uniform manufacturing, leadership, JP Nagar production facilities, and standard SA8000 compliance guidelines.">
+  <meta property="twitter:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+
+  <!-- Canonical Link -->
+  <link rel="canonical" href="https://uniwear.co/about.html">
+  
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#B91C1C',
+            primaryHover: '#991B1B',
+            darkBg: '#111827',
+            lightBg: '#FFFFFF',
+            lightCard: '#F9FAFB',
+            mutedText: '#4B5563',
+            charcoal: '#111827',
+            lightBorder: 'rgba(0, 0, 0, 0.08)'
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+  
+  <style>
+    /* Premium Typography & Hierarchy System */
+    h1, h2, .font-display {
+      font-family: 'Clash Display', sans-serif !important;
+    }
+    h3, h4, h5, h6, nav a, .mobile-nav-link, button, .btn, .font-heading {
+      font-family: 'Outfit', sans-serif !important;
+    }
+    body, input, textarea, select, label, p, span, li, .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hierarchy, Line Height, and Letter Spacing Adjustments */
+    h1 {
+      font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important; /* Responsive fluid text scaling */
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.02em !important;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h3, .card-title {
+      line-height: 1.3 !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Section & Container Breathing Room */
+    section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+      padding-top: clamp(4rem, 8vw, 8rem);
+      padding-bottom: clamp(4rem, 8vw, 8rem);
+    }
+    
+    /* Navigation & CTA Optimization */
+    nav a, .mobile-nav-link {
+      letter-spacing: -0.01em;
+    }
+    button, .btn {
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    input, textarea, select {
+      font-family: 'Inter', sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F9FAFB;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E5E7EB;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B91C1C;
+    }
+
+
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    /* Mobile optimizations */
+    @media (max-width: 640px) {
+      .marquee-content { gap: 32px !important; }
+      h1, h2 { overflow-wrap: break-word; word-break: break-word; }
+      .grid-cols-2 .border-r { border-right: none; }
+    }
+    * { -webkit-tap-highlight-color: transparent; }
+    img { max-width: 100%; }
+  </style>
+</head>
+<body class="bg-lightBg text-charcoal font-body overflow-x-hidden antialiased">
+
+
+
+  <!-- Sweep Overlay -->
+  <div id="transition-overlay" class="fixed inset-0 bg-primary z-[9999] transform translate-y-full flex items-center justify-center pointer-events-none">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-t-4 border-r-4 border-white rounded-full animate-spin"></div>
+      <div class="mt-4 font-heading text-xl uppercase tracking-widest text-white">UNIWEAR</div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5 z-50">
+        <img src="logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
+      </a>
+      
+      <nav class="hidden lg:flex items-center lg:gap-3 xl:gap-6 glass-card py-2 lg:px-4 xl:px-6 rounded-full border border-lightBorder">
+        <a href="index.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Home</a>
+        <a href="about.html" class="nav-link lg:text-xs xl:text-sm font-semibold hover:text-primary transition-colors text-charcoal">About Us</a>
+        <a href="uniforms.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Uniforms</a>
+        <a href="gifts.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Gifting</a>
+        <a href="catalog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Catalog</a>
+        <a href="clientele.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Clientele</a>
+        <a href="blog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Blog</a>
+        <a href="contact.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Contact</a>
+      </nav>
+
+      <div class="hidden lg:flex items-center lg:gap-3 xl:gap-4">
+        <a href="login.html" class="lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Client Portal</a>
+        <button class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+          <i class="ri-moon-line text-lg"></i>
+        </button>
+        <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white lg:px-4 xl:px-6 py-2 lg:py-2 xl:py-2.5 rounded-full lg:text-xs xl:text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-primary/20">
+          Request Consultation
+        </a>
+      </div>
+
+      <!-- Mobile CTAs / Toggle -->
+      <div class="flex items-center gap-3 lg:hidden z-50">
+        <button class="theme-toggle-btn w-9 h-9 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+          <i class="ri-moon-line text-base"></i>
+        </button>
+        <button id="mobile-menu-btn" class="text-charcoal focus:outline-none">
+          <i class="ri-menu-line text-2xl" id="menu-icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div id="mobile-nav" class="fixed inset-0 bg-white/95 backdrop-blur-lg flex flex-col justify-start items-center gap-6 pt-28 pb-12 z-40 transform translate-x-full transition-transform duration-500 ease-in-out lg:hidden overflow-y-auto">
+      <a href="index.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Home</a>
+      <a href="about.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">About Us</a>
+      <a href="uniforms.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Uniforms</a>
+      <a href="gifts.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Gifting</a>
+      <a href="catalog.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Catalog</a>
+      <a href="clientele.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Clientele</a>
+      <a href="blog.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Blog</a>
+      <a href="contact.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Contact</a>
+      <div class="h-[1px] w-24 bg-charcoal/10 my-2 shrink-0"></div>
+      <a href="login.html" class="mobile-nav-link font-heading text-lg font-medium text-mutedText hover:text-primary transition-colors">Client Portal</a>
+      <button class="theme-toggle-btn w-12 h-12 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors my-2" title="Toggle Theme">
+        <i class="ri-moon-line text-xl"></i>
+      </button>
+      <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white px-8 py-3 rounded-full text-base font-semibold transition-all duration-300 shrink-0">
+        Request Consultation
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main>
+    <!-- Page Hero Banner -->
+    <section class="relative h-[75vh] min-h-[520px] flex items-end overflow-hidden">
+      <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80" alt="UNIWEAR Manufacturing Heritage" class="w-full h-full object-cover scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent"></div>
+      </div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-10 sm:pb-14 z-10">
+        <span class="text-xs uppercase tracking-widest text-primary font-bold">OUR HERITAGE</span>
+        <h1 class="font-heading text-3xl sm:text-5xl md:text-7xl font-bold mt-2 text-charcoal leading-tight">Three Decades of<br>Textile Craftsmanship</h1>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+      <div class="mb-8 border-b border-lightBorder pb-4"></div>
+
+      <!-- Story section -->
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-14 sm:mb-24 items-center">
+        <div class="space-y-6">
+          <h3 class="font-heading text-2xl sm:text-3xl font-bold text-charcoal">Established in Bengaluru, Serving Worldwide</h3>
+          <p class="text-mutedText leading-relaxed">
+            Founded in 1992, UNIWEAR emerged from a vision to revolutionize the workplace uniform ecosystem in India. Over the last 30+ years of dedicated textile craftsmanship, we have grown from a boutique tailoring enterprise in Bengaluru into a national workwear powerhouse, managing complex supply contracts and delivering premium garments for over 2,000+ corporate partners, heavy industrial conglomerates, healthcare systems, and hospitality brands globally.
+          </p>
+          <p class="text-mutedText leading-relaxed">
+            Our core philosophy balances advanced textile innovation with strict structural ergonomics. Every garment we manufacture is built on a foundation of quality, ensuring maximum safety, comfort, and durability while functioning as a proud representation of our clients' core brand identity.
+          </p>
+          <div class="grid grid-cols-2 gap-6 mt-8">
+            <div class="p-4 bg-lightCard rounded-xl border border-lightBorder">
+              <span class="text-xs uppercase tracking-widest text-primary font-bold">Corporate Headquarters</span>
+              <p class="text-sm font-semibold text-charcoal mt-1">Jayanagar, Bengaluru</p>
+            </div>
+            <div class="p-4 bg-lightCard rounded-xl border border-lightBorder">
+              <span class="text-xs uppercase tracking-widest text-primary font-bold">Primary Plant</span>
+              <p class="text-sm font-semibold text-charcoal mt-1">JP Nagar, Bengaluru</p>
+            </div>
+          </div>
+        </div>
+        <div class="relative rounded-3xl overflow-hidden shadow-lg border border-lightBorder group">
+          <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="Engineered Uniform Manufacturing" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+        </div>
+      </div>
+
+      <!-- Mission & Vision -->
+      <div class="grid sm:grid-cols-2 gap-6 sm:gap-8 mb-14 sm:mb-24">
+        <div class="bg-lightCard p-6 sm:p-10 rounded-3xl border border-lightBorder hover:border-primary/30 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+            <i class="ri-focus-3-line text-2xl"></i>
+          </div>
+          <h3 class="font-heading text-2xl font-bold mb-4 text-charcoal">Our Mission</h3>
+          <p class="text-mutedText leading-relaxed text-sm">
+            To engineer premium, sustainable, and highly functional workwear solutions that elevate brand identity, enhance employee safety, and foster organizational pride for enterprises worldwide.
+          </p>
+        </div>
+        <div class="bg-lightCard p-6 sm:p-10 rounded-3xl border border-lightBorder hover:border-primary/30 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+            <i class="ri-eye-line text-2xl"></i>
+          </div>
+          <h3 class="font-heading text-2xl font-bold mb-4 text-charcoal">Our Vision</h3>
+          <p class="text-mutedText leading-relaxed text-sm">
+            To become the global gold standard in corporate and industrial workwear, pioneering ethical manufacturing, textile research, and custom digital apparel inventory systems.
+          </p>
+        </div>
+      </div>
+
+      <!-- Industries We Serve Section -->
+      <div class="py-10 sm:py-16 border-t border-lightBorder mb-24">
+        <div class="text-center mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">Sector Expertise</span>
+          <h2 class="font-heading text-3xl sm:text-4xl font-bold mt-2 text-charcoal">Industries We Serve</h2>
+          <p class="text-mutedText max-w-xl mx-auto mt-4 leading-relaxed">
+            We engineer industry-specific workwear designed to meet the rigorous safety, durability, and stylistic standards of diverse business sectors.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <!-- Corporate -->
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center">
+            <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
+              <i class="ri-briefcase-line text-2xl"></i>
+            </div>
+            <h4 class="font-heading text-lg font-bold text-charcoal mb-1">Corporate</h4>
+            <p class="text-xs text-mutedText leading-relaxed">Executive shirts, custom blazers, and high-performance formal wear.</p>
+          </div>
+          <!-- Industrial -->
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center">
+            <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
+              <i class="ri-settings-3-line text-2xl"></i>
+            </div>
+            <h4 class="font-heading text-lg font-bold text-charcoal mb-1">Industrial</h4>
+            <p class="text-xs text-mutedText leading-relaxed">Flame-retardant boiler suits, safety jackets, and anti-static boots.</p>
+          </div>
+          <!-- Hospitality -->
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center">
+            <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
+              <i class="ri-hotel-line text-2xl"></i>
+            </div>
+            <h4 class="font-heading text-lg font-bold text-charcoal mb-1">Hospitality</h4>
+            <p class="text-xs text-mutedText leading-relaxed">Chef coats, front-desk uniforms, and kitchen staff aprons.</p>
+          </div>
+          <!-- Healthcare -->
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center">
+            <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
+              <i class="ri-shield-cross-line text-2xl"></i>
+            </div>
+            <h4 class="font-heading text-lg font-bold text-charcoal mb-1">Healthcare</h4>
+            <p class="text-xs text-mutedText leading-relaxed">Antimicrobial scrubs, lab coats, and sterile surgical gowns.</p>
+          </div>
+          <!-- Education -->
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center col-span-2 md:col-span-1 font-body">
+            <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
+              <i class="ri-graduation-cap-line text-2xl"></i>
+            </div>
+            <h4 class="font-heading text-lg font-bold text-charcoal mb-1">Education</h4>
+            <p class="text-xs text-mutedText leading-relaxed">Durable school blazer sets, sports jerseys, and university wear.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manufacturing Excellence -->
+      <div class="py-10 sm:py-16 border-t border-lightBorder mb-24">
+        <div class="text-center mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">Precision & Scale</span>
+          <h2 class="font-heading text-3xl sm:text-4xl font-bold mt-2 text-charcoal">Manufacturing Excellence</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-lightCard p-8 rounded-2xl border border-lightBorder text-center">
+            <i class="ri-award-line text-primary text-4xl mb-4 block"></i>
+            <h4 class="font-heading text-xl font-bold mb-2 text-charcoal">Automated Pattern Cutters</h4>
+            <p class="text-sm text-mutedText">Our JP Nagar factory houses laser-guided cutting systems to guarantee pattern precision across bulk runs.</p>
+          </div>
+          <div class="bg-lightCard p-8 rounded-2xl border border-lightBorder text-center">
+            <i class="ri-heart-pulse-line text-primary text-4xl mb-4 block"></i>
+            <h4 class="font-heading text-xl font-bold mb-2 text-charcoal">Tensile Testing Lab</h4>
+            <p class="text-sm text-mutedText">Every fabric batch is subjected to tests checking tear thresholds, color bleeding, and shrinkage levels prior to production.</p>
+          </div>
+          <div class="bg-lightCard p-8 rounded-2xl border border-lightBorder text-center">
+            <i class="ri-leaf-line text-primary text-4xl mb-4 block"></i>
+            <h4 class="font-heading text-xl font-bold mb-2 text-charcoal">Ethically Sourced Yarn</h4>
+            <p class="text-sm text-mutedText">We prioritize environment-friendly organic yarn and adhere strictly to zero-child-labor policies globally.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Infrastructure Showcase -->
+      <div class="py-10 sm:py-16 border-t border-lightBorder mb-24">
+        <div class="text-center mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">Factory Tour</span>
+          <h2 class="font-heading text-4xl font-bold mt-2 text-charcoal">Our Infrastructure & Facilities</h2>
+          <p class="text-mutedText max-w-xl mx-auto mt-4 leading-relaxed">
+            Spanning over 75,000 sq. ft. across JP Nagar and Jayanagar, our workspaces combine advanced CAD design suites with high-capacity assembly systems.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Facility 1 -->
+          <div class="bg-white rounded-3xl overflow-hidden border border-lightBorder hover:shadow-xl transition-all duration-300 group flex flex-col justify-between">
+            <div class="h-60 overflow-hidden relative">
+              <img src="uniform_customizer_ui.png" alt="CAD Studio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between font-body">
+              <div>
+                <h4 class="font-heading text-xl font-bold text-charcoal mb-2">3D CAD Design Studio</h4>
+                <p class="text-sm text-mutedText leading-relaxed">Where digital pattern matching and custom client layout configurations are simulated before pattern release.</p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-lightBorder flex justify-between text-xs font-semibold text-charcoal">
+                <span>Location: Jayanagar HQ</span>
+                <span class="text-primary">Fully Digital</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Facility 2 -->
+          <div class="bg-white rounded-3xl overflow-hidden border border-lightBorder hover:shadow-xl transition-all duration-300 group flex flex-col justify-between">
+            <div class="h-60 overflow-hidden relative">
+              <img src="corporate_blazer_detail.png" alt="Stitching Department" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between font-body">
+              <div>
+                <h4 class="font-heading text-xl font-bold text-charcoal mb-2">Automated Stitching Department</h4>
+                <p class="text-sm text-mutedText leading-relaxed">Utilizes computerized JUKI lockstitch machinery and multi-head embroidery loops for absolute uniformity.</p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-lightBorder flex justify-between text-xs font-semibold text-charcoal">
+                <span>Location: JP Nagar Plant</span>
+                <span class="text-primary">12,000 Pcs/Day</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Facility 3 -->
+          <div class="bg-white rounded-3xl overflow-hidden border border-lightBorder hover:shadow-xl transition-all duration-300 group flex flex-col justify-between">
+            <div class="h-60 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=800&q=80" alt="Logistics Center" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between font-body">
+              <div>
+                <h4 class="font-heading text-xl font-bold text-charcoal mb-2">Logistics & Distribution Hub</h4>
+                <p class="text-sm text-mutedText leading-relaxed">Equipped with automated batch sorting, barcoded storage tracking, and direct global dispatch pipelines.</p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-lightBorder flex justify-between text-xs font-semibold text-charcoal">
+                <span>Location: JP Nagar Plant</span>
+                <span class="text-primary">Global Transit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leadership Grid -->
+      <div class="py-10 sm:py-16 border-t border-lightBorder mb-24">
+        <div class="text-center mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">THE TEAM</span>
+          <h2 class="font-heading text-4xl font-bold mt-2 text-charcoal">Leadership Team</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Member 1 -->
+          <div class="bg-lightCard rounded-2xl overflow-hidden border border-lightBorder group">
+            <div class="h-80 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80" alt="CEO" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+              <h4 class="font-heading text-xl font-bold text-charcoal">K. R. Murthy</h4>
+              <p class="text-xs text-primary font-bold tracking-widest uppercase mt-1">Founder & CEO</p>
+              <p class="text-sm text-mutedText mt-3">35+ years of apparel domain leadership in Southern India.</p>
+            </div>
+          </div>
+          <!-- Member 2 -->
+          <div class="bg-lightCard rounded-2xl overflow-hidden border border-lightBorder group">
+            <div class="h-80 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" alt="Design Head" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+              <h4 class="font-heading text-xl font-bold text-charcoal">Dr. Anjali Sen</h4>
+              <p class="text-xs text-primary font-bold tracking-widest uppercase mt-1">Head of Textile Design</p>
+              <p class="text-sm text-mutedText mt-3">PhD in Fabric Engineering from IIT Delhi. Specializes in safety apparel.</p>
+            </div>
+          </div>
+          <!-- Member 3 -->
+          <div class="bg-lightCard rounded-2xl overflow-hidden border border-lightBorder group">
+            <div class="h-80 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="COO" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+              <h4 class="font-heading text-xl font-bold text-charcoal">Rhea Murthy</h4>
+              <p class="text-xs text-primary font-bold tracking-widest uppercase mt-1">Chief Operations Officer</p>
+              <p class="text-sm text-mutedText mt-3">Ex-Management Consultant, specialized in scaling manufacturing pipelines.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="py-10 sm:py-16 border-t border-lightBorder text-center">
+        <span class="text-xs uppercase tracking-widest text-primary font-bold">GLOBAL STANDARDS</span>
+        <h2 class="font-heading text-4xl font-bold mt-2 mb-12 text-charcoal">Compliance & Certifications</h2>
+        <div class="flex flex-wrap items-center justify-center gap-12 opacity-60">
+          <div class="flex flex-col items-center">
+            <i class="ri-government-line text-5xl mb-2 text-charcoal"></i>
+            <span class="text-sm font-semibold uppercase text-mutedText tracking-wider">ISO 9001:2015</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <i class="ri-shield-user-line text-5xl mb-2 text-charcoal"></i>
+            <span class="text-sm font-semibold uppercase text-mutedText tracking-wider">SA8000 Ethical</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <i class="ri-seedling-line text-5xl mb-2 text-charcoal"></i>
+            <span class="text-sm font-semibold uppercase text-mutedText tracking-wider">OEKO-TEX Yarn</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <i class="ri-global-line text-5xl mb-2 text-charcoal"></i>
+            <span class="text-sm font-semibold uppercase text-mutedText tracking-wider">SEDEX Member</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="global-footer" class="bg-darkBg border-t border-lightBorder py-16 relative z-30 text-white mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 mb-12">
+      <div class="lg:col-span-2 space-y-6">
+        <a href="index.html">
+          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
+        </a>
+        <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
+          Headquartered in Bengaluru. Crafting premium, certified uniforms for multi-scale industrial setups and corporate giants since 1992.
+        </p>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-linkedin-box-line"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-instagram-line"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-facebook-box-line"></i></a>
+        </div>
+      </div>
+      <div>
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Collections</h5>
+        <ul class="space-y-3 text-sm">
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Industrial Wear</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Executive Blouse & Suit</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Fine Dining Kitchen Wear</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">School & University Sets</a></li>
+          <li><a href="gifts.html" class="text-gray-400 hover:text-primary transition-colors">Corporate Gifting Options</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Corporate</h5>
+        <ul class="space-y-3 text-sm">
+          <li><a href="about.html" class="text-gray-400 hover:text-primary transition-colors">Our Story</a></li>
+          <li><a href="clientele.html" class="text-gray-400 hover:text-primary transition-colors">Enterprise Clientele</a></li>
+          <li><a href="catalog.html" class="text-gray-400 hover:text-primary transition-colors">Locked Catalog Library</a></li>
+          <li><a href="blog.html" class="text-gray-400 hover:text-primary transition-colors">Fabric Research Hub</a></li>
+          <li><a href="contact.html" class="text-gray-400 hover:text-primary transition-colors">Consultation Office</a></li>
+          <li><a href="login.html" class="text-gray-400 hover:text-primary transition-colors">Business Login</a></li>
+        </ul>
+      </div>
+      <div class="space-y-6">
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Subscribe</h5>
+        <p class="text-xs text-gray-400 leading-relaxed">Join our mailing registry for periodic updates on fabric technologies.</p>
+        <form onsubmit="event.preventDefault(); document.getElementById('newsletter-success').classList.remove('hidden');" class="relative">
+          <input type="email" required placeholder="Enter work email..." class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-xs text-white focus:outline-none focus:border-primary">
+          <button type="submit" class="absolute right-1 top-1 w-9 h-9 bg-primary hover:bg-primaryHover text-white rounded-full flex items-center justify-center transition-colors">
+            <i class="ri-arrow-right-line"></i>
+          </button>
+        </form>
+        <span id="newsletter-success" class="text-xs text-green-500 hidden font-bold">Successfully joined the registry.</span>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-gray-500">Copyright © 2026 <span class="company-name">UNIWEAR</span>. Premium Uniform Manufacturing partner, Bengaluru.</p>
+    </div>
+  </footer>
+
+  <script src="api.js"></script>
+  <script src="shared.js"></script>
+</body>
+</html>
+

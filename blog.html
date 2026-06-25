@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Textile Innovation Blog | UNIWEAR</title>
+  <meta name="description" content="Read recent publications on fabric density standards, safety garments EN regulations, and uniform aesthetic branding guides.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://uniwear.co/blog.html">
+  <meta property="og:title" content="Textile Innovation Blog | UNIWEAR">
+  <meta property="og:description" content="Read recent publications on fabric density standards, safety garments EN regulations, and uniform aesthetic branding guides.">
+  <meta property="og:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://uniwear.co/blog.html">
+  <meta property="twitter:title" content="Textile Innovation Blog | UNIWEAR">
+  <meta property="twitter:description" content="Read recent publications on fabric density standards, safety garments EN regulations, and uniform aesthetic branding guides.">
+  <meta property="twitter:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+
+  <!-- Canonical Link -->
+  <link rel="canonical" href="https://uniwear.co/blog.html">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#B91C1C',
+            primaryHover: '#991B1B',
+            darkBg: '#111827',
+            lightBg: '#FFFFFF',
+            lightCard: '#F9FAFB',
+            mutedText: '#4B5563',
+            charcoal: '#111827',
+            lightBorder: 'rgba(0, 0, 0, 0.08)'
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+  
+  <style>
+    /* Premium Typography & Hierarchy System */
+    h1, h2, .font-display {
+      font-family: 'Clash Display', sans-serif !important;
+    }
+    h3, h4, h5, h6, nav a, .mobile-nav-link, button, .btn, .font-heading {
+      font-family: 'Outfit', sans-serif !important;
+    }
+    body, input, textarea, select, label, p, span, li, .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hierarchy, Line Height, and Letter Spacing Adjustments */
+    h1 {
+      font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important; /* Responsive fluid text scaling */
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.02em !important;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h3, .card-title {
+      line-height: 1.3 !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Section & Container Breathing Room */
+    section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+      padding-top: clamp(4rem, 8vw, 8rem);
+      padding-bottom: clamp(4rem, 8vw, 8rem);
+    }
+    
+    /* Navigation & CTA Optimization */
+    nav a, .mobile-nav-link {
+      letter-spacing: -0.01em;
+    }
+    button, .btn {
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    input, textarea, select {
+      font-family: 'Inter', sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F9FAFB;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E5E7EB;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B91C1C;
+    }
+
+
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    /* Mobile optimizations */
+    @media (max-width: 640px) {
+      .marquee-content { gap: 32px !important; }
+      h1, h2 { overflow-wrap: break-word; word-break: break-word; }
+      .grid-cols-2 .border-r { border-right: none; }
+    }
+    * { -webkit-tap-highlight-color: transparent; }
+    img { max-width: 100%; }
+  </style>
+</head>
+<body class="bg-lightBg text-charcoal font-body overflow-x-hidden antialiased">
+
+
+
+  <!-- Sweep Curtain -->
+  <div id="transition-overlay" class="fixed inset-0 bg-primary z-[9999] transform translate-y-full flex items-center justify-center pointer-events-none">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-t-4 border-r-4 border-white rounded-full animate-spin"></div>
+      <div class="mt-4 font-heading text-xl uppercase tracking-widest text-white">UNIWEAR</div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5 z-50">
+        <img src="logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
+      </a>
+      
+      <nav class="hidden lg:flex items-center lg:gap-3 xl:gap-6 glass-card py-2 lg:px-4 xl:px-6 rounded-full border border-lightBorder">
+        <a href="index.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Home</a>
+        <a href="about.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">About Us</a>
+        <a href="uniforms.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Uniforms</a>
+        <a href="gifts.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Gifting</a>
+        <a href="catalog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Catalog</a>
+        <a href="clientele.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Clientele</a>
+        <a href="blog.html" class="nav-link lg:text-xs xl:text-sm font-semibold hover:text-primary transition-colors text-charcoal">Blog</a>
+        <a href="contact.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Contact</a>
+      </nav>
+
+      <div class="hidden lg:flex items-center lg:gap-3 xl:gap-4">
+        <a href="login.html" class="lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Client Portal</a>
+        <button class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+          <i class="ri-moon-line text-lg"></i>
+        </button>
+        <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white lg:px-4 xl:px-6 py-2 lg:py-2 xl:py-2.5 rounded-full lg:text-xs xl:text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-primary/20">
+          Request Consultation
+        </a>
+      </div>
+
+      <!-- Mobile CTAs / Toggle -->
+      <div class="flex items-center gap-3 lg:hidden z-50">
+        <button class="theme-toggle-btn w-9 h-9 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+          <i class="ri-moon-line text-base"></i>
+        </button>
+        <button id="mobile-menu-btn" class="text-charcoal focus:outline-none">
+          <i class="ri-menu-line text-2xl" id="menu-icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div id="mobile-nav" class="fixed inset-0 bg-white/95 backdrop-blur-lg flex flex-col justify-start items-center gap-6 pt-28 pb-12 z-40 transform translate-x-full transition-transform duration-500 ease-in-out lg:hidden overflow-y-auto">
+      <a href="index.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Home</a>
+      <a href="about.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">About Us</a>
+      <a href="uniforms.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Uniforms</a>
+      <a href="gifts.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Gifting</a>
+      <a href="catalog.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Catalog</a>
+      <a href="clientele.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Clientele</a>
+      <a href="blog.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Blog</a>
+      <a href="contact.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Contact</a>
+      <div class="h-[1px] w-24 bg-charcoal/10 my-2 shrink-0"></div>
+      <a href="login.html" class="mobile-nav-link font-heading text-lg font-medium text-mutedText hover:text-primary transition-colors">Client Portal</a>
+      <button class="theme-toggle-btn w-12 h-12 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors my-2" title="Toggle Theme">
+        <i class="ri-moon-line text-xl"></i>
+      </button>
+      <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white px-8 py-3 rounded-full text-base font-semibold transition-all duration-300 shrink-0">
+        Request Consultation
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main>
+    <!-- Page Hero Banner -->
+    <section class="relative h-[75vh] min-h-[520px] flex items-end overflow-hidden">
+      <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1920&q=80" alt="UNIWEAR Textile Innovation Blog" class="w-full h-full object-cover scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
+      </div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-10 sm:pb-14 z-10 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 w-full">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">EDITORIAL HUB</span>
+          <h1 class="font-heading text-3xl sm:text-5xl md:text-7xl font-bold mt-2 text-charcoal leading-tight">Workwear<br>Insights</h1>
+        </div>
+        <!-- Search Bar -->
+        <div class="relative w-full md:w-80">
+          <input type="text" id="blog-search-input" onkeyup="handleBlogSearch()" placeholder="Search publications..." class="w-full bg-white/90 backdrop-blur-sm border border-lightBorder rounded-full py-3 px-6 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors shadow-md">
+          <i class="ri-search-line absolute right-5 top-3.5 text-mutedText"></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+      <!-- Featured Story banner -->
+      <div id="featured-article-container" class="mb-24">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Category Navigation Filters -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-8 sm:mb-12 pb-5 sm:pb-6 border-b border-lightBorder">
+        <button onclick="filterBlogs('All')" class="blog-filter-btn px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white" id="blog-filter-btn-All">All Articles</button>
+        <button onclick="filterBlogs('Fabrics')" class="blog-filter-btn px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText" id="blog-filter-btn-Fabrics">Fabric Tech</button>
+        <button onclick="filterBlogs('Branding')" class="blog-filter-btn px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText" id="blog-filter-btn-Branding">Branding</button>
+        <button onclick="filterBlogs('Industrial')" class="blog-filter-btn px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText" id="blog-filter-btn-Industrial">Industrial Safety</button>
+        <button onclick="filterBlogs('Corporate')" class="blog-filter-btn px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText" id="blog-filter-btn-Corporate">Corporate</button>
+        <button onclick="filterBlogs('Hospitality')" class="blog-filter-btn px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText" id="blog-filter-btn-Hospitality">Hospitality</button>
+        <button onclick="filterBlogs('Institutional')" class="blog-filter-btn px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText" id="blog-filter-btn-Institutional">Institutional</button>
+      </div>
+
+      <!-- Article Grid -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-12" id="blog-articles-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="global-footer" class="bg-darkBg border-t border-lightBorder py-16 relative z-30 text-white mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 mb-12">
+      <div class="lg:col-span-2 space-y-6">
+        <a href="index.html">
+          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
+        </a>
+        <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
+          Headquartered in Bengaluru. Crafting premium, certified uniforms for multi-scale industrial setups and corporate giants since 1992.
+        </p>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-linkedin-box-line"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-instagram-line"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-facebook-box-line"></i></a>
+        </div>
+      </div>
+      <div>
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Collections</h5>
+        <ul class="space-y-3 text-sm">
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Industrial Wear</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Executive Blouse & Suit</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Fine Dining Kitchen Wear</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">School & University Sets</a></li>
+          <li><a href="gifts.html" class="text-gray-400 hover:text-primary transition-colors">Corporate Gifting Options</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Corporate</h5>
+        <ul class="space-y-3 text-sm">
+          <li><a href="about.html" class="text-gray-400 hover:text-primary transition-colors">Our Story</a></li>
+          <li><a href="clientele.html" class="text-gray-400 hover:text-primary transition-colors">Enterprise Clientele</a></li>
+          <li><a href="catalog.html" class="text-gray-400 hover:text-primary transition-colors">Locked Catalog Library</a></li>
+          <li><a href="blog.html" class="text-gray-400 hover:text-primary transition-colors">Fabric Research Hub</a></li>
+          <li><a href="contact.html" class="text-gray-400 hover:text-primary transition-colors">Consultation Office</a></li>
+          <li><a href="login.html" class="text-gray-400 hover:text-primary transition-colors">Business Login</a></li>
+        </ul>
+      </div>
+      <div class="space-y-6">
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Subscribe</h5>
+        <p class="text-xs text-gray-400 leading-relaxed">Join our mailing registry for periodic updates on fabric technologies.</p>
+        <form onsubmit="event.preventDefault(); document.getElementById('newsletter-success').classList.remove('hidden');" class="relative">
+          <input type="email" required placeholder="Enter work email..." class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-xs text-white focus:outline-none focus:border-primary">
+          <button type="submit" class="absolute right-1 top-1 w-9 h-9 bg-primary hover:bg-primaryHover text-white rounded-full flex items-center justify-center transition-colors">
+            <i class="ri-arrow-right-line"></i>
+          </button>
+        </form>
+        <span id="newsletter-success" class="text-xs text-green-500 hidden font-bold">Successfully joined the registry.</span>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-gray-500">Copyright © 2026 <span class="company-name">UNIWEAR</span>. Premium Uniform Manufacturing partner, Bengaluru.</p>
+    </div>
+  </footer>
+
+  <script src="api.js"></script>
+  <script src="shared.js"></script>
+  
+  <script>
+    let activeBlogCategory = "All";
+    let blogSearchQuery = "";
+
+    function renderBlogPage() {
+      let blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
+      blogs = blogs.filter(b => b.status === "Published");
+
+      // 1. Featured spotlight render
+      const featuredBox = document.getElementById('featured-article-container');
+      const featuredPost = blogs.find(b => b.featured) || blogs[0];
+      if (featuredBox && featuredPost) {
+        featuredBox.innerHTML = `
+          <div class="bg-lightCard rounded-3xl overflow-hidden grid lg:grid-cols-12 gap-6 sm:gap-8 p-5 sm:p-8 border border-lightBorder items-center">
+            <div class="lg:col-span-6 h-52 sm:h-72 lg:h-80 rounded-2xl overflow-hidden relative bg-lightCard">
+              <img src="${featuredPost.img}" class="w-full h-full object-cover">
+            </div>
+            <div class="lg:col-span-6 space-y-4">
+              <span class="bg-primary text-white text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Featured Story</span>
+              <h3 class="font-heading text-3xl font-extrabold text-charcoal mt-2">${featuredPost.title}</h3>
+              <p class="text-sm text-mutedText leading-relaxed">${featuredPost.excerpt}</p>
+              <div class="flex items-center gap-4 text-xs text-gray-400">
+                <span>By ${featuredPost.author}</span>
+                <span>•</span>
+                <span>${featuredPost.date}</span>
+              </div>
+              <button onclick="alert('Full editorial layout requires partner account authorization.')" class="bg-charcoal hover:bg-black text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all">
+                Read Publication
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      // 2. Blog cards list render
+      const blogGrid = document.getElementById('blog-articles-grid');
+      if (blogGrid) {
+        blogGrid.innerHTML = "";
+        
+        let filtered = blogs;
+        if (activeBlogCategory !== "All") {
+          filtered = filtered.filter(b => b.category === activeBlogCategory);
+        }
+        if (blogSearchQuery.trim() !== "") {
+          const q = blogSearchQuery.toLowerCase();
+          filtered = filtered.filter(b => b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q));
+        }
+
+        if (filtered.length === 0) {
+          blogGrid.innerHTML = `<p class="col-span-3 text-center py-12 text-mutedText">No publications matched your parameters.</p>`;
+          return;
+        }
+
+        filtered.forEach(post => {
+          const card = document.createElement('article');
+          card.className = "bg-white rounded-2xl overflow-hidden border border-lightBorder hover:shadow-lg transition-all duration-300 group";
+          card.innerHTML = `
+            <div class="h-48 overflow-hidden relative">
+              <img src="${post.img}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+              <span class="text-[9px] uppercase tracking-wider text-primary font-bold">${post.category}</span>
+              <h4 class="font-heading text-lg font-bold text-charcoal mt-1 group-hover:text-primary transition-colors line-clamp-2">${post.title}</h4>
+              <p class="text-xs text-mutedText mt-2 line-clamp-2">${post.excerpt}</p>
+              <div class="flex items-center justify-between border-t border-lightBorder pt-4 mt-4 text-[10px] text-gray-400">
+                <span>By ${post.author}</span>
+                <span>${post.date}</span>
+              </div>
+            </div>
+          `;
+          blogGrid.appendChild(card);
+        });
+      }
+      if (window.refreshHoverables) window.refreshHoverables();
+    }
+
+    function filterBlogs(cat) {
+      activeBlogCategory = cat;
+      document.querySelectorAll('.blog-filter-btn').forEach(btn => {
+        btn.classList.remove('border-primary', 'bg-primary', 'text-white');
+        btn.classList.add('border-lightBorder', 'text-mutedText');
+      });
+      const activeBtn = document.getElementById(`blog-filter-btn-${cat}`);
+      activeBtn.classList.remove('border-lightBorder', 'text-mutedText');
+      activeBtn.classList.add('border-primary', 'bg-primary', 'text-white');
+      renderBlogPage();
+    }
+
+    function handleBlogSearch() {
+      blogSearchQuery = document.getElementById('blog-search-input').value;
+      renderBlogPage();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderBlogPage();
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | UNIWEAR</title>
+  <meta name="description" content="Operations management dashboard for UNIWEAR administration.">
+
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#B91C1C',
+            primaryHover: '#991B1B',
+            darkBg: '#111827',
+            lightBg: '#FFFFFF',
+            lightCard: '#F9FAFB',
+            mutedText: '#4B5563',
+            charcoal: '#111827',
+            lightBorder: 'rgba(0, 0, 0, 0.08)'
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    /* Premium Typography & Hierarchy System */
+    h1,
+    h2,
+    .font-display {
+      font-family: 'Clash Display', sans-serif !important;
+    }
+
+    h3,
+    h4,
+    h5,
+    h6,
+    nav a,
+    .mobile-nav-link,
+    button,
+    .btn,
+    .font-heading {
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    body,
+    input,
+    textarea,
+    select,
+    label,
+    p,
+    span,
+    li,
+    .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hierarchy, Line Height, and Letter Spacing Adjustments */
+    h1 {
+      font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important;
+      /* Responsive fluid text scaling */
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.02em !important;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h3,
+    .card-title {
+      line-height: 1.3 !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Section & Container Breathing Room */
+    section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+      padding-top: clamp(4rem, 8vw, 8rem);
+      padding-bottom: clamp(4rem, 8vw, 8rem);
+    }
+
+    /* Navigation & CTA Optimization */
+    nav a,
+    .mobile-nav-link {
+      letter-spacing: -0.01em;
+    }
+
+    button,
+    .btn {
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    input,
+    textarea,
+    select {
+      font-family: 'Inter', sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+
+    /* Dashboard Metrics & Numbers Overrides */
+    .metric-value,
+    .stat-value,
+    [id^="stat-"],
+    .metric-number,
+    [id^="dash-widget-"] {
+      font-family: 'Outfit', sans-serif !important;
+      font-size: clamp(2rem, 3.5vw, 3.25rem) !important;
+      /* Larger display */
+      font-weight: 800 !important;
+      letter-spacing: -0.03em !important;
+      line-height: 1.1 !important;
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-label,
+    .stat-label {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.75rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.05em !important;
+      text-transform: uppercase;
+      color: #4B5563 !important;
+      /* Slate 600 */
+    }
+  </style>
+</head>
+
+<body class="bg-lightCard text-charcoal font-body overflow-x-hidden antialiased min-h-screen flex">
+
+
+
+  <!-- Sweep Curtain -->
+  <div id="transition-overlay"
+    class="fixed inset-0 bg-primary z-[9999] transform translate-y-full flex items-center justify-center pointer-events-none">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-t-4 border-r-4 border-white rounded-full animate-spin"></div>
+      <div class="mt-4 font-heading text-xl uppercase tracking-widest text-white">UNIWEAR</div>
+    </div>
+  </div>
+
+  <!-- Sidebar Overlay for Mobile -->
+  <div id="sidebar-overlay" onclick="toggleSidebar(false)"
+    class="fixed inset-0 bg-charcoal/30 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0"></div>
+
+  <!-- ADMIN SIDEBAR -->
+  <aside id="admin-sidebar"
+    class="w-64 bg-white border-r border-lightBorder flex flex-col justify-between shrink-0 fixed inset-y-0 left-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:flex">
+    <div>
+      <div class="p-6 border-b border-lightBorder flex items-center justify-between">
+        <a href="index.html" class="flex items-center">
+          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-7 w-auto object-contain">
+        </a>
+        <span
+          class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-bold uppercase font-mono">Admin</span>
+      </div>
+
+      <nav class="p-4 space-y-1" id="admin-sidebar-nav">
+        <button onclick="setAdminTab('admin-dash')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors bg-primary text-white"
+          id="admin-tab-admin-dash">
+          <i class="ri-dashboard-line"></i> Dashboard
+        </button>
+        <button onclick="setAdminTab('admin-leads')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-leads">
+          <i class="ri-contacts-line"></i> Leads
+        </button>
+        <button onclick="setAdminTab('admin-quotes')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-quotes">
+          <i class="ri-file-copy-2-line"></i> Quotations
+        </button>
+        <button onclick="setAdminTab('admin-products')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-products">
+          <i class="ri-shirt-line"></i> Products
+        </button>
+        <button onclick="setAdminTab('admin-blogs')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-blogs">
+          <i class="ri-article-line"></i> Blog
+        </button>
+        <button onclick="setAdminTab('admin-customers')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-customers">
+          <i class="ri-user-shared-line"></i> Customers
+        </button>
+        <button onclick="setAdminTab('admin-settings')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-settings">
+          <i class="ri-settings-4-line"></i> Settings
+        </button>
+      </nav>
+    </div>
+
+    <div class="p-4 border-t border-lightBorder space-y-2 font-body">
+      <div class="flex items-center gap-3 px-4 py-2">
+        <div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">A</div>
+        <div>
+          <p class="text-xs font-bold text-charcoal">System Admin</p>
+          <p class="text-[10px] text-mutedText font-mono">Operations HQ</p>
+        </div>
+      </div>
+      <button onclick="handleLogout()"
+        class="w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
+        <i class="ri-logout-box-r-line"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <header class="bg-white border-b border-lightBorder py-4 px-6 md:px-8 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar(true)"
+          class="md:hidden text-charcoal focus:outline-none hover:text-primary transition-colors">
+          <i class="ri-menu-2-line text-2xl"></i>
+        </button>
+        <h2 class="font-heading text-lg md:text-xl font-extrabold text-charcoal" id="admin-portal-title">Dashboard</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <!-- Theme Switcher -->
+        <button
+          class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-mutedText hover:text-charcoal focus:outline-none"
+          title="Toggle Theme">
+          <i class="ri-moon-line text-lg"></i>
+        </button>
+        <button onclick="handleLogout()"
+          class="md:hidden text-red-500 text-sm font-semibold px-3 py-1.5 rounded hover:bg-red-50">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <div class="p-6 md:p-8 flex-1">
+
+      <!-- TAB 1: ADMIN DASHBOARD -->
+      <div id="admin-dash" class="admin-portal-view space-y-8">
+
+        <!-- Phase 1 Summary Widgets: 6 cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+
+          <!-- 1. Total Leads -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Total Leads</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="admin-stat-leads">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">CRM board</p>
+          </div>
+
+          <!-- 2. Active Quotations -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Active Quotations</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="admin-stat-open-quotes">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Price review</p>
+          </div>
+
+          <!-- 3. Total Products -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Total Products</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="admin-stat-products">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Catalog Registry</p>
+          </div>
+
+          <!-- 4. Blog Posts -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Blog Posts</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="admin-stat-blogs">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Published articles</p>
+          </div>
+
+          <!-- 5. Total Customers -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Customers</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-green-600" id="admin-stat-active-customers">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Registered accounts</p>
+          </div>
+
+          <!-- 6. Pending Registrations -->
+          <div
+            class="bg-white p-4 rounded-2xl border border-yellow-200 shadow-sm cursor-pointer hover:border-yellow-400 hover:shadow-md transition-all group"
+            onclick="openPendingCustomers()" title="Click to review pending registrations">
+            <span
+              class="text-[10px] font-bold text-yellow-600 uppercase tracking-widest block flex items-center gap-1"><i
+                class="ri-user-add-line"></i> Pending</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-yellow-600" id="admin-stat-pending-customers">0
+            </h4>
+            <p class="text-[9px] text-yellow-500 mt-1 font-semibold group-hover:text-yellow-700">Awaiting approval ›</p>
+          </div>
+
+        </div>
+
+        <!-- Recent Leads Preview -->
+        <div class="bg-white rounded-2xl border border-lightBorder shadow-sm overflow-x-auto">
+          <div class="p-5 border-b border-lightBorder flex items-center justify-between">
+            <h4 class="font-heading text-base font-bold text-charcoal">Recent Leads</h4>
+            <button onclick="setAdminTab('admin-leads')" class="text-primary text-xs font-semibold hover:underline">View
+              All &rarr;</button>
+          </div>
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Name</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Company</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Stage</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Date</th>
+              </tr>
+            </thead>
+            <tbody id="admin-dash-recent-leads">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Recent Quotations Preview -->
+        <div class="bg-white rounded-2xl border border-lightBorder shadow-sm overflow-x-auto">
+          <div class="p-5 border-b border-lightBorder flex items-center justify-between">
+            <h4 class="font-heading text-base font-bold text-charcoal">Recent Quotations</h4>
+            <button onclick="setAdminTab('admin-quotes')"
+              class="text-primary text-xs font-semibold hover:underline">View All &rarr;</button>
+          </div>
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Quote ID</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Client Email</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product Line</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+              </tr>
+            </thead>
+            <tbody id="admin-dash-recent-quotes">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: LEADS -->
+      <div id="admin-leads" class="admin-portal-view hidden space-y-8">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Incoming Consultation Leads</h3>
+
+        <!-- Source Filter Bar -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3 pb-2">
+          <button onclick="filterLeadsBySource('All')" id="lead-filter-All"
+            class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white">All
+            Leads</button>
+          <button onclick="filterLeadsBySource('Design Studio')" id="lead-filter-DesignStudio"
+            class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Design
+            Studio</button>
+          <button onclick="filterLeadsBySource('Contact Form')" id="lead-filter-ContactForm"
+            class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Contact
+            Form</button>
+          <button onclick="filterLeadsBySource('Chatbot')" id="lead-filter-Chatbot"
+            class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Chatbot</button>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Name</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Company</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Email</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Mobile</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Source</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Date Submitted</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Stage</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-leads-table-body">
+              <!-- Dynamically injected leads -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: QUOTATIONS -->
+      <div id="admin-quotes" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Quotations Manager</h3>
+          <button onclick="openCreateQuoteModal()"
+            class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+            Create Quotation
+          </button>
+        </div>
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[900px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Quote ID</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Client Email</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product Line</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Volume</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Specs</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-quotes-table-body">
+              <!-- Dynamically injected quotations -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: PRODUCTS CATALOG -->
+      <div id="admin-products" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Apparel Catalog Registry</h3>
+          <button onclick="openProductModal('add')"
+            class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+            Add Product
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Image</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product Name</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Fabric</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">MOQ</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Description</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-table-body">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 5: BLOG PUBLISHING -->
+      <div id="admin-blogs" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Editorial Desk</h3>
+          <button onclick="openBlogModal('add')"
+            class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+            Publish Article
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Title</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Author</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Date</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-blogs-table-body">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 6: CUSTOMERS DIRECTORY -->
+      <div id="admin-customers" class="admin-portal-view hidden space-y-8">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Registered Customer Accounts</h3>
+          <span class="text-xs text-mutedText font-semibold" id="admin-customers-count-label"></span>
+        </div>
+
+        <!-- Customer Filter Bar -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3 pb-1">
+          <button onclick="filterCustomersByStatus('All')" id="cust-filter-All"
+            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white">All</button>
+          <button onclick="filterCustomersByStatus('Pending')" id="cust-filter-Pending"
+            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-yellow-400 text-yellow-700 bg-yellow-50 hover:bg-yellow-100">⏳
+            Pending</button>
+          <button onclick="filterCustomersByStatus('Active')" id="cust-filter-Active"
+            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-green-400 hover:text-green-700">✓
+            Active</button>
+          <button onclick="filterCustomersByStatus('Disabled')" id="cust-filter-Disabled"
+            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-red-400 hover:text-red-600">✗
+            Disabled</button>
+          <button onclick="filterCustomersByStatus('Rejected')" id="cust-filter-Rejected"
+            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-gray-400">⊘
+            Rejected</button>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[1100px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Company</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Contact Person</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Email</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Phone</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Reg. Date</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-customers-table-body">
+              <!-- Dynamically list clients -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 7: SETTINGS -->
+      <div id="admin-settings" class="admin-portal-view hidden space-y-8">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Company & Branding Settings</h3>
+        <div class="bg-white p-6 md:p-8 rounded-2xl border border-lightBorder shadow-sm max-w-2xl">
+          <form onsubmit="submitCompanySettings(event)" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Company
+                  Name</label>
+                <input type="text" id="settings-company-name" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Support
+                  Email</label>
+                <input type="email" id="settings-support-email" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Sales Email</label>
+                <input type="email" id="settings-sales-email" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Phone
+                  Numbers</label>
+                <input type="text" id="settings-phone" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Office
+                Address</label>
+              <textarea id="settings-address" rows="3" required
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Notification
+                  Email</label>
+                <input type="email" id="settings-notification-email" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">CC Email</label>
+                <input type="email" id="settings-cc-email"
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Long / Main Logo
+                    (Header & Footer)</label>
+                  <div class="flex items-center gap-4">
+                    <div id="settings-logo-preview-container"
+                      class="w-16 h-16 rounded-xl border border-lightBorder bg-lightCard flex items-center justify-center overflow-hidden shrink-0">
+                      <img id="settings-logo-preview" src="logo-full.png" class="w-10 h-10 object-contain">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <div class="flex gap-1.5">
+                        <button type="button" onclick="triggerLogoUpload('long')"
+                          class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">
+                          Upload
+                        </button>
+                        <button type="button" onclick="resetLogoToDefault('long')"
+                          class="border border-lightBorder text-charcoal hover:bg-lightCard px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors">
+                          Reset
+                        </button>
+                      </div>
+                      <p class="text-[9px] text-mutedText">Horizontal format recommended.</p>
+                    </div>
+                  </div>
+                  <input type="file" id="settings-logo-file" accept="image/*" class="hidden"
+                    onchange="handleLogoUpload(event, 'long')">
+                  <input type="hidden" id="settings-logo-data">
+                </div>
+
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Favicon / Icon
+                    Logo (Browser Tab)</label>
+                  <div class="flex items-center gap-4">
+                    <div id="settings-favicon-preview-container"
+                      class="w-16 h-16 rounded-xl border border-lightBorder bg-lightCard flex items-center justify-center overflow-hidden shrink-0">
+                      <img id="settings-favicon-preview" src="logo-icon.png" class="w-10 h-10 object-contain">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <div class="flex gap-1.5">
+                        <button type="button" onclick="triggerLogoUpload('favicon')"
+                          class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">
+                          Upload
+                        </button>
+                        <button type="button" onclick="resetLogoToDefault('favicon')"
+                          class="border border-lightBorder text-charcoal hover:bg-lightCard px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors">
+                          Reset
+                        </button>
+                      </div>
+                      <p class="text-[9px] text-mutedText">Square format (SVG/PNG) recommended.</p>
+                    </div>
+                  </div>
+                  <input type="file" id="settings-favicon-file" accept="image/*" class="hidden"
+                    onchange="handleLogoUpload(event, 'favicon')">
+                  <input type="hidden" id="settings-favicon-data">
+                </div>
+              </div>
+            </div>
+            <button type="submit"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+              Save Settings & Apply Branding
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: Add/Edit Product -->
+  <div id="admin-product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-product-modal', false)">
+    </div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal" id="product-modal-title">Add New Product</h3>
+        <button onclick="toggleModal('admin-product-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitAdminProduct(event)" class="space-y-4">
+        <input type="hidden" id="product-modal-action">
+        <input type="hidden" id="product-modal-id">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product Name</label>
+          <input type="text" id="prod-name" required placeholder="AeroGuard Scrubs"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Category</label>
+            <select id="prod-cat"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Industrial">Industrial</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Institutional">Institutional</option>
+              <option value="Corporate Gifting">Corporate Gifting</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Fabric Base</label>
+            <input type="text" id="prod-fabric" required placeholder="65% Cotton / 35% Poly"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">GSM Density</label>
+            <input type="text" id="prod-gsm" required placeholder="180 GSM"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">MOQ Limit</label>
+            <input type="number" id="prod-moq" required placeholder="100"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product Image</label>
+          <div id="product-img-upload-zone"
+            class="border-2 border-dashed border-lightBorder hover:border-primary/50 rounded-xl p-4 text-center cursor-pointer transition-all bg-lightCard relative flex flex-col items-center justify-center min-h-[140px] group">
+
+            <!-- When image is uploaded -->
+            <div id="upload-zone-preview" class="hidden flex-col items-center space-y-2">
+              <img id="upload-preview-thumb" src=""
+                class="w-20 h-20 object-cover rounded-lg border border-lightBorder shadow-sm">
+              <button type="button" onclick="removeModalImage(event)"
+                class="text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1"><i
+                  class="ri-delete-bin-line"></i> Remove Image</button>
+            </div>
+
+            <!-- When no image is uploaded -->
+            <div id="upload-zone-prompt" class="flex flex-col items-center space-y-2">
+              <div
+                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+                <i class="ri-image-add-line text-lg"></i></div>
+              <p class="text-xs text-charcoal font-semibold">Click to upload or drag image here</p>
+              <p class="text-[10px] text-mutedText">PNG, JPG, JPEG, or WEBP up to 2MB</p>
+            </div>
+
+            <!-- Dragover overlay highlight -->
+            <div id="upload-zone-overlay"
+              class="absolute inset-0 bg-primary/5 border-2 border-primary border-dashed rounded-xl flex items-center justify-center z-10 hidden">
+              <div class="text-center text-primary font-bold text-xs uppercase tracking-wider">Drop image here</div>
+            </div>
+          </div>
+          <!-- Hidden Inputs -->
+          <input type="file" id="prod-img-file" accept="image/*" class="hidden">
+          <input type="hidden" id="prod-img-url" value="corporate_blazer_detail.png">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Description</label>
+          <textarea id="prod-desc" rows="3" required placeholder="Describe technical performance specs..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <input type="checkbox" id="prod-featured"
+            class="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded">
+          <label for="prod-featured"
+            class="text-xs font-bold text-mutedText uppercase tracking-widest select-none">Featured Product</label>
+        </div>
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Save Catalog Entry
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add/Edit Blog -->
+  <div id="admin-blog-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-blog-modal', false)">
+    </div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal" id="blog-modal-title">Publish Blog Post</h3>
+        <button onclick="toggleModal('admin-blog-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitAdminBlog(event)" class="space-y-4">
+        <input type="hidden" id="blog-modal-action">
+        <input type="hidden" id="blog-modal-id">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Article Title</label>
+          <input type="text" id="blog-title" required placeholder="Sourcing Linen Safely"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Category</label>
+            <select id="blog-cat"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Fabrics">Fabrics</option>
+              <option value="Branding">Branding</option>
+              <option value="Industrial">Industrial</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Institutional">Institutional</option>
+              <option value="Corporate Gifting">Corporate Gifting</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Author</label>
+            <input type="text" id="blog-author" required placeholder="Dr. Anjali Sen"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Status</label>
+            <select id="blog-status"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Published">Published</option>
+              <option value="Draft">Draft</option>
+              <option value="Scheduled">Scheduled</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Short Excerpt</label>
+          <textarea id="blog-excerpt" rows="2" required placeholder="Summary of the article content..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Save Editorial Post
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Revise Quotation -->
+  <div id="admin-revise-quote-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md"
+      onclick="toggleModal('admin-revise-quote-modal', false)"></div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Revise Quotation</h3>
+        <button onclick="toggleModal('admin-revise-quote-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitReviseQuotation(event)" class="space-y-4">
+        <input type="hidden" id="revise-quote-id">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product / Apparel
+            Base</label>
+          <input type="text" id="revise-quote-cat" required placeholder="Corporate Blazer"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Volume</label>
+            <input type="number" id="revise-quote-volume" required placeholder="500"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Price Value</label>
+            <input type="text" id="revise-quote-value" required placeholder="₹125,000"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Save Revised Proposal
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Create Quotation -->
+  <div id="admin-create-quote-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md"
+      onclick="toggleModal('admin-create-quote-modal', false)"></div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Create New Quotation</h3>
+        <button onclick="toggleModal('admin-create-quote-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitCreateQuotation(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Client Email</label>
+          <input type="email" id="create-quote-email" required placeholder="client@tajhotels.com"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product Line</label>
+            <select id="create-quote-cat"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Industrial">Industrial</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Institutional">Institutional</option>
+              <option value="Corporate Gifting">Corporate Gifting</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Volume (Sets)</label>
+            <input type="number" id="create-quote-volume" required placeholder="100"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Price Value</label>
+          <input type="text" id="create-quote-value" required placeholder="₹85,000"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Specifications</label>
+          <textarea id="create-quote-specs" rows="3" required
+            placeholder="Describe fabrics, size matrix, custom logos, etc..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Publish Quotation Proposal
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="shared.js"></script>
+
+  <script>
+    // ─── PRODUCT IMAGE UPLOAD PARAMETERS & HANDLERS ────────────────────────────
+    let currentTableUploadProductId = null;
+
+    function triggerTableImageUpload(prodId) {
+      currentTableUploadProductId = prodId;
+      let input = document.getElementById('table-image-input');
+      if (!input) {
+        input = document.createElement('input');
+        input.type = 'file';
+        input.id = 'table-image-input';
+        input.accept = 'image/*';
+        input.className = 'hidden';
+        input.addEventListener('change', handleTableImageUpload);
+        document.body.appendChild(input);
+      }
+      input.click();
+    }
+
+    function handleTableImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file || !currentTableUploadProductId) return;
+
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (PNG, JPG, JPEG, WEBP).');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert('File size exceeds 2MB limit.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Url = e.target.result;
+        let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+        const idx = prods.findIndex(p => p.id === currentTableUploadProductId);
+        if (idx !== -1) {
+          prods[idx].img = base64Url;
+          prods[idx].image = base64Url;
+          localStorage.setItem('uniwear_products', JSON.stringify(prods));
+          updateAdminDashboard();
+          alert('Product image updated successfully!');
+        }
+        currentTableUploadProductId = null;
+        event.target.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeTableImage(prodId) {
+      if (!confirm('Are you sure you want to remove the product image? It will revert to the fallback image.')) return;
+      let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+      const idx = prods.findIndex(p => p.id === prodId);
+      if (idx !== -1) {
+        prods[idx].img = 'corporate_blazer_detail.png';
+        prods[idx].image = 'corporate_blazer_detail.png';
+        localStorage.setItem('uniwear_products', JSON.stringify(prods));
+        updateAdminDashboard();
+        alert('Product image reverted to default.');
+      }
+    }
+
+    function initProductImageUpload() {
+      const zone = document.getElementById('product-img-upload-zone');
+      const fileInput = document.getElementById('prod-img-file');
+
+      if (!zone || !fileInput) return;
+
+      zone.addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) handleFileSelected(file);
+      });
+
+      const overlay = document.getElementById('upload-zone-overlay');
+
+      if (overlay) {
+        zone.addEventListener('dragenter', (e) => {
+          e.preventDefault();
+          overlay.classList.remove('hidden');
+        });
+
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          overlay.classList.remove('hidden');
+        });
+
+        overlay.addEventListener('dragleave', (e) => {
+          e.preventDefault();
+          overlay.classList.add('hidden');
+        });
+
+        overlay.addEventListener('drop', (e) => {
+          e.preventDefault();
+          overlay.classList.add('hidden');
+          const file = e.dataTransfer.files[0];
+          if (file) handleFileSelected(file);
+        });
+      }
+    }
+
+    function handleFileSelected(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (PNG, JPG, JPEG, WEBP).');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert('File size exceeds 2MB limit.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Url = e.target.result;
+        document.getElementById('prod-img-url').value = base64Url;
+        updateUploadZonePreview(base64Url);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeModalImage(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('prod-img-url').value = 'corporate_blazer_detail.png';
+      updateUploadZonePreview('corporate_blazer_detail.png');
+      document.getElementById('prod-img-file').value = '';
+    }
+
+    function updateUploadZonePreview(src) {
+      const previewZone = document.getElementById('upload-zone-preview');
+      const promptZone = document.getElementById('upload-zone-prompt');
+      const thumb = document.getElementById('upload-preview-thumb');
+
+      if (src && src !== 'corporate_blazer_detail.png' && src !== '') {
+        if (thumb) thumb.src = src;
+        if (previewZone) previewZone.classList.remove('hidden');
+        if (promptZone) promptZone.classList.add('hidden');
+      } else {
+        if (thumb) thumb.src = '';
+        if (previewZone) previewZone.classList.add('hidden');
+        if (promptZone) promptZone.classList.remove('hidden');
+      }
+    }
+
+    // Sync data from server
+    async function syncAdminData() {
+      try {
+        const [usersRes, leadsRes, quotesRes, settingsRes, notificationsRes] = await Promise.all([
+          window.api.getUsers(),
+          window.api.getLeads(),
+          window.api.getQuotations(),
+          window.api.getSettings(),
+          window.api.getNotifications('admin')
+        ]);
+
+        if (usersRes.success) localStorage.setItem('uniwear_users', JSON.stringify(usersRes.data));
+        if (leadsRes.success) localStorage.setItem('uniwear_leads', JSON.stringify(leadsRes.data));
+        if (quotesRes.success) localStorage.setItem('uniwear_quotations', JSON.stringify(quotesRes.data));
+        if (settingsRes.success) localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsRes.data));
+        if (notificationsRes.success) localStorage.setItem('uniwear_notifications', JSON.stringify(notificationsRes.data));
+      } catch (err) {
+        console.error("Failed to sync admin data:", err);
+      }
+    }
+
+    // Auth guard
+    window.addEventListener('DOMContentLoaded', async () => {
+      const role = localStorage.getItem('uniwear_auth_role');
+      if (role !== 'admin') {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        await syncAdminData();
+      } catch (err) {
+        console.error("Failed to sync data on page load", err);
+      }
+      updateAdminDashboard();
+      initProductImageUpload();
+    });
+
+    // ─── TAB NAVIGATION ───────────────────────────────────────────────────────
+    const TAB_TITLES = {
+      'admin-dash': 'Dashboard',
+      'admin-leads': 'Leads',
+      'admin-quotes': 'Quotations',
+      'admin-products': 'Products',
+      'admin-blogs': 'Blog',
+      'admin-customers': 'Customers',
+      'admin-settings': 'Settings'
+    };
+
+    function setAdminTab(tabId) {
+      // Hide all views
+      document.querySelectorAll('.admin-portal-view').forEach(view => view.classList.add('hidden'));
+
+      // Show target view
+      const target = document.getElementById(tabId);
+      if (!target) return;
+      target.classList.remove('hidden');
+
+      // Reset all sidebar buttons to inactive style
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('text-mutedText', 'hover:bg-lightCard', 'hover:text-charcoal');
+      });
+
+      // Activate the clicked button
+      const activeBtn = document.getElementById('admin-tab-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-mutedText', 'hover:bg-lightCard', 'hover:text-charcoal');
+        activeBtn.classList.add('bg-primary', 'text-white');
+      }
+
+      // Update header title
+      document.getElementById('admin-portal-title').innerText = TAB_TITLES[tabId] || 'Admin Portal';
+
+      // Load form details if switching to settings tab
+      if (tabId === 'admin-settings') {
+        loadCompanySettingsForm();
+      }
+
+      // Refresh data
+      updateAdminDashboard();
+
+      // Auto-close sidebar on mobile
+      if (window.innerWidth < 768) {
+        toggleSidebar(false);
+      }
+    }
+
+    function loadCompanySettingsForm() {
+      const settings = JSON.parse(localStorage.getItem('uniwear_company_settings')) || {
+        companyName: "UNIWEAR",
+        supportEmail: "connect@uniwear.co",
+        salesEmail: "sales@uniwear.co",
+        phone: "91087 65831, 98459 32201",
+        address: "No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070",
+        logoUrl: "",
+        faviconUrl: "",
+        notificationEmail: "connect@uniwear.co",
+        ccEmail: ""
+      };
+
+      document.getElementById('settings-company-name').value = settings.companyName || '';
+      document.getElementById('settings-support-email').value = settings.supportEmail || '';
+      document.getElementById('settings-sales-email').value = settings.salesEmail || '';
+      document.getElementById('settings-phone').value = settings.phone || '';
+      document.getElementById('settings-address').value = settings.address || '';
+      document.getElementById('settings-notification-email').value = settings.notificationEmail || '';
+      document.getElementById('settings-cc-email').value = settings.ccEmail || '';
+
+      // Main/Long Logo Preview
+      const previewLong = document.getElementById('settings-logo-preview');
+      const hiddenInputLong = document.getElementById('settings-logo-data');
+      if (settings.logoUrl) {
+        previewLong.src = settings.logoUrl;
+        hiddenInputLong.value = settings.logoUrl;
+      } else {
+        previewLong.src = 'logo-icon.svg';
+        hiddenInputLong.value = '';
+      }
+
+      // Favicon Logo Preview
+      const previewFavicon = document.getElementById('settings-favicon-preview');
+      const hiddenInputFavicon = document.getElementById('settings-favicon-data');
+      if (settings.faviconUrl) {
+        previewFavicon.src = settings.faviconUrl;
+        hiddenInputFavicon.value = settings.faviconUrl;
+      } else {
+        previewFavicon.src = 'logo-icon.svg';
+        hiddenInputFavicon.value = '';
+      }
+    }
+
+    function triggerLogoUpload(type) {
+      if (type === 'long') {
+        document.getElementById('settings-logo-file').click();
+      } else if (type === 'favicon') {
+        document.getElementById('settings-favicon-file').click();
+      }
+    }
+
+    function handleLogoUpload(event, type) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (PNG, JPG, JPEG, WEBP, SVG).');
+        return;
+      }
+      if (file.size > 500 * 1024) {
+        alert('Logo file size exceeds 500KB limit.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Url = e.target.result;
+        if (type === 'long') {
+          document.getElementById('settings-logo-preview').src = base64Url;
+          document.getElementById('settings-logo-data').value = base64Url;
+        } else if (type === 'favicon') {
+          document.getElementById('settings-favicon-preview').src = base64Url;
+          document.getElementById('settings-favicon-data').value = base64Url;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetLogoToDefault(type) {
+      if (type === 'long') {
+        document.getElementById('settings-logo-preview').src = 'logo-icon.svg';
+        document.getElementById('settings-logo-data').value = '';
+        document.getElementById('settings-logo-file').value = '';
+      } else if (type === 'favicon') {
+        document.getElementById('settings-favicon-preview').src = 'logo-icon.svg';
+        document.getElementById('settings-favicon-data').value = '';
+        document.getElementById('settings-favicon-file').value = '';
+      }
+    }
+
+    async function submitCompanySettings(event) {
+      event.preventDefault();
+      const settings = {
+        companyName: document.getElementById('settings-company-name').value.trim(),
+        supportEmail: document.getElementById('settings-support-email').value.trim(),
+        salesEmail: document.getElementById('settings-sales-email').value.trim(),
+        phone: document.getElementById('settings-phone').value.trim(),
+        address: document.getElementById('settings-address').value.trim(),
+        logoUrl: document.getElementById('settings-logo-data').value,
+        faviconUrl: document.getElementById('settings-favicon-data').value,
+        notificationEmail: document.getElementById('settings-notification-email').value.trim(),
+        ccEmail: document.getElementById('settings-cc-email').value.trim()
+      };
+
+      try {
+        await window.api.updateSettings(settings);
+        await syncAdminData();
+
+        // Apply branding changes instantly
+        if (typeof applyCompanySettings === 'function') {
+          applyCompanySettings();
+        }
+
+        alert('Branding and company settings updated successfully!');
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to update settings.');
+      }
+    }
+
+    // ─── LOGOUT ────────────────────────────────────────────────────────────────
+    function handleLogout() {
+      localStorage.removeItem('uniwear_auth_role');
+      localStorage.removeItem('uniwear_auth_role_details');
+      localStorage.removeItem('uniwear_auth_email');
+      window.location.href = 'login.html';
+    }
+
+    // ─── MODAL HELPER ──────────────────────────────────────────────────────────
+    function toggleModal(modalId, show) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      if (show) {
+        modal.classList.remove('hidden');
+        const inner = modal.querySelector('.relative');
+        if (inner && typeof gsap !== 'undefined') {
+          gsap.from(inner, { scale: 0.95, opacity: 0, duration: 0.25 });
+        }
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    let activeLeadFilter = 'All';
+    function filterLeadsBySource(source) {
+      activeLeadFilter = source;
+      document.querySelectorAll('.lead-filter-btn').forEach(btn => {
+        btn.classList.remove('border-primary', 'bg-primary', 'text-white');
+        btn.classList.add('border-lightBorder', 'text-mutedText', 'bg-white');
+      });
+      const btnId = 'lead-filter-' + source.replace(/\s+/g, '');
+      const activeBtn = document.getElementById(btnId);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-lightBorder', 'text-mutedText', 'bg-white');
+        activeBtn.classList.add('border-primary', 'bg-primary', 'text-white');
+      }
+      updateAdminDashboard();
+    }
+
+    // ─── DASHBOARD DATA RENDER ─────────────────────────────────────────────────
+    function updateAdminDashboard() {
+      const leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
+      const quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+      const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
+      const users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+
+      // ── Stat counters ──
+      const elLeads = document.getElementById('admin-stat-leads');
+      if (elLeads) elLeads.innerText = leads.length;
+
+      const elQuotes = document.getElementById('admin-stat-open-quotes');
+      if (elQuotes) {
+        const activeQuotes = quotes.filter(q => q && q.status !== 'Rejected' && q.status !== 'Declined');
+        elQuotes.innerText = activeQuotes.length;
+      }
+
+      const elProds = document.getElementById('admin-stat-products');
+      if (elProds) elProds.innerText = prods.length;
+
+      const elBlogs = document.getElementById('admin-stat-blogs');
+      if (elBlogs) elBlogs.innerText = blogs.length;
+
+      const elCust = document.getElementById('admin-stat-active-customers');
+      if (elCust) {
+        const customers = users.filter(u => u && u.role === 'Customer' && u.status === 'Active');
+        elCust.innerText = customers.length;
+      }
+
+      // ── Dashboard: Recent Leads (last 5) ──
+      const recentLeadsBody = document.getElementById('admin-dash-recent-leads');
+      if (recentLeadsBody) {
+        recentLeadsBody.innerHTML = '';
+        const recentLeads = leads.slice(-5).reverse();
+        if (recentLeads.length === 0) {
+          recentLeadsBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-mutedText text-xs">No leads yet.</td></tr>`;
+        } else {
+          recentLeads.forEach(l => {
+            if (!l) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            const stageColors = { 'Won': 'bg-green-100 text-green-700', 'Lost': 'bg-red-100 text-red-600', 'New Lead': 'bg-blue-100 text-blue-700' };
+            const stageStyle = stageColors[l.stage] || 'bg-gray-100 text-gray-600';
+            tr.innerHTML = `
+              <td class="p-4 font-bold text-charcoal">${l.name || ''}</td>
+              <td class="p-4 font-semibold text-mutedText">${l.company || ''}</td>
+              <td class="p-4">${l.category || ''}</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase ${stageStyle}">${l.stage || ''}</span></td>
+              <td class="p-4 font-mono text-gray-400">${l.date || ''}</td>
+            `;
+            recentLeadsBody.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Dashboard: Recent Quotations (last 5) ──
+      const recentQuotesBody = document.getElementById('admin-dash-recent-quotes');
+      if (recentQuotesBody) {
+        recentQuotesBody.innerHTML = '';
+        const recentQuotes = quotes.slice(-5).reverse();
+        if (recentQuotes.length === 0) {
+          recentQuotesBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-mutedText text-xs">No quotations yet.</td></tr>`;
+        } else {
+          recentQuotes.forEach(q => {
+            if (!q) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            const qColors = { 'Approved': 'bg-green-100 text-green-700', 'Rejected': 'bg-red-100 text-red-600', 'Declined': 'bg-red-100 text-red-600', 'Revised': 'bg-blue-100 text-blue-700' };
+            const qStyle = qColors[q.status] || 'bg-yellow-100 text-yellow-700';
+            tr.innerHTML = `
+              <td class="p-4 font-mono font-bold text-charcoal">${q.id || ''}</td>
+              <td class="p-4 text-mutedText">${q.clientEmail || ''}</td>
+              <td class="p-4 font-semibold">${q.productClass || ''}</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase ${qStyle}">${q.status || ''}</span></td>
+            `;
+            recentQuotesBody.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Leads Table ──
+      const tbodyLeads = document.getElementById('admin-leads-table-body');
+      if (tbodyLeads) {
+        tbodyLeads.innerHTML = '';
+        let mappedLeads = leads.map((l, index) => ({ ...l, globalIndex: index }));
+        if (activeLeadFilter !== 'All') {
+          mappedLeads = mappedLeads.filter(l => {
+            if (activeLeadFilter === 'Chatbot') {
+              return l.source === 'Chatbot' || l.source === 'AI Assistant';
+            }
+            return l.source === activeLeadFilter;
+          });
+        }
+
+        if (mappedLeads.length === 0) {
+          tbodyLeads.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-mutedText text-xs">No active business leads.</td></tr>`;
+        } else {
+          mappedLeads.forEach((l) => {
+            if (!l) return;
+            const idx = l.globalIndex;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+
+            const stages = ['New Lead', 'Contacted', 'Quotation Sent', 'Negotiation', 'Won', 'Lost'];
+            let options = '';
+            stages.forEach(s => {
+              options += `<option value="${s}" ${l.stage === s ? 'selected' : ''}>${s}</option>`;
+            });
+
+            let sourceBadge = '';
+            if (l.source === 'Design Studio') {
+              sourceBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-indigo-100 text-indigo-700 border border-indigo-200">Design Studio</span>`;
+            } else if (l.source === 'Contact Form') {
+              sourceBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700 border border-blue-200">Contact Form</span>`;
+            } else if (l.source === 'Chatbot' || l.source === 'AI Assistant') {
+              sourceBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-100 text-purple-700 border border-purple-200">Chatbot</span>`;
+            } else {
+              sourceBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-gray-100 text-gray-700 border border-gray-200">${l.source || 'Website'}</span>`;
+            }
+
+            tr.innerHTML = `
+              <td class="p-4 font-bold text-charcoal">${l.name || ''}</td>
+              <td class="p-4 font-semibold">${l.company || ''}</td>
+              <td class="p-4 font-mono select-all">${l.email || ''}</td>
+              <td class="p-4 font-mono">${l.phone || ''}</td>
+              <td class="p-4">${l.category || ''}</td>
+              <td class="p-4">${sourceBadge}</td>
+              <td class="p-4 font-mono text-gray-500">${l.date || ''}</td>
+              <td class="p-4">
+                <select onchange="updateLeadStage(${idx}, this.value)" class="bg-lightCard border border-lightBorder rounded py-1 px-2 text-[10px] text-charcoal font-semibold focus:outline-none focus:border-primary">
+                  ${options}
+                </select>
+              </td>
+              <td class="p-4 text-right flex justify-end gap-2">
+                <button onclick="convertLeadToQuote(${idx})" class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">Convert to Quote</button>
+                <button onclick="deleteLead(${idx})" class="bg-gray-100 hover:bg-red-50 text-mutedText hover:text-red-500 p-1.5 rounded transition-colors"><i class="ri-delete-bin-line"></i></button>
+              </td>
+            `;
+            tbodyLeads.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Quotes Table ──
+      const tbodyQuotes = document.getElementById('admin-quotes-table-body');
+      if (tbodyQuotes) {
+        tbodyQuotes.innerHTML = '';
+        if (quotes.length === 0) {
+          tbodyQuotes.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs">No quotation requests cataloged.</td></tr>`;
+        } else {
+          quotes.forEach(q => {
+            if (!q) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+
+            let btnGroup = '';
+            if (q.status !== 'Approved' && q.status !== 'Rejected' && q.status !== 'Declined' && q.status !== 'Converted to Order') {
+              btnGroup = `
+                <div class="flex justify-end gap-2">
+                  <button onclick="approveDirectQuote('${q.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors">Approve</button>
+                  <button onclick="openReviseQuoteModal('${q.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors">Revise</button>
+                  <button onclick="declineDirectQuote('${q.id}')" class="bg-charcoal hover:bg-black text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors">Reject</button>
+                </div>
+              `;
+            } else {
+              btnGroup = `<span class="text-gray-400 italic text-[10px]">Processed (${q.status})</span>`;
+            }
+
+            const statusColors = { 'Approved': 'bg-green-100 text-green-700', 'Revised': 'bg-blue-100 text-blue-700', 'Rejected': 'bg-red-100 text-red-600', 'Declined': 'bg-red-100 text-red-600' };
+            const statusStyle = statusColors[q.status] || 'bg-yellow-100 text-yellow-700';
+
+            tr.innerHTML = `
+              <td class="p-4 font-mono font-bold text-charcoal">${q.id}</td>
+              <td class="p-4 font-semibold text-gray-500">${q.clientEmail || ''}</td>
+              <td class="p-4 font-semibold">${q.productClass || ''}</td>
+              <td class="p-4">${q.volume || 0} Sets</td>
+              <td class="p-4 text-xs text-mutedText max-w-xs truncate" title="${q.specs || 'None'}">${q.specs || 'None'}</td>
+              <td class="p-4">
+                <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${q.status || ''}</span>
+              </td>
+              <td class="p-4 text-right">${btnGroup}</td>
+            `;
+            tbodyQuotes.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Products Table ──
+      const tbodyProds = document.getElementById('admin-products-table-body');
+      if (tbodyProds) {
+        tbodyProds.innerHTML = '';
+        if (prods.length === 0) {
+          tbodyProds.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs">No products in catalog.</td></tr>`;
+        } else {
+          prods.forEach(p => {
+            if (!p) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            const featuredBadge = p.featured ? `<span class="ml-2 bg-yellow-100 text-yellow-800 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider inline-flex items-center gap-0.5"><i class="ri-star-fill text-[9px]"></i> Featured</span>` : '';
+            const imgPath = p.img || 'corporate_blazer_detail.png';
+            tr.innerHTML = `
+              <td class="p-4">
+                <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard group/img cursor-pointer" onclick="triggerTableImageUpload(${p.id})">
+                  <img src="${imgPath}" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-charcoal/50 flex items-center justify-center text-white opacity-0 group-hover/img:opacity-100 transition-opacity">
+                    <i class="ri-upload-2-line text-xs"></i>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4 font-bold text-charcoal">${p.name || ''} ${featuredBadge}</td>
+              <td class="p-4 text-primary font-bold text-[10px] uppercase font-heading">${p.category || ''}</td>
+              <td class="p-4 font-medium">${p.fabric || ''} (${p.gsm || ''})</td>
+              <td class="p-4 font-semibold">${p.moq || 0} Sets</td>
+              <td class="p-4 text-mutedText truncate max-w-xs">${p.desc || ''}</td>
+              <td class="p-4 text-right">
+                <div class="flex justify-end items-center gap-2">
+                  <button onclick="triggerTableImageUpload(${p.id})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Upload/Replace Image"><i class="ri-image-add-line"></i></button>
+                  ${(p.img && p.img !== 'corporate_blazer_detail.png') ? `<button onclick="removeTableImage(${p.id})" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Remove Image"><i class="ri-close-line text-xs"></i></button>` : ''}
+                  <button onclick="openProductModal('edit', ${p.id})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Product"><i class="ri-edit-line"></i></button>
+                  <button onclick="deleteProduct(${p.id})" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Product"><i class="ri-delete-bin-line"></i></button>
+                </div>
+              </td>
+            `;
+            tbodyProds.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Blogs Table ──
+      const tbodyBlogs = document.getElementById('admin-blogs-table-body');
+      if (tbodyBlogs) {
+        tbodyBlogs.innerHTML = '';
+        if (blogs.length === 0) {
+          tbodyBlogs.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-mutedText text-xs">No blog articles published.</td></tr>`;
+        } else {
+          blogs.forEach(b => {
+            if (!b) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            const statusColors = { 'Published': 'bg-green-100 text-green-700', 'Draft': 'bg-gray-100 text-gray-600', 'Scheduled': 'bg-blue-100 text-blue-700' };
+            const statusStyle = statusColors[b.status] || 'bg-gray-100 text-gray-600';
+            tr.innerHTML = `
+              <td class="p-4 font-bold text-charcoal">${b.title || ''}</td>
+              <td class="p-4 text-primary font-bold text-[10px] uppercase font-heading">${b.category || ''}</td>
+              <td class="p-4 font-semibold">${b.author || ''}</td>
+              <td class="p-4 text-gray-400 font-mono">${b.date || ''}</td>
+              <td class="p-4">
+                <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${b.status || 'Published'}</span>
+              </td>
+              <td class="p-4 text-right flex justify-end gap-2">
+                <button onclick="openBlogModal('edit', ${b.id})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors"><i class="ri-edit-line"></i></button>
+                <button onclick="deleteBlog(${b.id})" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all"><i class="ri-delete-bin-line"></i></button>
+              </td>
+            `;
+            tbodyBlogs.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Dashboard Pending Widget Counter ──
+      const elPending = document.getElementById('admin-stat-pending-customers');
+      if (elPending) {
+        const pendingCount = users.filter(u => u && u.role === 'Customer' && u.status === 'Pending').length;
+        elPending.innerText = pendingCount;
+      }
+
+      // ── Full Customers Table ──
+      renderCustomersTable(users);
+
+      if (window.refreshHoverables) window.refreshHoverables();
+    }
+
+    // ─── LEADS ─────────────────────────────────────────────────────────────────
+    async function updateLeadStage(index, newStage) {
+      let leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
+      const lead = leads[index];
+      if (lead) {
+        try {
+          await window.api.updateLead(lead._id, { stage: newStage });
+          await syncAdminData();
+          updateAdminDashboard();
+        } catch (err) {
+          alert(err.message || 'Failed to update lead stage.');
+        }
+      }
+    }
+
+    async function deleteLead(index) {
+      if (!confirm('Delete this lead?')) return;
+      let leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
+      const lead = leads[index];
+      if (lead) {
+        try {
+          await window.api.deleteLead(lead._id);
+          await syncAdminData();
+          updateAdminDashboard();
+        } catch (err) {
+          alert(err.message || 'Failed to delete lead.');
+        }
+      }
+    }
+
+    async function convertLeadToQuote(index) {
+      let leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
+      const lead = leads[index];
+      if (!lead) return;
+
+      const qId = 'UW-Quote-' + Math.floor(100 + Math.random() * 900);
+      const quotePayload = {
+        id: qId,
+        clientEmail: lead.email || 'client@uniwear.co',
+        productClass: lead.category,
+        volume: lead.volume || 0,
+        date: new Date().toISOString().split('T')[0],
+        value: '₹' + ((lead.volume || 0) * 850).toLocaleString(),
+        status: 'Approved',
+        specs: lead.details || 'Converted from sales consultation lead.'
+      };
+
+      try {
+        await window.api.createQuotation(quotePayload);
+        await window.api.deleteLead(lead._id);
+
+        // Notify
+        await window.api.createNotification({
+          recipient: 'admin',
+          title: 'Lead Converted',
+          text: `Lead from ${lead.company} converted to quotation ${qId}.`
+        });
+
+        await syncAdminData();
+        alert('Lead converted successfully to quotation ' + qId + '.');
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to convert lead to quote.');
+      }
+    }
+
+    // ─── QUOTATIONS ────────────────────────────────────────────────────────────
+    async function approveDirectQuote(quoteId) {
+      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const q = quotes.find(item => item.id === quoteId);
+      if (!q) return;
+
+      try {
+        const val = '₹' + ((q.volume || 0) * 850).toLocaleString();
+        await window.api.updateQuotation(q._id, { status: 'Approved', value: val });
+        await syncAdminData();
+        alert('Quotation approved with value: ' + val);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to approve quotation.');
+      }
+    }
+
+    async function declineDirectQuote(quoteId) {
+      if (!confirm('Reject this quotation?')) return;
+      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const q = quotes.find(item => item.id === quoteId);
+      if (!q) return;
+
+      try {
+        await window.api.updateQuotation(q._id, { status: 'Rejected' });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to reject quotation.');
+      }
+    }
+
+    function openReviseQuoteModal(quoteId) {
+      const quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const q = quotes.find(item => item.id === quoteId);
+      if (!q) return;
+
+      document.getElementById('revise-quote-id').value = q.id;
+      document.getElementById('revise-quote-cat').value = q.productClass;
+      document.getElementById('revise-quote-volume').value = q.volume;
+      document.getElementById('revise-quote-value').value = q.value || ('₹' + ((q.volume || 0) * 850).toLocaleString());
+
+      toggleModal('admin-revise-quote-modal', true);
+    }
+
+    async function submitReviseQuotation(event) {
+      event.preventDefault();
+      const qId = document.getElementById('revise-quote-id').value;
+      const cat = document.getElementById('revise-quote-cat').value;
+      const vol = parseInt(document.getElementById('revise-quote-volume').value);
+      const val = document.getElementById('revise-quote-value').value;
+
+      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const q = quotes.find(item => item.id === qId);
+      if (!q) return;
+
+      try {
+        await window.api.updateQuotation(q._id, {
+          productClass: cat,
+          volume: vol,
+          value: val,
+          status: 'Revised'
+        });
+        await syncAdminData();
+        toggleModal('admin-revise-quote-modal', false);
+        alert('Quotation revised successfully.');
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to revise quotation.');
+      }
+    }
+
+    function openCreateQuoteModal() {
+      document.getElementById('create-quote-email').value = '';
+      document.getElementById('create-quote-volume').value = '';
+      document.getElementById('create-quote-value').value = '';
+      document.getElementById('create-quote-specs').value = '';
+      toggleModal('admin-create-quote-modal', true);
+    }
+
+    async function submitCreateQuotation(event) {
+      event.preventDefault();
+      const email = document.getElementById('create-quote-email').value.trim().toLowerCase();
+      const prodLine = document.getElementById('create-quote-cat').value;
+      const volume = parseInt(document.getElementById('create-quote-volume').value);
+      let valueVal = document.getElementById('create-quote-value').value.trim();
+      const specs = document.getElementById('create-quote-specs').value.trim();
+
+      if (!valueVal.startsWith('₹')) valueVal = '₹' + valueVal;
+
+      const qId = 'UW-Quote-' + Math.floor(100 + Math.random() * 900);
+
+      const quotePayload = {
+        id: qId,
+        clientEmail: email,
+        productClass: prodLine,
+        volume: volume,
+        date: new Date().toISOString().split('T')[0],
+        value: valueVal,
+        status: 'Awaiting Admin Review',
+        specs: specs
+      };
+
+      try {
+        await window.api.createQuotation(quotePayload);
+        await syncAdminData();
+        toggleModal('admin-create-quote-modal', false);
+        alert('Quotation ' + qId + ' created for ' + email + '.');
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to create quotation.');
+      }
+    }
+
+    // ─── PRODUCTS ──────────────────────────────────────────────────────────────
+    function openProductModal(action, prodId) {
+      document.getElementById('product-modal-action').value = action;
+
+      if (action === 'add') {
+        document.getElementById('product-modal-title').innerText = 'Add New Product';
+        document.getElementById('prod-name').value = '';
+        document.getElementById('prod-fabric').value = '';
+        document.getElementById('prod-gsm').value = '';
+        document.getElementById('prod-moq').value = '';
+        document.getElementById('prod-img-url').value = 'corporate_blazer_detail.png';
+        updateUploadZonePreview('corporate_blazer_detail.png');
+        document.getElementById('prod-desc').value = '';
+        document.getElementById('prod-featured').checked = false;
+        document.getElementById('product-modal-id').value = '';
+      } else {
+        document.getElementById('product-modal-title').innerText = 'Edit Product';
+        const prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+        const p = prods.find(item => item.id === prodId);
+        if (!p) return;
+
+        document.getElementById('product-modal-id').value = p.id;
+        document.getElementById('prod-name').value = p.name;
+        document.getElementById('prod-cat').value = p.category;
+        document.getElementById('prod-fabric').value = p.fabric;
+        document.getElementById('prod-gsm').value = p.gsm;
+        document.getElementById('prod-moq').value = p.moq;
+        document.getElementById('prod-img-url').value = p.img;
+        updateUploadZonePreview(p.img);
+        document.getElementById('prod-desc').value = p.desc;
+        document.getElementById('prod-featured').checked = p.featured || false;
+      }
+
+      toggleModal('admin-product-modal', true);
+    }
+
+    function submitAdminProduct(event) {
+      event.preventDefault();
+      const action = document.getElementById('product-modal-action').value;
+      let prods = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
+
+      const newProd = {
+        name: document.getElementById('prod-name').value,
+        category: document.getElementById('prod-cat').value,
+        fabric: document.getElementById('prod-fabric').value,
+        gsm: document.getElementById('prod-gsm').value,
+        moq: parseInt(document.getElementById('prod-moq').value),
+        img: document.getElementById('prod-img-url').value || 'corporate_blazer_detail.png',
+        image: document.getElementById('prod-img-url').value || 'corporate_blazer_detail.png',
+        desc: document.getElementById('prod-desc').value,
+        featured: document.getElementById('prod-featured').checked
+      };
+
+      if (action === 'add') {
+        newProd.id = prods.length > 0 ? Math.max(...prods.map(p => p.id)) + 1 : 1;
+        prods.push(newProd);
+        alert('Product added successfully!');
+      } else {
+        const id = parseInt(document.getElementById('product-modal-id').value);
+        const idx = prods.findIndex(p => p.id === id);
+        if (idx !== -1) { newProd.id = id; prods[idx] = newProd; alert('Product updated successfully!'); }
+      }
+
+      localStorage.setItem('uniwear_products', JSON.stringify(prods));
+      toggleModal('admin-product-modal', false);
+      updateAdminDashboard();
+    }
+
+    function deleteProduct(prodId) {
+      if (!confirm('Delete this product?')) return;
+      let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+      prods = prods.filter(p => p.id !== prodId);
+      localStorage.setItem('uniwear_products', JSON.stringify(prods));
+      updateAdminDashboard();
+    }
+
+    // ─── BLOGS ─────────────────────────────────────────────────────────────────
+    function openBlogModal(action, blogId) {
+      document.getElementById('blog-modal-action').value = action;
+
+      if (action === 'add') {
+        document.getElementById('blog-modal-title').innerText = 'Publish Blog Post';
+        document.getElementById('blog-title').value = '';
+        document.getElementById('blog-author').value = '';
+        document.getElementById('blog-excerpt').value = '';
+        document.getElementById('blog-status').value = 'Published';
+        document.getElementById('blog-modal-id').value = '';
+      } else {
+        document.getElementById('blog-modal-title').innerText = 'Edit Blog Post';
+        const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
+        const b = blogs.find(item => item.id === blogId);
+        if (!b) return;
+
+        document.getElementById('blog-modal-id').value = b.id;
+        document.getElementById('blog-title').value = b.title;
+        document.getElementById('blog-cat').value = b.category;
+        document.getElementById('blog-author').value = b.author;
+        document.getElementById('blog-excerpt').value = b.excerpt;
+        document.getElementById('blog-status').value = b.status || 'Published';
+      }
+
+      toggleModal('admin-blog-modal', true);
+    }
+
+    function submitAdminBlog(event) {
+      event.preventDefault();
+      const action = document.getElementById('blog-modal-action').value;
+      let blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
+
+      const newBlog = {
+        title: document.getElementById('blog-title').value,
+        category: document.getElementById('blog-cat').value,
+        author: document.getElementById('blog-author').value,
+        status: document.getElementById('blog-status').value,
+        excerpt: document.getElementById('blog-excerpt').value,
+        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
+        featured: false
+      };
+
+      if (action === 'add') {
+        newBlog.id = blogs.length > 0 ? Math.max(...blogs.map(b => b.id)) + 1 : 1;
+        blogs.push(newBlog);
+        alert('Blog article published!');
+      } else {
+        const id = parseInt(document.getElementById('blog-modal-id').value);
+        const idx = blogs.findIndex(b => b.id === id);
+        if (idx !== -1) { newBlog.id = id; blogs[idx] = newBlog; alert('Blog post updated!'); }
+      }
+
+      localStorage.setItem('uniwear_blogs', JSON.stringify(blogs));
+      toggleModal('admin-blog-modal', false);
+      updateAdminDashboard();
+    }
+
+    function deleteBlog(blogId) {
+      if (!confirm('Delete this blog article?')) return;
+      let blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
+      blogs = blogs.filter(b => b.id !== blogId);
+      localStorage.setItem('uniwear_blogs', JSON.stringify(blogs));
+      updateAdminDashboard();
+    }
+
+    // ─── CUSTOMER STATUS MANAGEMENT ────────────────────────────────────────────
+
+    let activeCustomerFilter = 'All';
+
+    function filterCustomersByStatus(status) {
+      activeCustomerFilter = status;
+      // Update filter button styles
+      document.querySelectorAll('.cust-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+        btn.classList.add('bg-white', 'text-mutedText', 'border-lightBorder');
+      });
+      const activeBtn = document.getElementById('cust-filter-' + status);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'text-mutedText', 'border-lightBorder');
+        activeBtn.classList.add('bg-primary', 'text-white', 'border-primary');
+      }
+      const users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+      renderCustomersTable(users);
+    }
+
+    function openPendingCustomers() {
+      setAdminTab('admin-customers');
+      filterCustomersByStatus('Pending');
+    }
+
+    function renderCustomersTable(users) {
+      const tbodyClients = document.getElementById('admin-customers-table-body');
+      if (!tbodyClients) return;
+      tbodyClients.innerHTML = '';
+
+      let customers = users.filter(u => u && u.role === 'Customer');
+      if (activeCustomerFilter !== 'All') {
+        customers = customers.filter(u => u.status === activeCustomerFilter);
+      }
+
+      const countLabel = document.getElementById('admin-customers-count-label');
+      if (countLabel) countLabel.innerText = `${customers.length} account${customers.length !== 1 ? 's' : ''} shown`;
+
+      if (customers.length === 0) {
+        tbodyClients.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs">No customer accounts match this filter.</td></tr>`;
+        return;
+      }
+
+      customers.forEach(u => {
+        const ctr = document.createElement('tr');
+        ctr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+
+        const statusBadges = {
+          'Active': 'bg-green-100 text-green-700 border border-green-200',
+          'Disabled': 'bg-red-100 text-red-600 border border-red-200',
+          'Pending': 'bg-yellow-100 text-yellow-700 border border-yellow-200',
+          'Rejected': 'bg-gray-100 text-gray-500 border border-gray-200'
+        };
+        const statusStyle = statusBadges[u.status] || 'bg-gray-100 text-gray-600';
+
+        // Build action buttons based on status
+        let actionHtml = '';
+        if (u.status === 'Pending') {
+          actionHtml = `
+            <div class="flex justify-end gap-1.5">
+              <button onclick="approveUser(${u.id})" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1"><i class="ri-check-line"></i> Approve</button>
+              <button onclick="confirmRejectUser(${u.id})" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1"><i class="ri-close-line"></i> Reject</button>
+            </div>`;
+        } else if (u.status === 'Active') {
+          actionHtml = `
+            <div class="flex justify-end">
+              <button onclick="toggleUserStatus(${u.id}, 'Disabled')" class="bg-charcoal hover:bg-black text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1"><i class="ri-forbid-line"></i> Disable</button>
+            </div>`;
+        } else if (u.status === 'Disabled') {
+          actionHtml = `
+            <div class="flex justify-end">
+              <button onclick="toggleUserStatus(${u.id}, 'Active')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1"><i class="ri-shield-check-line"></i> Enable</button>
+            </div>`;
+        } else if (u.status === 'Rejected') {
+          actionHtml = `<span class="text-gray-400 italic text-[10px]">Rejected</span>`;
+        }
+
+        ctr.innerHTML = `
+          <td class="p-4 font-bold text-charcoal">${u.companyName || 'N/A'}</td>
+          <td class="p-4 font-semibold">${u.representative || ''}</td>
+          <td class="p-4 font-semibold text-primary font-mono select-all text-[10px]">${u.email || ''}</td>
+          <td class="p-4 font-mono">${u.phone || 'N/A'}</td>
+          <td class="p-4 font-mono text-gray-400">${u.regDate || '—'}</td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${u.status || ''}</span></td>
+          <td class="p-4 text-right">${actionHtml}</td>
+        `;
+        tbodyClients.appendChild(ctr);
+      });
+    }
+
+    async function approveUser(userId) {
+      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+      const u = users.find(user => user.id === userId || user._id === userId);
+      if (!u) return;
+
+      try {
+        await window.api.updateUser(u._id, { status: 'Active' });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to approve user.');
+      }
+    }
+
+    let _rejectTargetUserId = null;
+
+    function confirmRejectUser(userId) {
+      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+      const u = users.find(user => user.id === userId || user._id === userId);
+      if (!u) return;
+      _rejectTargetUserId = userId;
+
+      document.getElementById('reject-modal-company').innerText = u.companyName || u.email;
+      document.getElementById('reject-modal-email').innerText = u.email;
+      toggleModal('admin-reject-user-modal', true);
+    }
+
+    async function executeRejectUser(option) {
+      const userId = _rejectTargetUserId;
+      if (!userId) return;
+
+      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+      const u = users.find(user => user.id === userId || user._id === userId);
+      if (!u) { toggleModal('admin-reject-user-modal', false); return; }
+
+      try {
+        if (option === 'delete') {
+          await window.api.deleteUser(u._id);
+        } else {
+          await window.api.updateUser(u._id, { status: 'Rejected' });
+        }
+        await syncAdminData();
+        _rejectTargetUserId = null;
+        toggleModal('admin-reject-user-modal', false);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to reject user.');
+      }
+    }
+
+    async function toggleUserStatus(userId, newStatus) {
+      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+      const u = users.find(user => user.id === userId || user._id === userId);
+      if (!u) return;
+
+      try {
+        await window.api.updateUser(u._id, { status: newStatus });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to toggle user status.');
+      }
+    }
+  </script>
+
+  <!-- MODAL: Reject User -->
+  <div id="admin-reject-user-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md"
+      onclick="toggleModal('admin-reject-user-modal', false)"></div>
+    <div class="relative w-full max-w-md bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="font-heading text-xl font-bold text-charcoal">Reject Registration</h3>
+        <button onclick="toggleModal('admin-reject-user-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <div class="p-4 bg-red-50 border border-red-100 rounded-2xl mb-6">
+        <p class="text-xs font-bold text-charcoal mb-0.5" id="reject-modal-company">Company Name</p>
+        <p class="text-[10px] text-mutedText font-mono" id="reject-modal-email">email@example.com</p>
+      </div>
+
+      <p class="text-xs text-mutedText leading-relaxed mb-6">Choose how to handle this rejection. Deleting removes the
+        account entirely; keeping the record retains it with a <strong class="text-charcoal">Rejected</strong> status
+        for audit purposes.</p>
+
+      <div class="space-y-3">
+        <button onclick="executeRejectUser('keep')"
+          class="w-full bg-charcoal hover:bg-black text-white py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors shadow-sm flex items-center justify-center gap-2">
+          <i class="ri-archive-line"></i> Reject &amp; Keep Record
+        </button>
+        <button onclick="executeRejectUser('delete')"
+          class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors shadow-sm flex items-center justify-center gap-2">
+          <i class="ri-delete-bin-line"></i> Reject &amp; Delete Account
+        </button>
+        <button onclick="toggleModal('admin-reject-user-modal', false)"
+          class="w-full bg-lightCard hover:bg-gray-100 text-mutedText py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors border border-lightBorder">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

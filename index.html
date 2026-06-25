@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIWEAR | Premium Workwear Partner</title>
+  <meta name="description" content="UNIWEAR is Bengaluru's premier uniform manufacturing partner, delivering corporate, industrial, hospitality, and educational workwear for 30+ years.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://uniwear.co/">
+  <meta property="og:title" content="UNIWEAR | Premium Workwear Partner">
+  <meta property="og:description" content="UNIWEAR is Bengaluru's premier uniform manufacturing partner, delivering corporate, industrial, hospitality, and educational workwear for 30+ years.">
+  <meta property="og:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://uniwear.co/">
+  <meta property="twitter:title" content="UNIWEAR | Premium Workwear Partner">
+  <meta property="twitter:description" content="UNIWEAR is Bengaluru's premier uniform manufacturing partner, delivering corporate, industrial, hospitality, and educational workwear for 30+ years.">
+  <meta property="twitter:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+
+  <!-- Canonical Link -->
+  <link rel="canonical" href="https://uniwear.co/">
+  
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#B91C1C', // Deep Crimson Red
+            primaryHover: '#991B1B',
+            darkBg: '#111827', // Footer Charcoal
+            lightBg: '#FFFFFF', // Clean White
+            lightCard: '#F9FAFB', // Off-White
+            mutedText: '#4B5563', // Gray 600
+            charcoal: '#111827', // Slate Gray 900
+            lightBorder: 'rgba(0, 0, 0, 0.08)'
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          },
+          animation: {
+            'marquee-infinite': 'marquee 25s linear infinite',
+          },
+          keyframes: {
+            marquee: {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-50%)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+  
+  <!-- Custom Styling Extensions -->
+  <style>
+    /* Premium Typography & Hierarchy System */
+    h1, h2, .font-display {
+      font-family: 'Clash Display', sans-serif !important;
+    }
+    h3, h4, h5, h6, nav a, .mobile-nav-link, button, .btn, .font-heading {
+      font-family: 'Outfit', sans-serif !important;
+    }
+    body, input, textarea, select, label, p, span, li, .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hierarchy, Line Height, and Letter Spacing Adjustments */
+    h1 {
+      font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important; /* Responsive fluid text scaling */
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.02em !important;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h3, .card-title {
+      line-height: 1.3 !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Section & Container Breathing Room */
+    section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+      padding-top: clamp(4rem, 8vw, 8rem);
+      padding-bottom: clamp(4rem, 8vw, 8rem);
+    }
+    
+    /* Navigation & CTA Optimization */
+    nav a, .mobile-nav-link {
+      letter-spacing: -0.01em;
+    }
+    button, .btn {
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    input, textarea, select {
+      font-family: 'Inter', sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F9FAFB;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E5E7EB;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B91C1C;
+    }
+
+
+    /* Backdrop glassmorphism for Light Nav */
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    /* Mobile optimizations */
+    @media (max-width: 640px) {
+      .marquee-content { gap: 32px !important; }
+      h1, h2 { overflow-wrap: break-word; word-break: break-word; }
+      .grid-cols-2 .border-r { border-right: none; }
+    }
+    * { -webkit-tap-highlight-color: transparent; }
+    img { max-width: 100%; }
+
+    .text-reveal-wrap {
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: bottom;
+    }
+
+    .marquee-container {
+      overflow: hidden;
+      white-space: nowrap;
+      display: flex;
+    }
+    .marquee-content {
+      display: flex;
+      flex-shrink: 0;
+      min-width: 100%;
+      justify-content: space-around;
+      align-items: center;
+    }
+  </style>
+</head>
+<body class="bg-lightBg text-charcoal font-body overflow-x-hidden antialiased">
+
+
+  <!-- Page sweep curtains -->
+  <div id="transition-overlay" class="fixed inset-0 bg-primary z-[9999] transform translate-y-full flex items-center justify-center pointer-events-none">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-t-4 border-r-4 border-white rounded-full animate-spin"></div>
+      <div class="mt-4 font-heading text-xl uppercase tracking-widest text-white">UNIWEAR</div>
+    </div>
+  </div>
+
+  <!-- FLOATING NAVIGATION HEADER -->
+  <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5 z-50">
+        <img src="logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
+      </a>
+      
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden lg:flex items-center lg:gap-3 xl:gap-6 glass-card py-2 lg:px-4 xl:px-6 rounded-full border border-lightBorder">
+        <a href="index.html" class="nav-link lg:text-xs xl:text-sm font-semibold hover:text-primary transition-colors text-charcoal">Home</a>
+        <a href="about.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">About Us</a>
+        <a href="uniforms.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Uniforms</a>
+        <a href="gifts.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Gifting</a>
+        <a href="catalog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Catalog</a>
+        <a href="clientele.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Clientele</a>
+        <a href="blog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Blog</a>
+        <a href="contact.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Contact</a>
+      </nav>
+
+      <!-- Desktop CTAs -->
+      <div class="hidden lg:flex items-center lg:gap-3 xl:gap-4">
+        <a href="login.html" class="lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Client Portal</a>
+        <button class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+          <i class="ri-moon-line text-lg"></i>
+        </button>
+        <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white lg:px-4 xl:px-6 py-2 lg:py-2 xl:py-2.5 rounded-full lg:text-xs xl:text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-primary/20">
+          Request Consultation
+        </a>
+      </div>
+
+      <!-- Mobile CTAs / Toggle -->
+      <div class="flex items-center gap-3 lg:hidden z-50">
+        <button class="theme-toggle-btn w-9 h-9 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+          <i class="ri-moon-line text-base"></i>
+        </button>
+        <button id="mobile-menu-btn" class="text-charcoal focus:outline-none">
+          <i class="ri-menu-line text-2xl" id="menu-icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav" class="fixed inset-0 bg-white/95 backdrop-blur-lg flex flex-col justify-start items-center gap-6 pt-28 pb-12 z-40 transform translate-x-full transition-transform duration-500 ease-in-out lg:hidden overflow-y-auto">
+      <a href="index.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Home</a>
+      <a href="about.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">About Us</a>
+      <a href="uniforms.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Uniforms</a>
+      <a href="gifts.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Gifting</a>
+      <a href="catalog.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Catalog</a>
+      <a href="clientele.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Clientele</a>
+      <a href="blog.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Blog</a>
+      <a href="contact.html" class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Contact</a>
+      <div class="h-[1px] w-24 bg-charcoal/10 my-2 shrink-0"></div>
+      <a href="login.html" class="mobile-nav-link font-heading text-lg font-medium text-mutedText hover:text-primary transition-colors">Client Portal</a>
+      <button class="theme-toggle-btn w-12 h-12 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors my-2" title="Toggle Theme">
+        <i class="ri-moon-line text-xl"></i>
+      </button>
+      <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white px-8 py-3 rounded-full text-base font-semibold transition-all duration-300 shrink-0">
+        Request Consultation
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN HOMEPAGE CONTENT -->
+  <main>
+    <!-- Light Hero Section -->
+    <section class="relative h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden bg-lightCard hero-section">
+      <div class="absolute inset-0 select-none pointer-events-none">
+        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1920&q=80" alt="Textile Design Background" class="w-full h-full object-cover scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:30px_30px]"></div>
+      </div>
+
+      <div class="relative max-w-5xl mx-auto text-center z-20 px-4 pt-12 pb-12">
+        <span class="inline-block px-3 sm:px-4 py-1.5 mb-6 rounded-full border border-primary/20 bg-primary/5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-primary hero-reveal">
+          30+ Years of Manufacturing Leadership
+        </span>
+        <h1 class="font-heading text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-tight mb-6 sm:mb-8 text-charcoal">
+          <span class="text-reveal-wrap"><span class="hero-reveal block">Your Premium</span></span><br>
+          <span class="text-reveal-wrap"><span class="hero-reveal block text-primary">Workwear Partner</span></span>
+        </h1>
+        <p class="text-base sm:text-lg md:text-xl text-mutedText max-w-2xl mx-auto mb-8 sm:mb-10 hero-reveal leading-relaxed">
+          Co-creating premium apparel identities for corporate hubs, precision factories, elite institutions, and five-star hospitality suites across the globe.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 hero-reveal">
+          <a href="uniforms.html" class="w-full sm:w-auto bg-primary hover:bg-primaryHover text-white px-8 py-3.5 sm:py-4 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20 flex items-center justify-center gap-2 text-sm sm:text-base">
+            Explore Collections <i class="ri-arrow-right-line"></i>
+          </a>
+          <a href="contact.html" class="w-full sm:w-auto bg-white hover:bg-gray-50 text-charcoal border border-lightBorder px-8 py-3.5 sm:py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base shadow-sm">
+            Request Samples
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Bar (Infinite Marquee Ticker) -->
+    <section class="py-12 border-y border-lightBorder bg-lightCard relative overflow-hidden z-20">
+      <div class="max-w-7xl mx-auto px-6 mb-4 text-center">
+        <p class="text-xs uppercase tracking-widest text-mutedText font-semibold">ENGINEERING IDENTITY FOR THE WORLD'S BEST</p>
+      </div>
+      <div class="marquee-container w-full">
+        <div class="marquee-content animate-marquee-infinite gap-16">
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">TOYOTA</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">TAJ HOTELS</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">FORTIS</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">SHELL GLOBAL</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">BIOCON</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">BOSCH</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">WIPRO</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">INFOSYS</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">LARSEN & TOUBRO</span>
+        </div>
+        <!-- Duplicated for seamless loop -->
+        <div class="marquee-content animate-marquee-infinite gap-16" aria-hidden="true">
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">TOYOTA</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">TAJ HOTELS</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">FORTIS</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">SHELL GLOBAL</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">BIOCON</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">BOSCH</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">WIPRO</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">INFOSYS</span>
+          <span class="font-heading text-2xl font-bold tracking-widest text-gray-400 hover:text-charcoal transition-colors cursor-pointer">LARSEN & TOUBRO</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Legacy Statistics Section -->
+    <section class="py-24 bg-white relative z-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+        <div class="text-center p-4 sm:p-6 border-r border-lightBorder last:border-r-0">
+          <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-years">0</h3>
+          <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Years of Legacy</p>
+        </div>
+        <div class="text-center p-4 sm:p-6 border-r border-lightBorder lg:last:border-r-0">
+          <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-clients">0</h3>
+          <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Clients Served</p>
+        </div>
+        <div class="text-center p-4 sm:p-6 border-r border-lightBorder last:border-r-0">
+          <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-garments">0</h3>
+          <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Garments Shipped</p>
+        </div>
+        <div class="text-center p-4 sm:p-6">
+          <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-retention">0</h3>
+          <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Retention Rate</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Industries Served (Interactive Hover Grid) -->
+    <section class="py-16 sm:py-24 bg-lightCard relative z-20 border-t border-lightBorder">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+          <div>
+            <span class="text-xs uppercase tracking-widest text-primary font-bold">Uncompromising Quality</span>
+            <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Industries We Innovate For</h2>
+          </div>
+          <p class="text-mutedText max-w-md mt-4 md:mt-0 leading-relaxed">
+            Every industry demands unique parameters of durability, safety, style, and utility. We engineer workwear custom-tailored for your domain.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Industry 1 -->
+          <div class="bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative">
+            <div class="h-60 overflow-hidden relative">
+              <img src="industrial_uniforms_mockup.png" alt="Industrial Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+            </div>
+            <div class="p-8 relative bg-white">
+              <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Industrial & Engineering</h3>
+              <p class="text-sm text-mutedText leading-relaxed mb-6">Heavy-duty overalls, fire-retardant suits, anti-static jackets, and safety accessories tested under heavy stress.</p>
+              <a href="uniforms.html" class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
+                View Specifications <i class="ri-arrow-right-up-line"></i>
+              </a>
+            </div>
+          </div>
+          <!-- Industry 2 -->
+          <div class="bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative">
+            <div class="h-60 overflow-hidden relative">
+              <img src="corporate_uniforms_mockup.png" alt="Corporate Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+            </div>
+            <div class="p-8 relative bg-white">
+              <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Corporate & Executive</h3>
+              <p class="text-sm text-mutedText leading-relaxed mb-6">Bespoke wool blazers, tailored trousers, high-thread oxford shirts, and custom-embroidered smart casuals.</p>
+              <a href="uniforms.html" class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
+                View Specifications <i class="ri-arrow-right-up-line"></i>
+              </a>
+            </div>
+          </div>
+          <!-- Industry 3 -->
+          <div class="bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative">
+            <div class="h-60 overflow-hidden relative">
+              <img src="hospitality_uniforms_mockup.png" alt="Hospitality Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+            </div>
+            <div class="p-8 relative bg-white">
+              <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Hospitality & Fine Dining</h3>
+              <p class="text-sm text-mutedText leading-relaxed mb-6">Artisanal chef coats, front-desk corporate blazers, premium aprons, and breathable housekeeping apparel.</p>
+              <a href="uniforms.html" class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
+                View Specifications <i class="ri-arrow-right-up-line"></i>
+              </a>
+            </div>
+          </div>
+          <!-- Industry 4 -->
+          <div class="bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative">
+            <div class="h-60 overflow-hidden relative">
+              <img src="institutional_uniforms_mockup.png" alt="Institutional Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+            </div>
+            <div class="p-8 relative bg-white">
+              <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Institutional & Academy</h3>
+              <p class="text-sm text-mutedText leading-relaxed mb-6">High-grade school blazers, collegiate hoodies, sports activewear, and customized school crest sets.</p>
+              <a href="uniforms.html" class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
+                View Specifications <i class="ri-arrow-right-up-line"></i>
+              </a>
+            </div>
+          </div>
+          <!-- Industry 5 -->
+          <div class="bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative">
+            <div class="h-60 overflow-hidden relative">
+              <img src="corporate_gifting_mockup.png" alt="Corporate Gifting" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+            </div>
+            <div class="p-8 relative bg-white">
+              <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Corporate Gifting</h3>
+              <p class="text-sm text-mutedText leading-relaxed mb-6">Premium full-grain leather planners, copper roller pens, presentation portfolio cases, and customizable gift boxes.</p>
+              <a href="uniforms.html" class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
+                View Specifications <i class="ri-arrow-right-up-line"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manufacturing Process Timeline -->
+    <section class="py-16 sm:py-24 bg-white relative z-20 border-t border-lightBorder">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">The Blueprint of Excellence</span>
+          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Our Manufacturing Lifecycle</h2>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          <!-- Timeline Buttons Navigation -->
+          <div class="lg:col-span-5 space-y-4">
+            <button onclick="setActiveStep(1)" class="w-full text-left p-6 rounded-xl border border-lightBorder bg-lightCard transition-all group flex items-start gap-4 focus:outline-none step-btn active-step" id="step-btn-1">
+              <span class="w-8 h-8 rounded-full border border-primary flex items-center justify-center font-heading font-bold text-sm text-primary group-[.active-step]:bg-primary group-[.active-step]:text-white">01</span>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Consultation & Design Proposal</h4>
+                <p class="text-xs text-mutedText mt-1">We engage with you to understand your uniform needs, industry standards, and expectations.</p>
+              </div>
+            </button>
+            <button onclick="setActiveStep(2)" class="w-full text-left p-6 rounded-xl border border-transparent hover:bg-lightCard transition-all group flex items-start gap-4 focus:outline-none step-btn" id="step-btn-2">
+              <span class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center font-heading font-bold text-sm text-gray-400 group-[.active-step]:bg-primary group-[.active-step]:text-white group-[.active-step]:border-primary">02</span>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Product Selection & Sample Approval</h4>
+                <p class="text-xs text-mutedText mt-1">We create prototypes for your review, ensuring alignment with quality and design expectations.</p>
+              </div>
+            </button>
+            <button onclick="setActiveStep(3)" class="w-full text-left p-6 rounded-xl border border-transparent hover:bg-lightCard transition-all group flex items-start gap-4 focus:outline-none step-btn" id="step-btn-3">
+              <span class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center font-heading font-bold text-sm text-gray-400 group-[.active-step]:bg-primary group-[.active-step]:text-white group-[.active-step]:border-primary">03</span>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Production & Quality Assurance</h4>
+                <p class="text-xs text-mutedText mt-1">Our experienced team ensures seamless production, supported by stringent quality checks.</p>
+              </div>
+            </button>
+            <button onclick="setActiveStep(4)" class="w-full text-left p-6 rounded-xl border border-transparent hover:bg-lightCard transition-all group flex items-start gap-4 focus:outline-none step-btn" id="step-btn-4">
+              <span class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center font-heading font-bold text-sm text-gray-400 group-[.active-step]:bg-primary group-[.active-step]:text-white group-[.active-step]:border-primary">04</span>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Delivery & Order Finalization</h4>
+                <p class="text-xs text-mutedText mt-1">We ensure timely delivery and a smooth handover with formal purchase order closure.</p>
+              </div>
+            </button>
+          </div>
+
+          <!-- Interactive Process Description Card -->
+          <div class="lg:col-span-7">
+            <div class="bg-lightCard p-6 rounded-3xl border border-lightBorder relative overflow-hidden" id="step-detail-card">
+              <div class="h-52 sm:h-72 lg:h-96 rounded-2xl overflow-hidden mb-6 relative">
+                <img id="step-detail-image" src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=800&q=80" alt="Process Step Visual" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-lightCard via-lightCard/10 to-transparent"></div>
+              </div>
+              <div class="relative z-10">
+                <span id="step-detail-num" class="font-heading text-xs uppercase tracking-widest text-primary font-bold">PHASE 01</span>
+                <h3 id="step-detail-title" class="font-heading text-2xl font-bold mt-1 mb-4 text-charcoal">Consultation & Needs Analysis</h3>
+                <p id="step-detail-desc" class="text-sm text-mutedText leading-relaxed">
+                  We begin by conducting detailed interviews with your operational heads. Our design team assesses factors like safety hazards (flammability, static charge), microclimatic shifts, movement velocity, and core branding guidelines to establish a robust apparel mandate.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fabric Innovation Laboratory -->
+    <section class="py-16 sm:py-24 bg-white relative z-20 border-t border-lightBorder">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">Textile Science</span>
+          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Fabric Innovation Laboratory</h2>
+          <p class="text-mutedText max-w-xl mx-auto mt-4 leading-relaxed">
+            Explore our advanced certified fabric technologies engineered for extreme durability, active thermal control, and smart executive tailoring.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          <!-- Fabric Tabs List (Left) -->
+          <div class="lg:col-span-4 space-y-4 font-body">
+            <button onclick="setActiveFabric(1)" class="w-full text-left p-5 rounded-2xl border border-lightBorder bg-lightCard transition-all group flex items-start gap-4 focus:outline-none fabric-btn active-fabric" id="fabric-btn-1">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-heading font-bold text-lg group-[.active-fabric]:bg-primary group-[.active-fabric]:text-white">01</div>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Flame-Shield Aramid</h4>
+                <p class="text-xs text-mutedText mt-0.5">Refinery & petrochemical grade thermal armor.</p>
+              </div>
+            </button>
+            <button onclick="setActiveFabric(2)" class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-lightCard transition-all group flex items-start gap-4 focus:outline-none fabric-btn" id="fabric-btn-2">
+              <div class="w-10 h-10 rounded-xl bg-gray-100 text-gray-500 flex items-center justify-center font-heading font-bold text-lg group-[.active-fabric]:bg-primary group-[.active-fabric]:text-white">02</div>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Super 120s Merino Wool</h4>
+                <p class="text-xs text-mutedText mt-0.5">Crease-resistant luxury weave for executives.</p>
+              </div>
+            </button>
+            <button onclick="setActiveFabric(3)" class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-lightCard transition-all group flex items-start gap-4 focus:outline-none fabric-btn" id="fabric-btn-3">
+              <div class="w-10 h-10 rounded-xl bg-gray-100 text-gray-500 flex items-center justify-center font-heading font-bold text-lg group-[.active-fabric]:bg-primary group-[.active-fabric]:text-white">03</div>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">CoolBreathe Micro-Mesh</h4>
+                <p class="text-xs text-mutedText mt-0.5">Active moisture-wicking system for hospitalities.</p>
+              </div>
+            </button>
+            <button onclick="setActiveFabric(4)" class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-lightCard transition-all group flex items-start gap-4 focus:outline-none fabric-btn" id="fabric-btn-4">
+              <div class="w-10 h-10 rounded-xl bg-gray-100 text-gray-500 flex items-center justify-center font-heading font-bold text-lg group-[.active-fabric]:bg-primary group-[.active-fabric]:text-white">04</div>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">DuroWeave Cotton Drill</h4>
+                <p class="text-xs text-mutedText mt-0.5">Heavy tensile-strength construction canvas.</p>
+              </div>
+            </button>
+          </div>
+
+          <!-- Fabric Visual Panel (Right) -->
+          <div class="lg:col-span-8">
+            <div class="bg-lightCard p-8 rounded-3xl border border-lightBorder grid md:grid-cols-2 gap-8 items-center relative overflow-hidden" id="fabric-detail-card">
+              <div class="h-80 rounded-2xl overflow-hidden relative border border-lightBorder">
+                <img id="fabric-detail-image" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80" alt="Fabric Visual" class="w-full h-full object-cover">
+              </div>
+              <div class="space-y-6 font-body">
+                <div>
+                  <span id="fabric-detail-tag" class="font-heading text-xs uppercase tracking-widest text-primary font-bold">INDUSTRIAL GRADE</span>
+                  <h3 id="fabric-detail-title" class="font-heading text-2xl font-bold mt-1 text-charcoal">Flame-Shield Aramid</h3>
+                  <p id="fabric-detail-desc" class="text-sm text-mutedText mt-3 leading-relaxed">
+                    Designed to withstand high-temperature flare hazards in heavy industrial zones. Integrates Nomex carbon fiber meshes providing complete anti-static security and certified thermal resilience.
+                  </p>
+                </div>
+                
+                <!-- Performance Metrics -->
+                <div class="space-y-3">
+                  <div>
+                    <div class="flex justify-between text-xs font-semibold mb-1">
+                      <span class="text-charcoal">Thermal Protection</span>
+                      <span id="metric-val-1" class="text-primary">98%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                      <div id="metric-bar-1" class="bg-primary h-full transition-all duration-500" style="width: 98%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-xs font-semibold mb-1">
+                      <span class="text-charcoal">Tensile Strength</span>
+                      <span id="metric-val-2" class="text-primary">92%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                      <div id="metric-bar-2" class="bg-primary h-full transition-all duration-500" style="width: 92%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-xs font-semibold mb-1">
+                      <span class="text-charcoal">Breathability Index</span>
+                      <span id="metric-val-3" class="text-primary">65%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                      <div id="metric-bar-3" class="bg-primary h-full transition-all duration-500" style="width: 65%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Specs Tags -->
+                <div class="flex flex-wrap gap-2 pt-2">
+                  <span id="spec-tag-1" class="px-3 py-1 bg-white border border-lightBorder rounded-full text-[10px] font-semibold text-charcoal">Nomex Grid</span>
+                  <span id="spec-tag-2" class="px-3 py-1 bg-white border border-lightBorder rounded-full text-[10px] font-semibold text-charcoal">Anti-Static</span>
+                  <span id="spec-tag-3" class="px-3 py-1 bg-white border border-lightBorder rounded-full text-[10px] font-semibold text-charcoal">EN ISO 11612</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose UNIWEAR (Value Pillars) -->
+    <section class="py-16 sm:py-24 bg-lightCard relative z-20 border-t border-lightBorder">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">The Uniwear Edge</span>
+          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Why Global Enterprises Choose Us</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+              <i class="ri-award-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Industry Expertise</h3>
+            <p class="text-sm text-mutedText leading-relaxed">Over 30 years of experience serving industries with tailored uniform solutions.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+              <i class="ri-palette-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Tailored Solutions</h3>
+            <p class="text-sm text-mutedText leading-relaxed">Custom uniforms designed to meet your operational and brand requirements.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+              <i class="ri-shield-check-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Superior Quality</h3>
+            <p class="text-sm text-mutedText leading-relaxed">Meticulously crafted uniforms with strict quality controls at every stage.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+              <i class="ri-truck-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Timely Delivery</h3>
+            <p class="text-sm text-mutedText leading-relaxed">Punctual production and delivery ensure your business operations run smoothly.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+              <i class="ri-shirt-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Diverse Product Range</h3>
+            <p class="text-sm text-mutedText leading-relaxed">Offering industrial uniforms, corporate wear, hospitality apparel, and gifting solutions.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+              <i class="ri-customer-service-2-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">End-to-End Support</h3>
+            <p class="text-sm text-mutedText leading-relaxed">Dedicated team providing seamless communication and personalized service throughout the process.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Uniform Configurator Studio -->
+    <section class="py-16 sm:py-24 bg-white relative z-20 border-t border-lightBorder">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Text and Configurator Controls (Left) -->
+          <div class="lg:col-span-5 space-y-8">
+            <div>
+              <span class="text-xs uppercase tracking-widest text-primary font-bold">Uniwear Design Studio</span>
+              <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Design Your Brand Uniform</h2>
+              <p class="text-mutedText mt-4 leading-relaxed">
+                Test custom colorways, embroidery placements, and premium fabric configurations using our digital studio layout. Craft your concept in real-time.
+              </p>
+            </div>
+
+            <!-- Interactive controls -->
+            <div class="space-y-6 p-6 bg-lightCard rounded-3xl border border-lightBorder font-body">
+              <!-- Select Category -->
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">1. Select Category</label>
+                <select id="config-product-category" onchange="populateProductsByCategory()" class="w-full bg-white border border-lightBorder rounded-xl py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary">
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+
+              <!-- Choose Product -->
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">2. Choose Product</label>
+                <select id="config-choose-product" onchange="onProductChange()" class="w-full bg-white border border-lightBorder rounded-xl py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary">
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+
+              <!-- Color Customizations: Primary, Secondary -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Primary Color</label>
+                  <select id="config-primary-color" onchange="updateConfiguratorUI()" class="w-full bg-white border border-lightBorder rounded-xl py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary">
+                    <option value="#1e293b" selected>Navy Blue</option>
+                    <option value="#374151">Charcoal Grey</option>
+                    <option value="#991b1b">Deep Crimson</option>
+                    <option value="#1d4ed8">Royal Blue</option>
+                    <option value="#ea580c">Safety Orange</option>
+                    <option value="#065f46">Forest Green</option>
+                    <option value="#f3f4f6">Alpine White</option>
+                    <option value="#d97706">Mustard Yellow</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Secondary Color</label>
+                  <select id="config-secondary-color" onchange="updateConfiguratorUI()" class="w-full bg-white border border-lightBorder rounded-xl py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary">
+                    <option value="#1e293b">Navy Blue</option>
+                    <option value="#374151">Charcoal Grey</option>
+                    <option value="#991b1b">Deep Crimson</option>
+                    <option value="#1d4ed8">Royal Blue</option>
+                    <option value="#ea580c">Safety Orange</option>
+                    <option value="#065f46" selected>Forest Green</option>
+                    <option value="#f3f4f6">Alpine White</option>
+                    <option value="#d97706">Mustard Yellow</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Branding Options -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Branding Type</label>
+                  <select id="config-branding-type" onchange="updateConfiguratorUI()" class="w-full bg-white border border-lightBorder rounded-xl py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary">
+                    <option value="embroidery" selected>Embroidery</option>
+                    <option value="printed">Printed Logo</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Logo Position</label>
+                  <select id="config-branding-pos" onchange="updateConfiguratorUI()" class="w-full bg-white border border-lightBorder rounded-xl py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary">
+                    <option value="chest" selected>Chest Logo</option>
+                    <option value="back">Back Logo</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Fabric and Quantity -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Fabric Choice</label>
+                  <select id="config-fabric-type" onchange="updateConfiguratorUI()" class="w-full bg-white border border-lightBorder rounded-xl py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary">
+                    <option value="Cotton" selected>Cotton</option>
+                    <option value="Poly Cotton">Poly Cotton</option>
+                    <option value="Premium Blend">Premium Blend</option>
+                    <option value="Performance Fabric">Performance Fabric</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Quantity (MOQ applies)</label>
+                  <input type="number" id="config-qty" value="100" min="50" onchange="updateConfiguratorUI()" oninput="updateConfiguratorUI()" class="w-full bg-white border border-lightBorder rounded-xl py-3 px-4 text-sm text-charcoal focus:outline-none focus:border-primary">
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <button onclick="openDesignConsultationModal()" class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primaryHover text-white px-8 py-4 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20 focus:outline-none w-full sm:w-auto">
+              Request Design Consultation <i class="ri-arrow-right-line"></i>
+            </button>
+          </div>
+
+          <!-- Studio Mockup Screen (Right) -->
+          <div class="lg:col-span-7 font-body">
+            <div class="bg-charcoal rounded-3xl p-4 shadow-2xl border border-gray-800 relative overflow-hidden group">
+              <!-- Screen Header -->
+              <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-4 px-2">
+                <div class="flex gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                </div>
+                <span class="text-[10px] text-gray-500 uppercase tracking-widest font-mono">Uniwear Studio CAD v4.0</span>
+                <span class="text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full font-mono">LIVE PREVIEW</span>
+              </div>
+
+              <!-- Interactive Display Display Canvas -->
+              <div class="h-64 sm:h-80 lg:h-[480px] w-full rounded-2xl overflow-hidden relative bg-[#0f172a] border border-gray-800 flex items-center justify-center">
+                <!-- Background Product Image -->
+                <img id="configurator-product-img" src="" alt="Product Preview" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-all duration-300">
+                
+                <!-- Tint Overlay for Visual Customization -->
+                <div id="configurator-tint-overlay" class="absolute inset-0 pointer-events-none mix-blend-color opacity-30 transition-all duration-300"></div>
+
+                <!-- Dynamic SVG Live Preview Container -->
+                <div id="configurator-svg-container" class="absolute inset-0 w-full h-full flex items-center justify-center p-12 transition-all duration-300 pointer-events-none opacity-80">
+                  <!-- SVG injected here -->
+                </div>
+
+                <!-- Pulsing Logo Placement Badge -->
+                <div id="configurator-logo-badge" class="absolute w-8 h-8 rounded-full border-2 border-white flex items-center justify-center shadow-lg transition-all duration-500 animate-bounce z-10" style="background-color: #B91C1C;">
+                  <i class="ri-brush-line text-white text-[10px]"></i>
+                </div>
+                
+                <!-- HUD Overlay elements -->
+                <div class="absolute bottom-4 left-4 right-4 bg-black/75 backdrop-blur-md border border-white/15 rounded-xl p-4 text-white z-10">
+                  <div class="flex flex-col gap-2">
+                    <div class="flex justify-between items-start text-xs">
+                      <div>
+                        <span class="text-[9px] uppercase tracking-wider text-primary font-bold block" id="canvas-tag-type">Polo T-Shirt</span>
+                        <span class="font-bold font-heading text-sm" id="canvas-tag-color">Navy Blue Colorway</span>
+                      </div>
+                      <div class="text-right">
+                        <span class="text-[9px] uppercase text-gray-400 block" id="canvas-tag-branding-type">Embroidery</span>
+                        <span class="font-semibold text-green-400" id="canvas-tag-logo">Chest Placement</span>
+                      </div>
+                    </div>
+                    <!-- Product Description Section inside HUD -->
+                    <div class="border-t border-white/10 pt-2 mt-1">
+                      <h4 class="font-bold text-xs text-gray-200" id="canvas-product-name">Product Name</h4>
+                      <p class="text-[10px] text-gray-400 line-clamp-2 mt-0.5" id="canvas-product-desc">Product description...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Fading Testimonial Slider -->
+    <section class="py-16 sm:py-24 bg-white relative z-20 border-t border-lightBorder">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        <span class="text-xs uppercase tracking-widest text-primary font-bold">Trusted Endorsements</span>
+        <h2 class="font-heading text-4xl font-bold mt-2 mb-16 text-charcoal">Client Success Voices</h2>
+
+        <div class="relative h-72 flex items-center justify-center">
+          <!-- Testimonial 1 -->
+          <div class="testimonial-slide absolute inset-0 opacity-100 transition-opacity duration-500" id="testimonial-slide-1">
+            <i class="ri-double-quotes-l text-primary text-6xl opacity-10 block mb-4 mx-auto"></i>
+            <p class="text-lg md:text-xl text-charcoal italic mb-6 leading-relaxed max-w-2xl mx-auto">
+              "I have had a good experience with Uniwear! Their attention to the quality of products is very good. I highly recommend Uniwear for anyone looking for premium solutions such as T-Shirts/ Shirts/ Gifting Solutions."
+            </p>
+            <h4 class="font-heading text-lg font-bold text-charcoal">Anjali</h4>
+            <p class="text-xs text-primary uppercase font-bold tracking-widest mt-1">Corporate Partner</p>
+          </div>
+          <!-- Testimonial 2 -->
+          <div class="testimonial-slide absolute inset-0 opacity-0 transition-opacity duration-500" id="testimonial-slide-2">
+            <i class="ri-double-quotes-l text-primary text-6xl opacity-10 block mb-4 mx-auto"></i>
+            <p class="text-lg md:text-xl text-charcoal italic mb-6 leading-relaxed max-w-2xl mx-auto">
+              "Uniwear's uniforms speak volumes about our company's commitment to excellence. With their durable, comfortable attire, including shirts, trousers, t-shirts, caps, and shoes, our team is always ready to represent our brand."
+            </p>
+            <h4 class="font-heading text-lg font-bold text-charcoal">Bhavya</h4>
+            <p class="text-xs text-primary uppercase font-bold tracking-widest mt-1">Operations Manager</p>
+          </div>
+          <!-- Testimonial 3 -->
+          <div class="testimonial-slide absolute inset-0 opacity-0 transition-opacity duration-500" id="testimonial-slide-3">
+            <i class="ri-double-quotes-l text-primary text-6xl opacity-10 block mb-4 mx-auto"></i>
+            <p class="text-lg md:text-xl text-charcoal italic mb-6 leading-relaxed max-w-2xl mx-auto">
+              "What truly sets Uniwear apart is their professionalism and reliability. They have consistently met our tight deadlines, ensuring timely delivery without compromising on quality. Their proactive communication and attention to detail make the entire process seamless."
+            </p>
+            <h4 class="font-heading text-lg font-bold text-charcoal">Sonia Murdeshwar</h4>
+            <p class="text-xs text-primary uppercase font-bold tracking-widest mt-1">Procurement Director</p>
+          </div>
+        </div>
+
+        <!-- Slider Controls -->
+        <div class="flex items-center justify-center gap-4 mt-8">
+          <button onclick="changeTestimonial(-1)" class="w-12 h-12 rounded-full border border-lightBorder bg-lightCard hover:border-primary flex items-center justify-center hover:text-primary transition-colors focus:outline-none">
+            <i class="ri-arrow-left-line"></i>
+          </button>
+          <button onclick="changeTestimonial(1)" class="w-12 h-12 rounded-full border border-lightBorder bg-lightCard hover:border-primary flex items-center justify-center hover:text-primary transition-colors focus:outline-none">
+            <i class="ri-arrow-right-line"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Thinking Blog Preview -->
+    <section class="py-16 sm:py-24 bg-lightCard relative z-20 border-t border-lightBorder">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-10 sm:mb-16">
+          <div>
+            <span class="text-xs uppercase tracking-widest text-primary font-bold">Latest Thinking</span>
+            <h2 class="font-heading text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Workwear Insights & Innovations</h2>
+          </div>
+          <a href="blog.html" class="hidden md:flex items-center gap-2 text-sm font-semibold hover:text-primary transition-colors text-charcoal">
+            Browse All Articles <i class="ri-arrow-right-line"></i>
+          </a>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8" id="homepage-blog-grid">
+          <!-- Rendered dynamically from storage -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="py-16 sm:py-24 bg-white relative z-20 overflow-hidden border-t border-lightBorder">
+      <div class="absolute inset-0 bg-[radial-gradient(rgba(185,28,28,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-60"></div>
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
+        <h2 class="font-heading text-3xl sm:text-4xl md:text-6xl font-bold mb-6 text-charcoal">Let's co-create your brand statement.</h2>
+        <p class="text-lg text-mutedText max-w-2xl mx-auto mb-10 leading-relaxed">
+          Partner with Bengaluru's premier uniform manufacturer to engineer highly custom, functional, and beautiful uniforms for your business.
+        </p>
+        <a href="contact.html" class="inline-block bg-primary hover:bg-primaryHover text-white px-7 sm:px-10 py-4 sm:py-5 rounded-full text-base sm:text-lg font-bold transition-all shadow-xl shadow-primary/30 transform hover:scale-105">
+          Book Consultation Today
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- PREMIUM FOOTER -->
+  <footer id="global-footer" class="bg-darkBg border-t border-lightBorder py-16 relative z-30 text-white">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+      <!-- Branding Column -->
+      <div class="lg:col-span-2 space-y-6">
+        <a href="index.html">
+          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
+        </a>
+        <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
+          Headquartered in Bengaluru. Crafting premium, certified uniforms for multi-scale industrial setups and corporate giants since 1992.
+        </p>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-linkedin-box-line"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-instagram-line"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-facebook-box-line"></i></a>
+        </div>
+      </div>
+
+      <!-- Links Column 1 -->
+      <div>
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Collections</h5>
+        <ul class="space-y-3 text-sm">
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Industrial Wear</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Executive Blouse & Suit</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Fine Dining Kitchen Wear</a></li>
+          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">School & University Sets</a></li>
+          <li><a href="gifts.html" class="text-gray-400 hover:text-primary transition-colors">Corporate Gifting Options</a></li>
+        </ul>
+      </div>
+
+      <!-- Links Column 2 -->
+      <div>
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Corporate</h5>
+        <ul class="space-y-3 text-sm">
+          <li><a href="about.html" class="text-gray-400 hover:text-primary transition-colors">Our Story</a></li>
+          <li><a href="clientele.html" class="text-gray-400 hover:text-primary transition-colors">Enterprise Clientele</a></li>
+          <li><a href="catalog.html" class="text-gray-400 hover:text-primary transition-colors">Locked Catalog Library</a></li>
+          <li><a href="blog.html" class="text-gray-400 hover:text-primary transition-colors">Fabric Research Hub</a></li>
+          <li><a href="contact.html" class="text-gray-400 hover:text-primary transition-colors">Consultation Office</a></li>
+          <li><a href="login.html" class="text-gray-400 hover:text-primary transition-colors">Business Login</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter Registry Column -->
+      <div class="space-y-6">
+        <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Subscribe</h5>
+        <p class="text-xs text-gray-400 leading-relaxed">Join our mailing registry for periodic updates on fabric technologies.</p>
+        <form onsubmit="handleNewsletterSubmit(event)" class="relative">
+          <input type="email" required placeholder="Enter work email..." class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-xs text-white focus:outline-none focus:border-primary">
+          <button type="submit" class="absolute right-1 top-1 w-9 h-9 bg-primary hover:bg-primaryHover text-white rounded-full flex items-center justify-center transition-colors">
+            <i class="ri-arrow-right-line"></i>
+          </button>
+        </form>
+        <span id="newsletter-success" class="text-xs text-green-500 hidden font-bold">Successfully joined the registry.</span>
+      </div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-gray-500">Copyright © 2026 <span class="company-name">UNIWEAR</span>. Premium Uniform Manufacturing partner, Bengaluru.</p>
+      <div class="flex gap-6 text-xs text-gray-500">
+        <a href="#" class="hover:text-primary transition-colors">Privacy Charter</a>
+        <a href="#" class="hover:text-primary transition-colors">SLA Mandate</a>
+        <a href="#" class="hover:text-primary transition-colors">Vendor Guidelines</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Link to Shared JS system -->
+  <script src="api.js"></script>
+  <script src="shared.js"></script>
+  
+  <!-- Page Specific Execution -->
+  <script>
+    // Stats Counter scroll animations helper
+    window.addEventListener('DOMContentLoaded', () => {
+      // Animate homepage hero entry
+      gsap.fromTo('.hero-reveal', 
+        { y: 50, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out" }
+      );
+
+      // Trigger counter counters
+      const statItems = [
+        { id: 'stat-years', target: 30, suffix: '+' },
+        { id: 'stat-clients', target: 2000, suffix: '+' },
+        { id: 'stat-garments', target: 5000, suffix: '+' },
+        { id: 'stat-retention', target: 99.8, suffix: '%' }
+      ];
+
+      statItems.forEach(stat => {
+        const el = document.getElementById(stat.id);
+        if (!el) return;
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 85%',
+          onEnter: () => {
+            let valueObj = { val: 0 };
+            gsap.to(valueObj, {
+              val: stat.target,
+              duration: 2,
+              ease: "power2.out",
+              onUpdate: () => {
+                if (Number.isInteger(stat.target)) {
+                  el.innerText = Math.floor(valueObj.val).toLocaleString() + stat.suffix;
+                } else {
+                  el.innerText = valueObj.val.toFixed(1) + stat.suffix;
+                }
+              }
+            });
+          },
+          once: true
+        });
+      });
+
+      // Render home blog previews (Published only)
+      const homeGrid = document.getElementById('homepage-blog-grid');
+      if (homeGrid) {
+        homeGrid.innerHTML = "";
+        let blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
+        let publishedBlogs = blogs.filter(post => post.status === "Published");
+        publishedBlogs.slice(0, 3).forEach(post => {
+          const card = document.createElement('article');
+          card.className = "bg-white rounded-2xl overflow-hidden border border-lightBorder hover:shadow-lg transition-all duration-300 group";
+          card.innerHTML = `
+            <div class="h-48 overflow-hidden relative">
+              <img src="${post.img}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+              <span class="text-[9px] uppercase tracking-wider text-primary font-bold">${post.category}</span>
+              <h4 class="font-heading text-lg font-bold text-charcoal mt-1 group-hover:text-primary transition-colors line-clamp-2">${post.title}</h4>
+              <p class="text-xs text-mutedText mt-2 line-clamp-2">${post.excerpt}</p>
+              <div class="flex items-center justify-between border-t border-lightBorder pt-4 mt-4 text-[10px] text-gray-400">
+                <span>By ${post.author}</span>
+                <span>${post.date}</span>
+              </div>
+            </div>
+          `;
+          homeGrid.appendChild(card);
+        });
+      }
+    });
+
+    // Timeline Process Stepper State
+    const stepDetails = {
+      1: {
+        num: "PHASE 01",
+        title: "Consultation & Design Proposal",
+        desc: "We engage with you to understand your uniform needs, industry standards, and expectations to craft a tailored project proposal.",
+        img: "https://images.unsplash.com/photo-1521791136366-3e1abb0d421d?auto=format&fit=crop&w=800&q=80"
+      },
+      2: {
+        num: "PHASE 02",
+        title: "Product Selection & Sample Approval",
+        desc: "We create digital and physical prototypes for your review, allowing you to test fits and approve fabric options prior to release.",
+        img: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=800&q=80"
+      },
+      3: {
+        num: "PHASE 03",
+        title: "Production & Quality Assurance",
+        desc: "Our experienced production team patterns and stitches garments with high tensile threads, running double-pass quality checks.",
+        img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
+      },
+      4: {
+        num: "PHASE 04",
+        title: "Delivery & Order Finalization",
+        desc: "We deliver size-sorted, barcode-tracked packages directly to your corporate campuses or logistics points to complete purchase orders.",
+        img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80"
+      }
+    };
+
+    function setActiveStep(stepNum) {
+      document.querySelectorAll('.step-btn').forEach(btn => {
+        btn.classList.remove('active-step', 'bg-lightCard', 'border-lightBorder');
+        btn.classList.add('border-transparent');
+      });
+
+      const activeBtn = document.getElementById(`step-btn-${stepNum}`);
+      activeBtn.classList.add('active-step', 'bg-lightCard', 'border-lightBorder');
+      activeBtn.classList.remove('border-transparent');
+
+      const detailCard = document.getElementById('step-detail-card');
+      gsap.to(detailCard, {
+        opacity: 0,
+        y: 10,
+        duration: 0.2,
+        onComplete: () => {
+          document.getElementById('step-detail-num').innerText = stepDetails[stepNum].num;
+          document.getElementById('step-detail-title').innerText = stepDetails[stepNum].title;
+          document.getElementById('step-detail-desc').innerText = stepDetails[stepNum].desc;
+          document.getElementById('step-detail-image').src = stepDetails[stepNum].img;
+          
+          gsap.to(detailCard, { opacity: 1, y: 0, duration: 0.3 });
+        }
+      });
+    }
+
+    // Fading Testimonial Slider Controls
+    let activeTestimonialIndex = 1;
+    function changeTestimonial(direction) {
+      const current = document.getElementById(`testimonial-slide-${activeTestimonialIndex}`);
+      let nextIndex = activeTestimonialIndex + direction;
+      if (nextIndex > 3) nextIndex = 1;
+      if (nextIndex < 1) nextIndex = 3;
+
+      const next = document.getElementById(`testimonial-slide-${nextIndex}`);
+
+      gsap.to(current, { opacity: 0, duration: 0.3, onComplete: () => {
+        current.classList.add('opacity-0');
+        current.classList.remove('opacity-100');
+        
+        next.classList.remove('opacity-0');
+        next.classList.add('opacity-100');
+        gsap.to(next, { opacity: 1, duration: 0.3 });
+      }});
+
+      activeTestimonialIndex = nextIndex;
+    }
+
+    function handleNewsletterSubmit(event) {
+      event.preventDefault();
+      document.getElementById('newsletter-success').classList.remove('hidden');
+      event.target.reset();
+      setTimeout(() => {
+        document.getElementById('newsletter-success').classList.add('hidden');
+      }, 4000);
+    }
+
+    // Fabric Showroom Details Data
+    const fabricDetails = {
+      1: {
+        tag: "INDUSTRIAL GRADE",
+        title: "Flame-Shield Aramid",
+        desc: "Designed to withstand high-temperature flare hazards in heavy industrial zones. Integrates Nomex carbon fiber meshes providing complete anti-static security and certified thermal resilience.",
+        img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
+        metrics: [98, 92, 65],
+        specs: ["Nomex Grid", "Anti-Static", "EN ISO 11612"]
+      },
+      2: {
+        tag: "EXECUTIVE CLASS",
+        title: "Super 120s Merino Wool",
+        desc: "Premium Merino wool blended with natural silk elements. Features anti-pilling attributes, moisture balance systems, and a high-twist design ensuring it remains wrinkle-free.",
+        img: "corporate_blazer_detail.png",
+        metrics: [45, 85, 95],
+        specs: ["80% Merino Wool", "Wrinkle-Free", "Breathable Silk"]
+      },
+      3: {
+        tag: "ACTIVE COMFORT",
+        title: "CoolBreathe Micro-Mesh",
+        desc: "Engineered specifically for active high-motion suites. Utilizes a honeycomb pore structure that accelerates moisture dispersion and cools body temperature by up to 2 degrees.",
+        img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+        metrics: [88, 70, 99],
+        specs: ["Moisture-Wicking", "Quick Dry", "Honeycomb Pores"]
+      },
+      4: {
+        tag: "HEAVY STRESS",
+        title: "DuroWeave Cotton Drill",
+        desc: "Constructed using dual-ply combed cotton threads. Highly resistant to tears and abrasion, ideal for rigorous field activities and heavy-duty workshop environments.",
+        img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+        metrics: [15, 99, 82],
+        specs: ["100% Combed Cotton", "Heavy Weight", "Triple-Stitched"]
+      }
+    };
+
+    function setActiveFabric(fabricNum) {
+      document.querySelectorAll('.fabric-btn').forEach(btn => {
+        btn.classList.remove('active-fabric', 'bg-lightCard', 'border-lightBorder');
+        btn.classList.add('border-transparent');
+        const numEl = btn.querySelector('.w-10');
+        if (numEl) {
+          numEl.classList.remove('bg-primary', 'text-white');
+          numEl.classList.add('bg-gray-100', 'text-gray-500');
+        }
+      });
+
+      const activeBtn = document.getElementById(`fabric-btn-${fabricNum}`);
+      activeBtn.classList.add('active-fabric', 'bg-lightCard', 'border-lightBorder');
+      activeBtn.classList.remove('border-transparent');
+      const numEl = activeBtn.querySelector('.w-10');
+      if (numEl) {
+        numEl.classList.remove('bg-gray-100', 'text-gray-500');
+        numEl.classList.add('bg-primary', 'text-white');
+      }
+
+      const detailCard = document.getElementById('fabric-detail-card');
+      gsap.to(detailCard, {
+        opacity: 0,
+        y: 10,
+        duration: 0.2,
+        onComplete: () => {
+          const data = fabricDetails[fabricNum];
+          document.getElementById('fabric-detail-tag').innerText = data.tag;
+          document.getElementById('fabric-detail-title').innerText = data.title;
+          document.getElementById('fabric-detail-desc').innerText = data.desc;
+          document.getElementById('fabric-detail-image').src = data.img;
+
+          // Update metrics
+          for (let i = 1; i <= 3; i++) {
+            const val = data.metrics[i-1];
+            document.getElementById(`metric-val-${i}`).innerText = `${val}%`;
+            gsap.to(document.getElementById(`metric-bar-${i}`), { width: `${val}%`, duration: 0.5, ease: "power2.out" });
+          }
+
+          // Update specs
+          for (let i = 1; i <= 3; i++) {
+            document.getElementById(`spec-tag-${i}`).innerText = data.specs[i-1];
+          }
+          
+          gsap.to(detailCard, { opacity: 1, y: 0, duration: 0.3 });
+        }
+      });
+    }
+
+    // Expanded Design Studio SVG configuration templates
+    const garmentSVGs = {
+      industrial: (body, sleeves, collar, logoType, logoPos) => `
+        <svg viewBox="0 0 100 100" class="w-full h-full max-h-[300px]">
+          <path d="M15 65 L30 25 L35 30 L23 68 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M85 65 L70 25 L65 30 L77 68 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M30 25 L70 25 L72 90 L52 90 L50 65 L48 90 L28 90 Z" fill="${body}" stroke="#0f172a" stroke-width="1.5"/>
+          <rect x="30" y="45" width="40" height="4" fill="#eab308" stroke="#0f172a" stroke-width="0.5"/>
+          <rect x="30" y="70" width="15" height="4" fill="#eab308" stroke="#0f172a" stroke-width="0.5"/>
+          <rect x="55" y="70" width="15" height="4" fill="#eab308" stroke="#0f172a" stroke-width="0.5"/>
+          <path d="M32 25 L50 33 L68 25 L50 22 Z" fill="${collar}" stroke="#0f172a" stroke-width="1.5"/>
+          ${logoPos === 'chest' ? `<circle cx="40" cy="38" r="3" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+          ${logoPos === 'back' ? `<rect x="42" y="52" width="16" height="8" rx="1" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+        </svg>
+      `,
+      shirt: (body, sleeves, collar, logoType, logoPos) => `
+        <svg viewBox="0 0 100 100" class="w-full h-full max-h-[300px]">
+          <path d="M15 65 L30 25 L35 30 L23 68 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M85 65 L70 25 L65 30 L77 68 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M30 25 L70 25 L75 90 L25 90 Z" fill="${body}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M30 25 L50 35 L70 25 L50 22 Z" fill="${collar}" stroke="#0f172a" stroke-width="1.5"/>
+          <line x1="50" y1="35" x2="50" y2="90" stroke="#0f172a" stroke-width="1.5"/>
+          <circle cx="50" cy="45" r="1" fill="#0f172a"/>
+          <circle cx="50" cy="55" r="1" fill="#0f172a"/>
+          <circle cx="50" cy="65" r="1" fill="#0f172a"/>
+          ${logoPos === 'chest' ? `<circle cx="40" cy="42" r="3" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+          ${logoPos === 'back' ? `<rect x="42" y="52" width="16" height="8" rx="1" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+        </svg>
+      `,
+      polo: (body, sleeves, collar, logoType, logoPos) => `
+        <svg viewBox="0 0 100 100" class="w-full h-full max-h-[300px]">
+          <path d="M15 35 L30 25 L35 40 L25 45 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M85 35 L70 25 L65 40 L75 45 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M30 25 L70 25 L75 90 L25 90 Z" fill="${body}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M35 25 L50 35 L65 25 L55 20 L45 20 Z" fill="${collar}" stroke="#0f172a" stroke-width="1.5"/>
+          <line x1="50" y1="35" x2="50" y2="50" stroke="#0f172a" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <circle cx="50" cy="40" r="1" fill="#0f172a"/>
+          <circle cx="50" cy="46" r="1" fill="#0f172a"/>
+          ${logoPos === 'chest' ? `<circle cx="40" cy="40" r="3" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+          ${logoPos === 'back' ? `<rect x="42" y="50" width="16" height="8" rx="1" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+        </svg>
+      `,
+      hospitality: (body, sleeves, collar, logoType, logoPos) => `
+        <svg viewBox="0 0 100 100" class="w-full h-full max-h-[300px]">
+          <path d="M15 50 L30 25 L35 30 L23 53 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M85 50 L70 25 L65 30 L77 53 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M30 25 L70 25 L73 85 L27 85 Z" fill="${body}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M45 25 L55 25 L55 85 L45 85 Z" fill="${body}" opacity="0.3"/>
+          <circle cx="42" cy="40" r="1.5" fill="#0f172a"/>
+          <circle cx="42" cy="50" r="1.5" fill="#0f172a"/>
+          <circle cx="42" cy="60" r="1.5" fill="#0f172a"/>
+          <circle cx="58" cy="40" r="1.5" fill="#0f172a"/>
+          <circle cx="58" cy="50" r="1.5" fill="#0f172a"/>
+          <circle cx="58" cy="60" r="1.5" fill="#0f172a"/>
+          <path d="M35 25 Q50 32 65 25 L65 21 Q50 26 35 21 Z" fill="${collar}" stroke="#0f172a" stroke-width="1.5"/>
+          ${logoPos === 'chest' ? `<circle cx="35" cy="35" r="3" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+          ${logoPos === 'back' ? `<rect x="42" y="50" width="16" height="8" rx="1" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+        </svg>
+      `,
+      institutional: (body, sleeves, collar, logoType, logoPos) => `
+        <svg viewBox="0 0 100 100" class="w-full h-full max-h-[300px]">
+          <path d="M15 65 L30 25 L35 30 L23 68 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M85 65 L70 25 L65 30 L77 68 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M30 25 L70 25 L75 90 L25 90 Z" fill="${body}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M30 25 L45 50 L50 50 L35 25 Z" fill="${collar}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M70 25 L55 50 L50 50 L65 25 Z" fill="${collar}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M48 25 L52 25 L54 40 L50 45 L46 40 Z" fill="#b91c1c" stroke="#0f172a" stroke-width="0.5"/>
+          ${logoPos === 'chest' ? `<circle cx="36" cy="40" r="3" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+          ${logoPos === 'back' ? `<rect x="42" y="52" width="16" height="8" rx="1" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+        </svg>
+      `,
+      jacket: (body, sleeves, collar, logoType, logoPos) => `
+        <svg viewBox="0 0 100 100" class="w-full h-full max-h-[300px]">
+          <path d="M12 65 L28 25 L35 30 L22 68 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M88 65 L72 25 L65 30 L78 68 Z" fill="${sleeves}" stroke="#0f172a" stroke-width="1.5"/>
+          <polygon points="16,52 25,29 27,31 18,54" fill="#eab308"/>
+          <polygon points="84,52 75,29 73,31 82,54" fill="#eab308"/>
+          <path d="M28 25 L72 25 L75 80 L25 80 Z" fill="${body}" stroke="#0f172a" stroke-width="1.5"/>
+          <rect x="25" y="48" width="50" height="5" fill="#eab308" stroke="#0f172a" stroke-width="0.5"/>
+          <rect x="25" y="55" width="50" height="5" fill="#eab308" stroke="#0f172a" stroke-width="0.5"/>
+          <path d="M28 25 L50 35 L72 25 L50 20 Z" fill="${collar}" stroke="#0f172a" stroke-width="1.5"/>
+          <line x1="50" y1="35" x2="50" y2="80" stroke="#0f172a" stroke-width="1.5" stroke-dasharray="1,1"/>
+          ${logoPos === 'chest' ? `<circle cx="38" cy="40" r="3" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+          ${logoPos === 'back' ? `<rect x="42" y="62" width="16" height="8" rx="1" fill="${logoType === 'embroidery' ? '#d4af37' : '#ef4444'}" stroke="#0f172a" stroke-width="0.5"/>` : ''}
+        </svg>
+      `
+    };
+
+    const colorNames = {
+      '#1e293b': 'Navy Blue',
+      '#374151': 'Charcoal Grey',
+      '#991b1b': 'Deep Crimson',
+      '#1d4ed8': 'Royal Blue',
+      '#ea580c': 'Safety Orange',
+      '#065f46': 'Forest Green',
+      '#f3f4f6': 'Alpine White',
+      '#d97706': 'Mustard Yellow'
+    };
+
+    // Category and Product Populators
+    function initDesignStudioProducts() {
+      try {
+        console.log("Design Studio: Initializing Category and Product selectors...");
+        const categorySelect = document.getElementById('config-product-category');
+        const productSelect = document.getElementById('config-choose-product');
+
+        if (!categorySelect || !productSelect) {
+          console.error("Design Studio Error: Category or Product selector DOM elements not found!");
+          return;
+        }
+
+        let products = null;
+        try {
+          const stored = localStorage.getItem('uniwear_products');
+          if (stored) {
+            products = JSON.parse(stored);
+          }
+        } catch (e) {
+          console.error("Design Studio Error: Failed to parse localStorage.uniwear_products", e);
+        }
+
+        // Fallback to defaultProducts
+        if (!products || !Array.isArray(products) || products.length === 0) {
+          console.log("Design Studio: localStorage.uniwear_products is empty or invalid. Falling back to defaultProducts.");
+          if (typeof defaultProducts !== 'undefined' && Array.isArray(defaultProducts)) {
+            products = defaultProducts;
+          } else {
+            products = [];
+          }
+        }
+
+        if (products.length === 0) {
+          console.warn("Design Studio Warning: No products available in database or fallback defaultProducts!");
+          categorySelect.innerHTML = `<option value="">No categories available</option>`;
+          productSelect.innerHTML = `<option value="">No products available. Please add products from Admin Portal.</option>`;
+          
+          const nameEl = document.getElementById('canvas-product-name');
+          const descEl = document.getElementById('canvas-product-desc');
+          if (nameEl) nameEl.innerText = "No product selected";
+          if (descEl) descEl.innerText = "Please add products from the Admin Portal to customize uniforms.";
+          return;
+        }
+
+        // Generate unique categories dynamically from products list
+        const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+        if (categories.length === 0) {
+          categorySelect.innerHTML = `<option value="">No categories available</option>`;
+          productSelect.innerHTML = `<option value="">No products available. Please add products from Admin Portal.</option>`;
+          return;
+        }
+
+        categorySelect.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+        populateProductsByCategory();
+        console.log("Design Studio: Product selectors successfully initialized!");
+      } catch (err) {
+        console.error("Design Studio Error: Crash in initDesignStudioProducts", err);
+      }
+    }
+
+    function populateProductsByCategory() {
+      try {
+        const categorySelect = document.getElementById('config-product-category');
+        const productSelect = document.getElementById('config-choose-product');
+        if (!categorySelect || !productSelect) return;
+
+        const selectedCat = categorySelect.value;
+        if (!selectedCat) {
+          productSelect.innerHTML = `<option value="">No products available</option>`;
+          return;
+        }
+
+        let products = null;
+        try {
+          products = JSON.parse(localStorage.getItem('uniwear_products'));
+        } catch (e) {}
+        if (!products || !Array.isArray(products) || products.length === 0) {
+          if (typeof defaultProducts !== 'undefined') products = defaultProducts;
+          else products = [];
+        }
+
+        const filteredProds = products.filter(p => p.category === selectedCat);
+        if (filteredProds.length === 0) {
+          productSelect.innerHTML = `<option value="">No products available in this category</option>`;
+          return;
+        }
+
+        productSelect.innerHTML = filteredProds.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+        onProductChange();
+      } catch (err) {
+        console.error("Design Studio Error: Crash in populateProductsByCategory", err);
+      }
+    }
+
+    function onProductChange() {
+      const products = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
+      const productId = parseInt(document.getElementById('config-choose-product').value);
+      const selectedProduct = products.find(p => p.id === productId);
+      if (!selectedProduct) return;
+
+      // Update Canvas product preview name and description
+      document.getElementById('canvas-product-name').innerText = selectedProduct.name;
+      document.getElementById('canvas-product-desc').innerText = selectedProduct.desc;
+
+      // Load Product image with fallback
+      const imgEl = document.getElementById('configurator-product-img');
+      if (imgEl) {
+        imgEl.src = selectedProduct.img || 'corporate_uniforms_mockup.png';
+        imgEl.onerror = () => {
+          imgEl.src = 'corporate_uniforms_mockup.png'; // Graceful fallback
+        };
+      }
+
+      // Update quantity input MOQ
+      const qtyInput = document.getElementById('config-qty');
+      if (qtyInput) {
+        qtyInput.min = selectedProduct.moq || 50;
+        qtyInput.value = selectedProduct.moq || 100;
+      }
+
+      // Pre-select product's fabric if available
+      const fabricSelect = document.getElementById('config-fabric-type');
+      if (fabricSelect && selectedProduct.fabric) {
+        let found = false;
+        for (let i = 0; i < fabricSelect.options.length; i++) {
+          if (fabricSelect.options[i].value.toLowerCase().includes(selectedProduct.fabric.split(' ')[0].toLowerCase())) {
+            fabricSelect.selectedIndex = i;
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          // Add dynamic option if not exists
+          const opt = document.createElement('option');
+          opt.value = selectedProduct.fabric;
+          opt.text = selectedProduct.fabric;
+          opt.selected = true;
+          fabricSelect.add(opt);
+        }
+      }
+
+      updateConfiguratorUI();
+    }
+
+    function updateConfiguratorUI() {
+      const products = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
+      const productId = parseInt(document.getElementById('config-choose-product').value);
+      const selectedProduct = products.find(p => p.id === productId);
+      if (!selectedProduct) return;
+
+      const primary = document.getElementById('config-primary-color').value;
+      const secondary = document.getElementById('config-secondary-color').value;
+      const brandingType = document.getElementById('config-branding-type').value;
+      const brandingPos = document.getElementById('config-branding-pos').value;
+      const fabric = document.getElementById('config-fabric-type').value;
+
+      // 1. Tint Overlay color
+      const tint = document.getElementById('configurator-tint-overlay');
+      if (tint) {
+        tint.style.backgroundColor = primary;
+      }
+
+      // 2. Vector SVG Overlay inside configurator-svg-container based on category
+      let svgType = 'polo';
+      const catName = selectedProduct.category.toLowerCase();
+      const prodName = selectedProduct.name.toLowerCase();
+      if (catName.includes('industrial')) {
+        svgType = 'industrial';
+      } else if (catName.includes('corporate') && prodName.includes('shirt')) {
+        svgType = 'shirt';
+      } else if (catName.includes('hospitality')) {
+        svgType = 'hospitality';
+      } else if (catName.includes('institutional')) {
+        svgType = 'institutional';
+      } else if (prodName.includes('jacket') || prodName.includes('vest')) {
+        svgType = 'jacket';
+      }
+
+      const container = document.getElementById('configurator-svg-container');
+      if (container && garmentSVGs[svgType]) {
+        container.innerHTML = garmentSVGs[svgType](primary, secondary, secondary, brandingType, brandingPos);
+      }
+
+      // 3. Logo Placement Badge Placement
+      const logoBadge = document.getElementById('configurator-logo-badge');
+      if (logoBadge) {
+        if (brandingPos === 'chest') {
+          logoBadge.style.top = '38%';
+          logoBadge.style.left = '42%';
+          logoBadge.style.transform = 'none';
+        } else {
+          logoBadge.style.top = '35%';
+          logoBadge.style.left = '50%';
+          logoBadge.style.transform = 'translateX(-50%)';
+        }
+        logoBadge.style.backgroundColor = secondary;
+        logoBadge.innerHTML = brandingType === 'embroidery'
+          ? '<i class="ri-brush-line text-white text-[10px]"></i>'
+          : '<i class="ri-printer-line text-white text-[10px]"></i>';
+      }
+
+      // Update HUD text tags
+      document.getElementById('canvas-tag-type').innerText = selectedProduct.name;
+      document.getElementById('canvas-tag-color').innerText = `${colorNames[primary] || 'Primary'} & ${colorNames[secondary] || 'Secondary'} Colors`;
+      document.getElementById('canvas-tag-branding-type').innerText = brandingType === 'embroidery' ? 'Embroidery' : 'Printed Logo';
+      document.getElementById('canvas-tag-logo').innerText = brandingPos === 'chest' ? 'Chest Placement' : 'Back Placement';
+    }
+
+    function openDesignConsultationModal() {
+      const products = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
+      const productId = parseInt(document.getElementById('config-choose-product').value);
+      const selectedProduct = products.find(p => p.id === productId);
+      if (!selectedProduct) return;
+
+      const primary = document.getElementById('config-primary-color').value;
+      const secondary = document.getElementById('config-secondary-color').value;
+      const brandingType = document.getElementById('config-branding-type').value;
+      const brandingPos = document.getElementById('config-branding-pos').value;
+      const fabric = document.getElementById('config-fabric-type').value;
+      const qty = document.getElementById('config-qty').value;
+
+      // Fill summary fields
+      document.getElementById('summary-garment').innerText = selectedProduct.name;
+      document.getElementById('summary-fabric').innerText = fabric;
+      document.getElementById('summary-body').innerText = `${colorNames[primary] || primary} (Primary) / ${colorNames[secondary] || secondary} (Secondary)`;
+      document.getElementById('summary-branding').innerText = brandingType === 'embroidery' ? 'Embroidery' : 'Printed Logo';
+      document.getElementById('summary-sleeve').innerText = colorNames[secondary] || secondary;
+      document.getElementById('summary-pos').innerText = brandingPos === 'chest' ? 'Chest Logo' : 'Back Logo';
+      document.getElementById('summary-collar').innerText = colorNames[secondary] || secondary;
+      document.getElementById('summary-qty').innerText = qty + ' Sets';
+
+      const modal = document.getElementById('design-consultation-modal');
+      const card = document.getElementById('design-modal-card');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        card.classList.remove('scale-95');
+      }, 50);
+    }
+
+    function closeDesignConsultationModal() {
+      const modal = document.getElementById('design-consultation-modal');
+      const card = document.getElementById('design-modal-card');
+      modal.classList.add('opacity-0');
+      card.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    function submitDesignLead(event) {
+      event.preventDefault();
+      
+      const products = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
+      const productId = parseInt(document.getElementById('config-choose-product').value);
+      const selectedProduct = products.find(p => p.id === productId);
+      if (!selectedProduct) return;
+
+      const primary = document.getElementById('config-primary-color').value;
+      const secondary = document.getElementById('config-secondary-color').value;
+      const brandingType = document.getElementById('config-branding-type').value;
+      const brandingPos = document.getElementById('config-branding-pos').value;
+      const fabric = document.getElementById('config-fabric-type').value;
+      const qty = parseInt(document.getElementById('config-qty').value) || 100;
+
+      const newLead = {
+        productId: productId,
+        productName: selectedProduct.name,
+        category: selectedProduct.category,
+        customizations: {
+          primaryColor: colorNames[primary] || primary,
+          secondaryColor: colorNames[secondary] || secondary,
+          logoPosition: brandingPos === 'chest' ? 'Chest Logo' : 'Back Logo',
+          brandingType: brandingType === 'embroidery' ? 'Embroidery' : 'Printed Logo',
+          fabric: fabric
+        },
+        volume: qty, // Align with admin portal convert-to-quote requirement
+        quantity: qty,
+        name: document.getElementById('lead-design-name').value,
+        company: document.getElementById('lead-design-company').value,
+        email: document.getElementById('lead-design-email').value,
+        phone: document.getElementById('lead-design-phone').value,
+        stage: "New Lead",
+        source: "Design Studio",
+        date: new Date().toISOString().split('T')[0],
+        details: `Product: ${selectedProduct.name} (ID: ${productId}). Fabric: ${fabric}. Colors: Primary(${colorNames[primary] || primary}), Secondary(${colorNames[secondary] || secondary}). Branding: ${brandingType === 'embroidery' ? 'Embroidery' : 'Printed Logo'} (${brandingPos === 'chest' ? 'Chest' : 'Back'}). Qty: ${qty} Sets.`
+      };
+
+      // 1. Save to leads in localStorage
+      let currentLeads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
+      currentLeads.push(newLead);
+      localStorage.setItem('uniwear_leads', JSON.stringify(currentLeads));
+
+      // Send to backend and trigger email notification (non-blocking)
+      if (window.api && typeof window.api.createLead === 'function') {
+        window.api.createLead(newLead).catch(err => console.error("Design Studio lead submission error:", err));
+      }
+
+      // 2. Add admin notification
+      let notifications = JSON.parse(localStorage.getItem('uniwear_notifications')) || [];
+      const newId = notifications.length > 0 ? Math.max(...notifications.map(n => n.id)) + 1 : 1;
+      notifications.unshift({
+        id: newId,
+        recipient: "admin",
+        title: "New Lead (Design Studio)",
+        text: `${newLead.name} from ${newLead.company} configured a custom ${newLead.productName}.`,
+        time: "Just now"
+      });
+      localStorage.setItem('uniwear_notifications', JSON.stringify(notifications));
+
+      // Close lead modal and open success modal
+      closeDesignConsultationModal();
+      
+      const successModal = document.getElementById('design-success-modal');
+      const successCard = document.getElementById('design-success-card');
+      successModal.classList.remove('hidden');
+      setTimeout(() => {
+        successModal.classList.remove('opacity-0');
+        successCard.classList.remove('scale-90');
+      }, 50);
+    }
+
+    // Modal triggers and initializations
+    window.addEventListener('DOMContentLoaded', () => {
+      initDesignStudioProducts();
+    });
+
+    function closeDesignSuccessModal() {
+      const successModal = document.getElementById('design-success-modal');
+      const successCard = document.getElementById('design-success-card');
+      successModal.classList.add('opacity-0');
+      successCard.classList.add('scale-90');
+      setTimeout(() => {
+        successModal.classList.add('hidden');
+      }, 300);
+    }
+  </script>
+
+  <!-- Design Consultation Lead Modal -->
+  <div id="design-consultation-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-charcoal/60 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+    <div id="design-modal-card" class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-6 sm:p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto transform scale-95 transition-all duration-300 font-body">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-xl sm:text-2xl font-bold text-charcoal">Design Consultation Request</h3>
+        <button onclick="closeDesignConsultationModal()" class="text-gray-400 hover:text-charcoal"><i class="ri-close-line text-2xl"></i></button>
+      </div>
+
+      <div class="bg-lightCard rounded-2xl p-4 mb-6 border border-lightBorder text-xs text-charcoal">
+        <h4 class="font-heading font-bold uppercase tracking-wider text-primary mb-3">Custom Design Configuration</h4>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-2">
+          <p><strong>Garment Type:</strong> <span id="summary-garment">Polo T-Shirt</span></p>
+          <p><strong>Fabric:</strong> <span id="summary-fabric">Cotton</span></p>
+          <p><strong>Body Color:</strong> <span id="summary-body">Navy</span></p>
+          <p><strong>Branding Type:</strong> <span id="summary-branding">Embroidery</span></p>
+          <p><strong>Sleeve Color:</strong> <span id="summary-sleeve">Navy</span></p>
+          <p><strong>Branding Position:</strong> <span id="summary-pos">Chest Logo</span></p>
+          <p><strong>Collar Color:</strong> <span id="summary-collar">Navy</span></p>
+          <p><strong>Quantity Range:</strong> <span id="summary-qty">Small Orders</span></p>
+        </div>
+      </div>
+
+      <form onsubmit="submitDesignLead(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Full Name *</label>
+          <input type="text" id="lead-design-name" required placeholder="John Doe" class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Company Name *</label>
+          <input type="text" id="lead-design-company" required placeholder="Toyota India" class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Corporate Email *</label>
+            <input type="email" id="lead-design-email" required placeholder="john@toyota.in" class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Phone Number *</label>
+            <input type="tel" id="lead-design-phone" required placeholder="+91 98765 43210" class="w-full bg-lightCard border border-lightBorder rounded-xl py-3 px-4 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-4 rounded-xl font-bold uppercase tracking-wider text-xs transition-colors shadow-lg shadow-primary/20 mt-4">
+          Submit Design Consultation Request
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Design Success Confirmation Modal -->
+  <div id="design-success-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-charcoal/60 backdrop-blur-md opacity-0 transition-opacity duration-300">
+    <div id="design-success-card" class="bg-white rounded-3xl p-8 max-w-md w-full border border-lightBorder shadow-2xl transform scale-90 transition-all duration-300 text-center font-body">
+      <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-6 mx-auto">
+        <i class="ri-checkbox-circle-fill text-4xl"></i>
+      </div>
+      <h3 class="font-heading text-2xl font-bold text-charcoal mb-3">Consultation Registered</h3>
+      <p class="text-sm text-mutedText leading-relaxed mb-6">
+        Your design configuration has been successfully saved to our leads database. Our executive consultant will review your blueprint and contact you shortly.
+      </p>
+      <button onclick="closeDesignSuccessModal()" class="w-full bg-charcoal hover:bg-charcoal/90 text-white py-3.5 rounded-xl font-bold uppercase tracking-wider transition-colors">
+        Dismiss
+      </button>
+    </div>
+  </div>
+</body>
+</html>
+

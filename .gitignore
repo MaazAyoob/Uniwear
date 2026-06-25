@@ -1,0 +1,14 @@
+node_modules/
+server/node_modules/
+
+.env
+server/.env
+
+.vscode/
+
+.vercel/
+
+dist/
+build/
+
+npm-debug.log*

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Authenticator | UNIWEAR</title>
+  <meta name="description" content="Secure business authentication portal for UNIWEAR clients and internal administrators.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#B91C1C',
+            primaryHover: '#991B1B',
+            darkBg: '#111827',
+            lightBg: '#FFFFFF',
+            lightCard: '#F9FAFB',
+            mutedText: '#4B5563',
+            charcoal: '#111827',
+            lightBorder: 'rgba(0, 0, 0, 0.08)'
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <style>
+    /* Premium Typography & Hierarchy System */
+    h1, h2, .font-display {
+      font-family: 'Clash Display', sans-serif !important;
+    }
+    h3, h4, h5, h6, nav a, .mobile-nav-link, button, .btn, .font-heading {
+      font-family: 'Outfit', sans-serif !important;
+    }
+    body, input, textarea, select, label, p, span, li, .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hierarchy, Line Height, and Letter Spacing Adjustments */
+    h1 {
+      font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important; /* Responsive fluid text scaling */
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.02em !important;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h3, .card-title {
+      line-height: 1.3 !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Section & Container Breathing Room */
+    section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+      padding-top: clamp(4rem, 8vw, 8rem);
+      padding-bottom: clamp(4rem, 8vw, 8rem);
+    }
+    
+    /* Navigation & CTA Optimization */
+    nav a, .mobile-nav-link {
+      letter-spacing: -0.01em;
+    }
+    button, .btn {
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    input, textarea, select {
+      font-family: 'Inter', sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+  </style>
+</head>
+<body class="bg-lightCard text-charcoal font-body overflow-x-hidden antialiased min-h-screen flex items-center justify-center p-6">
+
+
+
+  <!-- Floating Theme Toggle -->
+  <div class="fixed top-6 right-6 z-50">
+    <button class="theme-toggle-btn w-10 h-10 rounded-full bg-white border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors shadow-md" title="Toggle Theme">
+      <i class="ri-moon-line text-lg"></i>
+    </button>
+  </div>
+
+  <!-- Transition Sweep -->
+  <div id="transition-overlay" class="fixed inset-0 bg-primary z-[9999] transform translate-y-full flex items-center justify-center pointer-events-none">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-t-4 border-r-4 border-white rounded-full animate-spin"></div>
+      <div class="mt-4 font-heading text-xl uppercase tracking-widest text-white">UNIWEAR</div>
+    </div>
+  </div>
+
+  <div class="relative w-full max-w-5xl grid lg:grid-cols-2 rounded-3xl overflow-hidden bg-white z-10 border border-lightBorder shadow-xl">
+    
+    <!-- Left form side -->
+    <div class="p-8 md:p-12 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-10">
+          <a href="index.html" class="flex items-center gap-2.5">
+            <img src="logo-full.png" alt="UNIWEAR Logo" class="h-8 w-auto object-contain">
+          </a>
+          <a href="catalog.html" class="text-xs font-semibold text-primary flex items-center gap-1 hover:underline"><i class="ri-arrow-left-line"></i> Catalog</a>
+        </div>
+        
+        <!-- 1. LOGIN VIEW -->
+        <div id="login-view" class="space-y-6">
+          <div>
+            <h2 class="font-heading text-3xl font-extrabold text-charcoal mb-2">Access your UNIWEAR Customer Portal</h2>
+<p class="text-sm text-mutedText">Track quotations, orders, approvals and support requests in one place.</p>
+          </div>
+          
+          <form onsubmit="handlePortalLogin(event)" class="space-y-5">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Corporate Email Address</label>
+              <input type="email" id="login-email" required placeholder="client@uniwear.co" class="w-full bg-lightCard border border-lightBorder rounded-xl py-3.5 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold">Password</label>
+                <a href="#" onclick="showView('forgot-view')" class="text-xs text-primary hover:underline font-semibold">Forgot password?</a>
+              </div>
+              <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-lightCard border border-lightBorder rounded-xl py-3.5 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+            </div>
+
+
+
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <input type="checkbox" id="remember-me" class="rounded bg-lightCard border-lightBorder text-primary focus:ring-0">
+                <label for="remember-me" class="text-xs text-mutedText">Remember login parameters</label>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-4 rounded-xl font-bold uppercase tracking-wider transition-colors shadow-lg shadow-primary/20">
+              Authenticate & Enter
+            </button>
+            
+            <div id="login-error-msg" class="text-red-500 text-xs text-center hidden font-bold">Invalid credentials entered. Please try again.</div>
+            
+            <div class="text-center text-xs text-mutedText">
+              Don't have an enterprise account? 
+              <a href="#" onclick="showView('register-view')" class="text-primary hover:underline font-semibold">Register Account</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- 2. REGISTRATION VIEW -->
+        <div id="register-view" class="space-y-6 hidden">
+          <div>
+            <h2 class="font-heading text-3xl font-extrabold text-charcoal mb-2">Register Account</h2>
+            <p class="text-sm text-mutedText">Submit an enterprise application. Requests are routed to operations hub for approval.</p>
+          </div>
+          
+          <form onsubmit="handlePortalRegister(event)" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[10px] uppercase tracking-wider text-mutedText font-bold mb-1">Company Name</label>
+                <input type="text" id="reg-company" required placeholder="Toyota India" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary transition-colors">
+              </div>
+              <div>
+                <label class="block text-[10px] uppercase tracking-wider text-mutedText font-bold mb-1">Contact Person</label>
+                <input type="text" id="reg-person" required placeholder="John Doe" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary transition-colors">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-mutedText font-bold mb-1">Corporate Email Address</label>
+              <input type="email" id="reg-email" required placeholder="procurement@toyota.in" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary transition-colors">
+            </div>
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-mutedText font-bold mb-1">Phone Number</label>
+              <input type="text" id="reg-phone" required placeholder="+91 99000 55566" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary transition-colors">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[10px] uppercase tracking-wider text-mutedText font-bold mb-1">Password</label>
+                <input type="password" id="reg-password" required placeholder="••••••••" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary transition-colors">
+              </div>
+              <div>
+                <label class="block text-[10px] uppercase tracking-wider text-mutedText font-bold mb-1">Confirm Password</label>
+                <input type="password" id="reg-confirm" required placeholder="••••••••" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary transition-colors">
+              </div>
+            </div>
+
+            <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold uppercase tracking-wider transition-colors shadow-lg shadow-primary/20 text-xs">
+              Submit Registration Request
+            </button>
+            
+            <div id="reg-error-msg" class="text-red-500 text-xs text-center hidden font-bold">Passwords do not match. Please verify.</div>
+            <div id="reg-success-msg" class="text-green-600 text-xs text-center hidden font-bold">Registration logged! Loading check conditions...</div>
+            
+            <div class="text-center text-xs text-mutedText pt-2">
+              Already have an account? 
+              <a href="#" onclick="showView('login-view')" class="text-primary hover:underline font-semibold">Sign In</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- 3. FORGOT PASSWORD VIEW -->
+        <div id="forgot-view" class="space-y-6 hidden">
+          <div>
+            <h2 class="font-heading text-3xl font-extrabold text-charcoal mb-2">Forgot Password</h2>
+            <p class="text-sm text-mutedText">Verify registered corporate account to authorize password configuration overrides.</p>
+          </div>
+          
+          <form onsubmit="handleFindAccount(event)" class="space-y-5">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Corporate Email Address</label>
+              <input type="email" id="forgot-email" required placeholder="client@uniwear.co" class="w-full bg-lightCard border border-lightBorder rounded-xl py-3.5 px-4 text-sm text-charcoal focus:outline-none focus:border-primary transition-colors">
+            </div>
+            
+            <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3.5 rounded-xl font-bold uppercase tracking-wider transition-colors shadow-lg shadow-primary/20 text-xs">
+              Verify Account Email
+            </button>
+            
+            <div id="forgot-error-msg" class="text-red-500 text-xs text-center hidden font-bold">No registered account matches this email.</div>
+            
+            <div class="text-center text-xs text-mutedText">
+              <a href="#" onclick="showView('login-view')" class="text-primary hover:underline font-semibold">Back to Login</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- 4. RESET PASSWORD VIEW -->
+        <div id="reset-view" class="space-y-6 hidden">
+          <div>
+            <h2 class="font-heading text-3xl font-extrabold text-charcoal mb-2">Configure Password</h2>
+            <p class="text-sm text-mutedText">Enter new security passcode parameters for the validated email account.</p>
+          </div>
+          
+          <form onsubmit="handleResetPassword(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">New Password</label>
+              <input type="password" id="reset-password" required placeholder="••••••••" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary transition-colors">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Confirm New Password</label>
+              <input type="password" id="reset-confirm" required placeholder="••••••••" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary transition-colors">
+            </div>
+            
+            <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3.5 rounded-xl font-bold uppercase tracking-wider transition-colors shadow-lg shadow-primary/20 text-xs">
+              Override Passcode
+            </button>
+            
+            <div id="reset-error-msg" class="text-red-500 text-xs text-center hidden font-bold">Passwords do not match. Please re-enter.</div>
+            
+            <div class="text-center text-xs text-mutedText">
+              <a href="#" onclick="showView('login-view')" class="text-primary hover:underline font-semibold">Cancel and Return</a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <p class="text-xs text-gray-400 mt-8">Copyright © 2026 <span class="company-name">UNIWEAR</span>. All rights reserved.</p>
+    </div>
+
+    <!-- Right Image side -->
+    <div class="hidden lg:block relative overflow-hidden bg-primary/20 p-12 flex flex-col justify-end">
+      <div class="absolute inset-0 bg-cover bg-center transform scale-105" style="background-image: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80');"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+      <div class="relative z-10">
+        <span class="text-xs uppercase tracking-widest text-primary font-bold">PORTAL ACCESS</span>
+        <h3 class="font-heading text-3xl font-bold text-charcoal mt-1 mb-4">Track Orders & Sampling Lifecycle</h3>
+        <p class="text-sm text-mutedText leading-relaxed">Our unified business-to-business inventory tracker allows enterprise procurement managers to check stitching cycles, inspect pattern sheets, approve fabric colors, and schedule delivery packages.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="shared.js"></script>
+  
+  <script>
+    let validatedResetEmail = "";
+
+    function showView(viewId) {
+      document.getElementById('login-view').classList.add('hidden');
+      document.getElementById('register-view').classList.add('hidden');
+      document.getElementById('forgot-view').classList.add('hidden');
+      document.getElementById('reset-view').classList.add('hidden');
+      
+      const target = document.getElementById(viewId);
+      target.classList.remove('hidden');
+      gsap.fromTo(target, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" });
+    }
+
+    async function handlePortalLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const pass = document.getElementById('login-password').value.trim();
+      const errMsg = document.getElementById('login-error-msg');
+      const btn = event.target.querySelector('button[type="submit"]');
+
+      errMsg.classList.add('hidden');
+      if (btn) btn.disabled = true;
+
+      try {
+        const result = await window.api.login(email, pass);
+
+        const remember = document.getElementById('remember-me').checked;
+        if (remember) {
+          localStorage.setItem('uniwear_remembered_email', email);
+        } else {
+          localStorage.removeItem('uniwear_remembered_email');
+        }
+
+        if (result.authRole === 'client') {
+          window.location.href = 'customer-portal.html';
+        } else {
+          window.location.href = 'admin-portal.html';
+        }
+      } catch (err) {
+        errMsg.innerText = err.message || 'Invalid credentials entered. Please try again.';
+        errMsg.classList.remove('hidden');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    async function handlePortalRegister(event) {
+      event.preventDefault();
+      const company = document.getElementById('reg-company').value.trim();
+      const person = document.getElementById('reg-person').value.trim();
+      const email = document.getElementById('reg-email').value.trim().toLowerCase();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const pass = document.getElementById('reg-password').value.trim();
+      const confirm = document.getElementById('reg-confirm').value.trim();
+      const errMsg = document.getElementById('reg-error-msg');
+      const successMsg = document.getElementById('reg-success-msg');
+      const btn = event.target.querySelector('button[type="submit"]');
+
+      errMsg.classList.add('hidden');
+      successMsg.classList.add('hidden');
+
+      if (pass !== confirm) {
+        errMsg.innerText = "Passwords do not match. Please verify.";
+        errMsg.classList.remove('hidden');
+        return;
+      }
+
+      if (btn) btn.disabled = true;
+
+      try {
+        await window.api.register({
+          companyName: company,
+          representative: person,
+          email,
+          phone,
+          password: pass
+        });
+
+        successMsg.classList.remove('hidden');
+        event.target.reset();
+
+        setTimeout(() => {
+          showView('login-view');
+        }, 1500);
+      } catch (err) {
+        errMsg.innerText = err.message || 'Registration failed. Please try again.';
+        errMsg.classList.remove('hidden');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function handleFindAccount(event) {
+      event.preventDefault();
+      const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+      const errMsg = document.getElementById('forgot-error-msg');
+      errMsg.classList.add('hidden');
+
+      const users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+      const matched = users.find(u => u.email.toLowerCase() === email);
+
+      if (matched) {
+        validatedResetEmail = email;
+        showView('reset-view');
+      } else {
+        errMsg.classList.remove('hidden');
+      }
+    }
+
+    function handleResetPassword(event) {
+      event.preventDefault();
+      const pass = document.getElementById('reset-password').value.trim();
+      const confirm = document.getElementById('reset-confirm').value.trim();
+      const errMsg = document.getElementById('reset-error-msg');
+
+      errMsg.classList.add('hidden');
+
+      if (pass !== confirm) {
+        errMsg.classList.remove('hidden');
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+      const idx = users.findIndex(u => u.email.toLowerCase() === validatedResetEmail.toLowerCase());
+      if (idx !== -1) {
+        users[idx].password = pass;
+        localStorage.setItem('uniwear_users', JSON.stringify(users));
+        alert("Passcode updated successfully! Returning to login view.");
+        event.target.reset();
+        showView('login-view');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const remembered = localStorage.getItem('uniwear_remembered_email');
+      if (remembered) {
+        document.getElementById('login-email').value = remembered;
+        document.getElementById('remember-me').checked = true;
+      }
+    });
+  </script>
+</body>
+</html>
+
