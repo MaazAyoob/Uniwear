@@ -26,15 +26,25 @@ const createLead = async (req, res, next) => {
       time: 'Just now'
     });
 
-    // Send email notification (non-blocking)
-    const settings = await CompanySettings.findOne().lean() || {};
-    const template = req.body.source === 'Design Studio'
-      ? emailTemplates.designStudio(lead, settings)
-      : req.body.source === 'Chatbot'
-        ? emailTemplates.chatbotHandoff(lead, settings)
-        : emailTemplates.newLead(lead, settings);
-
-    sendMail(template);
+    // Send email notification (non-blocking & safe try-catch wrapper)
+    try {
+      const settings = await CompanySettings.findOne().lean() || {};
+      let template;
+      if (req.body.source === 'Design Studio') {
+        template = emailTemplates.designStudio(lead, req.body.customizations || {}, settings);
+      } else if (req.body.source === 'Chatbot') {
+        template = emailTemplates.chatbotHandoff(lead, settings);
+      } else if (req.body.source === 'Sample Request') {
+        template = emailTemplates.sampleRequest(lead, settings);
+      } else {
+        template = emailTemplates.newLead(lead, settings);
+      }
+      
+      // Ensure sendMail is called safely and asynchronous failures don't crash the server
+      sendMail(template).catch(err => console.error('[Mailer Trigger Error] Async sendMail failed:', err.message));
+    } catch (mailErr) {
+      console.error('[Mailer Trigger Error] Failed to generate email template for lead:', mailErr.message);
+    }
 
     res.status(201).json({ success: true, data: lead });
   } catch (err) {

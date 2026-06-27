@@ -1,4 +1,5 @@
 const CompanySettings = require('../models/CompanySettings');
+const { sendMail, emailTemplates } = require('../config/mailer');
 
 // GET /api/company-settings
 const getSettings = async (req, res, next) => {
@@ -39,6 +40,14 @@ const updateSettings = async (req, res, next) => {
     } else {
       Object.assign(settings, updates);
       await settings.save();
+    }
+
+    // Send settings changed email notification (non-blocking & safe try-catch wrapper)
+    try {
+      sendMail(emailTemplates.settingsUpdated(settings))
+        .catch(err => console.error('[Mailer Trigger Error] settingsUpdated failed:', err.message));
+    } catch (mailErr) {
+      console.error('[Mailer Trigger Error] settingsUpdated generation failed:', mailErr.message);
     }
 
     res.json({ success: true, data: settings });

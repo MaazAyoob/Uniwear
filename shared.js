@@ -1615,6 +1615,45 @@ function handleSampleCheckout() {
     alert("Please add items to sample first.");
     return;
   }
+
+  // Submit sample request lead to the backend (non-blocking)
+  if (window.api && typeof window.api.createLead === 'function') {
+    const authEmail = localStorage.getItem('uniwear_auth_email');
+    let name = 'Anonymous Customer';
+    let company = 'Not Logged In';
+    let email = authEmail || 'anonymous@uniwear.co';
+    let phone = 'N/A';
+
+    try {
+      const profileStr = localStorage.getItem('uniwear_profile');
+      if (profileStr) {
+        const profile = JSON.parse(profileStr);
+        name = profile.representative || name;
+        company = profile.companyName || company;
+        phone = profile.phone || phone;
+      }
+    } catch (e) {
+      console.error("Error reading profile for sample request", e);
+    }
+
+    const itemsText = cart.map(item => `${item.name} (Qty: ${item.quantity || 1})`).join(', ');
+
+    const leadPayload = {
+      name: name,
+      company: company,
+      email: email,
+      phone: phone,
+      category: 'Sample Request',
+      volume: cart.reduce((acc, curr) => acc + (curr.quantity || 1), 0),
+      details: `Requested samples of: ${itemsText}`,
+      source: 'Sample Request',
+      status: 'New',
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    window.api.createLead(leadPayload).catch(err => console.error("Sample request backend submit error:", err));
+  }
+
   alert("Sample request successfully logged! Our design styling consultant will contact you shortly.");
   setStorage('uniwear_cart', []);
   updateCartCountBadge();

@@ -88,10 +88,26 @@ const register = async (req, res, next) => {
       time: 'Just now'
     });
 
-    // Send emails (non-blocking)
-    const settings = await CompanySettings.findOne().lean() || {};
-    sendMail(emailTemplates.registrationAdmin(newUser, settings));
-    sendMail(emailTemplates.registrationCustomer(newUser, settings));
+    // Send emails (non-blocking & safe try-catch wrappers)
+    try {
+      const settings = await CompanySettings.findOne().lean() || {};
+      
+      try {
+        sendMail(emailTemplates.registrationAdmin(newUser, settings))
+          .catch(err => console.error('[Mailer Trigger Error] registrationAdmin failed:', err.message));
+      } catch (mailErr) {
+        console.error('[Mailer Trigger Error] registrationAdmin generation failed:', mailErr.message);
+      }
+
+      try {
+        sendMail(emailTemplates.registrationCustomer(newUser, settings))
+          .catch(err => console.error('[Mailer Trigger Error] registrationCustomer failed:', err.message));
+      } catch (mailErr) {
+        console.error('[Mailer Trigger Error] registrationCustomer generation failed:', mailErr.message);
+      }
+    } catch (err) {
+      console.error('[Mailer Trigger Error] Registration settings lookup failed:', err.message);
+    }
 
     res.status(201).json({ success: true, message: 'Registration submitted. Pending admin approval.' });
   } catch (err) {
