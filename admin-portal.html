@@ -822,9 +822,36 @@
             </select>
           </div>
         </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Slug (URL Name)</label>
+            <input type="text" id="blog-slug" placeholder="sourcing-linen-safely"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Reading Time (e.g. 5 min read)</label>
+            <input type="text" id="blog-reading-time" placeholder="Leave blank to auto-calculate"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Article Images (Multiple)</label>
+          <input type="file" id="blog-images-file" accept="image/*" multiple class="hidden">
+          <div onclick="document.getElementById('blog-images-file').click()" class="border-2 border-dashed border-lightBorder hover:border-primary/40 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-colors bg-lightCard">
+            <i class="ri-image-add-line text-xl text-mutedText"></i>
+            <span class="text-xs font-semibold text-charcoal mt-1">Upload Multiple Images</span>
+            <span class="text-[9px] text-gray-400">Click to browse or drop files here</span>
+          </div>
+          <div id="blog-images-preview" class="grid grid-cols-4 gap-2 mt-2"></div>
+        </div>
         <div>
           <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Short Excerpt</label>
           <textarea id="blog-excerpt" rows="2" required placeholder="Summary of the article content..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Complete Article Content</label>
+          <textarea id="blog-content" rows="6" required placeholder="Write the complete article body here (double enter for new paragraphs)..."
             class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
         </div>
         <button type="submit"
@@ -1085,6 +1112,56 @@
       }
     }
 
+    let tempBlogImages = [];
+
+    function initBlogImageUploadListener() {
+      const fileInput = document.getElementById('blog-images-file');
+      if (!fileInput) return;
+      fileInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+          if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            return;
+          }
+          if (file.size > 2 * 1024 * 1024) {
+            alert('Image size exceeds 2MB limit.');
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            tempBlogImages.push(evt.target.result);
+            renderBlogImagesPreview();
+          };
+          reader.readAsDataURL(file);
+        });
+        fileInput.value = '';
+      });
+    }
+
+    function renderBlogImagesPreview() {
+      const previewContainer = document.getElementById('blog-images-preview');
+      if (!previewContainer) return;
+      previewContainer.innerHTML = '';
+      tempBlogImages.forEach((imgSrc, idx) => {
+        const div = document.createElement('div');
+        div.className = 'relative h-16 rounded-lg overflow-hidden border border-lightBorder';
+        div.innerHTML = `
+          <img src="${imgSrc}" class="w-full h-full object-cover">
+          <button type="button" onclick="removeBlogImage(${idx})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/75 hover:bg-primary text-white flex items-center justify-center text-[10px] transition-colors">
+            <i class="ri-close-line"></i>
+          </button>
+        `;
+        previewContainer.appendChild(div);
+      });
+    }
+
+    function removeBlogImage(idx) {
+      tempBlogImages.splice(idx, 1);
+      renderBlogImagesPreview();
+    }
+    window.removeBlogImage = removeBlogImage;
+
     // Sync data from server
     async function syncAdminData() {
       try {
@@ -1120,6 +1197,7 @@
       }
       updateAdminDashboard();
       initProductImageUpload();
+      initBlogImageUploadListener();
     });
 
     // ─── TAB NAVIGATION ───────────────────────────────────────────────────────
@@ -1872,6 +1950,11 @@
         document.getElementById('blog-excerpt').value = '';
         document.getElementById('blog-status').value = 'Published';
         document.getElementById('blog-modal-id').value = '';
+        document.getElementById('blog-slug').value = '';
+        document.getElementById('blog-reading-time').value = '';
+        document.getElementById('blog-content').value = '';
+        tempBlogImages = [];
+        renderBlogImagesPreview();
       } else {
         document.getElementById('blog-modal-title').innerText = 'Edit Blog Post';
         const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
@@ -1884,6 +1967,11 @@
         document.getElementById('blog-author').value = b.author;
         document.getElementById('blog-excerpt').value = b.excerpt;
         document.getElementById('blog-status').value = b.status || 'Published';
+        document.getElementById('blog-slug').value = b.slug || '';
+        document.getElementById('blog-reading-time').value = b.readingTime || '';
+        document.getElementById('blog-content').value = b.content || '';
+        tempBlogImages = b.images ? [...b.images] : (b.featuredImage || b.img ? [b.featuredImage || b.img] : []);
+        renderBlogImagesPreview();
       }
 
       toggleModal('admin-blog-modal', true);
@@ -1894,14 +1982,34 @@
       const action = document.getElementById('blog-modal-action').value;
       let blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
 
+      const titleVal = document.getElementById('blog-title').value;
+      let slugVal = document.getElementById('blog-slug').value.trim();
+      if (!slugVal) {
+        slugVal = titleVal.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+
+      const contentVal = document.getElementById('blog-content').value;
+      let readingTimeVal = document.getElementById('blog-reading-time').value.trim();
+      if (!readingTimeVal) {
+        const words = contentVal.split(/\s+/).length;
+        const mins = Math.max(1, Math.ceil(words / 200));
+        readingTimeVal = `${mins} min read`;
+      }
+
+      const firstImage = tempBlogImages[0] || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80';
       const newBlog = {
-        title: document.getElementById('blog-title').value,
+        title: titleVal,
         category: document.getElementById('blog-cat').value,
         author: document.getElementById('blog-author').value,
         status: document.getElementById('blog-status').value,
         excerpt: document.getElementById('blog-excerpt').value,
+        slug: slugVal,
+        content: contentVal,
+        readingTime: readingTimeVal,
         date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-        img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
+        img: firstImage,
+        featuredImage: firstImage,
+        images: tempBlogImages,
         featured: false
       };
 
@@ -1912,7 +2020,22 @@
       } else {
         const id = parseInt(document.getElementById('blog-modal-id').value);
         const idx = blogs.findIndex(b => b.id === id);
-        if (idx !== -1) { newBlog.id = id; blogs[idx] = newBlog; alert('Blog post updated!'); }
+        if (idx !== -1) {
+          newBlog.id = id;
+          if (tempBlogImages.length > 0) {
+            newBlog.images = tempBlogImages;
+            newBlog.img = tempBlogImages[0];
+            newBlog.featuredImage = tempBlogImages[0];
+          } else {
+            newBlog.images = blogs[idx].images || [blogs[idx].featuredImage || blogs[idx].img];
+            newBlog.img = blogs[idx].img;
+            newBlog.featuredImage = blogs[idx].featuredImage || blogs[idx].img;
+          }
+          newBlog.featured = blogs[idx].featured || false;
+          newBlog.date = blogs[idx].date || newBlog.date; // Keep original date if exists
+          blogs[idx] = newBlog;
+          alert('Blog post updated!');
+        }
       }
 
       localStorage.setItem('uniwear_blogs', JSON.stringify(blogs));

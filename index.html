@@ -1022,7 +1022,8 @@
         let publishedBlogs = blogs.filter(post => post.status === "Published");
         publishedBlogs.slice(0, 3).forEach(post => {
           const card = document.createElement('article');
-          card.className = "bg-white rounded-2xl overflow-hidden border border-lightBorder hover:shadow-lg transition-all duration-300 group";
+          card.className = "bg-white rounded-2xl overflow-hidden border border-lightBorder hover:shadow-lg transition-all duration-300 group cursor-pointer";
+          card.setAttribute('onclick', `openBlogArticleModal(${post.id})`);
           card.innerHTML = `
             <div class="h-48 overflow-hidden relative">
               <img src="${post.img}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">

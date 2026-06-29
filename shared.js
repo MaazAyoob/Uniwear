@@ -549,8 +549,11 @@ const defaultBlogs = [
     date: "September 19, 2024",
     excerpt: "Tracing how uniforms evolved from medieval guild liveries to modern brand identities, reflecting changes in society and workplace dynamics.",
     img: "https://uniwear.co/api/assets/images/full/high_res/250177fa-e729-4d5f-87a7-0e84a6808f5c-Picture-1.webp",
+    featuredImage: "https://uniwear.co/api/assets/images/full/high_res/250177fa-e729-4d5f-87a7-0e84a6808f5c-Picture-1.webp",
     featured: true,
-    status: "Published"
+    status: "Published",
+    readingTime: "6 min read",
+    content: "Uniforms have always been more than just clothing. Throughout history, they have served as vital symbols of identity, authority, unity, and functionality. Tracing their evolution reveals a fascinating journey from the rigid structures of medieval guilds to the dynamic brand statements of today's corporate landscape.\n\nIn the medieval era, liveries and guild uniforms were the earliest precursors to modern workwear. They were used to identify members of specific trades and alliances, denoting craftsmanship and quality standards. Over time, as industrialization swept the globe, uniforms took on a more utilitarian role. Factory workers required durable, protective clothing, giving rise to heavy denim, canvas, and reinforced stitching.\n\nToday, uniforms are an essential pillar of brand strategy. They convey professionalism, foster team spirit, and ensure safety in high-risk environments. At UNIWEAR, we blend historic craftsmanship with state-of-the-art textile technology, ensuring that every garment we create is a testament to quality and design innovation."
   },
   {
     id: 2,
@@ -561,8 +564,11 @@ const defaultBlogs = [
     date: "September 19, 2024",
     excerpt: "Discover how sustainable materials, zero-waste packaging, and organic goods are transforming the corporate gifting landscape.",
     img: "https://uniwear.co/api/assets/images/full/high_res/29d8c009-d649-4258-936e-77e4ded99a29-UW-Blog-Cover.webp",
+    featuredImage: "https://uniwear.co/api/assets/images/full/high_res/29d8c009-d649-4258-936e-77e4ded99a29-UW-Blog-Cover.webp",
     featured: false,
-    status: "Published"
+    status: "Published",
+    readingTime: "4 min read",
+    content: "Corporate gifting has entered a new era. What was once a routine exchange of generic branded items has evolved into an opportunity to showcase values, build strong connections, and demonstrate ecological responsibility. Modern organizations are increasingly turning to sustainable, eco-friendly gifts to represent their brand.\n\nSustainable corporate gifting is not just about choosing organic materials; it is a holistic approach that covers product lifecycle, zero-waste packaging, and supporting local communities. From biodegradable tech accessories to organic cotton apparel, the options for high-quality, eco-conscious gifts are expanding rapidly.\n\nBy prioritizing sustainability in corporate gifts, businesses send a clear message: they care about their legacy, their employees, and the environment. This shift not only builds brand loyalty but also fosters a culture of mindfulness and care within the corporate ecosystem."
   },
   {
     id: 3,
@@ -573,8 +579,11 @@ const defaultBlogs = [
     date: "September 19, 2024",
     excerpt: "An in-depth analysis of how thoughtful executive gifts boost morale, reinforce company culture, and elevate brand recall.",
     img: "https://uniwear.co/api/assets/images/full/high_res/b4d25e52-9ad3-4230-8194-02bde89bf740-UW-Blog-Cover-2.webp",
+    featuredImage: "https://uniwear.co/api/assets/images/full/high_res/b4d25e52-9ad3-4230-8194-02bde89bf740-UW-Blog-Cover-2.webp",
     featured: false,
-    status: "Published"
+    status: "Published",
+    readingTime: "5 min read",
+    content: "In today's highly competitive business landscape, attracting and retaining top talent requires more than standard benefits. Organizations are searching for meaningful ways to express appreciation and foster a deep sense of belonging. This is where thoughtful, strategic corporate gifting plays a transformative role.\n\nA well-timed, premium executive gift is a powerful tool for employee engagement. When employees receive high-quality, personalized items, they feel valued and recognized for their contributions. This recognition acts as a catalyst, boosting morale and driving alignment with organizational goals.\n\nMoreover, executive gifting extends beyond employee engagement; it is a key driver of external brand loyalty. Gifting custom, finely crafted items to key clients and partners leaves a lasting impression that reinforces business relationships and builds long-term brand equity."
   }
 ];
 
@@ -1237,6 +1246,44 @@ if (localStorage.getItem('uniwear_seeded_v8') !== 'true') {
 let stateUsers = getStorage('uniwear_users', defaultUsers);
 let stateProducts = getStorage('uniwear_products', defaultProducts);
 let stateBlogs = getStorage('uniwear_blogs', defaultBlogs);
+
+// Self-healing migration for blog fields
+let blogsModified = false;
+stateBlogs = stateBlogs.map(b => {
+  const match = defaultBlogs.find(db => db.id === b.id || db.title.trim().toLowerCase() === b.title.trim().toLowerCase());
+  
+  if (!b.slug) {
+    b.slug = b.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    blogsModified = true;
+  }
+  
+  if (!b.featuredImage) {
+    b.featuredImage = b.img || (match ? match.featuredImage : '');
+    blogsModified = true;
+  }
+  
+  if (!b.content) {
+    b.content = (match ? match.content : b.excerpt) || "";
+    blogsModified = true;
+  }
+  
+  if (!b.readingTime) {
+    if (match && match.readingTime) {
+      b.readingTime = match.readingTime;
+    } else {
+      const words = b.content ? b.content.split(/\s+/).length : 0;
+      const mins = Math.max(1, Math.ceil(words / 200));
+      b.readingTime = `${mins} min read`;
+    }
+    blogsModified = true;
+  }
+  
+  return b;
+});
+if (blogsModified) {
+  localStorage.setItem('uniwear_blogs', JSON.stringify(stateBlogs));
+}
+
 let stateQuotations = getStorage('uniwear_quotations', defaultQuotations);
 let stateLeads = getStorage('uniwear_leads', defaultLeads);
 let stateOrders = getStorage('uniwear_orders', defaultOrders);
@@ -1904,6 +1951,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   applyCompanySettings();
   initAIChatbot();
+  initPremiumBlogModal();
 });
 
 // ==========================================
@@ -2992,5 +3040,469 @@ function createHandoffLead() {
 }
 
 // Global Init Load Call is handled inside window event DOMContentLoaded in shared.js
+
+// =============================================================================
+// PREMIUM RESPONSIVE BLOG ARTICLE MODAL SYSTEM
+// =============================================================================
+let modalFocusElements = [];
+let lastActiveElement = null;
+let hasPushedModalState = false;
+
+function showToast(message) {
+  let toast = document.getElementById('uniwear-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'uniwear-toast';
+    toast.className = 'fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[10000] bg-charcoal text-white text-xs font-semibold px-5 py-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none flex items-center gap-2';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<i class="ri-checkbox-circle-fill text-green-500 text-sm"></i> <span>${message}</span>`;
+  toast.classList.remove('opacity-0');
+  toast.classList.add('opacity-100');
+  
+  setTimeout(() => {
+    toast.classList.remove('opacity-100');
+    toast.classList.add('opacity-0');
+  }, 2500);
+}
+
+function getRelatedArticles(currentBlog, allBlogs) {
+  let related = allBlogs.filter(b => b.id !== currentBlog.id && b.status === "Published" && b.category === currentBlog.category);
+  if (related.length < 3) {
+    const extra = allBlogs.filter(b => b.id !== currentBlog.id && b.status === "Published" && b.category !== currentBlog.category);
+    related = [...related, ...extra];
+  }
+  return related.slice(0, 3);
+}
+
+function lockBackgroundScroll() {
+  if (typeof lenisInstance !== 'undefined' && lenisInstance) {
+    lenisInstance.stop();
+  }
+  document.documentElement.classList.add('overflow-hidden');
+  document.body.classList.add('overflow-hidden');
+}
+
+function unlockBackgroundScroll() {
+  document.documentElement.classList.remove('overflow-hidden');
+  document.body.classList.remove('overflow-hidden');
+  if (typeof lenisInstance !== 'undefined' && lenisInstance) {
+    lenisInstance.start();
+  }
+}
+
+function handleModalKeyDown(e) {
+  if (e.key === 'Tab') {
+    if (modalFocusElements.length === 0) return;
+    const firstEl = modalFocusElements[0];
+    const lastEl = modalFocusElements[modalFocusElements.length - 1];
+    
+    if (e.shiftKey) { // Shift + Tab
+      if (document.activeElement === firstEl) {
+        lastEl.focus();
+        e.preventDefault();
+      }
+    } else { // Tab
+      if (document.activeElement === lastEl) {
+        firstEl.focus();
+        e.preventDefault();
+      }
+    }
+  } else if (e.key === 'Escape') {
+    closeBlogArticleModal(true);
+  } else if (e.key === 'ArrowLeft') {
+    if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      const prevBtn = document.getElementById('modal-blog-prev');
+      if (prevBtn) prevBtn.click();
+    }
+  } else if (e.key === 'ArrowRight') {
+    if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      const nextBtn = document.getElementById('modal-blog-next');
+      if (nextBtn) nextBtn.click();
+    }
+  }
+}
+
+function initPremiumBlogModal() {
+  if (document.getElementById('premium-blog-modal')) return;
+  
+  const modalHTML = `
+  <div id="premium-blog-modal" data-lenis-prevent class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-charcoal/60 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 pointer-events-none" role="dialog" aria-modal="true" aria-labelledby="modal-blog-title">
+    <!-- Modal Card -->
+    <div id="premium-blog-card" data-lenis-prevent class="relative w-full max-w-4xl bg-white border border-lightBorder rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh] md:max-h-[85vh] transform scale-95 transition-all duration-300 opacity-0 outline-none" tabindex="-1">
+      
+      <!-- Floating Close Button -->
+      <button id="modal-blog-close" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-md border border-lightBorder flex items-center justify-center text-charcoal hover:bg-primary hover:text-white hover:scale-105 transition-all duration-200" aria-label="Close modal">
+        <i class="ri-close-line text-xl"></i>
+      </button>
+      
+      <!-- Left Side: Featured Image (Desktop: 40%, Mobile: Top Banner) -->
+      <div id="modal-blog-image-container" class="md:w-2/5 w-full bg-lightCard relative overflow-hidden flex-shrink-0 min-h-[220px] md:min-h-0">
+        <img id="modal-blog-image" src="" alt="" class="w-full h-full object-cover stagger-item">
+        <!-- Category Badge overlay -->
+        <span id="modal-blog-category-badge" class="absolute bottom-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md stagger-item">Category</span>
+      </div>
+      
+      <!-- Right Side: Scrollable Content -->
+      <div id="modal-blog-scroll-body" data-lenis-prevent class="md:w-3/5 w-full flex flex-col overflow-y-auto bg-white">
+        <div class="p-6 sm:p-8 md:p-10 flex-grow space-y-6">
+          
+          <!-- Header Info -->
+          <div class="space-y-3 stagger-item">
+            <div class="flex items-center gap-3 text-[11px] text-gray-400 font-semibold uppercase tracking-wider">
+              <span id="modal-blog-author">Author</span>
+              <span>•</span>
+              <span id="modal-blog-date">Date</span>
+              <span>•</span>
+              <span id="modal-blog-reading-time">5 min read</span>
+            </div>
+            
+            <h2 id="modal-blog-title" class="font-heading text-2xl sm:text-3xl font-bold text-charcoal leading-tight">Blog Title</h2>
+          </div>
+          
+          <!-- Action Row (Share Button) -->
+          <div class="flex items-center justify-between border-y border-lightBorder py-3 stagger-item">
+            <span class="text-xs text-mutedText font-semibold">UNIWEAR Textile Innovation Hub</span>
+            <button id="modal-blog-share" class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal hover:text-primary transition-colors py-1.5 px-3.5 rounded-full hover:bg-lightCard border border-transparent hover:border-lightBorder">
+              <i class="ri-share-line text-sm"></i> Share Article
+            </button>
+          </div>
+          
+          <!-- Article Body -->
+          <div id="modal-blog-body" class="prose max-w-none text-charcoal/80 text-sm leading-relaxed space-y-4 stagger-item">
+            <!-- Content dynamic -->
+          </div>
+          
+          <!-- Next/Prev Navigation Buttons -->
+          <div class="flex items-center justify-between border-t border-lightBorder pt-6 mt-8 stagger-item">
+            <button id="modal-blog-prev" class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal hover:text-primary transition-all hover:-translate-x-1">
+              <i class="ri-arrow-left-line text-base"></i> Previous Post
+            </button>
+            <button id="modal-blog-next" class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal hover:text-primary transition-all hover:translate-x-1">
+              Next Post <i class="ri-arrow-right-line text-base"></i>
+            </button>
+          </div>
+          
+          <!-- Related Stories Section -->
+          <div class="pt-8 border-t border-lightBorder space-y-4 stagger-item">
+            <h3 class="font-heading text-lg font-bold text-charcoal">Related Articles</h3>
+            <div id="modal-blog-related" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <!-- Content dynamic -->
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  `;
+  
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = modalHTML.trim();
+  const modalEl = tempDiv.firstChild;
+  document.body.appendChild(modalEl);
+  
+  // Custom transition styling
+  const style = document.createElement('style');
+  style.textContent = `
+    #premium-blog-modal {
+      transition: opacity 0.3s ease-out;
+    }
+    #premium-blog-card {
+      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease-out;
+    }
+    .stagger-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .stagger-item.animate-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #premium-blog-modal.opacity-100 {
+      opacity: 1;
+    }
+    #premium-blog-card.scale-100 {
+      transform: scale(1);
+      opacity: 1;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Backdrop and Close listeners
+  document.getElementById('modal-blog-close').addEventListener('click', () => closeBlogArticleModal(true));
+  modalEl.addEventListener('click', (e) => {
+    if (e.target === modalEl) {
+      closeBlogArticleModal(true);
+    }
+  });
+  
+  // Share listener
+  document.getElementById('modal-blog-share').addEventListener('click', () => {
+    const activeBlogId = modalEl.getAttribute('data-blog-id');
+    const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
+    const blog = blogs.find(b => b.id == activeBlogId);
+    if (blog) {
+      const url = window.location.origin + window.location.pathname + '#article-' + blog.slug;
+      navigator.clipboard.writeText(url).then(() => {
+        showToast("Article link copied to clipboard!");
+      }).catch(err => console.error("Clipboard copy failed:", err));
+    }
+  });
+
+  // Handle URL hash on initial load
+  setTimeout(checkUrlHashAndOpenModal, 400);
+
+  // Listen for history popstate events
+  window.addEventListener('popstate', (e) => {
+    const hash = window.location.hash;
+    const modal = document.getElementById('premium-blog-modal');
+    const isOpen = modal && !modal.classList.contains('hidden');
+    
+    if (hash.startsWith('#article-')) {
+      const slug = hash.replace('#article-', '');
+      const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
+      const blog = blogs.find(b => b.slug === slug);
+      if (blog) {
+        openBlogArticleModal(blog.id, false);
+      }
+    } else {
+      if (isOpen) {
+        closeBlogArticleModal(false);
+      }
+    }
+  });
+}
+
+function checkUrlHashAndOpenModal() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#article-')) {
+    const slug = hash.replace('#article-', '');
+    const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
+    const blog = blogs.find(b => b.slug === slug);
+    if (blog) {
+      openBlogArticleModal(blog.id, false);
+    }
+  }
+}
+
+function openBlogArticleModal(blogId, pushToHistory = true) {
+  initPremiumBlogModal();
+  
+  const modalEl = document.getElementById('premium-blog-modal');
+  const cardEl = document.getElementById('premium-blog-card');
+  if (!modalEl || !cardEl) return;
+  
+  const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
+  const blog = blogs.find(b => b.id == blogId);
+  if (!blog) return;
+  
+  // Record previous focus element
+  if (modalEl.classList.contains('hidden')) {
+    lastActiveElement = document.activeElement;
+  }
+  
+  modalEl.setAttribute('data-blog-id', blog.id);
+  
+  // Update fields
+  document.getElementById('modal-blog-title').innerText = blog.title;
+  document.getElementById('modal-blog-author').innerText = `By ${blog.author}`;
+  document.getElementById('modal-blog-date').innerText = blog.date;
+  document.getElementById('modal-blog-reading-time').innerText = blog.readingTime;
+  
+  // Set images and slider carousel
+  const imgContainer = document.getElementById('modal-blog-image-container');
+  if (imgContainer) {
+    const images = blog.images && blog.images.length > 0 ? blog.images : [blog.featuredImage || blog.img];
+    if (images.length > 1) {
+      let currentImgIdx = 0;
+      imgContainer.innerHTML = `
+        <img id="modal-blog-image" src="${images[currentImgIdx]}" alt="${blog.title}" class="w-full h-full object-cover stagger-item">
+        <span id="modal-blog-category-badge" class="absolute bottom-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md stagger-item">${blog.category}</span>
+        
+        <!-- Image Slide Controls -->
+        <button id="modal-blog-img-prev" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-charcoal hover:text-primary flex items-center justify-center shadow-md transition-all duration-200 z-10 focus:outline-none" aria-label="Previous image">
+          <i class="ri-arrow-left-s-line text-lg"></i>
+        </button>
+        <button id="modal-blog-img-next" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-charcoal hover:text-primary flex items-center justify-center shadow-md transition-all duration-200 z-10 focus:outline-none" aria-label="Next image">
+          <i class="ri-arrow-right-s-line text-lg"></i>
+        </button>
+        
+        <!-- Dot Indicators -->
+        <div class="absolute bottom-4 right-4 flex items-center gap-1.5 z-10">
+          ${images.map((_, i) => `<span class="modal-blog-dot w-2 h-2 rounded-full bg-white/50 transition-all duration-200 cursor-pointer ${i === 0 ? 'bg-white scale-125' : ''}" data-idx="${i}"></span>`).join('')}
+        </div>
+      `;
+      
+      const updateCarousel = (newIdx) => {
+        currentImgIdx = (newIdx + images.length) % images.length;
+        const img = document.getElementById('modal-blog-image');
+        if (img) img.src = images[currentImgIdx];
+        
+        imgContainer.querySelectorAll('.modal-blog-dot').forEach((dot, idx) => {
+          if (idx === currentImgIdx) {
+            dot.classList.remove('bg-white/50');
+            dot.classList.add('bg-white', 'scale-125');
+          } else {
+            dot.classList.remove('bg-white', 'scale-125');
+            dot.classList.add('bg-white/50');
+          }
+        });
+      };
+      
+      imgContainer.querySelector('#modal-blog-img-prev').addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateCarousel(currentImgIdx - 1);
+      });
+      imgContainer.querySelector('#modal-blog-img-next').addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateCarousel(currentImgIdx + 1);
+      });
+      
+      imgContainer.querySelectorAll('.modal-blog-dot').forEach(dot => {
+        dot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const targetIdx = parseInt(e.target.getAttribute('data-idx'));
+          updateCarousel(targetIdx);
+        });
+      });
+    } else {
+      imgContainer.innerHTML = `
+        <img id="modal-blog-image" src="${images[0]}" alt="${blog.title}" class="w-full h-full object-cover stagger-item">
+        <span id="modal-blog-category-badge" class="absolute bottom-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md stagger-item">${blog.category}</span>
+      `;
+    }
+  }
+  
+  // Safe paragraph formatting for article body
+  const bodyEl = document.getElementById('modal-blog-body');
+  bodyEl.innerHTML = '';
+  const paragraphs = (blog.content || "").split(/\n\s*\n/);
+  paragraphs.forEach(paraText => {
+    if (paraText.trim()) {
+      const p = document.createElement('p');
+      p.className = 'mb-4 leading-relaxed';
+      p.innerText = paraText.trim();
+      bodyEl.appendChild(p);
+    }
+  });
+  
+  // Next & Prev button logic
+  const publishedBlogs = blogs.filter(b => b.status === "Published");
+  const currentIndex = publishedBlogs.findIndex(b => b.id === blog.id);
+  const prevBtn = document.getElementById('modal-blog-prev');
+  const nextBtn = document.getElementById('modal-blog-next');
+  
+  if (currentIndex !== -1) {
+    const prevBlog = publishedBlogs[(currentIndex - 1 + publishedBlogs.length) % publishedBlogs.length];
+    const nextBlog = publishedBlogs[(currentIndex + 1) % publishedBlogs.length];
+    
+    prevBtn.onclick = () => openBlogArticleModal(prevBlog.id, true);
+    nextBtn.onclick = () => openBlogArticleModal(nextBlog.id, true);
+  }
+  
+  // Render Related Stories
+  const relatedContainer = document.getElementById('modal-blog-related');
+  relatedContainer.innerHTML = '';
+  const related = getRelatedArticles(blog, publishedBlogs);
+  related.forEach(post => {
+    const card = document.createElement('div');
+    card.className = "bg-lightCard rounded-xl overflow-hidden border border-lightBorder hover:shadow-md transition-all duration-300 cursor-pointer group flex flex-col";
+    card.setAttribute('onclick', `openBlogArticleModal(${post.id})`);
+    card.innerHTML = `
+      <div class="h-20 overflow-hidden relative">
+        <img src="${post.featuredImage || post.img}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+      </div>
+      <div class="p-3 flex-grow flex flex-col justify-between">
+        <div>
+          <span class="text-[8px] uppercase tracking-wider text-primary font-bold">${post.category}</span>
+          <h4 class="font-heading text-[11px] font-bold text-charcoal mt-0.5 line-clamp-2 group-hover:text-primary transition-colors leading-tight">${post.title}</h4>
+        </div>
+        <span class="text-[8px] text-gray-400 mt-1 block">${post.readingTime}</span>
+      </div>
+    `;
+    relatedContainer.appendChild(card);
+  });
+  
+  // Push state to browser history
+  if (pushToHistory) {
+    history.pushState({ isBlogModal: true, blogId: blog.id }, '', '#article-' + blog.slug);
+    hasPushedModalState = true;
+  }
+  
+  // Reset scrolling of content pane
+  document.getElementById('modal-blog-scroll-body').scrollTop = 0;
+  
+  // Lock background layout & pause lenis
+  lockBackgroundScroll();
+  
+  // Animate Open
+  modalEl.classList.remove('hidden');
+  modalEl.offsetWidth; // Force paint reflow
+  
+  modalEl.classList.add('opacity-100', 'pointer-events-auto');
+  cardEl.classList.add('scale-100', 'opacity-100');
+  
+  // Sequential load stagger animation
+  const staggerItems = modalEl.querySelectorAll('.stagger-item');
+  staggerItems.forEach((item, idx) => {
+    item.classList.remove('animate-in');
+    setTimeout(() => {
+      item.classList.add('animate-in');
+    }, idx * 60 + 100);
+  });
+  
+  // Prepare Focus Trap Elements
+  const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  modalFocusElements = Array.from(modalEl.querySelectorAll(focusableSelectors)).filter(el => {
+    return el.offsetWidth > 0 && el.offsetHeight > 0;
+  });
+  
+  window.addEventListener('keydown', handleModalKeyDown);
+  
+  // Focus the close button
+  document.getElementById('modal-blog-close').focus();
+}
+
+function closeBlogArticleModal(triggerHistoryBack = true) {
+  const modalEl = document.getElementById('premium-blog-modal');
+  const cardEl = document.getElementById('premium-blog-card');
+  if (!modalEl || !cardEl || modalEl.classList.contains('hidden')) return;
+  
+  window.removeEventListener('keydown', handleModalKeyDown);
+  
+  modalEl.classList.remove('opacity-100', 'pointer-events-auto');
+  cardEl.classList.remove('scale-100', 'opacity-100');
+  
+  const staggerItems = modalEl.querySelectorAll('.stagger-item');
+  staggerItems.forEach(item => item.classList.remove('animate-in'));
+  
+  unlockBackgroundScroll();
+  
+  if (triggerHistoryBack) {
+    if (hasPushedModalState) {
+      history.back();
+      hasPushedModalState = false;
+    } else {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }
+  
+  setTimeout(() => {
+    if (!modalEl.classList.contains('opacity-100')) {
+      modalEl.classList.add('hidden');
+      if (lastActiveElement) {
+        lastActiveElement.focus();
+        lastActiveElement = null;
+      }
+    }
+  }, 300);
+}
+
+// Expose open/close globally
+window.openBlogArticleModal = openBlogArticleModal;
+window.closeBlogArticleModal = closeBlogArticleModal;
 
 
