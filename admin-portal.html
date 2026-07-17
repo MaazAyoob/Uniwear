@@ -1000,7 +1000,8 @@
       reader.onload = (e) => {
         const base64Url = e.target.result;
         let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-        const idx = prods.findIndex(p => p.id === currentTableUploadProductId);
+        prods = prods.filter(Boolean);
+        const idx = prods.findIndex(p => p && p.id === currentTableUploadProductId);
         if (idx !== -1) {
           prods[idx].img = base64Url;
           prods[idx].image = base64Url;
@@ -1017,7 +1018,8 @@
     function removeTableImage(prodId) {
       if (!confirm('Are you sure you want to remove the product image? It will revert to the fallback image.')) return;
       let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-      const idx = prods.findIndex(p => p.id === prodId);
+      prods = prods.filter(Boolean);
+      const idx = prods.findIndex(p => p && p.id === prodId);
       if (idx !== -1) {
         prods[idx].img = 'corporate_blazer_detail.png';
         prods[idx].image = 'corporate_blazer_detail.png';
@@ -1414,7 +1416,7 @@
     function updateAdminDashboard() {
       const leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
       const quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
-      const prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+      const prods = (JSON.parse(localStorage.getItem('uniwear_products')) || []).filter(Boolean);
       const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
       const users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
 
@@ -1880,8 +1882,9 @@
         document.getElementById('product-modal-id').value = '';
       } else {
         document.getElementById('product-modal-title').innerText = 'Edit Product';
-        const prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-        const p = prods.find(item => item.id === prodId);
+        let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+        prods = prods.filter(Boolean);
+        const p = prods.find(item => item && item.id === prodId);
         if (!p) return;
 
         document.getElementById('product-modal-id').value = p.id;
@@ -1903,13 +1906,14 @@
       event.preventDefault();
       const action = document.getElementById('product-modal-action').value;
       let prods = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
+      prods = prods.filter(Boolean);
 
       const newProd = {
         name: document.getElementById('prod-name').value,
         category: document.getElementById('prod-cat').value,
         fabric: document.getElementById('prod-fabric').value,
         gsm: document.getElementById('prod-gsm').value,
-        moq: parseInt(document.getElementById('prod-moq').value),
+        moq: parseInt(document.getElementById('prod-moq').value) || 50,
         img: document.getElementById('prod-img-url').value || 'corporate_blazer_detail.png',
         image: document.getElementById('prod-img-url').value || 'corporate_blazer_detail.png',
         desc: document.getElementById('prod-desc').value,
@@ -1917,12 +1921,13 @@
       };
 
       if (action === 'add') {
-        newProd.id = prods.length > 0 ? Math.max(...prods.map(p => p.id)) + 1 : 1;
+        const validProds = prods.filter(p => p && typeof p.id === 'number');
+        newProd.id = validProds.length > 0 ? Math.max(...validProds.map(p => p.id)) + 1 : 1;
         prods.push(newProd);
         alert('Product added successfully!');
       } else {
         const id = parseInt(document.getElementById('product-modal-id').value);
-        const idx = prods.findIndex(p => p.id === id);
+        const idx = prods.findIndex(p => p && p.id === id);
         if (idx !== -1) { newProd.id = id; prods[idx] = newProd; alert('Product updated successfully!'); }
       }
 
@@ -1934,7 +1939,7 @@
     function deleteProduct(prodId) {
       if (!confirm('Delete this product?')) return;
       let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-      prods = prods.filter(p => p.id !== prodId);
+      prods = prods.filter(p => p && p.id !== prodId);
       localStorage.setItem('uniwear_products', JSON.stringify(prods));
       updateAdminDashboard();
     }

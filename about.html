@@ -147,6 +147,14 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(0, 0, 0, 0.05);
     }
+    /* Dark mode hero gradient override */
+    html[data-theme="dark"] .about-hero .bg-gradient-to-t {
+      background-image: linear-gradient(to top, #0B0F19, rgba(11, 15, 25, 0.4), transparent) !important;
+    }
+    html[data-theme="dark"] .about-hero .bg-gradient-to-r {
+      background-image: linear-gradient(to right, rgba(11, 15, 25, 0.3), transparent) !important;
+    }
+    
     /* Mobile optimizations */
     @media (max-width: 640px) {
       .marquee-content { gap: 32px !important; }
@@ -232,15 +240,15 @@
   <!-- CONTENT -->
   <main>
     <!-- Page Hero Banner -->
-    <section class="relative h-[75vh] min-h-[520px] flex items-end overflow-hidden">
+    <section class="relative h-[75vh] min-h-[520px] flex items-end overflow-hidden about-hero">
       <div class="absolute inset-0">
         <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80" alt="UNIWEAR Manufacturing Heritage" class="w-full h-full object-cover scale-105">
         <div class="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
         <div class="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent"></div>
       </div>
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-10 sm:pb-14 z-10">
-        <span class="text-xs uppercase tracking-widest text-primary font-bold">OUR HERITAGE</span>
-        <h1 class="font-heading text-3xl sm:text-5xl md:text-7xl font-bold mt-2 text-charcoal leading-tight">Three Decades of<br>Textile Craftsmanship</h1>
+        <span class="text-sm uppercase tracking-[0.25em] text-primary font-black">OUR HERITAGE</span>
+        <h1 class="font-heading text-4xl sm:text-5xl md:text-7xl font-extrabold mt-2 text-charcoal leading-tight">Three Decades of<br>Textile Craftsmanship</h1>
       </div>
     </section>
 
@@ -304,9 +312,9 @@
             We engineer industry-specific workwear designed to meet the rigorous safety, durability, and stylistic standards of diverse business sectors.
           </p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div class="grid grid-cols-2 md:flex md:flex-wrap md:justify-center gap-6">
           <!-- Corporate -->
-          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center">
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center w-full md:w-[calc(33.33%-1.5rem)] lg:w-[calc(20%-1.25rem)] shrink-0">
             <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
               <i class="ri-briefcase-line text-2xl"></i>
             </div>
@@ -314,7 +322,7 @@
             <p class="text-xs text-mutedText leading-relaxed">Executive shirts, custom blazers, and high-performance formal wear.</p>
           </div>
           <!-- Industrial -->
-          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center">
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center w-full md:w-[calc(33.33%-1.5rem)] lg:w-[calc(20%-1.25rem)] shrink-0">
             <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
               <i class="ri-settings-3-line text-2xl"></i>
             </div>
@@ -322,7 +330,7 @@
             <p class="text-xs text-mutedText leading-relaxed">Flame-retardant boiler suits, safety jackets, and anti-static boots.</p>
           </div>
           <!-- Hospitality -->
-          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center">
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center w-full md:w-[calc(33.33%-1.5rem)] lg:w-[calc(20%-1.25rem)] shrink-0">
             <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
               <i class="ri-hotel-line text-2xl"></i>
             </div>
@@ -330,7 +338,7 @@
             <p class="text-xs text-mutedText leading-relaxed">Chef coats, front-desk uniforms, and kitchen staff aprons.</p>
           </div>
           <!-- Healthcare -->
-          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center">
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center w-full md:w-[calc(33.33%-1.5rem)] lg:w-[calc(20%-1.25rem)] shrink-0">
             <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
               <i class="ri-shield-cross-line text-2xl"></i>
             </div>
@@ -338,7 +346,7 @@
             <p class="text-xs text-mutedText leading-relaxed">Antimicrobial scrubs, lab coats, and sterile surgical gowns.</p>
           </div>
           <!-- Education -->
-          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center col-span-2 md:col-span-1 font-body">
+          <div class="bg-lightCard p-6 rounded-2xl border border-lightBorder hover:border-primary/30 hover:shadow-md transition-all duration-300 group text-center flex flex-col justify-between items-center col-span-2 md:col-span-1 font-body w-full md:w-[calc(33.33%-1.5rem)] lg:w-[calc(20%-1.25rem)] shrink-0">
             <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-4">
               <i class="ri-graduation-cap-line text-2xl"></i>
             </div>
@@ -440,8 +448,8 @@
       <!-- Leadership Grid -->
       <div class="py-10 sm:py-16 border-t border-lightBorder mb-24">
         <div class="text-center mb-16">
-          <span class="text-xs uppercase tracking-widest text-primary font-bold">THE TEAM</span>
-          <h2 class="font-heading text-4xl font-bold mt-2 text-charcoal">Leadership Team</h2>
+          <span class="text-sm uppercase tracking-[0.25em] text-primary font-black">THE TEAM</span>
+          <h2 class="font-heading text-4xl sm:text-5xl font-extrabold mt-2 text-charcoal">Leadership Team</h2>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Member 1 -->

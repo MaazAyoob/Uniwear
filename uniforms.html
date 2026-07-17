@@ -234,17 +234,11 @@
         <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=1920&q=80" alt="Premium Uniform Collections" class="w-full h-full object-cover scale-105">
         <div class="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
       </div>
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-10 sm:pb-14 z-10 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 w-full">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-10 sm:pb-14 z-10">
         <div>
-          <span class="text-xs uppercase tracking-widest text-primary font-bold">THE CATALOGUE</span>
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">THE CATALOG</span>
           <h1 class="font-heading text-3xl sm:text-5xl md:text-7xl font-bold mt-2 text-charcoal leading-tight">Premium Uniform<br>Solutions</h1>
         </div>
-        <!-- Basket trigger button -->
-        <button onclick="toggleSampleDrawer(true)" class="relative bg-white/90 backdrop-blur-sm hover:bg-white border border-lightBorder text-charcoal px-6 py-3.5 rounded-full text-sm font-semibold transition-all flex items-center gap-2 shadow-md shrink-0">
-          <i class="ri-shopping-bag-line text-lg text-primary"></i>
-          Sample Request Basket
-          <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center" id="cart-badge-count">0</span>
-        </button>
       </div>
     </section>
 
@@ -357,34 +351,14 @@
             </div>
           </div>
         </div>
-        <button id="modal-cart-action-btn" onclick="" class="w-full bg-primary hover:bg-primaryHover text-white py-3.5 rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2">
-          <i class="ri-add-line"></i> Add to Sample Request Basket
-        </button>
+        <a href="contact.html" class="w-full bg-primary hover:bg-primaryHover text-white py-3.5 rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2 text-center">
+          <i class="ri-file-list-3-line"></i> Request a Quote
+        </a>
       </div>
     </div>
   </div>
 
-  <!-- Floating Sample Drawer -->
-  <div id="sample-request-drawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white border-l border-lightBorder shadow-2xl p-8 transform translate-x-full transition-transform duration-500 ease-in-out hidden flex flex-col justify-between">
-    <div>
-      <div class="flex justify-between items-center mb-8 pb-4 border-b border-lightBorder">
-        <h4 class="font-heading text-lg font-bold text-charcoal">Sample Request Basket</h4>
-        <button onclick="toggleSampleDrawer(false)" class="text-gray-400 hover:text-charcoal"><i class="ri-close-line text-2xl"></i></button>
-      </div>
-      <div class="space-y-4 max-h-[400px] overflow-y-auto" id="drawer-items-list">
-        <!-- Rendered dynamically -->
-      </div>
-    </div>
-    <div class="border-t border-lightBorder pt-6 space-y-4 bg-white">
-      <div class="flex justify-between text-sm">
-        <span class="text-mutedText">Total Sample Count</span>
-        <span class="font-bold text-charcoal" id="drawer-total-count">0 Items</span>
-      </div>
-      <button onclick="handleSampleCheckout()" class="w-full bg-primary hover:bg-primaryHover text-white py-4 rounded-xl font-bold uppercase tracking-wider text-xs transition-colors">
-        Submit Sample Request (FREE)
-      </button>
-    </div>
-  </div>
+
 
   <script src="api.js"></script>
   <script src="shared.js"></script>
@@ -397,11 +371,11 @@
       const grid = document.getElementById('products-catalog-grid');
       grid.innerHTML = "";
 
-      let products = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
+      let products = (JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts).filter(Boolean);
 
       const filtered = activeCategoryFilter === "All" 
-        ? products.filter(p => p.category !== "Corporate Gifting" && p.category !== "Gifting") 
-        : products.filter(p => p.category === activeCategoryFilter);
+        ? products.filter(p => p && p.category !== "Corporate Gifting" && p.category !== "Gifting") 
+        : products.filter(p => p && p.category === activeCategoryFilter);
 
       filtered.forEach(prod => {
         const card = document.createElement('div');
@@ -444,8 +418,8 @@
     }
 
     function openQuickView(prodId) {
-      let products = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
-      const prod = products.find(p => p.id === prodId);
+      let products = (JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts).filter(Boolean);
+      const prod = products.find(p => p && p.id === prodId);
       if (!prod) return;
 
       document.getElementById('modal-product-img').src = prod.img;
@@ -457,7 +431,9 @@
       document.getElementById('modal-product-moq').innerText = `${prod.moq} Sets`;
       
       const cartActionBtn = document.getElementById('modal-cart-action-btn');
-      cartActionBtn.setAttribute('onclick', `addToSampleCart(${prod.id}); toggleQuickViewModal(false);`);
+      if (cartActionBtn) {
+        cartActionBtn.setAttribute('onclick', `addToSampleCart(${prod.id}); toggleQuickViewModal(false);`);
+      }
 
       toggleQuickViewModal(true);
     }

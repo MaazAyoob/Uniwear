@@ -1340,7 +1340,11 @@ themeStyleEl.textContent = `
     color: var(--text-color) !important;
   }
   
-  html[data-theme="dark"] img:not([src*="logo-icon"]):not([src*="logo.svg"]) {
+  html[data-theme="dark"] img[src*="logo-full"] {
+    filter: brightness(0) invert(1) !important;
+  }
+  
+  html[data-theme="dark"] img:not([src*="logo-icon"]):not([src*="logo.svg"]):not([src*="logo-full"]) {
     filter: brightness(0.8) contrast(1.02);
   }
   
@@ -1606,108 +1610,24 @@ function initPageTransitions() {
 function updateCartCountBadge() {
   const badge = document.getElementById('cart-badge-count');
   if (badge) {
-    const cart = getStorage('uniwear_cart', []);
-    badge.innerText = cart.length;
+    badge.style.display = 'none';
   }
 }
 
 function addToSampleCart(prodId) {
-  let products = getStorage('uniwear_products', defaultProducts);
-  let cart = getStorage('uniwear_cart', []);
-  const prod = products.find(p => p.id === prodId);
-
-  if (!prod) return;
-
-  if (cart.some(item => item.id === prodId)) {
-    alert("This product is already added to your sample request basket.");
-    return;
-  }
-
-  cart.push(prod);
-  setStorage('uniwear_cart', cart);
-  updateCartCountBadge();
-
-  // Update cart drawer if it is on the current page
-  if (typeof renderCartDrawer === 'function') {
-    renderCartDrawer();
-  }
-  toggleSampleDrawer(true);
+  console.log("addToSampleCart disabled as per client revision");
 }
 
 function removeSampleCartItem(prodId) {
-  let cart = getStorage('uniwear_cart', []);
-  cart = cart.filter(item => item.id !== prodId);
-  setStorage('uniwear_cart', cart);
-  updateCartCountBadge();
-
-  if (typeof renderCartDrawer === 'function') {
-    renderCartDrawer();
-  }
+  console.log("removeSampleCartItem disabled as per client revision");
 }
 
 function toggleSampleDrawer(show) {
-  const drawer = document.getElementById('sample-request-drawer');
-  if (!drawer) return;
-  if (show) {
-    drawer.classList.remove('hidden');
-    gsap.to(drawer, { x: 0, duration: 0.4, ease: "power2.out" });
-  } else {
-    gsap.to(drawer, { x: "100%", duration: 0.4, ease: "power2.in", onComplete: () => drawer.classList.add('hidden') });
-  }
+  console.log("toggleSampleDrawer disabled as per client revision");
 }
 
 function handleSampleCheckout() {
-  let cart = getStorage('uniwear_cart', []);
-  if (cart.length === 0) {
-    alert("Please add items to sample first.");
-    return;
-  }
-
-  // Submit sample request lead to the backend (non-blocking)
-  if (window.api && typeof window.api.createLead === 'function') {
-    const authEmail = localStorage.getItem('uniwear_auth_email');
-    let name = 'Anonymous Customer';
-    let company = 'Not Logged In';
-    let email = authEmail || 'anonymous@uniwear.co';
-    let phone = 'N/A';
-
-    try {
-      const profileStr = localStorage.getItem('uniwear_profile');
-      if (profileStr) {
-        const profile = JSON.parse(profileStr);
-        name = profile.representative || name;
-        company = profile.companyName || company;
-        phone = profile.phone || phone;
-      }
-    } catch (e) {
-      console.error("Error reading profile for sample request", e);
-    }
-
-    const itemsText = cart.map(item => `${item.name} (Qty: ${item.quantity || 1})`).join(', ');
-
-    const leadPayload = {
-      name: name,
-      company: company,
-      email: email,
-      phone: phone,
-      category: 'Sample Request',
-      volume: cart.reduce((acc, curr) => acc + (curr.quantity || 1), 0),
-      details: `Requested samples of: ${itemsText}`,
-      source: 'Sample Request',
-      status: 'New',
-      date: new Date().toISOString().split('T')[0]
-    };
-
-    window.api.createLead(leadPayload).catch(err => console.error("Sample request backend submit error:", err));
-  }
-
-  alert("Sample request successfully logged! Our design styling consultant will contact you shortly.");
-  setStorage('uniwear_cart', []);
-  updateCartCountBadge();
-  if (typeof renderCartDrawer === 'function') {
-    renderCartDrawer();
-  }
-  toggleSampleDrawer(false);
+  console.log("handleSampleCheckout disabled as per client revision");
 }
 
 // FAQ Accordion Toggler
@@ -2895,8 +2815,8 @@ function renderRecommendationResults(industry) {
             <span>MOQ: ${p.moq} Sets</span>
             <span>${p.gsm || ''}</span>
           </div>
-          <button onclick="window.addToSampleCart(${p.id})" class="w-full bg-primary hover:bg-primaryHover text-white py-1.5 rounded-lg text-[9px] font-bold transition-all uppercase tracking-wider mt-3 flex items-center justify-center gap-1 select-all">
-            <i class="ri-add-line"></i> Add Sample Basket
+          <button onclick="window.location.href='contact.html?product=' + encodeURIComponent('${p.name}')" class="w-full bg-primary hover:bg-primaryHover text-white py-1.5 rounded-lg text-[9px] font-bold transition-all uppercase tracking-wider mt-3 flex items-center justify-center gap-1 select-all">
+            <i class="ri-mail-line"></i> Enquire Now
           </button>
         </div>
       </div>
