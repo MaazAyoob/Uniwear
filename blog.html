@@ -333,10 +333,26 @@
   <script>
     let activeBlogCategory = "All";
     let blogSearchQuery = "";
+    let globalBlogs = [];
+
+    async function loadBackendBlogs() {
+      try {
+        const res = await window.api.getBlogs();
+        if (res.success) {
+          globalBlogs = res.data;
+          localStorage.setItem('uniwear_blogs', JSON.stringify(res.data));
+        }
+      } catch (err) {
+        console.error("Failed to load blogs from API:", err);
+      }
+      if (!globalBlogs || globalBlogs.length === 0) {
+        globalBlogs = typeof defaultBlogs !== 'undefined' ? defaultBlogs : [];
+      }
+      renderBlogPage();
+    }
 
     function renderBlogPage() {
-      let blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
-      blogs = blogs.filter(b => b.status === "Published");
+      let blogs = globalBlogs.filter(b => b.status === "Published");
 
       // 1. Featured spotlight render
       const featuredBox = document.getElementById('featured-article-container');
@@ -414,8 +430,10 @@
         btn.classList.add('border-lightBorder', 'text-mutedText');
       });
       const activeBtn = document.getElementById(`blog-filter-btn-${cat}`);
-      activeBtn.classList.remove('border-lightBorder', 'text-mutedText');
-      activeBtn.classList.add('border-primary', 'bg-primary', 'text-white');
+      if (activeBtn) {
+        activeBtn.classList.remove('border-lightBorder', 'text-mutedText');
+        activeBtn.classList.add('border-primary', 'bg-primary', 'text-white');
+      }
       renderBlogPage();
     }
 
@@ -425,9 +443,8 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      renderBlogPage();
+      loadBackendBlogs();
     });
   </script>
 </body>
 </html>
-

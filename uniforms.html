@@ -365,13 +365,36 @@
   
   <script>
     let activeCategoryFilter = "All";
+    let globalProducts = [];
+
+    async function loadBackendProducts() {
+      try {
+        const res = await window.api.getProducts();
+        if (res.success) {
+          globalProducts = res.data;
+          localStorage.setItem('uniwear_products', JSON.stringify(res.data));
+        }
+      } catch (err) {
+        console.error("Failed to load products from API:", err);
+      }
+      if (!globalProducts || globalProducts.length === 0) {
+        globalProducts = typeof defaultProducts !== 'undefined' ? defaultProducts : [];
+      }
+      renderProductsCatalog();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadBackendProducts();
+      renderCartDrawer();
+    });
 
     // Products catalog mapping
     function renderProductsCatalog() {
       const grid = document.getElementById('products-catalog-grid');
+      if (!grid) return;
       grid.innerHTML = "";
 
-      let products = (JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts).filter(Boolean);
+      let products = globalProducts.filter(Boolean);
 
       const filtered = activeCategoryFilter === "All" 
         ? products.filter(p => p && p.category !== "Corporate Gifting" && p.category !== "Gifting") 
@@ -411,14 +434,16 @@
       });
 
       const activeBtn = document.getElementById(`filter-btn-${cat}`);
-      activeBtn.classList.remove('border-lightBorder', 'text-mutedText');
-      activeBtn.classList.add('border-primary', 'bg-primary', 'text-white');
+      if (activeBtn) {
+        activeBtn.classList.remove('border-lightBorder', 'text-mutedText');
+        activeBtn.classList.add('border-primary', 'bg-primary', 'text-white');
+      }
 
       renderProductsCatalog();
     }
 
     function openQuickView(prodId) {
-      let products = (JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts).filter(Boolean);
+      let products = globalProducts.filter(Boolean);
       const prod = products.find(p => p && p.id === prodId);
       if (!prod) return;
 
@@ -482,10 +507,7 @@
       if (window.refreshHoverables) window.refreshHoverables();
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      renderProductsCatalog();
-      renderCartDrawer();
-    });
+    // Removed duplicate listener
   </script>
 </body>
 </html>

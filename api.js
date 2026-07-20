@@ -211,6 +211,27 @@ const api = {
   getSettings: () => apiGet('/company-settings'),
   updateSettings: (data) => apiPatch('/company-settings', data),
 
+  // Products (CMS)
+  getProducts: (params) => apiGet('/products', params),
+  createProduct: (data) => apiPost('/products', data),
+  updateProduct: (id, data) => apiPatch(`/products/${id}`, data),
+  deleteProduct: (id) => apiDelete(`/products/${id}`),
+
+  // Catalog (CMS)
+  getCatalogs: (params) => apiGet('/catalog', params),
+  createCatalog: (data) => apiPost('/catalog', data),
+  updateCatalog: (id, data) => apiPatch(`/catalog/${id}`, data),
+  deleteCatalog: (id) => apiDelete(`/catalog/${id}`),
+
+  // Blogs (CMS)
+  getBlogs: (params) => apiGet('/blogs', params),
+  createBlog: (data) => apiPost('/blogs', data),
+  updateBlog: (id, data) => apiPatch(`/blogs/${id}`, data),
+  deleteBlog: (id) => apiDelete(`/blogs/${id}`),
+
+  // Dashboard Stats
+  getDashboardStats: () => apiGet('/dashboard/stats'),
+
   // Raw helpers for custom calls
   get: apiGet,
   post: apiPost,

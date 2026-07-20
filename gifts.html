@@ -364,11 +364,35 @@
   <script src="shared.js"></script>
   
   <script>
+    let globalProducts = [];
+
+    async function loadBackendProducts() {
+      try {
+        const res = await window.api.getProducts();
+        if (res.success) {
+          globalProducts = res.data;
+          localStorage.setItem('uniwear_products', JSON.stringify(res.data));
+        }
+      } catch (err) {
+        console.error("Failed to load products from API:", err);
+      }
+      if (!globalProducts || globalProducts.length === 0) {
+        globalProducts = typeof defaultProducts !== 'undefined' ? defaultProducts : [];
+      }
+      renderGiftingCatalog();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadBackendProducts();
+      if (typeof renderCartDrawer === 'function') renderCartDrawer();
+    });
+
     function renderGiftingCatalog() {
       const grid = document.getElementById('products-gifting-grid');
+      if (!grid) return;
       grid.innerHTML = "";
 
-      let products = (JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts).filter(Boolean);
+      let products = globalProducts.filter(Boolean);
       const giftingProducts = products.filter(p => p && (p.category === "Corporate Gifting" || p.category === "Gifting"));
 
       giftingProducts.forEach(prod => {
@@ -398,7 +422,7 @@
     }
 
     function openQuickView(prodId) {
-      let products = (JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts).filter(Boolean);
+      let products = globalProducts.filter(Boolean);
       const prod = products.find(p => p && p.id === prodId);
       if (!prod) return;
 
@@ -458,9 +482,7 @@
       if (window.refreshHoverables) window.refreshHoverables();
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      renderGiftingCatalog();
-    });
+    // Removed duplicate listener
   </script>
 </body>
 </html>

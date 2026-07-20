@@ -15,6 +15,10 @@ const orderRoutes = require('./routes/orderRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
+const productRoutes = require('./routes/productRoutes');
+const catalogRoutes = require('./routes/catalogRoutes');
+const blogRoutes = require('./routes/blogRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,7 +29,7 @@ connectDB();
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({
   origin: '*', // Tighten to your domain in production
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(morgan('dev'));
@@ -45,6 +49,10 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/company-settings', settingsRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/catalog', catalogRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {

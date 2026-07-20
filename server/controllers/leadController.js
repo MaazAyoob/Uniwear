@@ -6,7 +6,26 @@ const CompanySettings = require('../models/CompanySettings');
 // GET /api/leads
 const getLeads = async (req, res, next) => {
   try {
-    const leads = await Lead.find().sort({ createdAt: -1 }).lean();
+    const { search, source, stage } = req.query;
+    const filter = {};
+    if (source && source !== 'All') {
+      if (source === 'Chatbot') {
+        filter.$or = [{ source: 'Chatbot' }, { source: 'AI Assistant' }];
+      } else {
+        filter.source = source;
+      }
+    }
+    if (stage) filter.stage = stage;
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { company: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } },
+        { category: { $regex: search, $options: 'i' } }
+      ];
+    }
+    const leads = await Lead.find(filter).sort({ createdAt: -1 }).lean();
     res.json({ success: true, data: leads });
   } catch (err) {
     next(err);

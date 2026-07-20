@@ -211,6 +211,11 @@
           id="admin-tab-admin-products">
           <i class="ri-shirt-line"></i> Products
         </button>
+        <button onclick="setAdminTab('admin-catalog')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-catalog">
+          <i class="ri-book-open-line"></i> Catalog
+        </button>
         <button onclick="setAdminTab('admin-blogs')"
           class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
           id="admin-tab-admin-blogs">
@@ -371,25 +376,54 @@
           </table>
         </div>
 
+        <!-- Recent Activity Logs -->
+        <div class="bg-white rounded-2xl border border-lightBorder shadow-sm overflow-x-auto">
+          <div class="p-5 border-b border-lightBorder flex items-center justify-between">
+            <h4 class="font-heading text-base font-bold text-charcoal">System Recent Activity Logs</h4>
+            <span class="text-xs text-mutedText font-semibold">Real-time DB audit trail</span>
+          </div>
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Action</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Details</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">User</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="admin-dash-recent-activity">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+
       </div>
 
       <!-- TAB 2: LEADS -->
       <div id="admin-leads" class="admin-portal-view hidden space-y-8">
         <h3 class="font-heading text-2xl font-bold text-charcoal">Incoming Consultation Leads</h3>
 
-        <!-- Source Filter Bar -->
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3 pb-2">
-          <button onclick="filterLeadsBySource('All')" id="lead-filter-All"
-            class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white">All
-            Leads</button>
-          <button onclick="filterLeadsBySource('Design Studio')" id="lead-filter-DesignStudio"
-            class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Design
-            Studio</button>
-          <button onclick="filterLeadsBySource('Contact Form')" id="lead-filter-ContactForm"
-            class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Contact
-            Form</button>
-          <button onclick="filterLeadsBySource('Chatbot')" id="lead-filter-Chatbot"
-            class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Chatbot</button>
+        <!-- Source Filter Bar & Search -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <button onclick="filterLeadsBySource('All')" id="lead-filter-All"
+              class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white">All
+              Leads</button>
+            <button onclick="filterLeadsBySource('Design Studio')" id="lead-filter-DesignStudio"
+              class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Design
+              Studio</button>
+            <button onclick="filterLeadsBySource('Contact Form')" id="lead-filter-ContactForm"
+              class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Contact
+              Form</button>
+            <button onclick="filterLeadsBySource('Chatbot')" id="lead-filter-Chatbot"
+              class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Chatbot</button>
+          </div>
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="leads-search-input" onkeyup="handleLeadsSearch()" placeholder="Search leads..."
+              class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            <i class="ri-search-line absolute left-3 top-2.5 text-mutedText text-xs"></i>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
@@ -417,12 +451,19 @@
 
       <!-- TAB 3: QUOTATIONS -->
       <div id="admin-quotes" class="admin-portal-view hidden space-y-8">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center flex-wrap gap-4">
           <h3 class="font-heading text-2xl font-bold text-charcoal">Quotations Manager</h3>
-          <button onclick="openCreateQuoteModal()"
-            class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
-            Create Quotation
-          </button>
+          <div class="flex items-center gap-3">
+            <div class="relative w-48 sm:w-64">
+              <input type="text" id="quotes-search-input" onkeyup="handleQuotesSearch()" placeholder="Search quotes..."
+                class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+              <i class="ri-search-line absolute left-3 top-2.5 text-mutedText text-xs"></i>
+            </div>
+            <button onclick="openCreateQuoteModal()"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              Create Quotation
+            </button>
+          </div>
         </div>
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
           <table class="w-full text-left text-sm border-collapse font-body min-w-[900px]">
@@ -455,6 +496,34 @@
           </button>
         </div>
 
+        <!-- Search, Filter & Sort Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+          <div class="relative w-full sm:w-72">
+            <input type="text" id="product-search-input" onkeyup="handleProductSearch()" placeholder="Search products..."
+              class="w-full bg-lightCard border border-lightBorder rounded-full py-2 px-5 pl-10 text-xs text-charcoal focus:outline-none focus:border-primary">
+            <i class="ri-search-line absolute left-4 top-2.5 text-mutedText text-xs"></i>
+          </div>
+          <div class="flex items-center gap-3">
+            <select id="product-filter-category" onchange="handleProductSearch()"
+              class="bg-lightCard border border-lightBorder rounded-full py-1.5 px-4 text-xs text-charcoal focus:outline-none focus:border-primary font-semibold font-body">
+              <option value="All">All Categories</option>
+              <option value="Industrial">Industrial</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Institutional">Institutional</option>
+              <option value="Corporate Gifting">Corporate Gifting</option>
+            </select>
+            <select id="product-sort-by" onchange="handleProductSearch()"
+              class="bg-lightCard border border-lightBorder rounded-full py-1.5 px-4 text-xs text-charcoal focus:outline-none focus:border-primary font-semibold font-body">
+              <option value="displayOrder-asc">Sort: Display Order</option>
+              <option value="name-asc">Sort: Name (A-Z)</option>
+              <option value="name-desc">Sort: Name (Z-A)</option>
+              <option value="moq-asc">Sort: MOQ (Low-High)</option>
+              <option value="moq-desc">Sort: MOQ (High-Low)</option>
+            </select>
+          </div>
+        </div>
+
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
           <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
             <thead>
@@ -476,14 +545,59 @@
         </div>
       </div>
 
+      <!-- TAB 4.5: CATALOG CMS -->
+      <div id="admin-catalog" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Catalog CMS Manager</h3>
+          <div class="flex items-center gap-3">
+            <div class="relative w-48 sm:w-64">
+              <input type="text" id="catalog-search-input" onkeyup="handleCatalogSearch()" placeholder="Search catalogs..."
+                class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <i class="ri-search-line absolute left-3 top-2 text-mutedText text-xs"></i>
+            </div>
+            <button onclick="openCatalogModal('add')"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              Add Collection
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Image</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Collection Name</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Display Order</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Format & Pages</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-catalog-table-body">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- TAB 5: BLOG PUBLISHING -->
       <div id="admin-blogs" class="admin-portal-view hidden space-y-8">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center flex-wrap gap-4">
           <h3 class="font-heading text-2xl font-bold text-charcoal">Editorial Desk</h3>
-          <button onclick="openBlogModal('add')"
-            class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
-            Publish Article
-          </button>
+          <div class="flex items-center gap-3">
+            <div class="relative w-48 sm:w-64">
+              <input type="text" id="blogs-search-input" onkeyup="handleBlogsSearch()" placeholder="Search blogs..."
+                class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+              <i class="ri-search-line absolute left-3 top-2.5 text-mutedText text-xs"></i>
+            </div>
+            <button onclick="openBlogModal('add')"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              Publish Article
+            </button>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
@@ -511,24 +625,29 @@
         <div class="flex items-center justify-between flex-wrap gap-3">
           <h3 class="font-heading text-2xl font-bold text-charcoal">Registered Customer Accounts</h3>
           <span class="text-xs text-mutedText font-semibold" id="admin-customers-count-label"></span>
-        </div>
-
-        <!-- Customer Filter Bar -->
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3 pb-1">
-          <button onclick="filterCustomersByStatus('All')" id="cust-filter-All"
-            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white">All</button>
-          <button onclick="filterCustomersByStatus('Pending')" id="cust-filter-Pending"
-            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-yellow-400 text-yellow-700 bg-yellow-50 hover:bg-yellow-100">⏳
-            Pending</button>
-          <button onclick="filterCustomersByStatus('Active')" id="cust-filter-Active"
-            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-green-400 hover:text-green-700">✓
-            Active</button>
-          <button onclick="filterCustomersByStatus('Disabled')" id="cust-filter-Disabled"
-            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-red-400 hover:text-red-600">✗
-            Disabled</button>
-          <button onclick="filterCustomersByStatus('Rejected')" id="cust-filter-Rejected"
-            class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-gray-400">⊘
-            Rejected</button>
+        </div>        <!-- Customer Filter Bar & Search -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3 pb-1">
+            <button onclick="filterCustomersByStatus('All')" id="cust-filter-All"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white font-body">All</button>
+            <button onclick="filterCustomersByStatus('Pending')" id="cust-filter-Pending"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-yellow-400 text-yellow-700 bg-yellow-50 hover:bg-yellow-100 font-body">⏳
+              Pending</button>
+            <button onclick="filterCustomersByStatus('Active')" id="cust-filter-Active"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-green-400 hover:text-green-700 font-body">✓
+              Active</button>
+            <button onclick="filterCustomersByStatus('Disabled')" id="cust-filter-Disabled"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-red-400 hover:text-red-600 font-body">✗
+              Disabled</button>
+            <button onclick="filterCustomersByStatus('Rejected')" id="cust-filter-Rejected"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-gray-400 font-body">⊘
+              Rejected</button>
+          </div>
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="customers-search-input" onkeyup="handleCustomersSearch()" placeholder="Search customers..."
+              class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            <i class="ri-search-line absolute left-3 top-2.5 text-mutedText text-xs"></i>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
@@ -773,6 +892,140 @@
     </div>
   </div>
 
+  <!-- MODAL: Add/Edit Catalog -->
+  <div id="admin-catalog-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-catalog-modal', false)">
+    </div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal" id="catalog-modal-title">Add Catalog Collection</h3>
+        <button onclick="toggleModal('admin-catalog-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitAdminCatalog(event)" class="space-y-4 font-body">
+        <input type="hidden" id="catalog-modal-action">
+        <input type="hidden" id="catalog-modal-id">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Collection Title</label>
+          <input type="text" id="cat-title" required placeholder="Bespoke Executive Weaves"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Category</label>
+            <input type="text" id="cat-category" required placeholder="Corporate & Executive"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Slug (URL Name)</label>
+            <input type="text" id="cat-slug" placeholder="bespoke-executive-weaves"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Format</label>
+            <input type="text" id="cat-format" required placeholder="PDF Brochure"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Pages</label>
+            <input type="number" id="cat-pages" required placeholder="32"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">File Size</label>
+            <input type="text" id="cat-size" required placeholder="6.2 MB"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Display Order</label>
+            <input type="number" id="cat-order" required placeholder="1"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Status</label>
+            <select id="cat-status"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Publish">Publish</option>
+              <option value="Draft">Draft</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Description</label>
+          <textarea id="cat-description" rows="2" required placeholder="Describe what specifications are inside..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+
+        <div class="border-t border-lightBorder pt-4 space-y-3">
+          <h4 class="font-heading text-sm font-bold text-charcoal">Design & Cover Images</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Cover Image URL/Path</label>
+              <input type="text" id="cat-img" placeholder="corporate_uniforms_mockup.png"
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Banner Image URL</label>
+              <input type="text" id="cat-banner-image" placeholder="https://images.unsplash.com/photo..."
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Banner Title</label>
+              <input type="text" id="cat-banner-title" placeholder="Corporate Blazers Collection"
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Banner Desc</label>
+              <input type="text" id="cat-banner-desc" placeholder="View our bespoke coordinates..."
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-lightBorder pt-4 space-y-3">
+          <h4 class="font-heading text-sm font-bold text-charcoal">SEO & Meta Configuration</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">SEO Title</label>
+              <input type="text" id="cat-seo-title" placeholder="Executive Catalogs | UNIWEAR"
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Meta Image URL</label>
+              <input type="text" id="cat-meta-image" placeholder="https://..."
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">SEO Description</label>
+            <input type="text" id="cat-seo-desc" placeholder="Brief metadata description..."
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+          </div>
+        </div>
+
+        <div class="border-t border-lightBorder pt-4">
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Assign Products</label>
+          <div id="catalog-products-checkboxes" class="max-h-32 overflow-y-auto p-3 bg-lightCard border border-lightBorder rounded-lg space-y-1 text-xs">
+            <!-- Dynamically populated products checkbox list -->
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Save Catalog Collection
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: Add/Edit Blog -->
   <div id="admin-blog-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
     <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-blog-modal', false)">
@@ -957,14 +1210,28 @@
           class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
           Publish Quotation Proposal
         </button>
-      </form>
-    </div>
-  </div>
-
   <script src="api.js"></script>
   <script src="shared.js"></script>
-
   <script>
+    // ─── GLOBAL ADMIN STATE ────────────────────────────────────────────────────
+    let globalUsers = [];
+    let globalLeads = [];
+    let globalQuotations = [];
+    let globalNotifications = [];
+    let globalProducts = [];
+    let globalBlogs = [];
+    let globalCatalogs = [];
+    let globalDashboardStats = {};
+
+    let activeLeadFilter = 'All';
+    let activeCustomerFilter = 'All';
+
+    // ─── SEARCH & FILTER STATES ────────────────────────────────────────────────
+    let productSearchQuery = "";
+    let productCategoryFilter = "All";
+    let productSort = "displayOrder";
+    let productSortOrder = "asc";
+
     // ─── PRODUCT IMAGE UPLOAD PARAMETERS & HANDLERS ────────────────────────────
     let currentTableUploadProductId = null;
 
@@ -999,15 +1266,15 @@
       const reader = new FileReader();
       reader.onload = (e) => {
         const base64Url = e.target.result;
-        let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-        prods = prods.filter(Boolean);
-        const idx = prods.findIndex(p => p && p.id === currentTableUploadProductId);
-        if (idx !== -1) {
-          prods[idx].img = base64Url;
-          prods[idx].image = base64Url;
-          localStorage.setItem('uniwear_products', JSON.stringify(prods));
-          updateAdminDashboard();
-          alert('Product image updated successfully!');
+        const p = globalProducts.find(item => item && (item._id === currentTableUploadProductId || item.id === currentTableUploadProductId));
+        if (p) {
+          window.api.updateProduct(p._id, { img: base64Url, image: base64Url })
+            .then(async () => {
+              await syncAdminData();
+              updateAdminDashboard();
+              alert('Product image updated successfully!');
+            })
+            .catch(err => alert(err.message || 'Failed to update product image.'));
         }
         currentTableUploadProductId = null;
         event.target.value = '';
@@ -1015,17 +1282,18 @@
       reader.readAsDataURL(file);
     }
 
-    function removeTableImage(prodId) {
+    async function removeTableImage(prodId) {
       if (!confirm('Are you sure you want to remove the product image? It will revert to the fallback image.')) return;
-      let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-      prods = prods.filter(Boolean);
-      const idx = prods.findIndex(p => p && p.id === prodId);
-      if (idx !== -1) {
-        prods[idx].img = 'corporate_blazer_detail.png';
-        prods[idx].image = 'corporate_blazer_detail.png';
-        localStorage.setItem('uniwear_products', JSON.stringify(prods));
-        updateAdminDashboard();
-        alert('Product image reverted to default.');
+      const p = globalProducts.find(item => item && (item._id === prodId || item.id === prodId));
+      if (p) {
+        try {
+          await window.api.updateProduct(p._id, { img: 'corporate_blazer_detail.png', image: 'corporate_blazer_detail.png' });
+          await syncAdminData();
+          updateAdminDashboard();
+          alert('Product image reverted to default.');
+        } catch (err) {
+          alert(err.message || 'Failed to revert product image.');
+        }
       }
     }
 
@@ -1167,19 +1435,52 @@
     // Sync data from server
     async function syncAdminData() {
       try {
-        const [usersRes, leadsRes, quotesRes, settingsRes, notificationsRes] = await Promise.all([
+        const [
+          usersRes,
+          leadsRes,
+          quotesRes,
+          settingsRes,
+          notificationsRes,
+          productsRes,
+          blogsRes,
+          catalogsRes,
+          statsRes
+        ] = await Promise.all([
           window.api.getUsers(),
           window.api.getLeads(),
           window.api.getQuotations(),
           window.api.getSettings(),
-          window.api.getNotifications('admin')
+          window.api.getNotifications('admin'),
+          window.api.getProducts(),
+          window.api.getBlogs(),
+          window.api.getCatalogs(),
+          window.api.getDashboardStats()
         ]);
 
-        if (usersRes.success) localStorage.setItem('uniwear_users', JSON.stringify(usersRes.data));
-        if (leadsRes.success) localStorage.setItem('uniwear_leads', JSON.stringify(leadsRes.data));
-        if (quotesRes.success) localStorage.setItem('uniwear_quotations', JSON.stringify(quotesRes.data));
-        if (settingsRes.success) localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsRes.data));
-        if (notificationsRes.success) localStorage.setItem('uniwear_notifications', JSON.stringify(notificationsRes.data));
+        if (usersRes.success) {
+          globalUsers = usersRes.data;
+          localStorage.setItem('uniwear_users', JSON.stringify(usersRes.data));
+        }
+        if (leadsRes.success) {
+          globalLeads = leadsRes.data;
+          localStorage.setItem('uniwear_leads', JSON.stringify(leadsRes.data));
+        }
+        if (quotesRes.success) {
+          globalQuotations = quotesRes.data;
+          localStorage.setItem('uniwear_quotations', JSON.stringify(quotesRes.data));
+        }
+        if (settingsRes.success) {
+          localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsRes.data));
+        }
+        if (notificationsRes.success) {
+          globalNotifications = notificationsRes.data;
+          localStorage.setItem('uniwear_notifications', JSON.stringify(notificationsRes.data));
+        }
+        if (productsRes.success) globalProducts = productsRes.data;
+        if (blogsRes.success) globalBlogs = blogsRes.data;
+        if (catalogsRes.success) globalCatalogs = catalogsRes.data;
+        if (statsRes.success) globalDashboardStats = statsRes.data;
+
       } catch (err) {
         console.error("Failed to sync admin data:", err);
       }
@@ -1208,6 +1509,7 @@
       'admin-leads': 'Leads',
       'admin-quotes': 'Quotations',
       'admin-products': 'Products',
+      'admin-catalog': 'Catalog',
       'admin-blogs': 'Blog',
       'admin-customers': 'Customers',
       'admin-settings': 'Settings'
@@ -1396,8 +1698,7 @@
       }
     }
 
-    let activeLeadFilter = 'All';
-    function filterLeadsBySource(source) {
+    async function filterLeadsBySource(source) {
       activeLeadFilter = source;
       document.querySelectorAll('.lead-filter-btn').forEach(btn => {
         btn.classList.remove('border-primary', 'bg-primary', 'text-white');
@@ -1409,51 +1710,153 @@
         activeBtn.classList.remove('border-lightBorder', 'text-mutedText', 'bg-white');
         activeBtn.classList.add('border-primary', 'bg-primary', 'text-white');
       }
-      updateAdminDashboard();
+      const q = document.getElementById('leads-search-input') ? document.getElementById('leads-search-input').value.trim() : '';
+      try {
+        const res = await window.api.getLeads({ search: q, source: activeLeadFilter });
+        if (res.success) {
+          globalLeads = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    // ─── BACKEND SEARCH HANDLERS ────────────────────────────────────────────────
+    async function handleProductSearch() {
+      productSearchQuery = document.getElementById('product-search-input').value.trim();
+      productCategoryFilter = document.getElementById('product-filter-category').value;
+      const sortVal = document.getElementById('product-sort-by').value.split('-');
+      productSort = sortVal[0];
+      productSortOrder = sortVal[1];
+
+      try {
+        const queryParams = {
+          search: productSearchQuery,
+          category: productCategoryFilter,
+          sort: productSort,
+          order: productSortOrder
+        };
+        const res = await window.api.getProducts(queryParams);
+        if (res.success) {
+          globalProducts = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) {
+        console.error("Failed to search products:", err);
+      }
+    }
+
+    async function handleLeadsSearch() {
+      const q = document.getElementById('leads-search-input').value.trim();
+      try {
+        const res = await window.api.getLeads({ search: q, source: activeLeadFilter });
+        if (res.success) {
+          globalLeads = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function handleQuotesSearch() {
+      const q = document.getElementById('quotes-search-input').value.trim();
+      try {
+        const res = await window.api.getQuotations({ search: q });
+        if (res.success) {
+          globalQuotations = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function handleCustomersSearch() {
+      const q = document.getElementById('customers-search-input').value.trim();
+      try {
+        const res = await window.api.getUsers({ search: q, status: activeCustomerFilter });
+        if (res.success) {
+          globalUsers = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function handleBlogsSearch() {
+      const q = document.getElementById('blogs-search-input').value.trim();
+      try {
+        const res = await window.api.getBlogs({ search: q });
+        if (res.success) {
+          globalBlogs = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function handleCatalogSearch() {
+      const q = document.getElementById('catalog-search-input').value.trim();
+      try {
+        const res = await window.api.getCatalogs({ search: q });
+        if (res.success) {
+          globalCatalogs = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
     }
 
     // ─── DASHBOARD DATA RENDER ─────────────────────────────────────────────────
     function updateAdminDashboard() {
-      const leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
-      const quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
-      const prods = (JSON.parse(localStorage.getItem('uniwear_products')) || []).filter(Boolean);
-      const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
-      const users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
-
       // ── Stat counters ──
       const elLeads = document.getElementById('admin-stat-leads');
-      if (elLeads) elLeads.innerText = leads.length;
+      if (elLeads) elLeads.innerText = globalDashboardStats.leads || 0;
 
       const elQuotes = document.getElementById('admin-stat-open-quotes');
-      if (elQuotes) {
-        const activeQuotes = quotes.filter(q => q && q.status !== 'Rejected' && q.status !== 'Declined');
-        elQuotes.innerText = activeQuotes.length;
-      }
+      if (elQuotes) elQuotes.innerText = globalDashboardStats.quotes || 0;
 
       const elProds = document.getElementById('admin-stat-products');
-      if (elProds) elProds.innerText = prods.length;
+      if (elProds) elProds.innerText = globalDashboardStats.products || 0;
 
       const elBlogs = document.getElementById('admin-stat-blogs');
-      if (elBlogs) elBlogs.innerText = blogs.length;
+      if (elBlogs) elBlogs.innerText = globalDashboardStats.blogs || 0;
 
       const elCust = document.getElementById('admin-stat-active-customers');
-      if (elCust) {
-        const customers = users.filter(u => u && u.role === 'Customer' && u.status === 'Active');
-        elCust.innerText = customers.length;
+      if (elCust) elCust.innerText = globalDashboardStats.activeCustomers || 0;
+
+      const elPending = document.getElementById('admin-stat-pending-customers');
+      if (elPending) elPending.innerText = globalDashboardStats.pendingCustomers || 0;
+
+      // ── Dashboard: Recent Activity Logs ──
+      const recentActivityBody = document.getElementById('admin-dash-recent-activity');
+      if (recentActivityBody) {
+        recentActivityBody.innerHTML = '';
+        const logs = globalDashboardStats.recentActivity || [];
+        if (logs.length === 0) {
+          recentActivityBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-mutedText text-xs font-body">No activity logged yet.</td></tr>`;
+        } else {
+          logs.forEach(log => {
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+            tr.innerHTML = `
+              <td class="p-4 font-bold text-charcoal">
+                <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-gray-100 text-gray-700">${log.action}</span>
+              </td>
+              <td class="p-4 font-semibold text-mutedText">${log.details}</td>
+              <td class="p-4 font-mono text-xs">${log.user}</td>
+              <td class="p-4 font-mono text-gray-400">${new Date(log.timestamp).toLocaleString()}</td>
+            `;
+            recentActivityBody.appendChild(tr);
+          });
+        }
       }
 
       // ── Dashboard: Recent Leads (last 5) ──
       const recentLeadsBody = document.getElementById('admin-dash-recent-leads');
       if (recentLeadsBody) {
         recentLeadsBody.innerHTML = '';
-        const recentLeads = leads.slice(-5).reverse();
+        const recentLeads = globalLeads.slice(0, 5);
         if (recentLeads.length === 0) {
-          recentLeadsBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-mutedText text-xs">No leads yet.</td></tr>`;
+          recentLeadsBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-mutedText text-xs font-body">No leads yet.</td></tr>`;
         } else {
           recentLeads.forEach(l => {
             if (!l) return;
             const tr = document.createElement('tr');
-            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
             const stageColors = { 'Won': 'bg-green-100 text-green-700', 'Lost': 'bg-red-100 text-red-600', 'New Lead': 'bg-blue-100 text-blue-700' };
             const stageStyle = stageColors[l.stage] || 'bg-gray-100 text-gray-600';
             tr.innerHTML = `
@@ -1472,14 +1875,14 @@
       const recentQuotesBody = document.getElementById('admin-dash-recent-quotes');
       if (recentQuotesBody) {
         recentQuotesBody.innerHTML = '';
-        const recentQuotes = quotes.slice(-5).reverse();
+        const recentQuotes = globalQuotations.slice(0, 5);
         if (recentQuotes.length === 0) {
-          recentQuotesBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-mutedText text-xs">No quotations yet.</td></tr>`;
+          recentQuotesBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-mutedText text-xs font-body">No quotations yet.</td></tr>`;
         } else {
           recentQuotes.forEach(q => {
             if (!q) return;
             const tr = document.createElement('tr');
-            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
             const qColors = { 'Approved': 'bg-green-100 text-green-700', 'Rejected': 'bg-red-100 text-red-600', 'Declined': 'bg-red-100 text-red-600', 'Revised': 'bg-blue-100 text-blue-700' };
             const qStyle = qColors[q.status] || 'bg-yellow-100 text-yellow-700';
             tr.innerHTML = `
@@ -1497,24 +1900,13 @@
       const tbodyLeads = document.getElementById('admin-leads-table-body');
       if (tbodyLeads) {
         tbodyLeads.innerHTML = '';
-        let mappedLeads = leads.map((l, index) => ({ ...l, globalIndex: index }));
-        if (activeLeadFilter !== 'All') {
-          mappedLeads = mappedLeads.filter(l => {
-            if (activeLeadFilter === 'Chatbot') {
-              return l.source === 'Chatbot' || l.source === 'AI Assistant';
-            }
-            return l.source === activeLeadFilter;
-          });
-        }
-
-        if (mappedLeads.length === 0) {
-          tbodyLeads.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-mutedText text-xs">No active business leads.</td></tr>`;
+        if (globalLeads.length === 0) {
+          tbodyLeads.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-mutedText text-xs font-body">No active business leads.</td></tr>`;
         } else {
-          mappedLeads.forEach((l) => {
+          globalLeads.forEach((l) => {
             if (!l) return;
-            const idx = l.globalIndex;
             const tr = document.createElement('tr');
-            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
 
             const stages = ['New Lead', 'Contacted', 'Quotation Sent', 'Negotiation', 'Won', 'Lost'];
             let options = '';
@@ -1542,13 +1934,13 @@
               <td class="p-4">${sourceBadge}</td>
               <td class="p-4 font-mono text-gray-500">${l.date || ''}</td>
               <td class="p-4">
-                <select onchange="updateLeadStage(${idx}, this.value)" class="bg-lightCard border border-lightBorder rounded py-1 px-2 text-[10px] text-charcoal font-semibold focus:outline-none focus:border-primary">
+                <select onchange="updateLeadStage('${l._id}', this.value)" class="bg-lightCard border border-lightBorder rounded py-1 px-2 text-[10px] text-charcoal font-semibold focus:outline-none focus:border-primary font-body">
                   ${options}
                 </select>
               </td>
-              <td class="p-4 text-right flex justify-end gap-2">
-                <button onclick="convertLeadToQuote(${idx})" class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">Convert to Quote</button>
-                <button onclick="deleteLead(${idx})" class="bg-gray-100 hover:bg-red-50 text-mutedText hover:text-red-500 p-1.5 rounded transition-colors"><i class="ri-delete-bin-line"></i></button>
+              <td class="p-4 text-right flex justify-end gap-2 pt-6">
+                <button onclick="convertLeadToQuote('${l._id}')" class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">Convert to Quote</button>
+                <button onclick="deleteLead('${l._id}')" class="bg-gray-100 hover:bg-red-50 text-mutedText hover:text-red-500 p-1.5 rounded transition-colors"><i class="ri-delete-bin-line"></i></button>
               </td>
             `;
             tbodyLeads.appendChild(tr);
@@ -1560,21 +1952,21 @@
       const tbodyQuotes = document.getElementById('admin-quotes-table-body');
       if (tbodyQuotes) {
         tbodyQuotes.innerHTML = '';
-        if (quotes.length === 0) {
-          tbodyQuotes.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs">No quotation requests cataloged.</td></tr>`;
+        if (globalQuotations.length === 0) {
+          tbodyQuotes.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No quotation requests cataloged.</td></tr>`;
         } else {
-          quotes.forEach(q => {
+          globalQuotations.forEach(q => {
             if (!q) return;
             const tr = document.createElement('tr');
-            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
 
             let btnGroup = '';
             if (q.status !== 'Approved' && q.status !== 'Rejected' && q.status !== 'Declined' && q.status !== 'Converted to Order') {
               btnGroup = `
                 <div class="flex justify-end gap-2">
-                  <button onclick="approveDirectQuote('${q.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors">Approve</button>
-                  <button onclick="openReviseQuoteModal('${q.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors">Revise</button>
-                  <button onclick="declineDirectQuote('${q.id}')" class="bg-charcoal hover:bg-black text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors">Reject</button>
+                  <button onclick="approveDirectQuote('${q.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Approve</button>
+                  <button onclick="openReviseQuoteModal('${q.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Revise</button>
+                  <button onclick="declineDirectQuote('${q.id}')" class="bg-charcoal hover:bg-black text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Reject</button>
                 </div>
               `;
             } else {
@@ -1593,7 +1985,7 @@
               <td class="p-4">
                 <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${q.status || ''}</span>
               </td>
-              <td class="p-4 text-right">${btnGroup}</td>
+              <td class="p-4 text-right pt-6">${btnGroup}</td>
             `;
             tbodyQuotes.appendChild(tr);
           });
@@ -1604,18 +1996,18 @@
       const tbodyProds = document.getElementById('admin-products-table-body');
       if (tbodyProds) {
         tbodyProds.innerHTML = '';
-        if (prods.length === 0) {
-          tbodyProds.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs">No products in catalog.</td></tr>`;
+        if (globalProducts.length === 0) {
+          tbodyProds.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No products in catalog.</td></tr>`;
         } else {
-          prods.forEach(p => {
+          globalProducts.forEach(p => {
             if (!p) return;
             const tr = document.createElement('tr');
-            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
-            const featuredBadge = p.featured ? `<span class="ml-2 bg-yellow-100 text-yellow-800 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider inline-flex items-center gap-0.5"><i class="ri-star-fill text-[9px]"></i> Featured</span>` : '';
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+            const featuredBadge = p.featured ? `<span class="ml-2 bg-yellow-100 text-yellow-800 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider inline-flex items-center gap-0.5 font-body"><i class="ri-star-fill text-[9px]"></i> Featured</span>` : '';
             const imgPath = p.img || 'corporate_blazer_detail.png';
             tr.innerHTML = `
               <td class="p-4">
-                <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard group/img cursor-pointer" onclick="triggerTableImageUpload(${p.id})">
+                <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard group/img cursor-pointer" onclick="triggerTableImageUpload('${p._id}')">
                   <img src="${imgPath}" class="w-full h-full object-cover">
                   <div class="absolute inset-0 bg-charcoal/50 flex items-center justify-center text-white opacity-0 group-hover/img:opacity-100 transition-opacity">
                     <i class="ri-upload-2-line text-xs"></i>
@@ -1627,12 +2019,12 @@
               <td class="p-4 font-medium">${p.fabric || ''} (${p.gsm || ''})</td>
               <td class="p-4 font-semibold">${p.moq || 0} Sets</td>
               <td class="p-4 text-mutedText truncate max-w-xs">${p.desc || ''}</td>
-              <td class="p-4 text-right">
+              <td class="p-4 text-right pt-6">
                 <div class="flex justify-end items-center gap-2">
-                  <button onclick="triggerTableImageUpload(${p.id})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Upload/Replace Image"><i class="ri-image-add-line"></i></button>
-                  ${(p.img && p.img !== 'corporate_blazer_detail.png') ? `<button onclick="removeTableImage(${p.id})" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Remove Image"><i class="ri-close-line text-xs"></i></button>` : ''}
-                  <button onclick="openProductModal('edit', ${p.id})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Product"><i class="ri-edit-line"></i></button>
-                  <button onclick="deleteProduct(${p.id})" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Product"><i class="ri-delete-bin-line"></i></button>
+                  <button onclick="triggerTableImageUpload('${p._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Upload/Replace Image"><i class="ri-image-add-line"></i></button>
+                  ${(p.img && p.img !== 'corporate_blazer_detail.png') ? `<button onclick="removeTableImage('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Remove Image"><i class="ri-close-line text-xs"></i></button>` : ''}
+                  <button onclick="openProductModal('edit', '${p._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Product"><i class="ri-edit-line"></i></button>
+                  <button onclick="deleteProduct('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Product"><i class="ri-delete-bin-line"></i></button>
                 </div>
               </td>
             `;
@@ -1641,14 +2033,50 @@
         }
       }
 
+      // ── Full Catalog Table ──
+      const tbodyCatalog = document.getElementById('admin-catalog-table-body');
+      if (tbodyCatalog) {
+        tbodyCatalog.innerHTML = '';
+        if (globalCatalogs.length === 0) {
+          tbodyCatalog.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No catalog collections managed.</td></tr>`;
+        } else {
+          globalCatalogs.forEach(cat => {
+            if (!cat) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+            const statusStyle = cat.status === 'Publish' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600';
+            
+            tr.innerHTML = `
+              <td class="p-4">
+                <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard">
+                  <img src="${cat.img || 'corporate_blazer_detail.png'}" class="w-full h-full object-cover">
+                </div>
+              </td>
+              <td class="p-4 font-bold text-charcoal">${cat.title || ''}</td>
+              <td class="p-4 text-primary font-bold text-[10px] uppercase font-heading">${cat.category || ''}</td>
+              <td class="p-4 font-mono font-semibold">${cat.displayOrder || 0}</td>
+              <td class="p-4 font-medium">${cat.format || 'PDF Brochure'} (${cat.pages || 0} pages)</td>
+              <td class="p-4">
+                <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${cat.status || 'Publish'}</span>
+              </td>
+              <td class="p-4 text-right flex justify-end gap-2 pt-6">
+                <button onclick="openCatalogModal('edit', '${cat._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Collection"><i class="ri-edit-line"></i></button>
+                <button onclick="deleteCatalog('${cat._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Collection"><i class="ri-delete-bin-line"></i></button>
+              </td>
+            `;
+            tbodyCatalog.appendChild(tr);
+          });
+        }
+      }
+
       // ── Full Blogs Table ──
       const tbodyBlogs = document.getElementById('admin-blogs-table-body');
       if (tbodyBlogs) {
         tbodyBlogs.innerHTML = '';
-        if (blogs.length === 0) {
-          tbodyBlogs.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-mutedText text-xs">No blog articles published.</td></tr>`;
+        if (globalBlogs.length === 0) {
+          tbodyBlogs.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-mutedText text-xs font-body">No blog articles published.</td></tr>`;
         } else {
-          blogs.forEach(b => {
+          globalBlogs.forEach(b => {
             if (!b) return;
             const tr = document.createElement('tr');
             tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
@@ -1662,9 +2090,9 @@
               <td class="p-4">
                 <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${b.status || 'Published'}</span>
               </td>
-              <td class="p-4 text-right flex justify-end gap-2">
-                <button onclick="openBlogModal('edit', ${b.id})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors"><i class="ri-edit-line"></i></button>
-                <button onclick="deleteBlog(${b.id})" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all"><i class="ri-delete-bin-line"></i></button>
+              <td class="p-4 text-right flex justify-end gap-2 pt-6">
+                <button onclick="openBlogModal('edit', '${b._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors"><i class="ri-edit-line"></i></button>
+                <button onclick="deleteBlog('${b._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all"><i class="ri-delete-bin-line"></i></button>
               </td>
             `;
             tbodyBlogs.appendChild(tr);
@@ -1672,52 +2100,36 @@
         }
       }
 
-      // ── Dashboard Pending Widget Counter ──
-      const elPending = document.getElementById('admin-stat-pending-customers');
-      if (elPending) {
-        const pendingCount = users.filter(u => u && u.role === 'Customer' && u.status === 'Pending').length;
-        elPending.innerText = pendingCount;
-      }
-
       // ── Full Customers Table ──
-      renderCustomersTable(users);
+      renderCustomersTable(globalUsers);
 
       if (window.refreshHoverables) window.refreshHoverables();
     }
 
     // ─── LEADS ─────────────────────────────────────────────────────────────────
-    async function updateLeadStage(index, newStage) {
-      let leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
-      const lead = leads[index];
-      if (lead) {
-        try {
-          await window.api.updateLead(lead._id, { stage: newStage });
-          await syncAdminData();
-          updateAdminDashboard();
-        } catch (err) {
-          alert(err.message || 'Failed to update lead stage.');
-        }
+    async function updateLeadStage(leadId, newStage) {
+      try {
+        await window.api.updateLead(leadId, { stage: newStage });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to update lead stage.');
       }
     }
 
-    async function deleteLead(index) {
+    async function deleteLead(leadId) {
       if (!confirm('Delete this lead?')) return;
-      let leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
-      const lead = leads[index];
-      if (lead) {
-        try {
-          await window.api.deleteLead(lead._id);
-          await syncAdminData();
-          updateAdminDashboard();
-        } catch (err) {
-          alert(err.message || 'Failed to delete lead.');
-        }
+      try {
+        await window.api.deleteLead(leadId);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to delete lead.');
       }
     }
 
-    async function convertLeadToQuote(index) {
-      let leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
-      const lead = leads[index];
+    async function convertLeadToQuote(leadId) {
+      const lead = globalLeads.find(l => l._id === leadId);
       if (!lead) return;
 
       const qId = 'UW-Quote-' + Math.floor(100 + Math.random() * 900);
@@ -1753,8 +2165,7 @@
 
     // ─── QUOTATIONS ────────────────────────────────────────────────────────────
     async function approveDirectQuote(quoteId) {
-      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
-      const q = quotes.find(item => item.id === quoteId);
+      const q = globalQuotations.find(item => item.id === quoteId);
       if (!q) return;
 
       try {
@@ -1770,8 +2181,7 @@
 
     async function declineDirectQuote(quoteId) {
       if (!confirm('Reject this quotation?')) return;
-      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
-      const q = quotes.find(item => item.id === quoteId);
+      const q = globalQuotations.find(item => item.id === quoteId);
       if (!q) return;
 
       try {
@@ -1784,8 +2194,7 @@
     }
 
     function openReviseQuoteModal(quoteId) {
-      const quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
-      const q = quotes.find(item => item.id === quoteId);
+      const q = globalQuotations.find(item => item.id === quoteId);
       if (!q) return;
 
       document.getElementById('revise-quote-id').value = q.id;
@@ -1803,8 +2212,7 @@
       const vol = parseInt(document.getElementById('revise-quote-volume').value);
       const val = document.getElementById('revise-quote-value').value;
 
-      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
-      const q = quotes.find(item => item.id === qId);
+      const q = globalQuotations.find(item => item.id === qId);
       if (!q) return;
 
       try {
@@ -1865,7 +2273,7 @@
       }
     }
 
-    // ─── PRODUCTS ──────────────────────────────────────────────────────────────
+    // ─── PRODUCTS CRUD ─────────────────────────────────────────────────────────
     function openProductModal(action, prodId) {
       document.getElementById('product-modal-action').value = action;
 
@@ -1882,69 +2290,199 @@
         document.getElementById('product-modal-id').value = '';
       } else {
         document.getElementById('product-modal-title').innerText = 'Edit Product';
-        let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-        prods = prods.filter(Boolean);
-        const p = prods.find(item => item && item.id === prodId);
+        const p = globalProducts.find(item => item && (item._id === prodId || item.id === prodId));
         if (!p) return;
 
-        document.getElementById('product-modal-id').value = p.id;
+        document.getElementById('product-modal-id').value = p._id;
         document.getElementById('prod-name').value = p.name;
         document.getElementById('prod-cat').value = p.category;
-        document.getElementById('prod-fabric').value = p.fabric;
-        document.getElementById('prod-gsm').value = p.gsm;
-        document.getElementById('prod-moq').value = p.moq;
-        document.getElementById('prod-img-url').value = p.img;
-        updateUploadZonePreview(p.img);
-        document.getElementById('prod-desc').value = p.desc;
+        document.getElementById('prod-fabric').value = p.fabric || '';
+        document.getElementById('prod-gsm').value = p.gsm || '';
+        document.getElementById('prod-moq').value = p.moq || '';
+        document.getElementById('prod-img-url').value = p.img || 'corporate_blazer_detail.png';
+        updateUploadZonePreview(p.img || 'corporate_blazer_detail.png');
+        document.getElementById('prod-desc').value = p.desc || p.description || '';
         document.getElementById('prod-featured').checked = p.featured || false;
       }
 
       toggleModal('admin-product-modal', true);
     }
 
-    function submitAdminProduct(event) {
+    async function submitAdminProduct(event) {
       event.preventDefault();
       const action = document.getElementById('product-modal-action').value;
-      let prods = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
-      prods = prods.filter(Boolean);
-
-      const newProd = {
-        name: document.getElementById('prod-name').value,
+      const payload = {
+        name: document.getElementById('prod-name').value.trim(),
         category: document.getElementById('prod-cat').value,
-        fabric: document.getElementById('prod-fabric').value,
-        gsm: document.getElementById('prod-gsm').value,
+        fabric: document.getElementById('prod-fabric').value.trim(),
+        gsm: document.getElementById('prod-gsm').value.trim(),
         moq: parseInt(document.getElementById('prod-moq').value) || 50,
         img: document.getElementById('prod-img-url').value || 'corporate_blazer_detail.png',
         image: document.getElementById('prod-img-url').value || 'corporate_blazer_detail.png',
-        desc: document.getElementById('prod-desc').value,
+        desc: document.getElementById('prod-desc').value.trim(),
+        description: document.getElementById('prod-desc').value.trim(),
         featured: document.getElementById('prod-featured').checked
       };
 
+      try {
+        if (action === 'add') {
+          await window.api.createProduct(payload);
+          alert('Product added successfully!');
+        } else {
+          const id = document.getElementById('product-modal-id').value;
+          await window.api.updateProduct(id, payload);
+          alert('Product updated successfully!');
+        }
+        await syncAdminData();
+        toggleModal('admin-product-modal', false);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to save product.');
+      }
+    }
+
+    async function deleteProduct(prodId) {
+      if (!confirm('Delete this product?')) return;
+      try {
+        await window.api.deleteProduct(prodId);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to delete product.');
+      }
+    }
+
+    // ─── CATALOG CMS CRUD ──────────────────────────────────────────────────────
+    function openCatalogModal(action, catalogId) {
+      document.getElementById('catalog-modal-action').value = action;
+      populateCatalogProductsCheckboxes();
+
       if (action === 'add') {
-        const validProds = prods.filter(p => p && typeof p.id === 'number');
-        newProd.id = validProds.length > 0 ? Math.max(...validProds.map(p => p.id)) + 1 : 1;
-        prods.push(newProd);
-        alert('Product added successfully!');
+        document.getElementById('catalog-modal-title').innerText = 'Add Catalog Collection';
+        document.getElementById('cat-title').value = '';
+        document.getElementById('cat-category').value = '';
+        document.getElementById('cat-slug').value = '';
+        document.getElementById('cat-format').value = 'PDF Brochure';
+        document.getElementById('cat-pages').value = '32';
+        document.getElementById('cat-size').value = '5.0 MB';
+        document.getElementById('cat-order').value = '';
+        document.getElementById('cat-status').value = 'Publish';
+        document.getElementById('cat-description').value = '';
+        document.getElementById('cat-img').value = '';
+        document.getElementById('cat-banner-image').value = '';
+        document.getElementById('cat-banner-title').value = '';
+        document.getElementById('cat-banner-desc').value = '';
+        document.getElementById('cat-seo-title').value = '';
+        document.getElementById('cat-meta-image').value = '';
+        document.getElementById('cat-seo-desc').value = '';
+        document.getElementById('catalog-modal-id').value = '';
       } else {
-        const id = parseInt(document.getElementById('product-modal-id').value);
-        const idx = prods.findIndex(p => p && p.id === id);
-        if (idx !== -1) { newProd.id = id; prods[idx] = newProd; alert('Product updated successfully!'); }
+        document.getElementById('catalog-modal-title').innerText = 'Edit Catalog';
+        const c = globalCatalogs.find(item => item && (item._id === catalogId || item.slug === catalogId));
+        if (!c) return;
+
+        document.getElementById('catalog-modal-id').value = c._id;
+        document.getElementById('cat-title').value = c.title || '';
+        document.getElementById('cat-category').value = c.category || '';
+        document.getElementById('cat-slug').value = c.slug || '';
+        document.getElementById('cat-format').value = c.format || 'PDF Brochure';
+        document.getElementById('cat-pages').value = c.pages || '32';
+        document.getElementById('cat-size').value = c.size || '5.0 MB';
+        document.getElementById('cat-order').value = c.displayOrder || '';
+        document.getElementById('cat-status').value = c.status || 'Publish';
+        document.getElementById('cat-description').value = c.description || '';
+        document.getElementById('cat-img').value = c.img || '';
+        document.getElementById('cat-banner-image').value = c.bannerImage || '';
+        document.getElementById('cat-banner-title').value = c.bannerTitle || '';
+        document.getElementById('cat-banner-desc').value = c.bannerDescription || '';
+        document.getElementById('cat-seo-title').value = c.seoTitle || '';
+        document.getElementById('cat-meta-image').value = c.metaImage || '';
+        document.getElementById('cat-seo-desc').value = c.seoDescription || '';
+
+        // Pre-select checkbox products
+        const assignedProductIds = (c.products || []).map(p => typeof p === 'object' ? p._id : p);
+        document.querySelectorAll('.catalog-product-cb').forEach(cb => {
+          cb.checked = assignedProductIds.includes(cb.value);
+        });
       }
 
-      localStorage.setItem('uniwear_products', JSON.stringify(prods));
-      toggleModal('admin-product-modal', false);
-      updateAdminDashboard();
+      toggleModal('admin-catalog-modal', true);
     }
 
-    function deleteProduct(prodId) {
-      if (!confirm('Delete this product?')) return;
-      let prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-      prods = prods.filter(p => p && p.id !== prodId);
-      localStorage.setItem('uniwear_products', JSON.stringify(prods));
-      updateAdminDashboard();
+    function populateCatalogProductsCheckboxes() {
+      const container = document.getElementById('catalog-products-checkboxes');
+      if (!container) return;
+      container.innerHTML = globalProducts.map(p => `
+        <label class="flex items-center gap-2 cursor-pointer py-0.5 hover:bg-gray-100 rounded px-1 font-body">
+          <input type="checkbox" value="${p._id}" class="catalog-product-cb rounded border-gray-300 text-primary focus:ring-primary">
+          <span>${p.name} <span class="text-[9px] text-mutedText uppercase font-semibold">(${p.category})</span></span>
+        </label>
+      `).join('') || '<span class="text-mutedText">No products available.</span>';
     }
 
-    // ─── BLOGS ─────────────────────────────────────────────────────────────────
+    async function submitAdminCatalog(event) {
+      event.preventDefault();
+      const action = document.getElementById('catalog-modal-action').value;
+      const titleVal = document.getElementById('cat-title').value.trim();
+      let slugVal = document.getElementById('cat-slug').value.trim();
+      if (!slugVal) {
+        slugVal = titleVal.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+
+      const assignedProducts = [];
+      document.querySelectorAll('.catalog-product-cb:checked').forEach(cb => {
+        assignedProducts.push(cb.value);
+      });
+
+      const payload = {
+        title: titleVal,
+        category: document.getElementById('cat-category').value.trim(),
+        slug: slugVal,
+        format: document.getElementById('cat-format').value.trim(),
+        pages: parseInt(document.getElementById('cat-pages').value) || 32,
+        size: document.getElementById('cat-size').value.trim(),
+        displayOrder: parseInt(document.getElementById('cat-order').value) || 0,
+        status: document.getElementById('cat-status').value,
+        description: document.getElementById('cat-description').value.trim(),
+        img: document.getElementById('cat-img').value.trim(),
+        bannerImage: document.getElementById('cat-banner-image').value.trim(),
+        bannerTitle: document.getElementById('cat-banner-title').value.trim(),
+        bannerDescription: document.getElementById('cat-banner-desc').value.trim(),
+        seoTitle: document.getElementById('cat-seo-title').value.trim(),
+        metaImage: document.getElementById('cat-meta-image').value.trim(),
+        seoDescription: document.getElementById('cat-seo-desc').value.trim(),
+        products: assignedProducts
+      };
+
+      try {
+        if (action === 'add') {
+          await window.api.createCatalog(payload);
+          alert('Catalog Collection added successfully!');
+        } else {
+          const id = document.getElementById('catalog-modal-id').value;
+          await window.api.updateCatalog(id, payload);
+          alert('Catalog Collection updated successfully!');
+        }
+        await syncAdminData();
+        toggleModal('admin-catalog-modal', false);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to save Catalog collection.');
+      }
+    }
+
+    async function deleteCatalog(catalogId) {
+      if (!confirm('Delete this Catalog collection?')) return;
+      try {
+        await window.api.deleteCatalog(catalogId);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to delete Catalog collection.');
+      }
+    }
+
+    // ─── BLOGS CRUD ────────────────────────────────────────────────────────────
     function openBlogModal(action, blogId) {
       document.getElementById('blog-modal-action').value = action;
 
@@ -1962,15 +2500,14 @@
         renderBlogImagesPreview();
       } else {
         document.getElementById('blog-modal-title').innerText = 'Edit Blog Post';
-        const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
-        const b = blogs.find(item => item.id === blogId);
+        const b = globalBlogs.find(item => item && (item._id === blogId || item.id === blogId));
         if (!b) return;
 
-        document.getElementById('blog-modal-id').value = b.id;
+        document.getElementById('blog-modal-id').value = b._id;
         document.getElementById('blog-title').value = b.title;
         document.getElementById('blog-cat').value = b.category;
         document.getElementById('blog-author').value = b.author;
-        document.getElementById('blog-excerpt').value = b.excerpt;
+        document.getElementById('blog-excerpt').value = b.excerpt || '';
         document.getElementById('blog-status').value = b.status || 'Published';
         document.getElementById('blog-slug').value = b.slug || '';
         document.getElementById('blog-reading-time').value = b.readingTime || '';
@@ -1982,18 +2519,16 @@
       toggleModal('admin-blog-modal', true);
     }
 
-    function submitAdminBlog(event) {
+    async function submitAdminBlog(event) {
       event.preventDefault();
       const action = document.getElementById('blog-modal-action').value;
-      let blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || defaultBlogs;
-
-      const titleVal = document.getElementById('blog-title').value;
+      const titleVal = document.getElementById('blog-title').value.trim();
       let slugVal = document.getElementById('blog-slug').value.trim();
       if (!slugVal) {
         slugVal = titleVal.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       }
 
-      const contentVal = document.getElementById('blog-content').value;
+      const contentVal = document.getElementById('blog-content').value.trim();
       let readingTimeVal = document.getElementById('blog-reading-time').value.trim();
       if (!readingTimeVal) {
         const words = contentVal.split(/\s+/).length;
@@ -2002,67 +2537,51 @@
       }
 
       const firstImage = tempBlogImages[0] || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80';
-      const newBlog = {
+      const payload = {
         title: titleVal,
         category: document.getElementById('blog-cat').value,
-        author: document.getElementById('blog-author').value,
+        author: document.getElementById('blog-author').value.trim(),
         status: document.getElementById('blog-status').value,
-        excerpt: document.getElementById('blog-excerpt').value,
+        excerpt: document.getElementById('blog-excerpt').value.trim(),
         slug: slugVal,
         content: contentVal,
         readingTime: readingTimeVal,
-        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
         img: firstImage,
         featuredImage: firstImage,
-        images: tempBlogImages,
-        featured: false
+        images: tempBlogImages
       };
 
-      if (action === 'add') {
-        newBlog.id = blogs.length > 0 ? Math.max(...blogs.map(b => b.id)) + 1 : 1;
-        blogs.push(newBlog);
-        alert('Blog article published!');
-      } else {
-        const id = parseInt(document.getElementById('blog-modal-id').value);
-        const idx = blogs.findIndex(b => b.id === id);
-        if (idx !== -1) {
-          newBlog.id = id;
-          if (tempBlogImages.length > 0) {
-            newBlog.images = tempBlogImages;
-            newBlog.img = tempBlogImages[0];
-            newBlog.featuredImage = tempBlogImages[0];
-          } else {
-            newBlog.images = blogs[idx].images || [blogs[idx].featuredImage || blogs[idx].img];
-            newBlog.img = blogs[idx].img;
-            newBlog.featuredImage = blogs[idx].featuredImage || blogs[idx].img;
-          }
-          newBlog.featured = blogs[idx].featured || false;
-          newBlog.date = blogs[idx].date || newBlog.date; // Keep original date if exists
-          blogs[idx] = newBlog;
-          alert('Blog post updated!');
+      try {
+        if (action === 'add') {
+          await window.api.createBlog(payload);
+          alert('Blog article published!');
+        } else {
+          const id = document.getElementById('blog-modal-id').value;
+          await window.api.updateBlog(id, payload);
+          alert('Blog article updated!');
         }
+        await syncAdminData();
+        toggleModal('admin-blog-modal', false);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to save blog post.');
       }
-
-      localStorage.setItem('uniwear_blogs', JSON.stringify(blogs));
-      toggleModal('admin-blog-modal', false);
-      updateAdminDashboard();
     }
 
-    function deleteBlog(blogId) {
+    async function deleteBlog(blogId) {
       if (!confirm('Delete this blog article?')) return;
-      let blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
-      blogs = blogs.filter(b => b.id !== blogId);
-      localStorage.setItem('uniwear_blogs', JSON.stringify(blogs));
-      updateAdminDashboard();
+      try {
+        await window.api.deleteBlog(blogId);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to delete blog.');
+      }
     }
 
     // ─── CUSTOMER STATUS MANAGEMENT ────────────────────────────────────────────
-
-    let activeCustomerFilter = 'All';
-
-    function filterCustomersByStatus(status) {
+    async function filterCustomersByStatus(status) {
       activeCustomerFilter = status;
-      // Update filter button styles
       document.querySelectorAll('.cust-filter-btn').forEach(btn => {
         btn.classList.remove('bg-primary', 'text-white', 'border-primary');
         btn.classList.add('bg-white', 'text-mutedText', 'border-lightBorder');
@@ -2072,8 +2591,14 @@
         activeBtn.classList.remove('bg-white', 'text-mutedText', 'border-lightBorder');
         activeBtn.classList.add('bg-primary', 'text-white', 'border-primary');
       }
-      const users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
-      renderCustomersTable(users);
+      const q = document.getElementById('customers-search-input') ? document.getElementById('customers-search-input').value.trim() : '';
+      try {
+        const res = await window.api.getUsers({ search: q, status: activeCustomerFilter });
+        if (res.success) {
+          globalUsers = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
     }
 
     function openPendingCustomers() {
@@ -2087,21 +2612,18 @@
       tbodyClients.innerHTML = '';
 
       let customers = users.filter(u => u && u.role === 'Customer');
-      if (activeCustomerFilter !== 'All') {
-        customers = customers.filter(u => u.status === activeCustomerFilter);
-      }
 
       const countLabel = document.getElementById('admin-customers-count-label');
       if (countLabel) countLabel.innerText = `${customers.length} account${customers.length !== 1 ? 's' : ''} shown`;
 
       if (customers.length === 0) {
-        tbodyClients.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs">No customer accounts match this filter.</td></tr>`;
+        tbodyClients.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No customer accounts match this filter.</td></tr>`;
         return;
       }
 
       customers.forEach(u => {
         const ctr = document.createElement('tr');
-        ctr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+        ctr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
 
         const statusBadges = {
           'Active': 'bg-green-100 text-green-700 border border-green-200',
@@ -2111,26 +2633,25 @@
         };
         const statusStyle = statusBadges[u.status] || 'bg-gray-100 text-gray-600';
 
-        // Build action buttons based on status
         let actionHtml = '';
         if (u.status === 'Pending') {
           actionHtml = `
-            <div class="flex justify-end gap-1.5">
-              <button onclick="approveUser(${u.id})" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1"><i class="ri-check-line"></i> Approve</button>
-              <button onclick="confirmRejectUser(${u.id})" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1"><i class="ri-close-line"></i> Reject</button>
+            <div class="flex justify-end gap-1.5 font-body">
+              <button onclick="approveUser('${u._id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-check-line"></i> Approve</button>
+              <button onclick="confirmRejectUser('${u._id}')" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-close-line"></i> Reject</button>
             </div>`;
         } else if (u.status === 'Active') {
           actionHtml = `
-            <div class="flex justify-end">
-              <button onclick="toggleUserStatus(${u.id}, 'Disabled')" class="bg-charcoal hover:bg-black text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1"><i class="ri-forbid-line"></i> Disable</button>
+            <div class="flex justify-end font-body">
+              <button onclick="toggleUserStatus('${u._id}', 'Disabled')" class="bg-charcoal hover:bg-black text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-forbid-line"></i> Disable</button>
             </div>`;
         } else if (u.status === 'Disabled') {
           actionHtml = `
-            <div class="flex justify-end">
-              <button onclick="toggleUserStatus(${u.id}, 'Active')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1"><i class="ri-shield-check-line"></i> Enable</button>
+            <div class="flex justify-end font-body">
+              <button onclick="toggleUserStatus('${u._id}', 'Active')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-shield-check-line"></i> Enable</button>
             </div>`;
         } else if (u.status === 'Rejected') {
-          actionHtml = `<span class="text-gray-400 italic text-[10px]">Rejected</span>`;
+          actionHtml = `<span class="text-gray-400 italic text-[10px] font-body">Rejected</span>`;
         }
 
         ctr.innerHTML = `
@@ -2140,19 +2661,15 @@
           <td class="p-4 font-mono">${u.phone || 'N/A'}</td>
           <td class="p-4 font-mono text-gray-400">${u.regDate || '—'}</td>
           <td class="p-4"><span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${u.status || ''}</span></td>
-          <td class="p-4 text-right">${actionHtml}</td>
+          <td class="p-4 text-right pt-6">${actionHtml}</td>
         `;
         tbodyClients.appendChild(ctr);
       });
     }
 
     async function approveUser(userId) {
-      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
-      const u = users.find(user => user.id === userId || user._id === userId);
-      if (!u) return;
-
       try {
-        await window.api.updateUser(u._id, { status: 'Active' });
+        await window.api.updateUser(userId, { status: 'Active' });
         await syncAdminData();
         updateAdminDashboard();
       } catch (err) {
@@ -2163,8 +2680,7 @@
     let _rejectTargetUserId = null;
 
     function confirmRejectUser(userId) {
-      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
-      const u = users.find(user => user.id === userId || user._id === userId);
+      const u = globalUsers.find(user => user._id === userId || user.id === userId);
       if (!u) return;
       _rejectTargetUserId = userId;
 
@@ -2177,8 +2693,7 @@
       const userId = _rejectTargetUserId;
       if (!userId) return;
 
-      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
-      const u = users.find(user => user.id === userId || user._id === userId);
+      const u = globalUsers.find(user => user._id === userId || user.id === userId);
       if (!u) { toggleModal('admin-reject-user-modal', false); return; }
 
       try {
@@ -2197,8 +2712,7 @@
     }
 
     async function toggleUserStatus(userId, newStatus) {
-      let users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
-      const u = users.find(user => user.id === userId || user._id === userId);
+      const u = globalUsers.find(user => user._id === userId || user.id === userId);
       if (!u) return;
 
       try {

@@ -7,7 +7,19 @@ const CompanySettings = require('../models/CompanySettings');
 // GET /api/users
 const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find({}, '-password').lean();
+    const { search, role, status } = req.query;
+    const filter = {};
+    if (role) filter.role = role;
+    if (status) filter.status = status;
+    if (search) {
+      filter.$or = [
+        { email: { $regex: search, $options: 'i' } },
+        { companyName: { $regex: search, $options: 'i' } },
+        { representative: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } }
+      ];
+    }
+    const users = await User.find(filter, '-password').lean();
     res.json({ success: true, data: users });
   } catch (err) {
     next(err);

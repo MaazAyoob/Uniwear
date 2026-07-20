@@ -380,6 +380,360 @@ const defaultCompanySettings = {
   ccEmail: ""
 };
 
+const defaultProducts = [
+  {
+    id: 1,
+    name: "AeroGuard Boiler Suit",
+    category: "Industrial",
+    fabric: "65% Recycled Polyester / 35% Organic Cotton",
+    gsm: "240 GSM",
+    moq: 100,
+    desc: "Built to withstand critical mechanical workloads. Features flame-retardant parameters, anti-static carbon filaments, triple needle reinforcements, and reflective warning strips.",
+    img: "industrial_uniforms_mockup.png",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 2,
+    name: "TundraGuard Coldroom Suit",
+    category: "Industrial",
+    fabric: "Water-resistant thermal-lined Nylon Taslon",
+    gsm: "380 GSM",
+    moq: 50,
+    desc: "Sub-zero coldroom suit engineered for refrigeration warehouses. Thermal insulated lining and double-seamed windbreakers.",
+    img: "https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 3,
+    name: "Defender Safety Equipment Set",
+    category: "Industrial",
+    fabric: "Heavy Duty High-Impact Polymers / Reinforced Strapping",
+    gsm: "N/A",
+    moq: 50,
+    desc: "Includes EN-certified safety helmet, high-visibility reflective harness, and multi-point utility work belt.",
+    img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 4,
+    name: "ProTech Steel-Toe Safety Shoes",
+    category: "Industrial",
+    fabric: "Genuine Full-Grain Leather with Steel Cap",
+    gsm: "N/A",
+    moq: 100,
+    desc: "Anti-puncture, slip-resistant safety shoes. Steel toe cap rated for high-impact protection in smelting zones.",
+    img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 5,
+    name: "ThermoShield Bomber Safety Jacket",
+    category: "Industrial",
+    fabric: "Taslon Polyester Shell with Fleece Lining",
+    gsm: "300 GSM",
+    moq: 80,
+    desc: "Wind and water-resistant industrial safety jacket. High-visibility reflective tape strips and detachable hood.",
+    img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 6,
+    name: "Stamina Cargo Trousers",
+    category: "Industrial",
+    fabric: "Heavy Duty Cotton Drill",
+    gsm: "280 GSM",
+    moq: 100,
+    desc: "Tough-duty cargo pants reinforced with Cordura knee pad slots, multi-utility tactical pouches, and reinforced belt loops.",
+    img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 7,
+    name: "Executive Wool Blazer",
+    category: "Corporate",
+    fabric: "80% Merino Wool / 20% Silk Blend",
+    gsm: "300 GSM",
+    moq: 50,
+    desc: "Bespoke corporate outerwear featuring breathable lining, hand-finished lapel edges, and custom embroidered inner branding labels.",
+    img: "corporate_uniforms_mockup.png",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 8,
+    name: "Oxford Cotton Corporate Shirt",
+    category: "Corporate",
+    fabric: "100% Egyptian Cotton Giza 85",
+    gsm: "140 GSM",
+    moq: 100,
+    desc: "Wrinkle-resistant corporate shirt. Easy-iron finish, tailored cuffs, and double yoke stitch support.",
+    img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 9,
+    name: "Slick Dry Crewneck T-Shirt",
+    category: "Corporate",
+    fabric: "100% Organic Cotton",
+    gsm: "150 GSM",
+    moq: 200,
+    desc: "Lightweight and highly breathable active corporate tee. Optimized for employee wellness days and out-of-office branding.",
+    img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 10,
+    name: "AeroDry Medical Scrubs",
+    category: "Hospitality",
+    fabric: "90% Polyester / 10% Spandex",
+    gsm: "170 GSM",
+    moq: 100,
+    desc: "Antimicrobial, quick-dry surgical scrubs. Engineered to support high-intensity hospital shifts with ergonomic flex parameters.",
+    img: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 11,
+    name: "Taj Premium Hotel Uniform",
+    category: "Hospitality",
+    fabric: "Crepe Wool Crease-Resistant Blend",
+    gsm: "260 GSM",
+    moq: 50,
+    desc: "Sophisticated styling for luxury hotel front desks. Tailored slim fit design and customizable brass button trims.",
+    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 12,
+    name: "Imperial Chef Uniform",
+    category: "Hospitality",
+    fabric: "Combed Long-Staple Cotton Blend",
+    gsm: "220 GSM",
+    moq: 50,
+    desc: "Designed for premium kitchen suites. Hidden press stud fasteners, thermoregulator mesh panels, and dual sleeve pen pockets.",
+    img: "hospitality_uniforms_mockup.png",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 13,
+    name: "Elite Front Desk Blazer",
+    category: "Hospitality",
+    fabric: "Crepe Wool Crease-Resistant Blend",
+    gsm: "260 GSM",
+    moq: 50,
+    desc: "Sophisticated styling for luxury reception desks. Slim fit design, custom brass details, and deep pocket compartments.",
+    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 14,
+    name: "Academy Classic Blazer",
+    category: "Institutional",
+    fabric: "Premium Wool Flannel Blend",
+    gsm: "290 GSM",
+    moq: 200,
+    desc: "High-grade school uniforms. Built to survive rigorous playground routines. Includes anti-pilling guarantees and customizable logo badges.",
+    img: "institutional_uniforms_mockup.png",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 15,
+    name: "School Shirt & Trouser Set",
+    category: "Institutional",
+    fabric: "65% Polyester / 35% Cotton Blend",
+    gsm: "160 GSM",
+    moq: 200,
+    desc: "Classic school uniform set featuring a wrinkle-free dress shirt and durable cotton-blend trousers.",
+    img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 16,
+    name: "Varsity Fleece Hoodie",
+    category: "Institutional",
+    fabric: "80% Combed Cotton / 20% Polyester Fleece",
+    gsm: "320 GSM",
+    moq: 150,
+    desc: "Heavyweight collegiate pullover hoodie. Pre-shrunk fabric, double layer hood, and customized university chest felt embroidery.",
+    img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 17,
+    name: "Luxe Leather Portfolio Set",
+    category: "Corporate Gifting",
+    fabric: "Full-Grain Italian Leather",
+    gsm: "N/A",
+    moq: 50,
+    desc: "Sophisticated corporate gift presentation box. Includes leather planner binder, copper roller pen, and aluminum power bank shell.",
+    img: "corporate_gifting_mockup.png",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 18,
+    name: "Branded Executive T-Shirt",
+    category: "Corporate Gifting",
+    fabric: "100% Combed Cotton",
+    gsm: "180 GSM",
+    moq: 100,
+    desc: "Premium corporate polo t-shirt with embroidered front brand logo.",
+    img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 19,
+    name: "Custom Embroidered Cap",
+    category: "Corporate Gifting",
+    fabric: "100% Cotton Twill",
+    gsm: "N/A",
+    moq: 150,
+    desc: "Classic six-panel structured cap with custom embroidery placement on front and side panels.",
+    img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=400&q=80",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 20,
+    name: "Onboarding Starter Welcome Kit",
+    category: "Corporate Gifting",
+    fabric: "Eco-Friendly Material Blend",
+    gsm: "N/A",
+    moq: 30,
+    desc: "Includes premium steel drinkware bottle, notebook planner, metal ballpoint pen, and corporate apparel tee in a matte gift box.",
+    img: "corporate_gifting_mockup.png",
+    status: "Active",
+    featured: true
+  }
+];
+
+const defaultBlogs = [
+  {
+    id: 1,
+    title: "The Evolution of Uniforms: A Historical Perspective",
+    slug: "the-evolution-of-uniforms",
+    category: "Heritage",
+    author: "K. R. Murthy",
+    date: "September 19, 2024",
+    excerpt: "Tracing how uniforms evolved from medieval guild liveries to modern brand identities, reflecting changes in society and workplace dynamics.",
+    img: "https://uniwear.co/api/assets/images/full/high_res/250177fa-e729-4d5f-87a7-0e84a6808f5c-Picture-1.webp",
+    featuredImage: "https://uniwear.co/api/assets/images/full/high_res/250177fa-e729-4d5f-87a7-0e84a6808f5c-Picture-1.webp",
+    featured: true,
+    status: "Published",
+    readingTime: "6 min read",
+    content: "Uniforms have always been more than just clothing. Throughout history, they have served as vital symbols of identity, authority, unity, and functionality. Tracing their evolution reveals a fascinating journey from the rigid structures of medieval guilds to the dynamic brand statements of today's corporate landscape.\n\nIn the medieval era, liveries and guild uniforms were the earliest precursors to modern workwear. They were used to identify members of specific trades and alliances, denoting craftsmanship and quality standards. Over time, as industrialization swept the globe, uniforms took on a more utilitarian role. Factory workers required durable, protective clothing, giving rise to heavy denim, canvas, and reinforced stitching.\n\nToday, uniforms are an essential pillar of brand strategy. They convey professionalism, foster team spirit, and ensure safety in high-risk environments. At UNIWEAR, we blend historic craftsmanship with state-of-the-art textile technology, ensuring that every garment we create is a testament to quality and design innovation."
+  },
+  {
+    id: 2,
+    title: "Eco-Friendly Corporate Gifting: Redefining the Way We Gift",
+    slug: "eco-friendly-corporate-gifting",
+    category: "Sustainability",
+    author: "Dr. Anjali Sen",
+    date: "September 19, 2024",
+    excerpt: "Discover how sustainable materials, zero-waste packaging, and organic goods are transforming the corporate gifting landscape.",
+    img: "https://uniwear.co/api/assets/images/full/high_res/29d8c009-d649-4258-936e-77e4ded99a29-UW-Blog-Cover.webp",
+    featuredImage: "https://uniwear.co/api/assets/images/full/high_res/29d8c009-d649-4258-936e-77e4ded99a29-UW-Blog-Cover.webp",
+    featured: false,
+    status: "Published",
+    readingTime: "4 min read",
+    content: "Corporate gifting has entered a new era. What was once a routine exchange of generic branded items has evolved into an opportunity to showcase values, build strong connections, and demonstrate ecological responsibility. Modern organizations are increasingly turning to sustainable, eco-friendly gifts to represent their brand.\n\nSustainable corporate gifting is not just about choosing organic materials; it is a holistic approach that covers product lifecycle, zero-waste packaging, and supporting local communities. From biodegradable tech accessories to organic cotton apparel, the options for high-quality, eco-conscious gifts are expanding rapidly.\n\nBy prioritizing sustainability in corporate gifts, businesses send a clear message: they care about their legacy, their employees, and the environment. This shift not only builds brand loyalty but also fosters a culture of mindfulness and care within the corporate ecosystem."
+  },
+  {
+    id: 3,
+    title: "How Corporate Gifting Enhances Employee Engagement and Brand Loyalty",
+    slug: "corporate-gifting-employee-engagement",
+    category: "Branding",
+    author: "Rhea Murthy",
+    date: "September 19, 2024",
+    excerpt: "An in-depth analysis of how thoughtful executive gifts boost morale, reinforce company culture, and elevate brand recall.",
+    img: "https://uniwear.co/api/assets/images/full/high_res/b4d25e52-9ad3-4230-8194-02bde89bf740-UW-Blog-Cover-2.webp",
+    featuredImage: "https://uniwear.co/api/assets/images/full/high_res/b4d25e52-9ad3-4230-8194-02bde89bf740-UW-Blog-Cover-2.webp",
+    featured: false,
+    status: "Published",
+    readingTime: "5 min read",
+    content: "In today's highly competitive business landscape, attracting and retaining top talent requires more than standard benefits. Organizations are searching for meaningful ways to express appreciation and foster a deep sense of belonging. This is where thoughtful, strategic corporate gifting plays a transformative role.\n\nA well-timed, premium executive gift is a powerful tool for employee engagement. When employees receive high-quality, personalized items, they feel valued and recognized for their contributions. This recognition acts as a catalyst, boosting morale and driving alignment with organizational goals.\n\nMoreover, executive gifting extends beyond employee engagement; it is a key driver of external brand loyalty. Gifting custom, finely crafted items to key clients and partners leaves a lasting impression that reinforces business relationships and builds long-term brand equity."
+  }
+];
+
+const defaultCatalogs = [
+  {
+    title: "Safety Workwear Catalog",
+    slug: "safety-workwear-catalog",
+    category: "Industrial & Engineering",
+    description: "Detailed specifications for flame-retardant aramid overalls, electrostatic discharge (ESD) shirts, high-visibility winter jackets, and tear-resistant mechanical trousers.",
+    img: "industrial_uniforms_mockup.png",
+    format: "PDF Brochure",
+    pages: 48,
+    size: "8.4 MB",
+    displayOrder: 1,
+    status: "Publish"
+  },
+  {
+    title: "Bespoke Executive Weaves",
+    slug: "bespoke-executive-weaves",
+    category: "Corporate & Executive",
+    description: "Executive suits, wool coordinate trousers, custom logo embroidery guidelines, breathability index sheets, and colorway customization guides.",
+    img: "corporate_uniforms_mockup.png",
+    format: "PDF Brochure",
+    pages: 36,
+    size: "6.2 MB",
+    displayOrder: 2,
+    status: "Publish"
+  },
+  {
+    title: "Five-Star Culinary Outfits",
+    slug: "five-star-culinary-outfits",
+    category: "Hospitality & Culinary",
+    description: "Ergonomic chef jackets, anti-stain canvas aprons, front-desk coordinates, housekeeping tunics, and thermoregulator backing systems.",
+    img: "hospitality_uniforms_mockup.png",
+    format: "PDF Brochure",
+    pages: 42,
+    size: "7.8 MB",
+    displayOrder: 3,
+    status: "Publish"
+  },
+  {
+    title: "Collegiate Uniform Directory",
+    slug: "collegiate-uniform-directory",
+    category: "Institutional & Academy",
+    description: "High-durability school blazers, sports coordinate tracksuits, kids playground-safe coordinates, and anti-pilling test certifications.",
+    img: "institutional_uniforms_mockup.png",
+    format: "PDF Brochure",
+    pages: 32,
+    size: "5.4 MB",
+    displayOrder: 4,
+    status: "Publish"
+  },
+  {
+    title: "Executive Accessories Lookbook",
+    slug: "executive-accessories-lookbook",
+    category: "Corporate Gifting",
+    description: "Luxury leather portfolio cases, customized binder planners, premium alloy charging units, and metal pens with customized box carvings.",
+    img: "corporate_gifting_mockup.png",
+    format: "PDF Brochure",
+    pages: 24,
+    size: "4.8 MB",
+    displayOrder: 5,
+    status: "Publish"
+  }
+];
+
 module.exports = {
   defaultUsers,
   defaultLeads,
@@ -387,5 +741,8 @@ module.exports = {
   defaultOrders,
   defaultTickets,
   defaultNotifications,
-  defaultCompanySettings
+  defaultCompanySettings,
+  defaultProducts,
+  defaultBlogs,
+  defaultCatalogs
 };

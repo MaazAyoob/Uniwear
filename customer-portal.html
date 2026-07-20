@@ -660,19 +660,21 @@
   <script src="api.js"></script>
   <script src="shared.js"></script>
   
-  <script>
+    let globalProducts = [];
+
     // Sync customer specific data from server
     async function syncCustomerData() {
       const email = localStorage.getItem('uniwear_auth_email');
       if (!email) return;
 
       try {
-        const [quotesRes, ordersRes, ticketsRes, notisRes, settingsRes] = await Promise.all([
+        const [quotesRes, ordersRes, ticketsRes, notisRes, settingsRes, productsRes] = await Promise.all([
           window.api.getQuotations(email),
           window.api.getOrders(email),
           window.api.getTickets(email),
           window.api.getNotifications(email),
-          window.api.getSettings()
+          window.api.getSettings(),
+          window.api.getProducts()
         ]);
 
         if (quotesRes.success) localStorage.setItem('uniwear_quotations', JSON.stringify(quotesRes.data));
@@ -680,6 +682,7 @@
         if (ticketsRes.success) localStorage.setItem('uniwear_tickets', JSON.stringify(ticketsRes.data));
         if (notisRes.success) localStorage.setItem('uniwear_notifications', JSON.stringify(notisRes.data));
         if (settingsRes.success) localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsRes.data));
+        if (productsRes.success) globalProducts = productsRes.data;
       } catch (err) {
         console.error("Failed to sync customer data:", err);
       }
@@ -1044,7 +1047,7 @@
       if (clientOrders.length === 0) {
         ordersContainer.innerHTML = `<div class="bg-white p-6 rounded-2xl border border-lightBorder text-center text-xs text-mutedText col-span-2">No active uniform production contracts.</div>`;
       } else {
-        const stateProducts = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+        const stateProducts = globalProducts;
         clientOrders.forEach(o => {
           const matchedProduct = stateProducts.find(p => p.name === o.productName) || {};
           const imgUrl = matchedProduct.img || 'corporate_blazer_detail.png';

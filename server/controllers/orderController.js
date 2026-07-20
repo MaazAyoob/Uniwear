@@ -5,8 +5,17 @@ const { sendMail, emailTemplates } = require('../config/mailer');
 // GET /api/orders
 const getOrders = async (req, res, next) => {
   try {
+    const { clientEmail, search } = req.query;
     const filter = {};
-    if (req.query.clientEmail) filter.clientEmail = req.query.clientEmail.toLowerCase();
+    if (clientEmail) filter.clientEmail = clientEmail.toLowerCase();
+    if (search) {
+      filter.$or = [
+        { id: { $regex: search, $options: 'i' } },
+        { clientEmail: { $regex: search, $options: 'i' } },
+        { productName: { $regex: search, $options: 'i' } },
+        { statusText: { $regex: search, $options: 'i' } }
+      ];
+    }
     const orders = await Order.find(filter).sort({ createdAt: -1 }).lean();
     res.json({ success: true, data: orders });
   } catch (err) {
