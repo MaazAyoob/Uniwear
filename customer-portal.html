@@ -1252,7 +1252,7 @@
     }
 
     // Submit Sample Form
-    function submitClientSampleRequest(event) {
+    async function submitClientSampleRequest(event) {
       event.preventDefault();
       const product = document.getElementById('sample-req-product').value;
       const specs = document.getElementById('sample-req-specs').value;
@@ -1270,14 +1270,29 @@
         status: "Awaiting Review"
       };
 
-      let samples = JSON.parse(localStorage.getItem('uniwear_samples')) || [];
-      samples.push(newSample);
-      localStorage.setItem('uniwear_samples', JSON.stringify(samples));
+      try {
+        await window.api.createLead({
+          name: profile.representative,
+          company: profile.companyName,
+          email: profile.email,
+          phone: profile.phone || "N/A",
+          category: product,
+          volume: 1,
+          details: `Requested Prototype: ${product}. Specs: ${specs}. Logo: ${logoUrl || 'None'}`,
+          source: 'Sample Request'
+        });
 
-      toggleModal('cust-sample-modal', false);
-      alert(`Prototype request ${randomId} successfully captured!`);
-      event.target.reset();
-      updateCustomerPortal();
+        let samples = JSON.parse(localStorage.getItem('uniwear_samples')) || [];
+        samples.push(newSample);
+        localStorage.setItem('uniwear_samples', JSON.stringify(samples));
+
+        toggleModal('cust-sample-modal', false);
+        alert(`Prototype request ${randomId} successfully captured and sent to admin!`);
+        event.target.reset();
+        updateCustomerPortal();
+      } catch (err) {
+        alert(err.message || 'Failed to submit prototype request.');
+      }
     }
 
     // Submit Support Ticket Form

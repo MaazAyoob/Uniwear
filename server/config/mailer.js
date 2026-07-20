@@ -309,6 +309,32 @@ const emailTemplates = {
     )
   }),
 
+  // 8b. Quotation Requested (Admin Alert)
+  quotationRequestedAdmin: (quotation, settings = {}) => ({
+    to: settings.notificationEmail,
+    cc: settings.ccEmail || undefined,
+    subject: 'New Quotation Request Submitted - UNIWEAR',
+    eventName: 'Quotation Request Received',
+    html: wrapEmail(
+      'New Quotation Request - UNIWEAR',
+      `
+      <h2 style="color:#B91C1C; margin-top:0;">New Quotation Request</h2>
+      <p>A B2B client has submitted a new quotation request:</p>
+      <table class="table-data">
+        <tr><td>Quotation ID</td><td>${quotation.id}</td></tr>
+        <tr><td>Client Email</td><td>${quotation.clientEmail}</td></tr>
+        <tr><td>Product Category</td><td>${quotation.productClass}</td></tr>
+        <tr><td>Volume</td><td>${quotation.volume} Sets</td></tr>
+        <tr><td>Target Price/Value</td><td>${quotation.value || 'Pending Admin Estimation'}</td></tr>
+        <tr><td>Specifications</td><td>${quotation.specs || 'N/A'}</td></tr>
+        <tr><td>Request Date</td><td>${quotation.date || new Date().toISOString().split('T')[0]}</td></tr>
+      </table>
+      <p>Please log in to the admin portal to review, price, and publish the proposal details.</p>
+      `,
+      settings
+    )
+  }),
+
   // 9. Quotation Revised
   quotationRevised: (quotation, settings = {}) => ({
     to: quotation.clientEmail,

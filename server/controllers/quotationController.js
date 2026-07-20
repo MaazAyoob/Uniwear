@@ -22,13 +22,21 @@ const createQuotation = async (req, res, next) => {
   try {
     const quotation = await Quotation.create(req.body);
 
-    // Send quotation created email to customer (non-blocking & safe try-catch wrapper)
+    // Send emails (non-blocking & safe try-catch wrapper)
     try {
       const settings = await CompanySettings.findOne().lean() || {};
-      sendMail(emailTemplates.quotationCreated(quotation, settings))
-        .catch(err => console.error('[Mailer Trigger Error] quotationCreated failed:', err.message));
+      
+      if (req.user && req.user.role === 'Customer') {
+        // Requested by client -> notify admin
+        sendMail(emailTemplates.quotationRequestedAdmin(quotation, settings))
+          .catch(err => console.error('[Mailer Trigger Error] quotationRequestedAdmin failed:', err.message));
+      } else {
+        // Created by admin -> notify client
+        sendMail(emailTemplates.quotationCreated(quotation, settings))
+          .catch(err => console.error('[Mailer Trigger Error] quotationCreated failed:', err.message));
+      }
     } catch (mailErr) {
-      console.error('[Mailer Trigger Error] quotationCreated generation failed:', mailErr.message);
+      console.error('[Mailer Trigger Error] Quotation mail triggering failed:', mailErr.message);
     }
 
     res.status(201).json({ success: true, data: quotation });
