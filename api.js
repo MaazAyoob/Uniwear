@@ -7,12 +7,24 @@
 // Always call API helpers for writes/reads that need persistence.
 // ==========================================
 
-const API_BASE =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1' ||
-  window.location.protocol === 'file:'
-    ? 'http://localhost:5000/api'
-    : 'https://uniwear-api.onrender.com/api';
+function getApiBase() {
+  // 1. Explicit configuration from window.UNIWEAR_CONFIG
+  if (window.UNIWEAR_CONFIG && window.UNIWEAR_CONFIG.API_BASE !== undefined && window.UNIWEAR_CONFIG.API_BASE !== '') {
+    return window.UNIWEAR_CONFIG.API_BASE;
+  }
+  
+  // 2. Local development fallback (localhost / local file system)
+  const host = window.location.hostname;
+  const protocol = window.location.protocol;
+  if (host === 'localhost' || host === '127.0.0.1' || protocol === 'file:') {
+    return 'http://localhost:5000/api';
+  }
+  
+  // 3. Automatic same-origin detection
+  return '/api';
+}
+
+const API_BASE = getApiBase();
 
 // ─── Token Management ────────────────────────────────────────────────────────
 
