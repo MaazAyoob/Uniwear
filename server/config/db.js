@@ -87,8 +87,20 @@ const seedDatabase = async () => {
 
   // Seed Products
   if ((await Product.countDocuments()) === 0) {
-    await Product.insertMany(defaultProducts);
+    const preparedProducts = defaultProducts.map(p => ({
+      ...p,
+      isPublic: true,
+      status: 'Active',
+      displayLocations: ['uniforms', 'gifting', 'featured', 'new_arrivals']
+    }));
+    await Product.insertMany(preparedProducts);
     console.log(`[Seed] Inserted ${defaultProducts.length} products`);
+  } else {
+    // Migration safeguard: Update existing products with missing visibility or display locations
+    await Product.updateMany(
+      { $or: [{ isPublic: { $exists: false } }, { displayLocations: { $size: 0 } }, { displayLocations: { $exists: false } }] },
+      { $set: { isPublic: true, status: 'Active', displayLocations: ['uniforms', 'gifting', 'featured', 'new_arrivals'] } }
+    );
   }
 
   // Seed Blogs

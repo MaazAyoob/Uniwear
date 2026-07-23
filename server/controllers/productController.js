@@ -3,7 +3,7 @@ const Product = require('../models/Product');
 // GET /api/products
 const getProducts = async (req, res, next) => {
   try {
-    const { page, limit, search, category, status, featured, sort = 'id', order = 'asc' } = req.query;
+    const { page, limit, search, category, status, featured, isPublic, location, sort = 'sortOrder', order = 'asc' } = req.query;
 
     const filter = {};
     if (category && category !== 'All') {
@@ -14,6 +14,12 @@ const getProducts = async (req, res, next) => {
     }
     if (featured !== undefined) {
       filter.featured = featured === 'true';
+    }
+    if (isPublic !== undefined) {
+      filter.isPublic = isPublic === 'true';
+    }
+    if (location) {
+      filter.displayLocations = { $in: [location] };
     }
 
     if (search) {
@@ -64,7 +70,6 @@ const getProductById = async (req, res, next) => {
     const { id } = req.params;
     let product;
 
-    // Check if id is numeric or ObjectId
     if (/^\d+$/.test(id)) {
       product = await Product.findOne({ id: parseInt(id) }).lean();
     } else {
@@ -84,14 +89,12 @@ const getProductById = async (req, res, next) => {
 // POST /api/products
 const createProduct = async (req, res, next) => {
   try {
-    const { name, category, desc, description, sku, img, image } = req.body;
+    const { name, category, desc, description, sku, img, image, isPublic, displayLocations } = req.body;
 
-    // Validation
     if (!name || !category || (!desc && !description)) {
       return res.status(400).json({ success: false, message: 'Name, Category, and Description are required fields.' });
     }
 
-    // Validate base64 image if provided
     const targetImage = img || image;
     if (targetImage && targetImage.startsWith('data:image/')) {
       const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
@@ -101,7 +104,6 @@ const createProduct = async (req, res, next) => {
       }
     }
 
-    // SKU uniqueness
     if (sku) {
       const existingSku = await Product.findOne({ sku });
       if (existingSku) {
@@ -109,7 +111,6 @@ const createProduct = async (req, res, next) => {
       }
     }
 
-    // Generate numerical ID
     const lastProduct = await Product.findOne().sort({ id: -1 });
     const nextId = lastProduct && lastProduct.id ? lastProduct.id + 1 : 1;
 
@@ -118,8 +119,10 @@ const createProduct = async (req, res, next) => {
       id: nextId,
       desc: desc || description,
       description: description || desc,
-      img: img || image || 'corporate_blazer_detail.png',
-      image: image || img || 'corporate_blazer_detail.png'
+      isPublic: isPublic !== undefined ? isPublic : false,
+      displayLocations: Array.isArray(displayLocations) ? displayLocations : ['uniforms', 'gifting', 'featured'],
+      img: img || image || 'assets/images/products/corporate-blazer-detail.png',
+      image: image || img || 'assets/images/products/corporate-blazer-detail.png'
     };
 
     const product = await Product.create(payload);
@@ -147,7 +150,6 @@ const updateProduct = async (req, res, next) => {
 
     const { sku } = req.body;
 
-    // SKU check
     if (sku && sku !== product.sku) {
       const existingSku = await Product.findOne({ sku });
       if (existingSku) {

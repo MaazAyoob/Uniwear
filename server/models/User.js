@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
   address: { type: String, default: '' },
   status: {
     type: String,
-    enum: ['Active', 'Pending', 'Disabled', 'Info Requested'],
+    enum: ['Active', 'Pending', 'Disabled', 'Info Requested', 'Rejected'],
     default: 'Pending'
   },
   regDate: { type: String, default: () => new Date().toISOString().split('T')[0] }

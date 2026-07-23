@@ -1,0 +1,426 @@
+/* ==========================================
+ * UNIWEAR DESIGN SYSTEM & GLOBAL STYLES
+ * styles/main.css
+ * ========================================== */
+
+/* Typography Rules */
+h1, h2, .font-display {
+  font-family: 'Clash Display', sans-serif !important;
+}
+
+h3, h4, h5, h6, nav a, .mobile-nav-link, button, .btn, .font-heading {
+  font-family: 'Outfit', sans-serif !important;
+}
+
+body, input, textarea, select, label, p, span, li, .font-body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Responsive Hierarchy Scaling */
+h1 {
+  font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.03em !important;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+h3, .card-title {
+  line-height: 1.3 !important;
+  letter-spacing: -0.015em !important;
+  margin-bottom: 0.75rem;
+}
+
+/* Section Spacing */
+section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+  padding-top: clamp(4rem, 8vw, 8rem);
+  padding-bottom: clamp(4rem, 8vw, 8rem);
+}
+
+/* Navigation & Interactive Elements */
+nav a, .mobile-nav-link {
+  letter-spacing: -0.01em;
+}
+
+button, .btn {
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+input, textarea, select {
+  font-family: 'Inter', sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F9FAFB;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5E7EB;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B91C1C;
+}
+
+/* Glassmorphism & Depth System */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.glass-nav-scrolled {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08) !important;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+}
+
+/* Ambient Hero Glow Effects */
+.hero-bg-glow {
+  background: 
+    radial-gradient(circle at 50% 30%, rgba(185, 28, 28, 0.07) 0%, rgba(255, 255, 255, 0) 65%),
+    radial-gradient(circle at 85% 75%, rgba(243, 244, 246, 0.8) 0%, rgba(255, 255, 255, 0) 50%),
+    radial-gradient(circle at 15% 85%, rgba(254, 242, 242, 0.9) 0%, rgba(255, 255, 255, 0) 50%);
+}
+
+.hero-title-accent {
+  background: linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #991B1B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Scroll Pulse Keyframe */
+@keyframes scrollPulse {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
+
+.animate-scroll-pulse {
+  animation: scrollPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Micro Hover Transformations */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.07);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+  .marquee-content { gap: 32px !important; }
+  h1, h2 { overflow-wrap: break-word; word-break: break-word; }
+  .grid-cols-2 .border-r { border-right: none; }
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+img { max-width: 100%; }
+
+.text-reveal-wrap {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+}
+
+.marquee-content {
+  display: flex;
+  flex-shrink: 0;
+  min-width: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* ==========================================
+ * ELEGANT MINIMAL CURSOR & INTERACTION SYSTEM
+ * Inspired by Apple, Arc, Stripe, Notion, Linear
+ * ========================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  body.custom-cursor-enabled,
+  body.custom-cursor-enabled a,
+  body.custom-cursor-enabled button,
+  body.custom-cursor-enabled .btn,
+  body.custom-cursor-enabled [role="button"],
+  body.custom-cursor-enabled input[type="submit"],
+  body.custom-cursor-enabled input[type="button"] {
+    cursor: none !important;
+  }
+
+  body.custom-cursor-enabled input[type="text"],
+  body.custom-cursor-enabled input[type="email"],
+  body.custom-cursor-enabled input[type="password"],
+  body.custom-cursor-enabled input[type="search"],
+  body.custom-cursor-enabled input[type="number"],
+  body.custom-cursor-enabled input[type="tel"],
+  body.custom-cursor-enabled textarea,
+  body.custom-cursor-enabled select,
+  body.custom-cursor-enabled [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
+/* Subtle Hero Ambient Radial Light (<8% opacity) */
+.hero-cursor-spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: background;
+}
+
+/* 1. Default Solid Brand Red Core Dot (9px) */
+.custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  background-color: #B91C1C;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0 0 8px rgba(185, 28, 28, 0.45);
+  will-change: transform;
+}
+
+/* 2. Dynamic Thin Outer Ring (18–20px, Hidden by Default, Fades in on Hover) */
+.custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(185, 28, 28, 0.45);
+  background-color: rgba(185, 28, 28, 0.03);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              background-color 0.2s ease;
+  will-change: transform, opacity;
+}
+
+/* Ring Active Hover State */
+.custom-cursor-ring.ring-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Click Active State */
+.custom-cursor-ring.cursor-active {
+  transform: translate(-50%, -50%) scale(0.85) !important;
+  border-color: #B91C1C;
+}
+
+.custom-cursor-dot.cursor-active {
+  transform: translate(-50%, -50%) scale(1.3) !important;
+}
+
+/* Hidden State for Text Fields */
+.custom-cursor-ring.cursor-hidden,
+.custom-cursor-dot.cursor-hidden {
+  opacity: 0 !important;
+}
+
+/* 3. Typography Reactivity (Headings Hover) */
+h1, h2, h3, h4, h5, .hero-title-accent {
+  transition: color 0.25s ease, letter-spacing 0.25s ease, filter 0.25s ease;
+}
+
+.text-hover-reactive {
+  filter: contrast(108%) brightness(98%);
+  letter-spacing: -0.025em;
+}
+
+/* 4. Tactile Button Reactions (<250ms transition) */
+button, .btn, a.bg-primary, a.bg-gradient-to-r {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover, .btn:hover, a.bg-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(185, 28, 28, 0.22);
+}
+
+button:hover i.ri-arrow-right-line,
+.btn:hover i.ri-arrow-right-line,
+a.bg-primary:hover i.ri-arrow-right-line {
+  transform: translateX(3px);
+  transition: transform 0.2s ease;
+}
+
+/* 5. Product & Industry Cards Hover */
+.card, .hover-lift, article {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover img, .hover-lift:hover img {
+  transform: scale(1.03);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  filter: brightness(102%) contrast(104%);
+}
+
+.card:hover .card-title, .hover-lift:hover h3 {
+  color: #B91C1C !important;
+  transition: color 0.25s ease;
+}
+
+/* 6. Navigation Smooth Underline & Highlight */
+nav a, .nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+nav a::after, .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #B91C1C;
+  border-radius: 1px;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), left 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+nav a:hover::after, .nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* ==========================================
+ * COMPLETE MOBILE RESPONSIVENESS & TOUCH RULES
+ * ========================================== */
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, a, input, select, textarea, .btn {
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  body, #app, main, section, container, .hero-section {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 7vw, 3.2rem) !important;
+    line-height: 1.12 !important;
+    word-break: break-word;
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 5vw, 2.4rem) !important;
+    line-height: 1.2 !important;
+    word-break: break-word;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 4vw, 1.75rem) !important;
+  }
+
+  p {
+    font-size: clamp(0.875rem, 3.5vw, 1rem) !important;
+  }
+
+  button, .btn, input[type="submit"], input[type="button"], a.btn {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .px-6, .px-8 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .modal-container, [id$="-modal"] > div {
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    margin: 1rem !important;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px !important;
+    min-height: 44px;
+    max-width: 100% !important;
+  }
+
+  @media (max-width: 400px) {
+    .grid-cols-2 {
+      grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+    .flex-row-mobile-stack {
+      flex-direction: column !important;
+    }
+  }
+}
+
+
+
+
+

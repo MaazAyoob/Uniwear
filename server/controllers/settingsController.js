@@ -19,7 +19,7 @@ const getSettings = async (req, res, next) => {
         homepageHero: {
           title: 'Uniforms That Represent Your Brand',
           subtitle: 'Industrial, corporate, hospitality, healthcare and institutional uniforms—along with premium corporate gifting—designed and manufactured in Bengaluru.',
-          bannerUrl: "images/Banner image home page/Banner image'.png",
+          bannerUrl: "assets/images/hero/hero-banner.png",
           primaryCtaText: 'Request a Quote',
           primaryCtaLink: 'contact.html',
           secondaryCtaText: 'Explore Our Solutions',

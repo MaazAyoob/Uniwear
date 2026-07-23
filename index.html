@@ -11,14 +11,14 @@
   <meta property="og:url" content="https://uniwear.co/">
   <meta property="og:title" content="UNIWEAR | Premium Workwear Partner">
   <meta property="og:description" content="UNIWEAR is Bengaluru's premier uniform manufacturing partner, delivering corporate, industrial, hospitality, and educational workwear since 1998.">
-  <meta property="og:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+  <meta property="og:image" content="https://uniwear.co/assets/images/industries/corporate-uniforms.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://uniwear.co/">
   <meta property="twitter:title" content="UNIWEAR | Premium Workwear Partner">
   <meta property="twitter:description" content="UNIWEAR is Bengaluru's premier uniform manufacturing partner, delivering corporate, industrial, hospitality, and educational workwear since 1998.">
-  <meta property="twitter:image" content="https://uniwear.co/corporate_uniforms_mockup.png">
+  <meta property="twitter:image" content="https://uniwear.co/assets/images/industries/corporate-uniforms.png">
 
   <!-- Canonical Link -->
   <link rel="canonical" href="https://uniwear.co/">
@@ -33,7 +33,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- Browser Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="assets/favicons/favicon.png">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -146,17 +146,57 @@
     }
 
 
-    /* Backdrop glassmorphism for Light Nav */
+    /* Premium Glassmorphism & Depth System */
     .glass-nav {
       background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+    .glass-nav-scrolled {
+      background: rgba(255, 255, 255, 0.94) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08) !important;
     }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Ambient Hero Glow Effects */
+    .hero-bg-glow {
+      background: 
+        radial-gradient(circle at 50% 30%, rgba(185, 28, 28, 0.07) 0%, rgba(255, 255, 255, 0) 65%),
+        radial-gradient(circle at 85% 75%, rgba(243, 244, 246, 0.8) 0%, rgba(255, 255, 255, 0) 50%),
+        radial-gradient(circle at 15% 85%, rgba(254, 242, 242, 0.9) 0%, rgba(255, 255, 255, 0) 50%);
+    }
+
+    .hero-title-accent {
+      background: linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #991B1B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Subtle Scroll Indicator Animation */
+    @keyframes scrollPulse {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(6px); opacity: 1; }
+    }
+    .animate-scroll-pulse {
+      animation: scrollPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Micro Hover Transformations */
+    .hover-lift {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+    }
+    .hover-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.07);
+    }
+
     /* Mobile optimizations */
     @media (max-width: 640px) {
       .marquee-content { gap: 32px !important; }
@@ -185,6 +225,7 @@
       align-items: center;
     }
   </style>
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 <body class="bg-lightBg text-charcoal font-body overflow-x-hidden antialiased">
 
@@ -201,7 +242,7 @@
   <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2.5 z-50">
-        <img src="logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
+        <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
       </a>
       
       <!-- Desktop Navigation Menu -->
@@ -261,32 +302,76 @@
 
   <!-- MAIN HOMEPAGE CONTENT -->
   <main>
-    <!-- Light Hero Section -->
-    <section class="relative h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden bg-lightCard hero-section">
-      <div class="absolute inset-0 select-none pointer-events-none">
-        <img src="images/Banner image home page/Banner image'.png" alt="UNIWEAR Premium Workwear Banner" class="w-full h-full object-cover scale-105">
-        <div class="absolute inset-0 bg-white/35"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:30px_30px]"></div>
+    <!-- Refined Light Hero Section -->
+    <section class="relative min-h-[85vh] lg:min-h-[90vh] max-h-[880px] flex items-center justify-center px-4 sm:px-6 overflow-hidden bg-slate-50/60 hero-section hero-bg-glow pt-24 pb-12">
+      <!-- Vivid Background Image & Light Gradient Overlays -->
+      <div class="absolute inset-0 select-none pointer-events-none overflow-hidden">
+        <img src="assets/images/hero/hero-banner.png" alt="UNIWEAR Premium Workwear Banner" class="w-full h-full object-cover object-center scale-100 opacity-80 md:opacity-85 filter brightness-[1.03] contrast-[1.05] saturate-[1.05] transition-all duration-1000 ease-out">
+        <!-- Soft top & bottom vignette to keep text readable while showcasing uniform image -->
+        <div class="absolute inset-0 bg-gradient-to-b from-white/80 via-white/30 to-white/95"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.85)_0%,rgba(255,255,255,0.4)_60%,transparent_100%)]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(rgba(17,24,39,0.02)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <!-- Ambient Lighting Glow -->
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-primary/8 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div class="relative max-w-5xl mx-auto text-center z-20 px-4 pt-20 pb-16">
-        <span class="inline-block px-3 sm:px-4 py-1.5 mb-6 rounded-full border border-primary/20 bg-primary/5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-primary hero-reveal">
-          25+ Years of Manufacturing Leadership
-        </span>
-        <h1 class="font-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-tight mb-6 sm:mb-8 text-charcoal">
-          <span class="text-reveal-wrap"><span class="hero-reveal block">Your Premium</span></span><br>
-          <span class="text-reveal-wrap"><span class="hero-reveal block text-primary">Workwear Partner</span></span>
+      <div class="relative max-w-4xl mx-auto text-center z-20 px-4 flex flex-col items-center">
+        <!-- Badge -->
+        <div class="hero-reveal mb-5">
+          <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/25 bg-white/90 backdrop-blur-md text-[11px] sm:text-xs font-bold uppercase tracking-wider text-primary shadow-sm hover:border-primary/50 transition-colors">
+            <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+            25+ Years of Manufacturing Leadership
+          </span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.06] mb-5 text-slate-900 max-w-3xl drop-shadow-sm">
+          <span class="text-reveal-wrap"><span class="hero-reveal block">Your Premium</span></span>
+          <span class="text-reveal-wrap"><span class="hero-reveal block hero-title-accent">Workwear Partner</span></span>
         </h1>
-        <p class="text-base sm:text-lg md:text-xl text-mutedText max-w-2xl mx-auto mb-8 sm:mb-10 hero-reveal leading-relaxed font-medium">
+
+        <!-- Subtitle -->
+        <p class="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-8 hero-reveal leading-relaxed font-medium">
           Co-creating premium apparel identities for corporate hubs, precision factories, elite institutions, and five-star hospitality suites across the globe.
         </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 hero-reveal">
-          <a href="uniforms.html" class="w-full sm:w-auto bg-primary hover:bg-primaryHover text-white px-8 py-3.5 sm:py-4 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20 flex items-center justify-center gap-2 text-sm sm:text-base">
-            Explore Collections <i class="ri-arrow-right-line"></i>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 hero-reveal w-full sm:w-auto mb-10">
+          <a href="uniforms.html" class="w-full sm:w-auto bg-gradient-to-r from-primary via-red-700 to-primaryHover hover:from-primaryHover hover:to-red-900 text-white px-8 py-3.5 rounded-full font-bold transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 flex items-center justify-center gap-2.5 text-sm sm:text-base group">
+            <span>Explore Collections</span>
+            <i class="ri-arrow-right-line group-hover:translate-x-1.5 transition-transform duration-300"></i>
           </a>
-          <a href="contact.html" class="w-full sm:w-auto bg-white hover:bg-gray-50 text-charcoal border border-lightBorder px-8 py-3.5 sm:py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base shadow-sm">
+          <a href="contact.html" class="w-full sm:w-auto bg-white/95 hover:bg-white text-slate-900 border border-slate-200 hover:border-slate-300 px-8 py-3.5 rounded-full font-bold transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm sm:text-base shadow-sm hover:shadow-md backdrop-blur-md">
             Request a Quote
           </a>
+        </div>
+
+        <!-- Trust Indicators Bar -->
+        <div class="hero-reveal border-t border-slate-300/60 pt-6 w-full max-w-2xl">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+            <div class="flex items-center justify-center gap-2 text-slate-800">
+              <i class="ri-shield-star-line text-primary text-base"></i>
+              <span class="text-xs font-semibold">30+ Years Legacy</span>
+            </div>
+            <div class="flex items-center justify-center gap-2 text-slate-800">
+              <i class="ri-user-heart-line text-primary text-base"></i>
+              <span class="text-xs font-semibold">2,000+ Clients</span>
+            </div>
+            <div class="flex items-center justify-center gap-2 text-slate-800">
+              <i class="ri-map-pin-line text-primary text-base"></i>
+              <span class="text-xs font-semibold">Pan-India Delivery</span>
+            </div>
+            <div class="flex items-center justify-center gap-2 text-slate-800">
+              <i class="ri-verified-badge-line text-primary text-base"></i>
+              <span class="text-xs font-semibold">ISO / SA8000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtle Scroll Indicator -->
+        <div class="mt-6 flex flex-col items-center gap-1 opacity-70 hover:opacity-100 transition-opacity cursor-pointer hidden md:flex" onclick="window.scrollTo({top: window.innerHeight * 0.85, behavior: 'smooth'})">
+          <span class="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">Scroll</span>
+          <i class="ri-arrow-down-s-line text-primary text-lg animate-scroll-pulse"></i>
         </div>
       </div>
     </section>
@@ -328,21 +413,25 @@
     </section>
 
     <!-- Verified Statistics Section -->
-    <section class="py-24 bg-white relative z-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-        <div class="text-center p-4 sm:p-6 border-r border-lightBorder last:border-r-0">
+    <section class="py-20 bg-gradient-to-b from-white to-gray-50/50 relative z-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="text-center p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover-lift relative overflow-hidden group">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-years">1998</h3>
           <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Since 1998</p>
         </div>
-        <div class="text-center p-4 sm:p-6 border-r border-lightBorder lg:last:border-r-0">
+        <div class="text-center p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover-lift relative overflow-hidden group">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-clients">2,000+</h3>
           <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Clients Served</p>
         </div>
-        <div class="text-center p-4 sm:p-6 border-r border-lightBorder last:border-r-0">
+        <div class="text-center p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover-lift relative overflow-hidden group">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-pincodes">2,000+</h3>
           <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Pincodes Served</p>
         </div>
-        <div class="text-center p-4 sm:p-6">
+        <div class="text-center p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover-lift relative overflow-hidden group">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-delivery">Pan-India</h3>
           <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Pan-India Delivery</p>
         </div>
@@ -367,7 +456,7 @@
           <div class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
             <div>
               <div class="h-60 overflow-hidden relative">
-                <img src="images/Industries We Serve/Industrial Uniforms.png" alt="Industrial Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <img src="assets/images/industries/industrial-uniforms.png" alt="Industrial Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
               </div>
               <div class="p-8 relative bg-white">
@@ -383,7 +472,7 @@
           <div class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
             <div>
               <div class="h-60 overflow-hidden relative">
-                <img src="images/Industries We Serve/Corporate Uniforms.png" alt="Corporate Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <img src="assets/images/industries/corporate-uniforms.png" alt="Corporate Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
               </div>
               <div class="p-8 relative bg-white">
@@ -399,7 +488,7 @@
           <div class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
             <div>
               <div class="h-60 overflow-hidden relative">
-                <img src="images/Industries We Serve/Hospitality Uniforms.png" alt="Hospitality Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <img src="assets/images/industries/hospitality-uniforms.png" alt="Hospitality Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
               </div>
               <div class="p-8 relative bg-white">
@@ -415,7 +504,7 @@
           <div class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
             <div>
               <div class="h-60 overflow-hidden relative">
-                <img src="images/Industries We Serve/Institutional Uniforms.png" alt="Institutional Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <img src="assets/images/industries/institutional-uniforms.png" alt="Institutional Uniforms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
               </div>
               <div class="p-8 relative bg-white">
@@ -431,7 +520,7 @@
           <div class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
             <div>
               <div class="h-60 overflow-hidden relative">
-                <img src="images/Industries We Serve/Corporate Gifting.png" alt="Corporate Gifting" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <img src="assets/images/industries/corporate-gifting.png" alt="Corporate Gifting" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
               </div>
               <div class="p-8 relative bg-white">
@@ -493,7 +582,7 @@
             <div class="rounded-3xl overflow-hidden border border-lightBorder shadow-xl relative" style="aspect-ratio:4/3;">
               <img 
                 id="lifecycle-img"
-                src="images/Our Manufacturing Lifecycle/Product Selection and Sample Approval.png"
+                src="assets/images/manufacturing/lifecycle-step-1.png"
                 alt="Manufacturing Lifecycle Step"
                 class="w-full h-full object-cover block transition-opacity duration-500"
                 loading="lazy"
@@ -512,17 +601,17 @@
     <script>
       var lifecycleSteps = {
         1: {
-          src: "images/Our Manufacturing Lifecycle/Product Selection and Sample Approval.png",
+          src: "assets/images/manufacturing/lifecycle-step-1.png",
           label: 'Step 01',
           desc: 'Design & Development'
         },
         2: {
-          src: "images/Our Manufacturing Lifecycle/Production and Quality Assurance.png",
+          src: "assets/images/manufacturing/lifecycle-step-2.png",
           label: 'Step 02',
           desc: 'Manufacturing'
         },
         3: {
-          src: "images/Our Manufacturing Lifecycle/Delivery & Order Finalisation.png",
+          src: "assets/images/manufacturing/lifecycle-step-3.png",
           label: 'Step 03',
           desc: 'Quality Check & Delivery'
         }
@@ -596,44 +685,44 @@
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
-            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-              <i class="ri-award-line text-2xl"></i>
+          <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
+              <i class="ri-award-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
             </div>
             <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Industry Expertise</h3>
             <p class="text-sm text-mutedText leading-relaxed">Manufacturing legacy since 1998 serving industries with tailored uniform solutions.</p>
           </div>
-          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
-            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-              <i class="ri-palette-line text-2xl"></i>
+          <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
+              <i class="ri-palette-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
             </div>
             <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Tailored Solutions</h3>
             <p class="text-sm text-mutedText leading-relaxed">Custom uniforms designed to meet your operational and brand requirements.</p>
           </div>
-          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
-            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-              <i class="ri-shield-check-line text-2xl"></i>
+          <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
+              <i class="ri-shield-check-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
             </div>
             <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Superior Quality</h3>
             <p class="text-sm text-mutedText leading-relaxed">Meticulously crafted uniforms with strict quality controls at every stage.</p>
           </div>
-          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
-            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-              <i class="ri-truck-line text-2xl"></i>
+          <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
+              <i class="ri-truck-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
             </div>
             <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Timely Delivery</h3>
             <p class="text-sm text-mutedText leading-relaxed">Punctual production and delivery ensure your business operations run smoothly.</p>
           </div>
-          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
-            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-              <i class="ri-shirt-line text-2xl"></i>
+          <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
+              <i class="ri-shirt-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
             </div>
             <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Diverse Product Range</h3>
             <p class="text-sm text-mutedText leading-relaxed">Offering industrial uniforms, corporate wear, hospitality apparel, and gifting solutions.</p>
           </div>
-          <div class="bg-white p-8 rounded-2xl border border-lightBorder hover:border-primary/40 hover:shadow-lg transition-all group duration-300">
-            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-              <i class="ri-customer-service-2-line text-2xl"></i>
+          <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
+              <i class="ri-customer-service-2-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
             </div>
             <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">End-to-End Support</h3>
             <p class="text-sm text-mutedText leading-relaxed">Dedicated team providing seamless communication and personalized service throughout the process.</p>
@@ -890,7 +979,9 @@
               </p>
             </div>
             <div class="flex items-center justify-center gap-3 mt-auto">
-              <div class="px-3 py-1.5 bg-lightCard border border-lightBorder rounded-lg font-heading font-extrabold text-[10px] sm:text-xs tracking-widest text-gray-500" aria-label="Wipro Logo">WIPRO</div>
+              <div class="px-3 py-1.5 bg-white border border-lightBorder rounded-lg shadow-sm flex items-center justify-center h-10 w-24 sm:w-28 shrink-0">
+                <img src="assets/logos/wipro.png" alt="Wipro Logo" class="h-6 sm:h-7 w-auto object-contain">
+              </div>
               <div class="text-left">
                 <h4 class="font-heading text-base font-bold text-charcoal leading-none">Anjali</h4>
                 <p class="text-[10px] text-mutedText mt-1 font-semibold uppercase tracking-wider">Wipro &middot; Corporate Partner</p>
@@ -906,7 +997,9 @@
               </p>
             </div>
             <div class="flex items-center justify-center gap-3 mt-auto">
-              <div class="px-3 py-1.5 bg-lightCard border border-lightBorder rounded-lg font-heading font-extrabold text-[10px] sm:text-xs tracking-widest text-gray-500" aria-label="Otis Logo">OTIS</div>
+              <div class="px-3 py-1.5 bg-white border border-lightBorder rounded-lg shadow-sm flex items-center justify-center h-10 w-24 sm:w-28 shrink-0">
+                <img src="assets/logos/otis.webp" alt="Otis Logo" class="h-6 sm:h-7 w-auto object-contain">
+              </div>
               <div class="text-left">
                 <h4 class="font-heading text-base font-bold text-charcoal leading-none">Bhavya</h4>
                 <p class="text-[10px] text-mutedText mt-1 font-semibold uppercase tracking-wider">OTIS &middot; Operations Manager</p>
@@ -922,7 +1015,9 @@
               </p>
             </div>
             <div class="flex items-center justify-center gap-3 mt-auto">
-              <div class="px-3 py-1.5 bg-lightCard border border-lightBorder rounded-lg font-heading font-extrabold text-[10px] sm:text-xs tracking-widest text-gray-500" aria-label="Schneider Electric Logo">SCHNEIDER ELECTRIC</div>
+              <div class="px-3 py-1.5 bg-white border border-lightBorder rounded-lg shadow-sm flex items-center justify-center h-10 w-28 sm:w-36 shrink-0">
+                <img src="assets/logos/schneider-electric.webp" alt="Schneider Electric Logo" class="h-6 sm:h-7 w-auto object-contain">
+              </div>
               <div class="text-left">
                 <h4 class="font-heading text-base font-bold text-charcoal leading-none">Sonia Murdeshwar</h4>
                 <p class="text-[10px] text-mutedText mt-1 font-semibold uppercase tracking-wider">Schneider Electric &middot; Procurement Director</p>
@@ -983,7 +1078,7 @@
       <!-- Branding Column -->
       <div class="lg:col-span-2 space-y-6">
         <a href="index.html">
-          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
+          <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
         </a>
         <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
           Headquartered in Bengaluru. Crafting premium, certified uniforms for multi-scale industrial setups and corporate giants since 1998.
@@ -1045,9 +1140,9 @@
   </footer>
 
   <!-- Link to Shared JS system -->
-  <script src="config.js"></script>
-  <script src="api.js"></script>
-  <script src="shared.js"></script>
+  <script src="js/config/config.js"></script>
+  <script src="js/api/api.js"></script>
+  <script src="js/utils/shared.js"></script>
   
   <!-- Page Specific Execution -->
   <script>
@@ -1060,11 +1155,11 @@
           window.api.getProducts(),
           window.api.getBlogs()
         ]);
-        if (prodRes.success) {
+        if (prodRes && prodRes.success && Array.isArray(prodRes.data)) {
           globalProducts = prodRes.data;
           localStorage.setItem('uniwear_products', JSON.stringify(prodRes.data));
         }
-        if (blogRes.success) {
+        if (blogRes && blogRes.success && Array.isArray(blogRes.data)) {
           globalBlogs = blogRes.data;
           localStorage.setItem('uniwear_blogs', JSON.stringify(blogRes.data));
         }
@@ -1073,8 +1168,15 @@
       }
       
       // Fallback
-      if (!globalProducts || globalProducts.length === 0) globalProducts = typeof defaultProducts !== 'undefined' ? defaultProducts : [];
-      if (!globalBlogs || globalBlogs.length === 0) globalBlogs = typeof defaultBlogs !== 'undefined' ? defaultBlogs : [];
+      if (!globalProducts || globalProducts.length === 0) {
+        globalProducts = typeof defaultProducts !== 'undefined' ? defaultProducts : [];
+      }
+      if (window.getPublicProducts) {
+        globalProducts = window.getPublicProducts(globalProducts, 'featured');
+      }
+      if (!globalBlogs || globalBlogs.length === 0) {
+        globalBlogs = typeof defaultBlogs !== 'undefined' ? defaultBlogs : [];
+      }
 
       renderHomeBlogs();
       initDesignStudioProducts();
@@ -1112,10 +1214,22 @@
     window.addEventListener('DOMContentLoaded', () => {
       loadBackendData();
 
-      // Animate homepage hero entry
+      // Navbar scroll effect
+      window.addEventListener('scroll', () => {
+        const header = document.getElementById('global-header');
+        if (header) {
+          if (window.scrollY > 20) {
+            header.classList.add('glass-nav-scrolled');
+          } else {
+            header.classList.remove('glass-nav-scrolled');
+          }
+        }
+      });
+
+      // Animate homepage hero entry with silky fade-up & blur reveal
       gsap.fromTo('.hero-reveal', 
-        { y: 50, opacity: 0 }, 
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out" }
+        { y: 40, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 1.0, stagger: 0.12, ease: "power3.out" }
       );
 
       // Trigger counter counters
@@ -1415,16 +1529,16 @@
       // Load Product image with relevant fallback depending on category
       const imgEl = document.getElementById('configurator-product-img');
       if (imgEl) {
-        let fallback = 'corporate_uniforms_mockup.png';
+        let fallback = 'assets/images/industries/corporate-uniforms.png';
         const cat = (selectedProduct.category || '').toLowerCase();
         if (cat.includes('industrial')) {
-          fallback = 'industrial_uniforms_mockup.png';
+          fallback = 'assets/images/industries/industrial-uniforms.png';
         } else if (cat.includes('hospitality')) {
-          fallback = 'hospitality_uniforms_mockup.png';
+          fallback = 'assets/images/industries/hospitality-uniforms.png';
         } else if (cat.includes('institutional')) {
-          fallback = 'institutional_uniforms_mockup.png';
+          fallback = 'assets/images/industries/institutional-uniforms.png';
         } else if (cat.includes('gifting')) {
-          fallback = 'corporate_gifting_mockup.png';
+          fallback = 'assets/images/industries/corporate-gifting.png';
         }
         
         imgEl.src = selectedProduct.img || fallback;

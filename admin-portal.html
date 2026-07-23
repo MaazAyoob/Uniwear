@@ -19,7 +19,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
   <!-- Browser Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="assets/favicons/favicon.png">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -159,6 +159,7 @@
       /* Slate 600 */
     }
   </style>
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 
 <body class="bg-lightCard text-charcoal font-body overflow-x-hidden antialiased min-h-screen flex">
@@ -184,7 +185,7 @@
     <div>
       <div class="p-6 border-b border-lightBorder flex items-center justify-between">
         <a href="index.html" class="flex items-center">
-          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-7 w-auto object-contain">
+          <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-7 w-auto object-contain">
         </a>
         <span
           class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-bold uppercase font-mono">Admin</span>
@@ -346,7 +347,8 @@
             <button onclick="setAdminTab('admin-leads')" class="text-primary text-xs font-semibold hover:underline">View
               All &rarr;</button>
           </div>
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -361,6 +363,7 @@
               <!-- Injected dynamically -->
             </tbody>
           </table>
+</div>
         </div>
 
         <!-- Recent Quotations Preview -->
@@ -370,7 +373,8 @@
             <button onclick="setAdminTab('admin-quotes')"
               class="text-primary text-xs font-semibold hover:underline">View All &rarr;</button>
           </div>
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -384,6 +388,7 @@
               <!-- Injected dynamically -->
             </tbody>
           </table>
+</div>
         </div>
 
         <!-- Recent Activity Logs -->
@@ -392,7 +397,8 @@
             <h4 class="font-heading text-base font-bold text-charcoal">System Recent Activity Logs</h4>
             <span class="text-xs text-mutedText font-semibold">Real-time DB audit trail</span>
           </div>
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -406,6 +412,7 @@
               <!-- Injected dynamically -->
             </tbody>
           </table>
+</div>
         </div>
 
       </div>
@@ -443,7 +450,8 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -462,6 +470,7 @@
               <!-- Dynamically injected leads -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -486,7 +495,8 @@
           </div>
         </div>
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[900px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[900px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -503,6 +513,7 @@
               <!-- Dynamically injected quotations -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -551,7 +562,8 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -561,6 +573,7 @@
                 <th class="p-4 font-heading font-semibold text-charcoal">Fabric</th>
                 <th class="p-4 font-heading font-semibold text-charcoal">MOQ</th>
                 <th class="p-4 font-heading font-semibold text-charcoal">Description</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Visibility</th>
                 <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
               </tr>
             </thead>
@@ -568,6 +581,7 @@
               <!-- Injected dynamically -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -589,7 +603,8 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -606,6 +621,7 @@
               <!-- Injected dynamically -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -627,7 +643,8 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -643,6 +660,7 @@
               <!-- Injected dynamically -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -683,7 +701,8 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[1100px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[1100px]">
             <thead>
               <tr
                 class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
@@ -700,6 +719,7 @@
               <!-- Dynamically list clients -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -739,7 +759,8 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
             <thead>
               <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
                 <th class="p-4 font-heading font-semibold text-charcoal">Order #</th>
@@ -754,6 +775,7 @@
               <!-- Dynamically listed -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -792,7 +814,8 @@
 
         <!-- Assigned Products Table -->
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
             <thead>
               <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
                 <th class="p-4 font-heading font-semibold text-charcoal">Product</th>
@@ -809,6 +832,7 @@
               <!-- Injected dynamically -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -871,7 +895,7 @@
                   <div class="flex items-center gap-4">
                     <div id="settings-logo-preview-container"
                       class="w-16 h-16 rounded-xl border border-lightBorder bg-lightCard flex items-center justify-center overflow-hidden shrink-0">
-                      <img id="settings-logo-preview" src="logo-full.png" class="w-10 h-10 object-contain">
+                      <img id="settings-logo-preview" src="assets/logos/logo-full.png" class="w-10 h-10 object-contain">
                     </div>
                     <div class="flex flex-col gap-1">
                       <div class="flex gap-1.5">
@@ -898,7 +922,7 @@
                   <div class="flex items-center gap-4">
                     <div id="settings-favicon-preview-container"
                       class="w-16 h-16 rounded-xl border border-lightBorder bg-lightCard flex items-center justify-center overflow-hidden shrink-0">
-                      <img id="settings-favicon-preview" src="logo-icon.png" class="w-10 h-10 object-contain">
+                      <img id="settings-favicon-preview" src="assets/logos/logo-icon.png" class="w-10 h-10 object-contain">
                     </div>
                     <div class="flex flex-col gap-1">
                       <div class="flex gap-1.5">
@@ -1012,7 +1036,7 @@
           </div>
           <!-- Hidden Inputs -->
           <input type="file" id="prod-img-file" accept="image/*" class="hidden">
-          <input type="hidden" id="prod-img-url" value="corporate_blazer_detail.png">
+          <input type="hidden" id="prod-img-url" value="assets/images/products/corporate-blazer-detail.png">
         </div>
         <div>
           <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Description</label>
@@ -1025,6 +1049,61 @@
           <label for="prod-featured"
             class="text-xs font-bold text-mutedText uppercase tracking-widest select-none">Featured Product</label>
         </div>
+
+        <!-- Website Visibility & CMS Controls -->
+        <div class="border-t border-lightBorder pt-4 mt-2 space-y-3">
+          <h4 class="text-xs font-bold text-charcoal uppercase tracking-widest flex items-center gap-1.5"><i class="ri-global-line text-primary"></i> Website Visibility Controls</h4>
+          
+          <div class="flex items-center justify-between p-3 bg-lightCard rounded-lg border border-lightBorder">
+            <div>
+              <label for="prod-is-public" class="text-xs font-bold text-charcoal block">Show on Public Website</label>
+              <p class="text-[10px] text-mutedText">Controls if website visitors can see this product.</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="prod-is-public" class="sr-only peer">
+              <div class="w-9 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] uppercase tracking-widest text-mutedText font-bold mb-1">Product Status</label>
+              <select id="prod-status" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2 px-2.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+                <option value="Active">Active</option>
+                <option value="Draft">Draft</option>
+                <option value="Archived">Archived</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] uppercase tracking-widest text-mutedText font-bold mb-1">Display Sort Order</label>
+              <input type="number" id="prod-sort-order" value="0" placeholder="0" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2 px-2.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] uppercase tracking-widest text-mutedText font-bold mb-1">Public Display Locations</label>
+            <div class="grid grid-cols-2 gap-2 bg-lightCard p-3 rounded-lg border border-lightBorder text-xs">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="loc-uniforms" value="uniforms" class="rounded text-primary focus:ring-primary" checked>
+                <span>Uniforms Page</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="loc-gifting" value="gifting" class="rounded text-primary focus:ring-primary" checked>
+                <span>Corporate Gifting</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="loc-featured" value="featured" class="rounded text-primary focus:ring-primary" checked>
+                <span>Homepage Featured</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="loc-new-arrivals" value="new_arrivals" class="rounded text-primary focus:ring-primary">
+                <span>New Arrivals</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
         <button type="submit"
           class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
           Save Catalog Entry
@@ -1108,7 +1187,7 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Cover Image URL/Path</label>
-              <input type="text" id="cat-img" placeholder="corporate_uniforms_mockup.png"
+              <input type="text" id="cat-img" placeholder="assets/images/industries/corporate-uniforms.png"
                 class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
             </div>
             <div>
@@ -1416,9 +1495,9 @@
           class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
           Publish Quotation Proposal
         </button>
-  <script src="config.js"></script>
-  <script src="api.js"></script>
-  <script src="shared.js"></script>
+  <script src="js/config/config.js"></script>
+  <script src="js/api/api.js"></script>
+  <script src="js/utils/shared.js"></script>
   <script>
     // ─── GLOBAL ADMIN STATE ────────────────────────────────────────────────────
     let globalUsers = (JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []));
@@ -1494,7 +1573,7 @@
       const p = globalProducts.find(item => item && (item._id === prodId || item.id === prodId));
       if (p) {
         try {
-          await window.api.updateProduct(p._id, { img: 'corporate_blazer_detail.png', image: 'corporate_blazer_detail.png' });
+          await window.api.updateProduct(p._id, { img: 'assets/images/products/corporate-blazer-detail.png', image: 'assets/images/products/corporate-blazer-detail.png' });
           await syncAdminData();
           updateAdminDashboard();
           alert('Product image reverted to default.');
@@ -1568,8 +1647,8 @@
 
     function removeModalImage(event) {
       if (event) event.stopPropagation();
-      document.getElementById('prod-img-url').value = 'corporate_blazer_detail.png';
-      updateUploadZonePreview('corporate_blazer_detail.png');
+      document.getElementById('prod-img-url').value = 'assets/images/products/corporate-blazer-detail.png';
+      updateUploadZonePreview('assets/images/products/corporate-blazer-detail.png');
       document.getElementById('prod-img-file').value = '';
     }
 
@@ -1578,7 +1657,7 @@
       const promptZone = document.getElementById('upload-zone-prompt');
       const thumb = document.getElementById('upload-preview-thumb');
 
-      if (src && src !== 'corporate_blazer_detail.png' && src !== '') {
+      if (src && src !== 'assets/images/products/corporate-blazer-detail.png' && src !== '') {
         if (thumb) thumb.src = src;
         if (previewZone) previewZone.classList.remove('hidden');
         if (promptZone) promptZone.classList.add('hidden');
@@ -1825,7 +1904,7 @@
         previewLong.src = settings.logoUrl;
         hiddenInputLong.value = settings.logoUrl;
       } else {
-        previewLong.src = 'logo-icon.svg';
+        previewLong.src = 'assets/logos/logo-icon.svg';
         hiddenInputLong.value = '';
       }
 
@@ -1836,7 +1915,7 @@
         previewFavicon.src = settings.faviconUrl;
         hiddenInputFavicon.value = settings.faviconUrl;
       } else {
-        previewFavicon.src = 'logo-icon.svg';
+        previewFavicon.src = 'assets/logos/logo-icon.svg';
         hiddenInputFavicon.value = '';
       }
     }
@@ -1878,11 +1957,11 @@
 
     function resetLogoToDefault(type) {
       if (type === 'long') {
-        document.getElementById('settings-logo-preview').src = 'logo-icon.svg';
+        document.getElementById('settings-logo-preview').src = 'assets/logos/logo-icon.svg';
         document.getElementById('settings-logo-data').value = '';
         document.getElementById('settings-logo-file').value = '';
       } else if (type === 'favicon') {
-        document.getElementById('settings-favicon-preview').src = 'logo-icon.svg';
+        document.getElementById('settings-favicon-preview').src = 'assets/logos/logo-icon.svg';
         document.getElementById('settings-favicon-data').value = '';
         document.getElementById('settings-favicon-file').value = '';
       }
@@ -2256,7 +2335,7 @@
             const tr = document.createElement('tr');
             tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
             const featuredBadge = p.featured ? `<span class="ml-2 bg-yellow-100 text-yellow-800 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider inline-flex items-center gap-0.5 font-body"><i class="ri-star-fill text-[9px]"></i> Featured</span>` : '';
-            const imgPath = p.img || 'corporate_blazer_detail.png';
+            const imgPath = p.img || 'assets/images/products/corporate-blazer-detail.png';
             tr.innerHTML = `
               <td class="p-4">
                 <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard group/img cursor-pointer" onclick="triggerTableImageUpload('${p._id}')">
@@ -2271,10 +2350,13 @@
               <td class="p-4 font-medium">${p.fabric || ''} (${p.gsm || ''})</td>
               <td class="p-4 font-semibold">${p.moq || 0} Sets</td>
               <td class="p-4 text-mutedText truncate max-w-xs">${p.desc || ''}</td>
+              <td class="p-4">
+                ${(p.isPublic !== false) ? `<button onclick="toggleProductPublic('${p._id}', false)" class="px-2.5 py-1 rounded-full text-[9px] font-bold uppercase bg-green-100 text-green-700 border border-green-200 hover:bg-green-200 transition-colors inline-flex items-center gap-1 cursor-pointer" title="Click to Hide from Website"><i class="ri-global-line"></i> Public</button>` : `<button onclick="toggleProductPublic('${p._id}', true)" class="px-2.5 py-1 rounded-full text-[9px] font-bold uppercase bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200 transition-colors inline-flex items-center gap-1 cursor-pointer" title="Click to Make Public"><i class="ri-lock-line"></i> Hidden</button>`}
+              </td>
               <td class="p-4 text-right pt-6">
                 <div class="flex justify-end items-center gap-2">
                   <button onclick="triggerTableImageUpload('${p._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Upload/Replace Image"><i class="ri-image-add-line"></i></button>
-                  ${(p.img && p.img !== 'corporate_blazer_detail.png') ? `<button onclick="removeTableImage('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Remove Image"><i class="ri-close-line text-xs"></i></button>` : ''}
+                  ${(p.img && p.img !== 'assets/images/products/corporate-blazer-detail.png') ? `<button onclick="removeTableImage('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Remove Image"><i class="ri-close-line text-xs"></i></button>` : ''}
                   <button onclick="openProductModal('edit', '${p._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Product"><i class="ri-edit-line"></i></button>
                   <button onclick="deleteProduct('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Product"><i class="ri-delete-bin-line"></i></button>
                 </div>
@@ -2301,7 +2383,7 @@
             tr.innerHTML = `
               <td class="p-4">
                 <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard">
-                  <img src="${cat.img || 'corporate_blazer_detail.png'}" class="w-full h-full object-cover">
+                  <img src="${cat.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-full h-full object-cover">
                 </div>
               </td>
               <td class="p-4 font-bold text-charcoal">${cat.title || ''}</td>
@@ -2535,10 +2617,17 @@
         document.getElementById('prod-fabric').value = '';
         document.getElementById('prod-gsm').value = '';
         document.getElementById('prod-moq').value = '';
-        document.getElementById('prod-img-url').value = 'corporate_blazer_detail.png';
-        updateUploadZonePreview('corporate_blazer_detail.png');
+        document.getElementById('prod-img-url').value = 'assets/images/products/corporate-blazer-detail.png';
+        updateUploadZonePreview('assets/images/products/corporate-blazer-detail.png');
         document.getElementById('prod-desc').value = '';
         document.getElementById('prod-featured').checked = false;
+        if (document.getElementById('prod-is-public')) document.getElementById('prod-is-public').checked = false;
+        if (document.getElementById('prod-status')) document.getElementById('prod-status').value = 'Active';
+        if (document.getElementById('prod-sort-order')) document.getElementById('prod-sort-order').value = '0';
+        if (document.getElementById('loc-uniforms')) document.getElementById('loc-uniforms').checked = true;
+        if (document.getElementById('loc-gifting')) document.getElementById('loc-gifting').checked = true;
+        if (document.getElementById('loc-featured')) document.getElementById('loc-featured').checked = false;
+        if (document.getElementById('loc-new-arrivals')) document.getElementById('loc-new-arrivals').checked = false;
         document.getElementById('product-modal-id').value = '';
       } else {
         document.getElementById('product-modal-title').innerText = 'Edit Product';
@@ -2551,10 +2640,18 @@
         document.getElementById('prod-fabric').value = p.fabric || '';
         document.getElementById('prod-gsm').value = p.gsm || '';
         document.getElementById('prod-moq').value = p.moq || '';
-        document.getElementById('prod-img-url').value = p.img || 'corporate_blazer_detail.png';
-        updateUploadZonePreview(p.img || 'corporate_blazer_detail.png');
+        document.getElementById('prod-img-url').value = p.img || 'assets/images/products/corporate-blazer-detail.png';
+        updateUploadZonePreview(p.img || 'assets/images/products/corporate-blazer-detail.png');
         document.getElementById('prod-desc').value = p.desc || p.description || '';
         document.getElementById('prod-featured').checked = p.featured || false;
+        if (document.getElementById('prod-is-public')) document.getElementById('prod-is-public').checked = (p.isPublic !== false);
+        if (document.getElementById('prod-status')) document.getElementById('prod-status').value = p.status || 'Active';
+        if (document.getElementById('prod-sort-order')) document.getElementById('prod-sort-order').value = p.sortOrder || p.displayOrder || 0;
+        const locs = p.displayLocations || ['uniforms', 'gifting', 'featured'];
+        if (document.getElementById('loc-uniforms')) document.getElementById('loc-uniforms').checked = locs.includes('uniforms');
+        if (document.getElementById('loc-gifting')) document.getElementById('loc-gifting').checked = locs.includes('gifting');
+        if (document.getElementById('loc-featured')) document.getElementById('loc-featured').checked = locs.includes('featured');
+        if (document.getElementById('loc-new-arrivals')) document.getElementById('loc-new-arrivals').checked = locs.includes('new_arrivals');
       }
 
       toggleModal('admin-product-modal', true);
@@ -2569,11 +2666,20 @@
         fabric: document.getElementById('prod-fabric').value.trim(),
         gsm: document.getElementById('prod-gsm').value.trim(),
         moq: parseInt(document.getElementById('prod-moq').value) || 50,
-        img: document.getElementById('prod-img-url').value || 'corporate_blazer_detail.png',
-        image: document.getElementById('prod-img-url').value || 'corporate_blazer_detail.png',
+        img: document.getElementById('prod-img-url').value || 'assets/images/products/corporate-blazer-detail.png',
+        image: document.getElementById('prod-img-url').value || 'assets/images/products/corporate-blazer-detail.png',
         desc: document.getElementById('prod-desc').value.trim(),
         description: document.getElementById('prod-desc').value.trim(),
-        featured: document.getElementById('prod-featured').checked
+        featured: document.getElementById('prod-featured').checked,
+        isPublic: document.getElementById('prod-is-public') ? document.getElementById('prod-is-public').checked : false,
+        status: document.getElementById('prod-status') ? document.getElementById('prod-status').value : 'Active',
+        sortOrder: parseInt(document.getElementById('prod-sort-order').value) || 0,
+        displayLocations: [
+          document.getElementById('loc-uniforms')?.checked ? 'uniforms' : null,
+          document.getElementById('loc-gifting')?.checked ? 'gifting' : null,
+          document.getElementById('loc-featured')?.checked ? 'featured' : null,
+          document.getElementById('loc-new-arrivals')?.checked ? 'new_arrivals' : null
+        ].filter(Boolean)
       };
 
       try {
@@ -2590,6 +2696,17 @@
         updateAdminDashboard();
       } catch (err) {
         alert(err.message || 'Failed to save product.');
+      }
+    }
+
+    
+    async function toggleProductPublic(prodId, isPublic) {
+      try {
+        await window.api.updateProduct(prodId, { isPublic: isPublic });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to toggle product visibility.');
       }
     }
 
@@ -3093,7 +3210,7 @@
         tbody.innerHTML = currentAssignedProducts.map(p => `
           <tr class="border-b border-lightBorder hover:bg-lightCard text-xs transition-colors" id="assignment-row-${p.assignmentId}">
             <td class="p-4 font-semibold text-charcoal flex items-center gap-3">
-              <img src="${p.img || 'corporate_blazer_detail.png'}" class="w-10 h-10 object-cover rounded-lg border border-lightBorder shrink-0">
+              <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-10 h-10 object-cover rounded-lg border border-lightBorder shrink-0">
               <div>
                 <p class="font-bold text-charcoal">${p.name}</p>
                 <span class="text-[9px] uppercase text-primary font-bold">${p.category}</span>
@@ -3165,7 +3282,7 @@
             <label class="flex items-center justify-between p-2 bg-white rounded-lg border border-lightBorder cursor-pointer hover:border-primary/40">
               <div class="flex items-center gap-3">
                 <input type="checkbox" name="assign_prod_checkbox" value="${p._id || p.id}" class="rounded text-primary">
-                <img src="${p.img || 'corporate_blazer_detail.png'}" class="w-8 h-8 object-cover rounded">
+                <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-8 h-8 object-cover rounded">
                 <div>
                   <span class="text-xs font-bold text-charcoal block">${p.name}</span>
                   <span class="text-[9px] uppercase text-primary font-semibold">${p.category}</span>

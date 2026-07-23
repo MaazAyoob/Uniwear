@@ -11,14 +11,14 @@
   <meta property="og:url" content="https://uniwear.co/gifts.html">
   <meta property="og:title" content="Corporate Gifting & Employee Swag | UNIWEAR">
   <meta property="og:description" content="Explore premium custom corporate gifting options from UNIWEAR. Premium onboarding kits, custom branded apparel, leather sets, and customized event merchandise.">
-  <meta property="og:image" content="https://uniwear.co/corporate_gifting_mockup.png">
+  <meta property="og:image" content="https://uniwear.co/assets/images/industries/corporate-gifting.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://uniwear.co/gifts.html">
   <meta property="twitter:title" content="Corporate Gifting & Employee Swag | UNIWEAR">
   <meta property="twitter:description" content="Explore premium custom corporate gifting options from UNIWEAR. Premium onboarding kits, custom branded apparel, leather sets, and customized event merchandise.">
-  <meta property="twitter:image" content="https://uniwear.co/corporate_gifting_mockup.png">
+  <meta property="twitter:image" content="https://uniwear.co/assets/images/industries/corporate-gifting.png">
 
   <!-- Canonical Link -->
   <link rel="canonical" href="https://uniwear.co/gifts.html">
@@ -33,7 +33,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- Browser Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="assets/favicons/favicon.png">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -153,6 +153,7 @@
     * { -webkit-tap-highlight-color: transparent; }
     img { max-width: 100%; }
   </style>
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 <body class="bg-lightBg text-charcoal font-body overflow-x-hidden antialiased">
 
@@ -168,7 +169,7 @@
   <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2.5 z-50">
-        <img src="logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
+        <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
       </a>
       
       <nav class="hidden lg:flex items-center lg:gap-3 xl:gap-6 glass-card py-2 lg:px-4 xl:px-6 rounded-full border border-lightBorder">
@@ -264,7 +265,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 mb-12">
       <div class="lg:col-span-2 space-y-6">
         <a href="index.html">
-          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
+          <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
         </a>
         <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
           Headquartered in Bengaluru. Crafting premium, certified uniforms for multi-scale industrial setups and corporate giants since 1998.
@@ -360,9 +361,9 @@
 
 
 
-  <script src="config.js"></script>
-  <script src="api.js"></script>
-  <script src="shared.js"></script>
+  <script src="js/config/config.js"></script>
+  <script src="js/api/api.js"></script>
+  <script src="js/utils/shared.js"></script>
   
   <script>
     let globalProducts = [];
@@ -370,7 +371,7 @@
     async function loadBackendProducts() {
       try {
         const res = await window.api.getProducts();
-        if (res.success) {
+        if (res && res.success && Array.isArray(res.data)) {
           globalProducts = res.data;
           localStorage.setItem('uniwear_products', JSON.stringify(res.data));
         }
@@ -379,6 +380,9 @@
       }
       if (!globalProducts || globalProducts.length === 0) {
         globalProducts = typeof defaultProducts !== 'undefined' ? defaultProducts : [];
+      }
+      if (window.getPublicProducts) {
+        globalProducts = window.getPublicProducts(globalProducts, 'gifting');
       }
       renderGiftingCatalog();
     }

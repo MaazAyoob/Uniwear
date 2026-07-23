@@ -34,7 +34,7 @@ const exportData = async (req, res, next) => {
     } else if (moduleName === 'leads') {
       data = await Lead.find().lean();
     } else if (moduleName === 'customers' || moduleName === 'users') {
-      data = await User.find().select('-passwordHash').lean();
+      data = await User.find().select('-password').lean();
     } else if (moduleName === 'quotations') {
       data = await Quotation.find().lean();
     } else if (moduleName === 'orders') {
@@ -58,7 +58,6 @@ const exportData = async (req, res, next) => {
     });
 
     const csvContent = jsonToCsv(cleaned);
-    try { await ActivityLog.create({ action: 'Data Export', affectedModule: moduleName.toUpperCase(), details: `Exported ${cleaned.length} records from ${moduleName}` }); } catch (e) {}
 
     res.setHeader('Content-Type', 'text/csv');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);

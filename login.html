@@ -16,7 +16,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- Browser Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="assets/favicons/favicon.png">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -100,6 +100,7 @@
       letter-spacing: -0.01em;
     }
   </style>
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 <body class="bg-lightCard text-charcoal font-body overflow-x-hidden antialiased min-h-screen flex items-center justify-center p-6">
 
@@ -127,7 +128,7 @@
       <div>
         <div class="flex items-center justify-between mb-10">
           <a href="index.html" class="flex items-center gap-2.5">
-            <img src="logo-full.png" alt="UNIWEAR Logo" class="h-8 w-auto object-contain">
+            <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 w-auto object-contain">
           </a>
           <a href="catalog.html" class="text-xs font-semibold text-primary flex items-center gap-1 hover:underline"><i class="ri-arrow-left-line"></i> Catalog</a>
         </div>
@@ -294,9 +295,9 @@
     </div>
   </div>
 
-  <script src="config.js"></script>
-  <script src="api.js"></script>
-  <script src="shared.js"></script>
+  <script src="js/config/config.js"></script>
+  <script src="js/api/api.js"></script>
+  <script src="js/utils/shared.js"></script>
   
   <script>
     let validatedResetEmail = "";

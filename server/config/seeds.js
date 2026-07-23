@@ -389,7 +389,7 @@ const defaultProducts = [
     gsm: "240 GSM",
     moq: 100,
     desc: "Built to withstand critical mechanical workloads. Features flame-retardant parameters, anti-static carbon filaments, triple needle reinforcements, and reflective warning strips.",
-    img: "industrial_uniforms_mockup.png",
+    img: "assets/images/industries/industrial-uniforms.png",
     status: "Active",
     featured: true
   },
@@ -461,7 +461,7 @@ const defaultProducts = [
     gsm: "300 GSM",
     moq: 50,
     desc: "Bespoke corporate outerwear featuring breathable lining, hand-finished lapel edges, and custom embroidered inner branding labels.",
-    img: "corporate_uniforms_mockup.png",
+    img: "assets/images/industries/corporate-uniforms.png",
     status: "Active",
     featured: true
   },
@@ -521,7 +521,7 @@ const defaultProducts = [
     gsm: "220 GSM",
     moq: 50,
     desc: "Designed for premium kitchen suites. Hidden press stud fasteners, thermoregulator mesh panels, and dual sleeve pen pockets.",
-    img: "hospitality_uniforms_mockup.png",
+    img: "assets/images/industries/hospitality-uniforms.png",
     status: "Active",
     featured: false
   },
@@ -545,7 +545,7 @@ const defaultProducts = [
     gsm: "290 GSM",
     moq: 200,
     desc: "High-grade school uniforms. Built to survive rigorous playground routines. Includes anti-pilling guarantees and customizable logo badges.",
-    img: "institutional_uniforms_mockup.png",
+    img: "assets/images/industries/institutional-uniforms.png",
     status: "Active",
     featured: false
   },
@@ -581,7 +581,7 @@ const defaultProducts = [
     gsm: "N/A",
     moq: 50,
     desc: "Sophisticated corporate gift presentation box. Includes leather planner binder, copper roller pen, and aluminum power bank shell.",
-    img: "corporate_gifting_mockup.png",
+    img: "assets/images/industries/corporate-gifting.png",
     status: "Active",
     featured: true
   },
@@ -617,7 +617,7 @@ const defaultProducts = [
     gsm: "N/A",
     moq: 30,
     desc: "Includes premium steel drinkware bottle, notebook planner, metal ballpoint pen, and corporate apparel tee in a matte gift box.",
-    img: "corporate_gifting_mockup.png",
+    img: "assets/images/industries/corporate-gifting.png",
     status: "Active",
     featured: true
   }
@@ -677,7 +677,7 @@ const defaultCatalogs = [
     slug: "safety-workwear-catalog",
     category: "Industrial & Engineering",
     description: "Detailed specifications for flame-retardant aramid overalls, electrostatic discharge (ESD) shirts, high-visibility winter jackets, and tear-resistant mechanical trousers.",
-    img: "industrial_uniforms_mockup.png",
+    img: "assets/images/industries/industrial-uniforms.png",
     format: "PDF Brochure",
     pages: 48,
     size: "8.4 MB",
@@ -689,7 +689,7 @@ const defaultCatalogs = [
     slug: "bespoke-executive-weaves",
     category: "Corporate & Executive",
     description: "Executive suits, wool coordinate trousers, custom logo embroidery guidelines, breathability index sheets, and colorway customization guides.",
-    img: "corporate_uniforms_mockup.png",
+    img: "assets/images/industries/corporate-uniforms.png",
     format: "PDF Brochure",
     pages: 36,
     size: "6.2 MB",
@@ -701,7 +701,7 @@ const defaultCatalogs = [
     slug: "five-star-culinary-outfits",
     category: "Hospitality & Culinary",
     description: "Ergonomic chef jackets, anti-stain canvas aprons, front-desk coordinates, housekeeping tunics, and thermoregulator backing systems.",
-    img: "hospitality_uniforms_mockup.png",
+    img: "assets/images/industries/hospitality-uniforms.png",
     format: "PDF Brochure",
     pages: 42,
     size: "7.8 MB",
@@ -713,7 +713,7 @@ const defaultCatalogs = [
     slug: "collegiate-uniform-directory",
     category: "Institutional & Academy",
     description: "High-durability school blazers, sports coordinate tracksuits, kids playground-safe coordinates, and anti-pilling test certifications.",
-    img: "institutional_uniforms_mockup.png",
+    img: "assets/images/industries/institutional-uniforms.png",
     format: "PDF Brochure",
     pages: 32,
     size: "5.4 MB",
@@ -725,7 +725,7 @@ const defaultCatalogs = [
     slug: "executive-accessories-lookbook",
     category: "Corporate Gifting",
     description: "Luxury leather portfolio cases, customized binder planners, premium alloy charging units, and metal pens with customized box carvings.",
-    img: "corporate_gifting_mockup.png",
+    img: "assets/images/industries/corporate-gifting.png",
     format: "PDF Brochure",
     pages: 24,
     size: "4.8 MB",
@@ -735,12 +735,12 @@ const defaultCatalogs = [
 ];
 
 const defaultClientLogos = [
-  { name: 'Toyota Kirloskar', logoUrl: 'logo-full.png', industryCategory: 'Industrial & Automotive', featured: true, active: true, showOnHomepage: true, sortOrder: 1 },
-  { name: 'Wipro Technologies', logoUrl: 'logo-full.png', industryCategory: 'Corporate & Tech', featured: true, active: true, showOnHomepage: true, sortOrder: 2 },
-  { name: 'Taj Resorts & Hotels', logoUrl: 'logo-full.png', industryCategory: 'Hospitality', featured: true, active: true, showOnHomepage: true, sortOrder: 3 },
-  { name: 'Schneider Electric', logoUrl: 'logo-full.png', industryCategory: 'Industrial & Energy', featured: true, active: true, showOnHomepage: true, sortOrder: 4 },
-  { name: 'Sansera Engineering', logoUrl: 'logo-full.png', industryCategory: 'Industrial', featured: true, active: true, showOnHomepage: true, sortOrder: 5 },
-  { name: 'Apollo Hospitals', logoUrl: 'logo-full.png', industryCategory: 'Healthcare', featured: true, active: true, showOnHomepage: true, sortOrder: 6 }
+  { name: 'Toyota Kirloskar', logoUrl: 'assets/logos/logo-full.png', industryCategory: 'Industrial & Automotive', featured: true, active: true, showOnHomepage: true, sortOrder: 1 },
+  { name: 'Wipro Technologies', logoUrl: 'assets/logos/logo-full.png', industryCategory: 'Corporate & Tech', featured: true, active: true, showOnHomepage: true, sortOrder: 2 },
+  { name: 'Taj Resorts & Hotels', logoUrl: 'assets/logos/logo-full.png', industryCategory: 'Hospitality', featured: true, active: true, showOnHomepage: true, sortOrder: 3 },
+  { name: 'Schneider Electric', logoUrl: 'assets/logos/logo-full.png', industryCategory: 'Industrial & Energy', featured: true, active: true, showOnHomepage: true, sortOrder: 4 },
+  { name: 'Sansera Engineering', logoUrl: 'assets/logos/logo-full.png', industryCategory: 'Industrial', featured: true, active: true, showOnHomepage: true, sortOrder: 5 },
+  { name: 'Apollo Hospitals', logoUrl: 'assets/logos/logo-full.png', industryCategory: 'Healthcare', featured: true, active: true, showOnHomepage: true, sortOrder: 6 }
 ];
 
 const defaultTestimonials = [
@@ -750,7 +750,7 @@ const defaultTestimonials = [
     role: 'Head of Plant Safety & Operations',
     quote: 'Uniwear has delivered heat-resistant and FR-certified workwear for 3,500+ plant technicians on exact delivery timelines. Superior durability under heavy workloads.',
     rating: 5,
-    logoUrl: 'logo-full.png',
+    logoUrl: 'assets/logos/logo-full.png',
     featured: true,
     published: true,
     sortOrder: 1
@@ -761,7 +761,7 @@ const defaultTestimonials = [
     role: 'Corporate Sourcing Director',
     quote: 'The fabric finish and custom embroidery for our front-desk and culinary suites exceeded our global brand standards. Seamless sampling process.',
     rating: 5,
-    logoUrl: 'logo-full.png',
+    logoUrl: 'assets/logos/logo-full.png',
     featured: true,
     published: true,
     sortOrder: 2

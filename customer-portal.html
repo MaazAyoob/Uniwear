@@ -16,7 +16,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- Browser Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="assets/favicons/favicon.png">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -120,6 +120,7 @@
     }
   </style>
 
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 <body class="bg-lightCard text-charcoal font-body overflow-x-hidden antialiased min-h-screen flex">
 
@@ -141,7 +142,7 @@
     <div>
       <div class="p-6 border-b border-lightBorder flex items-center justify-between">
         <a href="index.html" class="flex items-center">
-          <img src="logo-full.png" alt="UNIWEAR Logo" class="h-7 w-auto object-contain">
+          <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-7 w-auto object-contain">
         </a>
         <span class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-bold uppercase">Client</span>
       </div>
@@ -399,7 +400,8 @@
         </div>
         
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
-          <table class="w-full text-left text-sm border-collapse min-w-[800px]">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse min-w-[800px]">
             <thead>
               <tr class="bg-lightCard border-b border-lightBorder text-xs uppercase text-mutedText tracking-wider">
                 <th class="p-4 font-heading font-semibold text-charcoal">Quote ID</th>
@@ -415,6 +417,7 @@
               <!-- Injected dynamically -->
             </tbody>
           </table>
+</div>
         </div>
       </div>
 
@@ -626,7 +629,7 @@
         </div>
         <div>
           <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Branding Logo Reference (Mock File / URL)</label>
-          <input type="text" id="sample-req-logo-url" placeholder="corporate_blazer_detail.png" value="corporate_blazer_detail.png" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          <input type="text" id="sample-req-logo-url" placeholder="assets/images/products/corporate-blazer-detail.png" value="assets/images/products/corporate-blazer-detail.png" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
         </div>
         <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
           Submit Sample Mandate
@@ -678,9 +681,9 @@
     </div>
   </div>
 
-  <script src="config.js"></script>
-  <script src="api.js"></script>
-  <script src="shared.js"></script>
+  <script src="js/config/config.js"></script>
+  <script src="js/api/api.js"></script>
+  <script src="js/utils/shared.js"></script>
   <script>
     let globalProducts = [];
     let customerAssignedProducts = [];
@@ -1079,7 +1082,7 @@
         const stateProducts = globalProducts;
         clientOrders.forEach(o => {
           const matchedProduct = stateProducts.find(p => p.name === o.productName) || {};
-          const imgUrl = matchedProduct.img || 'corporate_blazer_detail.png';
+          const imgUrl = matchedProduct.img || 'assets/images/products/corporate-blazer-detail.png';
           
           const statusMap = {
             1: { text: "Ordered", classes: "bg-yellow-100 text-yellow-800 border border-yellow-200" },
@@ -1145,7 +1148,7 @@
 
           card.innerHTML = `
             <div class="w-full md:w-32 h-32 rounded-2xl overflow-hidden relative border border-lightBorder shrink-0">
-              <img src="${s.logoUrl || 'corporate_blazer_detail.png'}" class="w-full h-full object-cover">
+              <img src="${s.logoUrl || 'assets/images/products/corporate-blazer-detail.png'}" class="w-full h-full object-cover">
             </div>
             <div class="flex-1 flex flex-col justify-between">
               <div>
@@ -1235,7 +1238,7 @@
         card.innerHTML = `
           <div>
             <div class="h-48 overflow-hidden relative bg-lightCard border-b border-lightBorder">
-              <img src="${p.img || 'corporate_blazer_detail.png'}" alt="${p.name}" class="w-full h-full object-cover">
+              <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" alt="${p.name}" class="w-full h-full object-cover">
               ${p.featuredInCatalog ? '<span class="absolute top-3 left-3 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">Featured</span>' : ''}
               <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-charcoal text-[9px] font-bold px-2.5 py-1 rounded-full border border-lightBorder font-mono">MOQ: ${moqText}</span>
             </div>
@@ -1295,7 +1298,7 @@
           clientEmail: q.clientEmail,
           productName: q.productClass,
           specs: "Initial sample setup automatically generated from approved quotation specifications.",
-          logoUrl: "corporate_blazer_detail.png",
+          logoUrl: "assets/images/products/corporate-blazer-detail.png",
           date: new Date().toISOString().split('T')[0],
           status: "Awaiting Review"
         });
@@ -1370,7 +1373,7 @@
         clientEmail: profile.email,
         productName: product,
         specs: specs,
-        logoUrl: logoUrl || "corporate_blazer_detail.png",
+        logoUrl: logoUrl || "assets/images/products/corporate-blazer-detail.png",
         date: new Date().toISOString().split('T')[0],
         status: "Awaiting Review"
       };

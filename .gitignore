@@ -11,4 +11,6 @@ server/.env
 dist/
 build/
 
+scratch/
+
 npm-debug.log*

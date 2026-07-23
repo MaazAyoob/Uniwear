@@ -14,8 +14,8 @@ const companySettingsSchema = new mongoose.Schema({
   address: { type: String, default: 'No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070' },
   gst: { type: String, default: '29ABCDE1234F1ZH' },
   website: { type: String, default: 'https://uniwear.co' },
-  logoUrl: { type: String, default: 'logo-full.png' },
-  faviconUrl: { type: String, default: 'favicon.png' },
+  logoUrl: { type: String, default: 'assets/logos/logo-full.png' },
+  faviconUrl: { type: String, default: 'assets/favicons/favicon.png' },
   companyProfilePdfUrl: { type: String, default: 'downloads/UNIWEAR_Company_Profile.pdf' },
   productCatalogPdfUrl: { type: String, default: 'downloads/UNIWEAR_Product_Catalog.pdf' },
   moqText: { type: String, default: 'Depends on product, fabric, customization and quantity.' },
@@ -29,12 +29,12 @@ const companySettingsSchema = new mongoose.Schema({
   seoDefaults: {
     metaTitle: { type: String, default: 'UNIWEAR | Premium Workwear & Corporate Gifting Partner' },
     metaDescription: { type: String, default: 'UNIWEAR is Bengaluru’s premier uniform manufacturing partner, delivering corporate, industrial, hospitality, healthcare, educational workwear & corporate gifting since 1998.' },
-    ogImage: { type: String, default: 'images/Industries We Serve/Corporate Uniforms.png' }
+    ogImage: { type: String, default: 'assets/images/industries/corporate-uniforms.png' }
   },
   homepageHero: {
     title: { type: String, default: 'Uniforms That Represent Your Brand' },
     subtitle: { type: String, default: 'Industrial, corporate, hospitality, healthcare and institutional uniforms—along with premium corporate gifting—designed and manufactured in Bengaluru.' },
-    bannerUrl: { type: String, default: "images/Banner image home page/Banner image'.png" },
+    bannerUrl: { type: String, default: "assets/images/hero/hero-banner.png" },
     primaryCtaText: { type: String, default: 'Request a Quote' },
     primaryCtaLink: { type: String, default: 'contact.html' },
     secondaryCtaText: { type: String, default: 'Explore Our Solutions' },
