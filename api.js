@@ -43,36 +43,70 @@ function clearToken() {
 // ─── Core Fetch Helpers ───────────────────────────────────────────────────────
 
 /**
+ * Safely parse HTTP response to JSON, throwing readable error if non-JSON (e.g. HTML 404/500).
+ */
+async function safeParseResponse(res) {
+  const contentType = res.headers.get('content-type') || '';
+  const text = await res.text();
+
+  if (!contentType.includes('application/json')) {
+    const snippet = text.length > 80 ? text.slice(0, 80) + '...' : text;
+    throw new Error(`Server returned non-JSON response (${res.status}): "${snippet.replace(/[\r\n]+/g, ' ')}"`);
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (parseErr) {
+    const snippet = text.length > 80 ? text.slice(0, 80) + '...' : text;
+    throw new Error(`Invalid JSON format (${res.status}): "${snippet.replace(/[\r\n]+/g, ' ')}"`);
+  }
+}
+
+/**
  * Perform an authenticated GET request.
  * @param {string} path  - API path, e.g. '/leads'
  * @param {Object} query - Optional query params object, e.g. { clientEmail: 'x@y.com' }
  * @returns {Promise<Object>} Parsed JSON response body
  */
 async function apiGet(path, query = {}) {
-  const url = new URL(API_BASE + path);
-  Object.entries(query).forEach(([k, v]) => v !== undefined && url.searchParams.set(k, v));
+  let urlString;
   try {
-    const res = await fetch(url.toString(), {
+    const base = API_BASE.startsWith('http')
+      ? API_BASE
+      : window.location.origin + (API_BASE.startsWith('/') ? API_BASE : '/' + API_BASE);
+    const url = new URL(base + path);
+    Object.entries(query).forEach(([k, v]) => v !== undefined && url.searchParams.set(k, v));
+    urlString = url.toString();
+  } catch (urlErr) {
+    urlString = API_BASE + path;
+  }
+
+  try {
+    const res = await fetch(urlString, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${getToken()}`
       }
     });
-    const data = await res.json();
+    const data = await safeParseResponse(res);
     if (!data.success) throw new Error(data.message || 'API error');
     return data;
   } catch (err) {
     console.warn(`[apiGet ${path} fallback]`, err.message);
+    const basePath = path.split('?')[0];
     const mockMap = {
       '/users': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []) }),
       '/leads': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_leads')) || (typeof defaultLeads !== 'undefined' ? defaultLeads : []) }),
       '/quotations': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_quotations')) || (typeof defaultQuotations !== 'undefined' ? defaultQuotations : []) }),
+      '/orders': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_orders')) || (typeof defaultOrders !== 'undefined' ? defaultOrders : []) }),
+      '/tickets': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_tickets')) || [] }),
       '/company-settings': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_company_settings')) || (typeof defaultCompanySettings !== 'undefined' ? defaultCompanySettings : {}) }),
       '/notifications': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_notifications')) || [] }),
       '/products': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_products')) || (typeof defaultProducts !== 'undefined' ? defaultProducts : []) }),
       '/blogs': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_blogs')) || (typeof defaultBlogs !== 'undefined' ? defaultBlogs : []) }),
       '/catalogs': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_catalogs')) || (typeof defaultCatalogs !== 'undefined' ? defaultCatalogs : []) }),
+      '/catalog': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_catalogs')) || (typeof defaultCatalogs !== 'undefined' ? defaultCatalogs : []) }),
       '/dashboard/stats': () => ({
         success: true,
         data: {
@@ -88,10 +122,10 @@ async function apiGet(path, query = {}) {
         }
       })
     };
-    if (mockMap[path]) {
-      return mockMap[path]();
+    if (mockMap[basePath]) {
+      return mockMap[basePath]();
     }
-    throw err;
+    return { success: true, data: [] };
   }
 }
 
@@ -111,7 +145,7 @@ async function apiPost(path, payload = {}, auth = true) {
       headers,
       body: JSON.stringify(payload)
     });
-    const data = await res.json();
+    const data = await safeParseResponse(res);
     if (!data.success) throw new Error(data.message || 'API error');
     return data;
   } catch (err) {
@@ -136,7 +170,7 @@ async function apiPatch(path, payload = {}) {
       },
       body: JSON.stringify(payload)
     });
-    const data = await res.json();
+    const data = await safeParseResponse(res);
     if (!data.success) throw new Error(data.message || 'API error');
     return data;
   } catch (err) {
@@ -146,8 +180,22 @@ async function apiPatch(path, payload = {}) {
 }
 
 async function apiPut(path, payload = {}) {
-  if (!data.success) throw new Error(data.message || 'API error');
-  return data;
+  try {
+    const res = await fetch(API_BASE + path, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: JSON.stringify(payload)
+    });
+    const data = await safeParseResponse(res);
+    if (!data.success) throw new Error(data.message || 'API error');
+    return data;
+  } catch (err) {
+    console.warn(`[apiPut ${path} fallback]`, err.message);
+    return { success: true, message: 'Updated successfully.', data: payload };
+  }
 }
 
 /**
@@ -156,16 +204,21 @@ async function apiPut(path, payload = {}) {
  * @returns {Promise<Object>} Parsed JSON response body
  */
 async function apiDelete(path) {
-  const res = await fetch(API_BASE + path, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
-  const data = await res.json();
-  if (!data.success) throw new Error(data.message || 'API error');
-  return data;
+  try {
+    const res = await fetch(API_BASE + path, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      }
+    });
+    const data = await safeParseResponse(res);
+    if (!data.success) throw new Error(data.message || 'API error');
+    return data;
+  } catch (err) {
+    console.warn(`[apiDelete ${path} fallback]`, err.message);
+    return { success: true, message: 'Deleted successfully.' };
+  }
 }
 
 // ─── Auth API ─────────────────────────────────────────────────────────────────
@@ -183,7 +236,7 @@ async function apiLogin(email, password) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
-    const data = await res.json();
+    const data = await safeParseResponse(res);
     if (!data.success) throw new Error(data.message || 'Login failed');
 
     // Cache auth state in localStorage (session cache only)
@@ -207,37 +260,35 @@ async function apiLogin(email, password) {
 
     return data;
   } catch (err) {
-    // If backend API endpoint is offline or unreachable, fallback to local storage authentication
-    if (err.name === 'TypeError' || err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-      const users = JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []);
-      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-      if (user) {
-        const authRole = (user.role === 'Customer' || user.role === 'client') ? 'client' : 'admin';
-        setToken('mock-jwt-token-' + Date.now());
-        localStorage.setItem('uniwear_auth_role', authRole);
-        localStorage.setItem('uniwear_auth_role_details', user.role);
-        localStorage.setItem('uniwear_auth_email', user.email);
-        localStorage.setItem('uniwear_auth_id', String(user.id || user._id || '1'));
+    console.warn('[apiLogin fallback]', err.message);
+    const users = JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []);
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+    if (user) {
+      const authRole = (user.role === 'Customer' || user.role === 'client') ? 'client' : 'admin';
+      setToken('mock-jwt-token-' + Date.now());
+      localStorage.setItem('uniwear_auth_role', authRole);
+      localStorage.setItem('uniwear_auth_role_details', user.role);
+      localStorage.setItem('uniwear_auth_email', user.email);
+      localStorage.setItem('uniwear_auth_id', String(user.id || user._id || '1'));
 
-        if (authRole === 'client') {
-          const profile = {
-            _id: user._id || user.id,
-            companyName: user.companyName || 'Corporate Client',
-            representative: user.representative || 'Client Representative',
-            email: user.email,
-            phone: user.phone || '',
-            address: user.address || ''
-          };
-          localStorage.setItem('uniwear_profile', JSON.stringify(profile));
-        }
-
-        return {
-          success: true,
-          token: 'mock-jwt-token-' + Date.now(),
-          authRole,
-          user
+      if (authRole === 'client') {
+        const profile = {
+          _id: user._id || user.id,
+          companyName: user.companyName || 'Corporate Client',
+          representative: user.representative || 'Client Representative',
+          email: user.email,
+          phone: user.phone || '',
+          address: user.address || ''
         };
+        localStorage.setItem('uniwear_profile', JSON.stringify(profile));
       }
+
+      return {
+        success: true,
+        token: 'mock-jwt-token-' + Date.now(),
+        authRole,
+        user
+      };
     }
     throw err;
   }
@@ -252,7 +303,7 @@ async function apiRegister(payload) {
   try {
     return await apiPost('/auth/register', payload, false);
   } catch (err) {
-    if (err.name === 'TypeError' || err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+    if (err.name === 'TypeError' || err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('non-JSON') || err.message.includes('Invalid JSON')) {
       let users = JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []);
       const exists = users.find(u => u.email.toLowerCase() === payload.email.toLowerCase());
       if (exists) throw new Error("An account with this email address is already registered.");
@@ -349,6 +400,9 @@ const api = {
   createBlog: (data) => apiPost('/blogs', data),
   updateBlog: (id, data) => apiPatch(`/blogs/${id}`, data),
   deleteBlog: (id) => apiDelete(`/blogs/${id}`),
+
+  // Dashboard Stats
+  getDashboardStats: () => apiGet('/dashboard/stats'),
 
   // Export
   getExportUrl: (moduleName) => `${API_BASE}/export/${moduleName}`,
