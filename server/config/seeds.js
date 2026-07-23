@@ -734,6 +734,59 @@ const defaultCatalogs = [
   }
 ];
 
+const defaultClientLogos = [
+  { name: 'Toyota Kirloskar', logoUrl: 'logo-full.png', industryCategory: 'Industrial & Automotive', featured: true, active: true, showOnHomepage: true, sortOrder: 1 },
+  { name: 'Wipro Technologies', logoUrl: 'logo-full.png', industryCategory: 'Corporate & Tech', featured: true, active: true, showOnHomepage: true, sortOrder: 2 },
+  { name: 'Taj Resorts & Hotels', logoUrl: 'logo-full.png', industryCategory: 'Hospitality', featured: true, active: true, showOnHomepage: true, sortOrder: 3 },
+  { name: 'Schneider Electric', logoUrl: 'logo-full.png', industryCategory: 'Industrial & Energy', featured: true, active: true, showOnHomepage: true, sortOrder: 4 },
+  { name: 'Sansera Engineering', logoUrl: 'logo-full.png', industryCategory: 'Industrial', featured: true, active: true, showOnHomepage: true, sortOrder: 5 },
+  { name: 'Apollo Hospitals', logoUrl: 'logo-full.png', industryCategory: 'Healthcare', featured: true, active: true, showOnHomepage: true, sortOrder: 6 }
+];
+
+const defaultTestimonials = [
+  {
+    clientName: 'Siddharth Rao',
+    company: 'Toyota Kirloskar Motor',
+    role: 'Head of Plant Safety & Operations',
+    quote: 'Uniwear has delivered heat-resistant and FR-certified workwear for 3,500+ plant technicians on exact delivery timelines. Superior durability under heavy workloads.',
+    rating: 5,
+    logoUrl: 'logo-full.png',
+    featured: true,
+    published: true,
+    sortOrder: 1
+  },
+  {
+    clientName: 'Meera Deshmukh',
+    company: 'Taj Luxury Hotels',
+    role: 'Corporate Sourcing Director',
+    quote: 'The fabric finish and custom embroidery for our front-desk and culinary suites exceeded our global brand standards. Seamless sampling process.',
+    rating: 5,
+    logoUrl: 'logo-full.png',
+    featured: true,
+    published: true,
+    sortOrder: 2
+  }
+];
+
+const defaultCaseStudies = [
+  {
+    title: 'Precision Workwear Scaleup for Heavy Manufacturing',
+    slug: 'precision-workwear-scaleup',
+    industry: 'Industrial & Automotive',
+    clientName: 'Toyota Kirloskar',
+    requirement: 'Standardize safety overalls and flame-retardant suits across 3 assembly plants with custom anti-static properties.',
+    products: 'AeroGuard Boiler Suits & Steel-Toe Safety Boots',
+    customization: 'Triple needle reinforcement, reflex strips, and department color-coded collar badges.',
+    deliveryChallenge: '3,500 units required within 18 working days across 4 locations.',
+    solution: 'Dedicated cutting lines and pre-stocked fabric lots at JP Nagar manufacturing plant.',
+    outcome: '100% on-time delivery with zero fitting defect returns.',
+    testimonial: 'Uniwear is our primary workwear partner across all plant units in India.',
+    featured: true,
+    published: true,
+    sortOrder: 1
+  }
+];
+
 module.exports = {
   defaultUsers,
   defaultLeads,
@@ -744,5 +797,9 @@ module.exports = {
   defaultCompanySettings,
   defaultProducts,
   defaultBlogs,
-  defaultCatalogs
+  defaultCatalogs,
+  defaultClientLogos,
+  defaultTestimonials,
+  defaultCaseStudies
 };
+

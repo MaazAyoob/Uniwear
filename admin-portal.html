@@ -196,6 +196,16 @@
           id="admin-tab-admin-dash">
           <i class="ri-dashboard-line"></i> Dashboard
         </button>
+        <button onclick="setAdminTab('admin-customers')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-customers">
+          <i class="ri-user-line"></i> Customers
+        </button>
+        <button onclick="setAdminTab('admin-assign-products')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-assign-products">
+          <i class="ri-user-shared-line"></i> Customer Product Assignment
+        </button>
         <button onclick="setAdminTab('admin-leads')"
           class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
           id="admin-tab-admin-leads">
@@ -216,15 +226,15 @@
           id="admin-tab-admin-catalog">
           <i class="ri-book-open-line"></i> Catalog
         </button>
+        <button onclick="setAdminTab('admin-orders')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-orders">
+          <i class="ri-route-line"></i> Orders & Production
+        </button>
         <button onclick="setAdminTab('admin-blogs')"
           class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
           id="admin-tab-admin-blogs">
           <i class="ri-article-line"></i> Blog
-        </button>
-        <button onclick="setAdminTab('admin-customers')"
-          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
-          id="admin-tab-admin-customers">
-          <i class="ri-user-shared-line"></i> Customers
         </button>
         <button onclick="setAdminTab('admin-settings')"
           class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
@@ -402,7 +412,13 @@
 
       <!-- TAB 2: LEADS -->
       <div id="admin-leads" class="admin-portal-view hidden space-y-8">
-        <h3 class="font-heading text-2xl font-bold text-charcoal">Incoming Consultation Leads</h3>
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Incoming Consultation Leads</h3>
+          <button onclick="exportModule('leads')"
+            class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+            <i class="ri-download-line"></i> Export CSV
+          </button>
+        </div>
 
         <!-- Source Filter Bar & Search -->
         <div class="flex flex-wrap items-center justify-between gap-4">
@@ -454,6 +470,10 @@
         <div class="flex justify-between items-center flex-wrap gap-4">
           <h3 class="font-heading text-2xl font-bold text-charcoal">Quotations Manager</h3>
           <div class="flex items-center gap-3">
+            <button onclick="exportModule('quotations')"
+              class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+              <i class="ri-download-line"></i> Export CSV
+            </button>
             <div class="relative w-48 sm:w-64">
               <input type="text" id="quotes-search-input" onkeyup="handleQuotesSearch()" placeholder="Search quotes..."
                 class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
@@ -488,12 +508,18 @@
 
       <!-- TAB 4: PRODUCTS CATALOG -->
       <div id="admin-products" class="admin-portal-view hidden space-y-8">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center flex-wrap gap-4">
           <h3 class="font-heading text-2xl font-bold text-charcoal">Apparel Catalog Registry</h3>
-          <button onclick="openProductModal('add')"
-            class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
-            Add Product
-          </button>
+          <div class="flex items-center gap-3">
+            <button onclick="exportModule('products')"
+              class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+              <i class="ri-download-line"></i> Export CSV
+            </button>
+            <button onclick="openProductModal('add')"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              + Add Product
+            </button>
+          </div>
         </div>
 
         <!-- Search, Filter & Sort Controls -->
@@ -624,7 +650,13 @@
       <div id="admin-customers" class="admin-portal-view hidden space-y-8">
         <div class="flex items-center justify-between flex-wrap gap-3">
           <h3 class="font-heading text-2xl font-bold text-charcoal">Registered Customer Accounts</h3>
-          <span class="text-xs text-mutedText font-semibold" id="admin-customers-count-label"></span>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-mutedText font-semibold" id="admin-customers-count-label"></span>
+            <button onclick="exportModule('customers')"
+              class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+              <i class="ri-download-line"></i> Export CSV
+            </button>
+          </div>
         </div>        <!-- Customer Filter Bar & Search -->
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-2 sm:gap-3 pb-1">
@@ -666,6 +698,115 @@
             </thead>
             <tbody id="admin-customers-table-body">
               <!-- Dynamically list clients -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: ORDERS & 14-STAGE PRODUCTION TRACKER -->
+      <div id="admin-orders" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h3 class="font-heading text-2xl font-bold text-charcoal">14-Stage Production Workflow</h3>
+            <p class="text-xs text-mutedText mt-1">Track orders from confirmed booking to final delivery.</p>
+          </div>
+          <button onclick="exportModule('orders')" class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+            <i class="ri-download-line"></i> Export CSV
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">On Schedule</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-green-600" id="dash-orders-on-schedule">0</h4>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Delayed Orders</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-red-600" id="dash-orders-delayed">0</h4>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Awaiting Approval</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-amber-600" id="dash-orders-approval">0</h4>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Ready for Dispatch</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-blue-600" id="dash-orders-dispatch">0</h4>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Completed</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="dash-orders-completed">0</h4>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
+            <thead>
+              <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Order #</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Client / Company</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product / Volume</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Current Stage (1-14)</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Schedule Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-orders-table-body">
+              <!-- Dynamically listed -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+
+      <!-- TAB: CUSTOMER PRODUCT ASSIGNMENT -->
+      <div id="admin-assign-products" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h3 class="font-heading text-2xl font-bold text-charcoal">Customer Product Assignment</h3>
+            <p class="text-xs text-mutedText mt-1">Assign custom products, set client-specific pricing, custom MOQs, and notes for B2B portal clients.</p>
+          </div>
+          <button onclick="openAssignProductsModal()" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">
+            + Assign Products
+          </button>
+        </div>
+
+        <!-- Customer Selector Card -->
+        <div class="bg-white p-6 rounded-2xl border border-lightBorder shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="w-full md:w-1/2">
+            <label class="block text-xs uppercase font-bold text-mutedText mb-2">Select Target Enterprise Customer *</label>
+            <select id="assign-customer-select" onchange="handleCustomerSelectChange()" class="w-full bg-lightCard border border-lightBorder rounded-xl p-3 text-xs text-charcoal font-semibold focus:outline-none focus:border-primary">
+              <!-- Dynamically populated with approved/pending customers -->
+            </select>
+          </div>
+          <div id="customer-approval-status-box" class="p-4 bg-lightCard rounded-xl border border-lightBorder w-full md:w-auto flex items-center gap-4">
+            <div>
+              <span class="text-[9px] uppercase font-bold text-mutedText tracking-wider block">Account Approval Status</span>
+              <span id="assign-customer-status-badge" class="px-2.5 py-1 rounded text-[10px] font-bold uppercase block mt-1 bg-yellow-100 text-yellow-800">Pending</span>
+            </div>
+            <div id="assign-customer-status-actions" class="flex gap-2">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Assigned Products Table -->
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
+            <thead>
+              <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Product</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Std MOQ / Price</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Custom Price (₹)</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Custom MOQ</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Visible</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Featured</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Customer Notes</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-assigned-products-table-body">
+              <!-- Injected dynamically -->
             </tbody>
           </table>
         </div>
@@ -1155,6 +1296,71 @@
     </div>
   </div>
 
+  <!-- MODAL: Assign Products to Customer (Bulk / Single) -->
+  <div id="admin-assign-products-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-assign-products-modal', false)"></div>
+    <div class="relative w-full max-w-2xl bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Assign Products to Customer</h3>
+          <p class="text-xs text-mutedText mt-0.5">Select existing products to expose in the customer's private portal.</p>
+        </div>
+        <button onclick="toggleModal('admin-assign-products-modal', false)" class="text-gray-400 hover:text-charcoal"><i class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitCustomerProductAssignment(event)" class="space-y-6">
+        <div>
+          <label class="block text-xs uppercase font-bold text-mutedText mb-2">Target Customer</label>
+          <input type="text" id="modal-assign-customer-name" readonly class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs font-bold text-charcoal">
+          <input type="hidden" id="modal-assign-customer-id">
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="block text-xs uppercase font-bold text-mutedText">Select Product(s) to Assign *</label>
+            <button type="button" onclick="toggleSelectAllProductsToAssign()" class="text-[10px] text-primary font-bold hover:underline">Select All</button>
+          </div>
+          <div class="max-h-60 overflow-y-auto border border-lightBorder rounded-xl p-3 space-y-2 bg-lightCard" id="modal-products-assign-checkbox-list">
+            <!-- Dynamically rendered checkbox list of global products -->
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase font-bold text-mutedText mb-1">Custom Price (₹) <span class="text-gray-400 font-normal">(Optional)</span></label>
+            <input type="number" id="modal-assign-custom-price" placeholder="Leave empty for standard" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase font-bold text-mutedText mb-1">Custom MOQ <span class="text-gray-400 font-normal">(Optional)</span></label>
+            <input type="number" id="modal-assign-custom-moq" placeholder="Leave empty for standard" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-charcoal">
+            <input type="checkbox" id="modal-assign-visible" checked class="rounded text-primary focus:ring-primary">
+            <span>Visible to Customer</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-charcoal">
+            <input type="checkbox" id="modal-assign-featured" class="rounded text-primary focus:ring-primary">
+            <span>Mark Featured</span>
+          </label>
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase font-bold text-mutedText mb-1">Customer-Specific Notes</label>
+          <textarea id="modal-assign-notes" rows="2" placeholder="Mention bespoke fabric specifications or contract details..." class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors shadow-sm">
+          Confirm Product Assignment
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+
   <!-- MODAL: Create Quotation -->
   <div id="admin-create-quote-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
     <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md"
@@ -1215,13 +1421,13 @@
   <script src="shared.js"></script>
   <script>
     // ─── GLOBAL ADMIN STATE ────────────────────────────────────────────────────
-    let globalUsers = [];
-    let globalLeads = [];
-    let globalQuotations = [];
-    let globalNotifications = [];
-    let globalProducts = [];
-    let globalBlogs = [];
-    let globalCatalogs = [];
+    let globalUsers = (JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []));
+    let globalLeads = (JSON.parse(localStorage.getItem('uniwear_leads')) || (typeof defaultLeads !== 'undefined' ? defaultLeads : []));
+    let globalQuotations = (JSON.parse(localStorage.getItem('uniwear_quotations')) || (typeof defaultQuotations !== 'undefined' ? defaultQuotations : []));
+    let globalNotifications = (JSON.parse(localStorage.getItem('uniwear_notifications')) || []);
+    let globalProducts = (JSON.parse(localStorage.getItem('uniwear_products')) || (typeof defaultProducts !== 'undefined' ? defaultProducts : []));
+    let globalBlogs = (JSON.parse(localStorage.getItem('uniwear_blogs')) || (typeof defaultBlogs !== 'undefined' ? defaultBlogs : []));
+    let globalCatalogs = (JSON.parse(localStorage.getItem('uniwear_catalogs')) || (typeof defaultCatalogs !== 'undefined' ? defaultCatalogs : []));
     let globalDashboardStats = {};
 
     let activeLeadFilter = 'All';
@@ -1487,32 +1693,52 @@
       }
     }
 
-    // Auth guard
+    // Strict Auth guard (Requires authenticated JWT token & approved Staff Role)
     window.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem('uniwear_jwt_token');
       const role = localStorage.getItem('uniwear_auth_role');
-      if (role !== 'admin') {
-        window.location.href = 'login.html';
+      const roleDetails = localStorage.getItem('uniwear_auth_role_details');
+      
+      const allowedRoles = ['Super Admin', 'Admin', 'Sales Executive', 'Production Manager'];
+      const isStaff = (role === 'admin' || role === 'Admin' || allowedRoles.includes(roleDetails));
+
+      // Redirect to login if token is missing or user does not possess an authorized staff role
+      if (!token || !role || !isStaff) {
+        if (role === 'client') {
+          window.location.href = 'customer-portal.html';
+        } else {
+          window.location.href = 'login.html';
+        }
         return;
       }
+
+      // 1. Initial immediate dashboard render from local state
+      updateAdminDashboard();
+      initProductImageUpload();
+      initBlogImageUploadListener();
+
+      // 2. Fetch live data from backend MongoDB REST API
       try {
         await syncAdminData();
       } catch (err) {
         console.error("Failed to sync data on page load", err);
       }
+
+      // 3. Re-render with synchronized live database records
       updateAdminDashboard();
-      initProductImageUpload();
-      initBlogImageUploadListener();
     });
 
     // ─── TAB NAVIGATION ───────────────────────────────────────────────────────
     const TAB_TITLES = {
       'admin-dash': 'Dashboard',
+      'admin-customers': 'Customers',
+      'admin-assign-products': 'Customer Product Assignment',
       'admin-leads': 'Leads',
       'admin-quotes': 'Quotations',
       'admin-products': 'Products',
       'admin-catalog': 'Catalog',
+      'admin-orders': 'Orders & Production Tracker',
       'admin-blogs': 'Blog',
-      'admin-customers': 'Customers',
       'admin-settings': 'Settings'
     };
 
@@ -1541,9 +1767,25 @@
       // Update header title
       document.getElementById('admin-portal-title').innerText = TAB_TITLES[tabId] || 'Admin Portal';
 
-      // Load form details if switching to settings tab
+      // Tab specific hooks
       if (tabId === 'admin-settings') {
         loadCompanySettingsForm();
+      } else if (tabId === 'admin-assign-products') {
+        initCustomerProductAssignmentTab();
+      } else if (tabId === 'admin-orders') {
+        renderOrdersTable();
+      } else if (tabId === 'admin-leads') {
+        if (typeof renderLeadsTable === 'function') renderLeadsTable();
+      } else if (tabId === 'admin-quotes') {
+        if (typeof renderQuotationsTable === 'function') renderQuotationsTable();
+      } else if (tabId === 'admin-products') {
+        if (typeof renderProductsTable === 'function') renderProductsTable();
+      } else if (tabId === 'admin-catalog') {
+        if (typeof renderCatalogsTable === 'function') renderCatalogsTable();
+      } else if (tabId === 'admin-blogs') {
+        if (typeof renderBlogsTable === 'function') renderBlogsTable();
+      } else if (tabId === 'admin-customers') {
+        if (typeof renderCustomersTable === 'function') renderCustomersTable();
       }
 
       // Refresh data
@@ -1790,6 +2032,15 @@
       } catch (err) { console.error(err); }
     }
 
+    function exportModule(moduleName) {
+      if (window.api && typeof window.api.getExportUrl === 'function') {
+        window.open(window.api.getExportUrl(moduleName), '_blank');
+      } else {
+        window.open('/api/export/' + moduleName, '_blank');
+      }
+    }
+    window.exportModule = exportModule;
+
     async function handleCatalogSearch() {
       const q = document.getElementById('catalog-search-input').value.trim();
       try {
@@ -1805,22 +2056,22 @@
     function updateAdminDashboard() {
       // ── Stat counters ──
       const elLeads = document.getElementById('admin-stat-leads');
-      if (elLeads) elLeads.innerText = globalDashboardStats.leads || 0;
+      if (elLeads) elLeads.innerText = (globalDashboardStats && globalDashboardStats.leads !== undefined) ? globalDashboardStats.leads : (globalLeads ? globalLeads.length : 0);
 
       const elQuotes = document.getElementById('admin-stat-open-quotes');
-      if (elQuotes) elQuotes.innerText = globalDashboardStats.quotes || 0;
+      if (elQuotes) elQuotes.innerText = (globalDashboardStats && globalDashboardStats.quotes !== undefined) ? globalDashboardStats.quotes : (globalQuotations ? globalQuotations.length : 0);
 
       const elProds = document.getElementById('admin-stat-products');
-      if (elProds) elProds.innerText = globalDashboardStats.products || 0;
+      if (elProds) elProds.innerText = (globalDashboardStats && globalDashboardStats.products !== undefined) ? globalDashboardStats.products : (globalProducts ? globalProducts.length : 0);
 
       const elBlogs = document.getElementById('admin-stat-blogs');
-      if (elBlogs) elBlogs.innerText = globalDashboardStats.blogs || 0;
+      if (elBlogs) elBlogs.innerText = (globalDashboardStats && globalDashboardStats.blogs !== undefined) ? globalDashboardStats.blogs : (globalBlogs ? globalBlogs.length : 0);
 
       const elCust = document.getElementById('admin-stat-active-customers');
-      if (elCust) elCust.innerText = globalDashboardStats.activeCustomers || 0;
+      if (elCust) elCust.innerText = (globalDashboardStats && globalDashboardStats.activeCustomers !== undefined) ? globalDashboardStats.activeCustomers : (globalUsers ? globalUsers.filter(u => u.status === 'Active').length : 0);
 
       const elPending = document.getElementById('admin-stat-pending-customers');
-      if (elPending) elPending.innerText = globalDashboardStats.pendingCustomers || 0;
+      if (elPending) elPending.innerText = (globalDashboardStats && globalDashboardStats.pendingCustomers !== undefined) ? globalDashboardStats.pendingCustomers : (globalUsers ? globalUsers.filter(u => u.status === 'Pending').length : 0);
 
       // ── Dashboard: Recent Activity Logs ──
       const recentActivityBody = document.getElementById('admin-dash-recent-activity');
@@ -2612,7 +2863,12 @@
       if (!tbodyClients) return;
       tbodyClients.innerHTML = '';
 
-      let customers = users.filter(u => u && u.role === 'Customer');
+      const targetUsers = (Array.isArray(users) && users.length > 0) ? users : (globalUsers || []);
+      let customers = targetUsers.filter(u => u && (u.role === 'Customer' || !u.role || String(u.role).toLowerCase() === 'customer'));
+
+      if (typeof activeCustomerFilter !== 'undefined' && activeCustomerFilter && activeCustomerFilter !== 'All') {
+        customers = customers.filter(u => u && u.status === activeCustomerFilter);
+      }
 
       const countLabel = document.getElementById('admin-customers-count-label');
       if (countLabel) countLabel.innerText = `${customers.length} account${customers.length !== 1 ? 's' : ''} shown`;
@@ -2724,6 +2980,419 @@
         alert(err.message || 'Failed to toggle user status.');
       }
     }
+
+    // ─── CUSTOMER PRODUCT ASSIGNMENT CONTROLLER ─────────────────────────────
+    let currentAssignedProducts = [];
+
+    async function initCustomerProductAssignmentTab() {
+      const select = document.getElementById('assign-customer-select');
+      if (!select) return;
+      select.innerHTML = "";
+
+      // Ensure globalUsers is populated from API, localStorage or defaultUsers
+      if (!globalUsers || globalUsers.length === 0) {
+        try {
+          const uRes = await window.api.getUsers();
+          if (uRes.success && uRes.data && uRes.data.length > 0) {
+            globalUsers = uRes.data;
+          }
+        } catch (e) {
+          console.warn("API getUsers fallback", e);
+        }
+        if (!globalUsers || globalUsers.length === 0) {
+          try {
+            globalUsers = JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []);
+          } catch (e) {
+            globalUsers = typeof defaultUsers !== 'undefined' ? defaultUsers : [];
+          }
+        }
+      }
+
+      const customers = (globalUsers || []).filter(u => {
+        if (!u.role) return true;
+        const r = String(u.role).toLowerCase();
+        return r === 'customer' || r === 'client' || (r !== 'admin' && r !== 'super admin' && r !== 'sales executive' && r !== 'production manager');
+      });
+
+      if (customers.length === 0) {
+        select.innerHTML = '<option value="">No customer accounts found</option>';
+        document.getElementById('admin-assigned-products-table-body').innerHTML = '<tr><td colspan="8" class="p-8 text-center text-mutedText text-xs">No customer accounts registered.</td></tr>';
+        return;
+      }
+
+      customers.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c._id || c.id;
+        opt.textContent = `${c.companyName || 'Corporate Client'} (${c.representative || c.email}) - [${c.status || 'Active'}]`;
+        select.appendChild(opt);
+      });
+
+      handleCustomerSelectChange();
+    }
+
+    async function handleCustomerSelectChange() {
+      const select = document.getElementById('assign-customer-select');
+      const customerId = select ? select.value : null;
+      if (!customerId) return;
+
+      const customer = (globalUsers || []).find(u => (u._id || u.id) === customerId);
+      const statusBadge = document.getElementById('assign-customer-status-badge');
+      const actionsBox = document.getElementById('assign-customer-status-actions');
+
+      if (customer && statusBadge && actionsBox) {
+        const status = customer.status || 'Active';
+        statusBadge.textContent = status;
+        if (status === 'Active') {
+          statusBadge.className = 'px-2.5 py-1 rounded text-[10px] font-bold uppercase block mt-1 bg-green-100 text-green-800';
+          actionsBox.innerHTML = `
+            <button onclick="changeCustomerAccountStatus('${customerId}', 'Pending')" class="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded text-[10px] font-bold">Set Pending</button>
+          `;
+        } else if (status === 'Pending') {
+          statusBadge.className = 'px-2.5 py-1 rounded text-[10px] font-bold uppercase block mt-1 bg-yellow-100 text-yellow-800';
+          actionsBox.innerHTML = `
+            <button onclick="changeCustomerAccountStatus('${customerId}', 'Active')" class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-[10px] font-bold">Approve Account</button>
+            <button onclick="changeCustomerAccountStatus('${customerId}', 'Rejected')" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold">Reject</button>
+          `;
+        } else {
+          statusBadge.className = 'px-2.5 py-1 rounded text-[10px] font-bold uppercase block mt-1 bg-red-100 text-red-800';
+          actionsBox.innerHTML = `
+            <button onclick="changeCustomerAccountStatus('${customerId}', 'Active')" class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-[10px] font-bold">Approve Account</button>
+          `;
+        }
+      }
+
+      await loadAssignedProductsForSelectedCustomer(customerId);
+    }
+
+    async function changeCustomerAccountStatus(userId, newStatus) {
+      try {
+        await window.api.updateUser(userId, { status: newStatus });
+        const userObj = (globalUsers || []).find(u => (u._id || u.id) === userId);
+        if (userObj) userObj.status = newStatus;
+        alert(`Customer account status updated to ${newStatus}`);
+        handleCustomerSelectChange();
+      } catch (err) {
+        alert(err.message || 'Failed to update account status.');
+      }
+    }
+
+    async function loadAssignedProductsForSelectedCustomer(customerId) {
+      const tbody = document.getElementById('admin-assigned-products-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-mutedText text-xs">Loading assigned products...</td></tr>';
+
+      try {
+        const res = await window.api.getCustomerProducts(customerId);
+        currentAssignedProducts = res.data || [];
+
+        if (currentAssignedProducts.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-mutedText text-xs">No products assigned to this customer yet. Click "+ Assign Products" to add.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = currentAssignedProducts.map(p => `
+          <tr class="border-b border-lightBorder hover:bg-lightCard text-xs transition-colors" id="assignment-row-${p.assignmentId}">
+            <td class="p-4 font-semibold text-charcoal flex items-center gap-3">
+              <img src="${p.img || 'corporate_blazer_detail.png'}" class="w-10 h-10 object-cover rounded-lg border border-lightBorder shrink-0">
+              <div>
+                <p class="font-bold text-charcoal">${p.name}</p>
+                <span class="text-[9px] uppercase text-primary font-bold">${p.category}</span>
+              </div>
+            </td>
+            <td class="p-4">
+              <span class="block text-gray-500 font-mono">MOQ: ${p.moq || 100}</span>
+              <span class="block font-bold text-charcoal mt-0.5">${p.price ? '₹' + p.price : 'Custom Quote'}</span>
+            </td>
+            <td class="p-4">
+              <input type="number" id="assign-price-${p.assignmentId}" value="${p.customPrice || ''}" placeholder="Standard" class="w-24 p-1.5 border border-lightBorder rounded text-xs font-mono">
+            </td>
+            <td class="p-4">
+              <input type="number" id="assign-moq-${p.assignmentId}" value="${p.customMOQ || ''}" placeholder="Standard" class="w-20 p-1.5 border border-lightBorder rounded text-xs font-mono">
+            </td>
+            <td class="p-4">
+              <input type="checkbox" id="assign-visible-${p.assignmentId}" ${p.visible !== false ? 'checked' : ''} class="rounded text-primary">
+            </td>
+            <td class="p-4">
+              <input type="checkbox" id="assign-featured-${p.assignmentId}" ${p.featuredInCatalog ? 'checked' : ''} class="rounded text-primary">
+            </td>
+            <td class="p-4">
+              <input type="text" id="assign-notes-${p.assignmentId}" value="${p.customerNotes || ''}" placeholder="Notes..." class="w-36 p-1.5 border border-lightBorder rounded text-xs">
+            </td>
+            <td class="p-4 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="saveAssignmentRow('${p.assignmentId}')" class="px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-[10px] font-bold">Save</button>
+                <button onclick="removeAssignmentRow('${p.assignmentId}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded text-[10px] font-bold">Remove</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.warn("getCustomerProducts fetch warning:", err);
+        currentAssignedProducts = [];
+        tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-mutedText text-xs">No products assigned to this customer yet. Click "+ Assign Products" to add.</td></tr>';
+      }
+    }
+
+    async function openAssignProductsModal() {
+      const select = document.getElementById('assign-customer-select');
+      const customerId = select ? select.value : null;
+      if (!customerId) {
+        alert("Please select a customer first.");
+        return;
+      }
+
+      if (!globalProducts || globalProducts.length === 0) {
+        try {
+          const pRes = await window.api.getProducts();
+          if (pRes.success && pRes.data && pRes.data.length > 0) globalProducts = pRes.data;
+        } catch (e) {}
+        if (!globalProducts || globalProducts.length === 0) {
+          globalProducts = typeof defaultProducts !== 'undefined' ? defaultProducts : [];
+        }
+      }
+
+      const customer = (globalUsers || []).find(u => (u._id || u.id) === customerId);
+      document.getElementById('modal-assign-customer-name').value = customer ? `${customer.companyName || customer.email} (${customer.representative || ''})` : customerId;
+      document.getElementById('modal-assign-customer-id').value = customerId;
+
+      // Render product checkbox list
+      const listContainer = document.getElementById('modal-products-assign-checkbox-list');
+      if (listContainer) {
+        if (!globalProducts || globalProducts.length === 0) {
+          listContainer.innerHTML = '<p class="text-xs text-mutedText text-center py-4">No master products available in database.</p>';
+        } else {
+          listContainer.innerHTML = (globalProducts || []).map(p => `
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border border-lightBorder cursor-pointer hover:border-primary/40">
+              <div class="flex items-center gap-3">
+                <input type="checkbox" name="assign_prod_checkbox" value="${p._id || p.id}" class="rounded text-primary">
+                <img src="${p.img || 'corporate_blazer_detail.png'}" class="w-8 h-8 object-cover rounded">
+                <div>
+                  <span class="text-xs font-bold text-charcoal block">${p.name}</span>
+                  <span class="text-[9px] uppercase text-primary font-semibold">${p.category}</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono text-gray-400">MOQ: ${p.moq || 100}</span>
+            </label>
+          `).join('');
+        }
+      }
+
+      toggleModal('admin-assign-products-modal', true);
+    }
+
+    function toggleSelectAllProductsToAssign() {
+      const checkboxes = document.querySelectorAll('input[name="assign_prod_checkbox"]');
+      const allChecked = Array.from(checkboxes).every(c => c.checked);
+      checkboxes.forEach(c => c.checked = !allChecked);
+    }
+
+    async function submitCustomerProductAssignment(event) {
+      event.preventDefault();
+      const customerId = document.getElementById('modal-assign-customer-id').value;
+      const checkboxes = document.querySelectorAll('input[name="assign_prod_checkbox"]:checked');
+      const productIds = Array.from(checkboxes).map(c => c.value);
+
+      if (productIds.length === 0) {
+        alert("Please select at least one product to assign.");
+        return;
+      }
+
+      const payload = {
+        customerId,
+        productIds,
+        customPrice: document.getElementById('modal-assign-custom-price').value,
+        customMOQ: document.getElementById('modal-assign-custom-moq').value,
+        visible: document.getElementById('modal-assign-visible').checked,
+        featured: document.getElementById('modal-assign-featured').checked,
+        notes: document.getElementById('modal-assign-notes').value
+      };
+
+      try {
+        await window.api.assignCustomerProducts(payload);
+        alert("Product assignment successfully saved!");
+        toggleModal('admin-assign-products-modal', false);
+        loadAssignedProductsForSelectedCustomer(customerId);
+      } catch (err) {
+        alert(err.message || 'Failed to assign products.');
+      }
+    }
+
+    async function saveAssignmentRow(assignmentId) {
+      const priceVal = document.getElementById(`assign-price-${assignmentId}`).value;
+      const moqVal = document.getElementById(`assign-moq-${assignmentId}`).value;
+      const visVal = document.getElementById(`assign-visible-${assignmentId}`).checked;
+      const featVal = document.getElementById(`assign-featured-${assignmentId}`).checked;
+      const notesVal = document.getElementById(`assign-notes-${assignmentId}`).value;
+
+      try {
+        await window.api.updateCustomerProduct(assignmentId, {
+          customPrice: priceVal,
+          customMOQ: moqVal,
+          visible: visVal,
+          featured: featVal,
+          notes: notesVal
+        });
+        alert("Assignment parameters saved!");
+      } catch (err) {
+        alert(err.message || 'Failed to save assignment row.');
+      }
+    }
+
+    async function removeAssignmentRow(assignmentId) {
+      if (!confirm("Are you sure you want to remove this product assignment from this customer?")) return;
+
+      try {
+        await window.api.removeCustomerProduct(assignmentId);
+        const select = document.getElementById('assign-customer-select');
+        if (select && select.value) loadAssignedProductsForSelectedCustomer(select.value);
+      } catch (err) {
+        alert(err.message || 'Failed to remove product assignment.');
+      }
+    }
+
+
+
+    // ─── ORDERS & 14-STAGE TRACKER TAB HANDLERS ─────────────────────────────
+    async function renderOrdersTable() {
+      const body = document.getElementById('admin-orders-table-body');
+      if (!body) return;
+
+      try {
+        const res = await window.api.getOrders();
+        const orders = (res.success && Array.isArray(res.data) && res.data.length > 0)
+          ? res.data
+          : (JSON.parse(localStorage.getItem('uniwear_orders')) || (typeof defaultOrders !== 'undefined' ? defaultOrders : [
+            {
+              _id: 'ord_1',
+              orderNo: 'UW-ORD-2026-101',
+              clientCompany: 'Taj Resorts & Hotels Group',
+              clientEmail: 'client@uniwear.co',
+              productName: 'Executive Wool Blazer Set',
+              volume: '1,200 Sets',
+              currentStageIndex: 8,
+              stageName: '08. Sewing & Stitch Assembly',
+              status: 'On Schedule'
+            },
+            {
+              _id: 'ord_2',
+              orderNo: 'UW-ORD-2026-102',
+              clientCompany: 'Infosys Tech Park Division',
+              clientEmail: 'infosys@uniwear.co',
+              productName: 'Corporate Polo Shirts',
+              volume: '5,000 Pcs',
+              currentStageIndex: 12,
+              stageName: '12. Quality Audit & Metal Detect',
+              status: 'Ready for Dispatch'
+            },
+            {
+              _id: 'ord_3',
+              orderNo: 'UW-ORD-2026-103',
+              clientCompany: 'Toyota Kirloskar Motors',
+              clientEmail: 'toyota@uniwear.co',
+              productName: 'Industrial Anti-Static Coveralls',
+              volume: '3,500 Sets',
+              currentStageIndex: 5,
+              stageName: '05. Precision CNC Fabric Cutting',
+              status: 'Delayed'
+            }
+          ]));
+
+        // Calculate stage metric counters
+        let onSchedule = 0, delayed = 0, approval = 0, dispatch = 0, completed = 0;
+        orders.forEach(o => {
+          const st = (o.status || 'On Schedule').toLowerCase();
+          if (st.includes('schedule')) onSchedule++;
+          else if (st.includes('delay')) delayed++;
+          else if (st.includes('approval')) approval++;
+          else if (st.includes('dispatch') || st.includes('ready')) dispatch++;
+          else if (st.includes('complete')) completed++;
+          else onSchedule++;
+        });
+
+        if (document.getElementById('dash-orders-on-schedule')) document.getElementById('dash-orders-on-schedule').innerText = onSchedule;
+        if (document.getElementById('dash-orders-delayed')) document.getElementById('dash-orders-delayed').innerText = delayed;
+        if (document.getElementById('dash-orders-approval')) document.getElementById('dash-orders-approval').innerText = approval;
+        if (document.getElementById('dash-orders-dispatch')) document.getElementById('dash-orders-dispatch').innerText = dispatch;
+        if (document.getElementById('dash-orders-completed')) document.getElementById('dash-orders-completed').innerText = completed;
+
+        if (orders.length === 0) {
+          body.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-mutedText text-xs font-body">No production orders found.</td></tr>`;
+          return;
+        }
+
+        const STAGES_LIST = [
+          "01. Quotation & Contract Finalized",
+          "02. Fabric Sourcing & Mill Reservation",
+          "03. Lab Dip & Color Dye Approval",
+          "04. Pre-Production Sample Sign-Off",
+          "05. Precision CNC Fabric Cutting",
+          "06. Logo Embroidery & Screen Printing",
+          "07. Component Bundling & Panel Prep",
+          "08. Sewing & Stitch Assembly",
+          "09. Quality Control & Inline Inspection",
+          "10. Thread Trimming & Steam Pressing",
+          "11. Poly-Bags & Barcode Labeling",
+          "12. Final Quality Audit & Metal Detect",
+          "13. Carton Packing & Palletization",
+          "14. Dispatch & Logistics Tracking"
+        ];
+
+        body.innerHTML = orders.map(o => {
+          const statusBadge = o.status === 'Delayed'
+            ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-red-100 text-red-700">Delayed</span>`
+            : o.status === 'Ready for Dispatch'
+            ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-blue-100 text-blue-700">Ready for Dispatch</span>`
+            : o.status === 'Completed'
+            ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-gray-100 text-gray-700">Completed</span>`
+            : `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700">On Schedule</span>`;
+
+          const stageOptionsHtml = STAGES_LIST.map((st, idx) => `
+            <option value="${idx + 1}" ${Number(o.currentStageIndex || 1) === (idx + 1) ? 'selected' : ''}>${st}</option>
+          `).join('');
+
+          return `
+            <tr class="border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body">
+              <td class="p-4 font-mono font-bold text-primary">${o.orderNo || 'UW-ORD-' + (o._id || '101')}</td>
+              <td class="p-4 font-bold text-charcoal">
+                ${o.clientCompany || o.clientEmail || 'Corporate Client'}
+                <span class="block text-[10px] text-mutedText font-normal">${o.clientEmail || ''}</span>
+              </td>
+              <td class="p-4 font-semibold text-charcoal">
+                ${o.productName || 'Custom Workwear'}
+                <span class="block text-[10px] text-mutedText font-normal">${o.volume || '1,000 Pcs'}</span>
+              </td>
+              <td class="p-4">
+                <select onchange="updateOrderStage('${o._id || o.id}', this.value)" class="bg-white border border-lightBorder rounded-lg p-1.5 text-xs text-charcoal font-semibold focus:outline-none focus:border-primary">
+                  ${stageOptionsHtml}
+                </select>
+              </td>
+              <td class="p-4">${statusBadge}</td>
+              <td class="p-4 text-right">
+                <button onclick="alert('Updating stage tracker for ${o.orderNo || 'Order'}')" class="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-colors">
+                  Update Tracker
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error("Failed to render orders table:", err);
+      }
+    }
+    window.renderOrdersTable = renderOrdersTable;
+
+    async function updateOrderStage(orderId, newStageIndex) {
+      try {
+        await window.api.updateOrder(orderId, { currentStageIndex: Number(newStageIndex) });
+        alert(`Order stage updated to Stage ${newStageIndex}!`);
+        renderOrdersTable();
+      } catch (err) {
+        alert(err.message || "Failed to update order stage.");
+      }
+    }
+    window.updateOrderStage = updateOrderStage;
+
+
   </script>
 
   <!-- MODAL: Reject User -->

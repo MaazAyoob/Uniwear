@@ -10,7 +10,7 @@ const getUsers = async (req, res, next) => {
     const { search, role, status } = req.query;
     const filter = {};
     if (role) filter.role = role;
-    if (status) filter.status = status;
+    if (status && status !== 'All') filter.status = status;
     if (search) {
       filter.$or = [
         { email: { $regex: search, $options: 'i' } },

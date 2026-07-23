@@ -24,45 +24,42 @@ const catalogRoutes = require('./routes/catalogRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 
+// Extended Routes
+const exportRoutes = require('./routes/exportRoutes');
+const customerProductRoutes = require('./routes/customerProductRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ─── Connect to MongoDB ───────────────────────────────────────────────────────
+// Connect to MongoDB
 connectDB();
 
-// ─── Security & Optimization Middlewares ──────────────────────────────────────
 app.use(helmet({
-  contentSecurityPolicy: false, // Disable CSP to allow external CDNs loaded in frontend HTMLs
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
 
-// API Rate Limiter
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200, // Limit each IP to 200 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'Too many requests from this IP, please try again after 15 minutes.' }
 });
 app.use('/api', apiLimiter);
 
-// Gzip Compression
 app.use(compression());
 
-// Dynamic CORS Configuration
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
   : [];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // Allow server-to-server or programmatic calls
-
-    // Allow localhost/local files in dev, or if allowedOrigins list is empty
+    if (!origin) return callback(null, true);
     if (process.env.NODE_ENV !== 'production' || allowedOrigins.length === 0) {
       return callback(null, true);
     }
-
     if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
       return callback(null, true);
     } else {
@@ -76,14 +73,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(morgan('dev'));
-app.use(express.json({ limit: '10mb' }));   // Support base64 logo payloads
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-// ─── Serve static frontend files ─────────────────────────────────────────────
-// Adjust this path if your frontend sits elsewhere relative to server/
 app.use(express.static(path.join(__dirname, '..')));
 
-// ─── API Routes ───────────────────────────────────────────────────────────────
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/leads', leadRoutes);
@@ -96,18 +91,17 @@ app.use('/api/products', productRoutes);
 app.use('/api/catalog', catalogRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/export', exportRoutes);
+app.use('/api', customerProductRoutes);
 
-// ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'UNIWEAR API is running.', timestamp: new Date().toISOString() });
+  res.json({ success: true, message: 'UNIWEAR Production API is running.', timestamp: new Date().toISOString() });
 });
 
-// ─── Catch-All: serve index.html for direct navigation ───────────────────────
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-// ─── Global Error Handler ─────────────────────────────────────────────────────
 app.use(errorHandler);
 
 app.listen(PORT, () => {

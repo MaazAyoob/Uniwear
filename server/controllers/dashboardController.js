@@ -4,7 +4,6 @@ const Lead = require('../models/Lead');
 const Quotation = require('../models/Quotation');
 const Order = require('../models/Order');
 const User = require('../models/User');
-const ActivityLog = require('../models/ActivityLog');
 
 // GET /api/dashboard/stats
 const getDashboardStats = async (req, res, next) => {
@@ -16,8 +15,7 @@ const getDashboardStats = async (req, res, next) => {
       quotesCount,
       ordersCount,
       users,
-      categories,
-      recentActivity
+      categories
     ] = await Promise.all([
       Product.countDocuments(),
       Blog.countDocuments({ status: 'Published' }),
@@ -25,8 +23,7 @@ const getDashboardStats = async (req, res, next) => {
       Quotation.countDocuments(),
       Order.countDocuments(),
       User.find({}, 'role status').lean(),
-      Product.distinct('category'),
-      ActivityLog.find().sort({ createdAt: -1 }).limit(10).lean()
+      Product.distinct('category')
     ]);
 
     const activeCustomers = users.filter(u => u.role === 'Customer' && u.status === 'Active').length;
@@ -43,7 +40,7 @@ const getDashboardStats = async (req, res, next) => {
         activeCustomers,
         pendingCustomers,
         categoriesCount: categories.length,
-        recentActivity
+        recentActivity: []
       }
     });
   } catch (err) {

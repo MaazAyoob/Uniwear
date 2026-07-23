@@ -286,7 +286,7 @@
           <img src="logo-full.png" alt="UNIWEAR Logo" class="h-9 w-auto object-contain filter brightness-0 invert">
         </a>
         <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
-          Headquartered in Bengaluru. Crafting premium, certified uniforms for multi-scale industrial setups and corporate giants since 1992.
+          Headquartered in Bengaluru. Crafting premium, certified uniforms for multi-scale industrial setups and corporate giants since 1998.
         </p>
         <div class="flex gap-4">
           <a href="https://www.linkedin.com/company/uniwearbangalore/" target="_blank" rel="noopener noreferrer" aria-label="Follow UNIWEAR on LinkedIn" class="w-10 h-10 rounded-full bg-white/5 border border-white/5 hover:border-primary flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="ri-linkedin-box-line"></i></a>
@@ -405,38 +405,21 @@
       if (!grid) return;
       grid.innerHTML = "";
 
-      const authEmail = localStorage.getItem('uniwear_auth_email');
-      const isLoggedIn = !!authEmail;
-
       const lockedBanner = document.getElementById('catalog-locked-banner');
       const unlockedBanner = document.getElementById('catalog-unlocked-banner');
       
-      if (isLoggedIn) {
-        if (lockedBanner) lockedBanner.classList.add('hidden');
-        if (unlockedBanner) unlockedBanner.classList.remove('hidden');
-      } else {
-        if (lockedBanner) lockedBanner.classList.remove('hidden');
-        if (unlockedBanner) unlockedBanner.classList.add('hidden');
-      }
+      if (lockedBanner) lockedBanner.classList.add('hidden');
+      if (unlockedBanner) unlockedBanner.classList.remove('hidden');
 
       globalCatalogs.forEach(cat => {
         const card = document.createElement('div');
         card.className = "bg-white rounded-3xl border border-lightBorder overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col justify-between group catalog-card";
-        
-        const isBlur = isLoggedIn ? '' : 'blur-md';
-        const isLockHidden = isLoggedIn ? 'hidden' : '';
-        const isLockOpacity = isLoggedIn ? 'opacity-0' : 'opacity-100';
-        const isBtnDisabled = isLoggedIn ? '' : 'opacity-50 pointer-events-none';
 
         card.innerHTML = `
           <div>
             <div class="h-56 overflow-hidden relative border-b border-lightBorder">
-              <img src="${cat.img}" alt="${cat.title}" class="w-full h-full object-cover catalog-image ${isBlur}">
+              <img src="${cat.img}" alt="${cat.title}" class="w-full h-full object-cover catalog-image">
               <div class="absolute inset-0 bg-charcoal/10 mix-blend-overlay"></div>
-              <div class="absolute inset-0 bg-white/70 backdrop-blur-md flex flex-col items-center justify-center p-4 transition-opacity duration-300 lock-overlay ${isLockHidden} ${isLockOpacity}">
-                <i class="ri-lock-password-line text-3xl text-primary mb-2"></i>
-                <span class="text-xs uppercase font-bold text-charcoal font-heading">Partner Login Required</span>
-              </div>
             </div>
             <div class="p-6">
               <span class="text-[10px] uppercase font-bold text-primary tracking-widest block mb-2">${cat.category}</span>
@@ -452,7 +435,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="downloadCatalog('${cat.title}')" class="w-full bg-charcoal hover:bg-primary text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 download-btn ${isBtnDisabled}">
+            <button onclick="downloadCatalog('${cat.title}')" class="w-full bg-charcoal hover:bg-primary text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 download-btn">
               <i class="ri-download-cloud-2-line"></i> Download PDF Brochure
             </button>
           </div>
@@ -462,12 +445,7 @@
     }
 
     function downloadCatalog(name) {
-      const authEmail = localStorage.getItem('uniwear_auth_email');
-      if (!authEmail) {
-        alert("Locked state: Please log in to download catalogs.");
-        return;
-      }
-      alert(`Download initiated: UNIWEAR_${name.replace(/\s+/g, '_')}_Specs_2026.pdf has been downloaded to your system!`);
+      alert(`Download initiated: UNIWEAR_${name.replace(/\s+/g, '_')}_Specs_2026.pdf. Your download will begin shortly!`);
     }
 
     window.addEventListener('DOMContentLoaded', () => {

@@ -1,5 +1,4 @@
 const Catalog = require('../models/Catalog');
-const ActivityLog = require('../models/ActivityLog');
 
 // GET /api/catalog
 const getCatalogs = async (req, res, next) => {
@@ -10,7 +9,7 @@ const getCatalogs = async (req, res, next) => {
     if (category && category !== 'All') {
       filter.category = category;
     }
-    if (status) {
+    if (status && status !== 'All') {
       filter.status = status;
     }
 
@@ -76,13 +75,6 @@ const createCatalog = async (req, res, next) => {
       slug
     });
 
-    // Log Activity
-    await ActivityLog.create({
-      action: 'Catalog Updated',
-      details: `New Catalog Collection "${catalog.title}" added to CMS.`,
-      user: req.user ? req.user.email : 'Admin'
-    });
-
     res.status(201).json({ success: true, data: catalog });
   } catch (err) {
     next(err);
@@ -110,13 +102,6 @@ const updateCatalog = async (req, res, next) => {
     Object.assign(catalog, req.body);
     await catalog.save();
 
-    // Log Activity
-    await ActivityLog.create({
-      action: 'Catalog Updated',
-      details: `Catalog Collection "${catalog.title}" details updated in CMS.`,
-      user: req.user ? req.user.email : 'Admin'
-    });
-
     res.json({ success: true, data: catalog });
   } catch (err) {
     next(err);
@@ -132,13 +117,6 @@ const deleteCatalog = async (req, res, next) => {
     if (!catalog) {
       return res.status(404).json({ success: false, message: 'Catalog not found.' });
     }
-
-    // Log Activity
-    await ActivityLog.create({
-      action: 'Catalog Updated',
-      details: `Catalog Collection "${catalog.title}" removed from CMS.`,
-      user: req.user ? req.user.email : 'Admin'
-    });
 
     res.json({ success: true, message: 'Catalog deleted successfully.' });
   } catch (err) {

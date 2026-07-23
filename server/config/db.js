@@ -15,12 +15,12 @@ const {
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/uniwear';
+    const conn = await mongoose.connect(uri);
     console.log(`[DB] MongoDB Connected: ${conn.connection.host}`);
     await seedDatabase();
   } catch (err) {
-    console.error(`[DB] Connection Error: ${err.message}`);
-    process.exit(1);
+    console.error(`[DB] Connection Warning: ${err.message}`);
   }
 };
 

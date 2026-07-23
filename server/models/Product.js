@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-  id: { type: Number, required: true }, // Backwards compatibility for frontend numeric IDs
+  id: { type: Number }, // Backwards compatibility for frontend numeric IDs
   name: { type: String, required: true },
   category: { type: String, required: true },
   fabric: { type: String, default: '' },

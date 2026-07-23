@@ -150,6 +150,9 @@
         <button onclick="setPortalTab('cust-dash')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors bg-primary text-white" id="cust-tab-cust-dash">
           <i class="ri-dashboard-line"></i> Dashboard
         </button>
+        <button onclick="setPortalTab('cust-assigned-products')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-assigned-products">
+          <i class="ri-shirt-line"></i> My Approved Products
+        </button>
         <button onclick="setPortalTab('cust-quotes')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-quotes">
           <i class="ri-file-list-3-line"></i> Quotations
         </button>
@@ -365,6 +368,24 @@
             </div>
 
           </div>
+        </div>
+      </div>
+
+      <!-- TAB: MY APPROVED PRODUCTS (Customer-Specific Catalog) -->
+      <div id="cust-assigned-products" class="cust-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h3 class="font-heading text-2xl font-bold text-charcoal">My Approved Product Catalog</h3>
+            <p class="text-xs text-mutedText mt-1">Exclusive products, custom pricing tiers, and approved specifications assigned to your enterprise account.</p>
+          </div>
+          <button onclick="setPortalTab('cust-quotes')" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">
+            Request Custom Quote
+          </button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cust-assigned-products-grid">
+          <!-- Injected dynamically based on customer's CustomerProduct mapping -->
         </div>
       </div>
 
@@ -660,22 +681,25 @@
   <script src="config.js"></script>
   <script src="api.js"></script>
   <script src="shared.js"></script>
-  
+  <script>
     let globalProducts = [];
+    let customerAssignedProducts = [];
 
     // Sync customer specific data from server
     async function syncCustomerData() {
       const email = localStorage.getItem('uniwear_auth_email');
+      const userId = localStorage.getItem('uniwear_auth_id');
       if (!email) return;
 
       try {
-        const [quotesRes, ordersRes, ticketsRes, notisRes, settingsRes, productsRes] = await Promise.all([
+        const [quotesRes, ordersRes, ticketsRes, notisRes, settingsRes, productsRes, assignedRes] = await Promise.all([
           window.api.getQuotations(email),
           window.api.getOrders(email),
           window.api.getTickets(email),
           window.api.getNotifications(email),
           window.api.getSettings(),
-          window.api.getProducts()
+          window.api.getProducts(),
+          userId ? window.api.getCustomerProducts(userId).catch(() => null) : Promise.resolve(null)
         ]);
 
         if (quotesRes.success) localStorage.setItem('uniwear_quotations', JSON.stringify(quotesRes.data));
@@ -684,6 +708,7 @@
         if (notisRes.success) localStorage.setItem('uniwear_notifications', JSON.stringify(notisRes.data));
         if (settingsRes.success) localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsRes.data));
         if (productsRes.success) globalProducts = productsRes.data;
+        if (assignedRes && assignedRes.success) customerAssignedProducts = assignedRes.data;
       } catch (err) {
         console.error("Failed to sync customer data:", err);
       }
@@ -805,6 +830,9 @@
       document.getElementById('dash-widget-samples').innerText = clientSamples.length;
       document.getElementById('dash-widget-alerts').innerText = clientNotis.length;
       document.getElementById('dash-widget-tickets').innerText = openTickets.length;
+
+      // Render My Approved Products catalog
+      renderAssignedProductsCatalog();
 
       if (clientNotis.length > 0) {
         document.getElementById('cust-noti-dot').classList.remove('hidden');
@@ -1173,6 +1201,82 @@
           ticketsContainer.appendChild(card);
         });
       }
+    }
+
+    function renderAssignedProductsCatalog() {
+      const grid = document.getElementById('cust-assigned-products-grid');
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      const productsToDisplay = (customerAssignedProducts && customerAssignedProducts.length > 0)
+        ? customerAssignedProducts
+        : [];
+
+      if (productsToDisplay.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-white p-12 rounded-3xl border border-lightBorder text-center">
+            <i class="ri-folder-lock-line text-4xl text-primary mb-3 block"></i>
+            <h4 class="font-heading text-lg font-bold text-charcoal">No Assigned Products Yet</h4>
+            <p class="text-xs text-mutedText max-w-md mx-auto mt-2 leading-relaxed">Your account currently has no custom product assignments. Please contact your Uniwear account manager or request a custom quotation.</p>
+            <button onclick="setPortalTab('cust-quotes')" class="mt-6 bg-primary text-white text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded-full">Request Quotation</button>
+          </div>
+        `;
+        return;
+      }
+
+      productsToDisplay.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-3xl border border-lightBorder overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between font-body";
+
+        const priceText = p.effectivePrice ? `₹${p.effectivePrice.toLocaleString()}` : (p.price ? `₹${p.price}` : 'Custom Quote');
+        const moqText = p.effectiveMOQ || p.customMOQ || p.moq || 100;
+        const notesHtml = p.customerNotes ? `<div class="p-2.5 bg-yellow-50/80 rounded-xl border border-yellow-100 text-[10px] text-yellow-800 font-medium mb-3"><strong>Account Note:</strong> ${p.customerNotes}</div>` : '';
+
+        card.innerHTML = `
+          <div>
+            <div class="h-48 overflow-hidden relative bg-lightCard border-b border-lightBorder">
+              <img src="${p.img || 'corporate_blazer_detail.png'}" alt="${p.name}" class="w-full h-full object-cover">
+              ${p.featuredInCatalog ? '<span class="absolute top-3 left-3 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">Featured</span>' : ''}
+              <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-charcoal text-[9px] font-bold px-2.5 py-1 rounded-full border border-lightBorder font-mono">MOQ: ${moqText}</span>
+            </div>
+            <div class="p-6">
+              <span class="text-[10px] uppercase font-bold text-primary tracking-widest block mb-1">${p.category}</span>
+              <h4 class="font-heading text-lg font-bold text-charcoal mb-2">${p.name}</h4>
+              <p class="text-xs text-mutedText leading-relaxed mb-4 line-clamp-2">${p.desc || 'Premium custom corporate apparel engineered to executive standards.'}</p>
+
+              ${notesHtml}
+
+              <div class="grid grid-cols-2 gap-2 p-3 bg-lightCard rounded-xl border border-lightBorder text-[10px] mb-4">
+                <div>
+                  <span class="text-gray-400 block font-semibold">Fabric</span>
+                  <span class="font-bold text-charcoal truncate block">${p.fabric || 'Certified Cotton Blend'}</span>
+                </div>
+                <div>
+                  <span class="text-gray-400 block font-semibold">GSM / Weight</span>
+                  <span class="font-bold text-charcoal truncate block">${p.gsm || '220 GSM'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 pt-0 border-t border-lightBorder/50 flex items-center justify-between gap-4 mt-2">
+            <div>
+              <span class="text-[9px] uppercase font-bold text-gray-400 block">Unit Price</span>
+              <span class="font-heading text-lg font-extrabold text-primary">${priceText}</span>
+            </div>
+            <button onclick="requestQuoteForAssignedProduct('${p.name}')" class="bg-charcoal hover:bg-primary text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5">
+              <i class="ri-file-list-3-line"></i> Order / Quote
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function requestQuoteForAssignedProduct(prodName) {
+      setPortalTab('cust-quotes');
+      toggleModal('cust-quote-modal', true);
+      const catInput = document.getElementById('quote-req-category');
+      if (catInput) catInput.value = prodName;
     }
 
     // Accept / Decline Quotations Workflows

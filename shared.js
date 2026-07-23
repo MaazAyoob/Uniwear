@@ -536,6 +536,78 @@ const defaultProducts = [
     img: "corporate_gifting_mockup.png",
     status: "Active",
     featured: true
+  },
+  {
+    id: 21,
+    name: "Executive Tech Backpack",
+    category: "Corporate Gifting",
+    fabric: "Water-Resistant Ballistic Nylon",
+    gsm: "N/A",
+    moq: 50,
+    desc: "Ergonomic laptop backpack with USB charging port, RFID security pocket, and custom company logo patch.",
+    img: "images/Industries We Serve/Corporate Gifting.png",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 22,
+    name: "Insulated Stainless Steel Bottle",
+    category: "Corporate Gifting",
+    fabric: "Food-Grade 304 Stainless Steel",
+    gsm: "750ml",
+    moq: 100,
+    desc: "Double-wall vacuum insulated thermal flask. Keeps beverages hot for 12h / cold for 24h. Custom laser engraved logo.",
+    img: "images/Industries We Serve/Corporate Gifting.png",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 23,
+    name: "Matte Ceramic Coffee Mug",
+    category: "Corporate Gifting",
+    fabric: "Premium Glazed Stoneware",
+    gsm: "350ml",
+    moq: 100,
+    desc: "Sleek matte finish desk mug with cork base and spill-proof lid. Microwave safe with high-durability print.",
+    img: "images/Industries We Serve/Corporate Gifting.png",
+    status: "Active",
+    featured: false
+  },
+  {
+    id: 24,
+    name: "Softshell Corporate Windbreaker Jacket",
+    category: "Corporate Gifting",
+    fabric: "Fleece-Lined Weatherproof Shell",
+    gsm: "280 GSM",
+    moq: 50,
+    desc: "Premium executive outdoor jacket with customized chest logo embroidery and weather-sealed zippers.",
+    img: "images/Industries We Serve/Corporate Gifting.png",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 25,
+    name: "Wireless Power Bank 10,000mAh",
+    category: "Corporate Gifting",
+    fabric: "Anodized Aluminum Casing",
+    gsm: "N/A",
+    moq: 50,
+    desc: "Fast-charging mag-safe wireless power bank with LED battery display and customized laser branding.",
+    img: "images/Industries We Serve/Corporate Gifting.png",
+    status: "Active",
+    featured: true
+  },
+  {
+    id: 26,
+    name: "Prestige Executive Crystal Award",
+    category: "Corporate Gifting",
+    fabric: "K9 Optical Crystal & Hardwood Base",
+    gsm: "N/A",
+    moq: 10,
+    desc: "Handcrafted crystal trophy for annual employee excellence awards and executive recognition ceremonies.",
+    img: "images/Industries We Serve/Corporate Gifting.png",
+    status: "Active",
+    featured: true
   }
 ];
 
@@ -1360,6 +1432,49 @@ themeStyleEl.textContent = `
     background-color: var(--card-bg) !important;
   }
   
+  html[data-theme="dark"] .bg-gray-50,
+  html[data-theme="dark"] .bg-slate-50 {
+    background-color: var(--card-bg) !important;
+  }
+  
+  html[data-theme="dark"] .bg-gray-100,
+  html[data-theme="dark"] .bg-slate-100 {
+    background-color: var(--bg-color) !important;
+  }
+
+  html[data-theme="dark"] .bg-gray-50\/80 {
+    background-color: rgba(17, 24, 39, 0.8) !important;
+  }
+
+  html[data-theme="dark"] .bg-gray-50\/50 {
+    background-color: rgba(17, 24, 39, 0.5) !important;
+  }
+
+  html[data-theme="dark"] .bg-white\/95 {
+    background-color: rgba(17, 24, 39, 0.95) !important;
+  }
+  
+  html[data-theme="dark"] .bg-white\/90 {
+    background-color: rgba(17, 24, 39, 0.90) !important;
+  }
+  
+  html[data-theme="dark"] .bg-white\/85 {
+    background-color: rgba(17, 24, 39, 0.85) !important;
+  }
+  
+  html[data-theme="dark"] .bg-white\/80 {
+    background-color: rgba(17, 24, 39, 0.80) !important;
+  }
+  
+  html[data-theme="dark"] .bg-white\/75 {
+    background-color: rgba(17, 24, 39, 0.75) !important;
+  }
+
+  html[data-theme="dark"] [id^="step-btn-"] {
+    background-color: var(--card-bg) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+  
   html[data-theme="dark"] .text-charcoal {
     color: var(--text-color) !important;
   }
@@ -1384,6 +1499,16 @@ themeStyleEl.textContent = `
   html[data-theme="dark"] select:focus,
   html[data-theme="dark"] textarea:focus {
     border-color: #B91C1C !important;
+  }
+  
+  html[data-theme="dark"] input::placeholder,
+  html[data-theme="dark"] textarea::placeholder {
+    color: #9CA3AF !important;
+    opacity: 0.6 !important;
+  }
+  
+  html[data-theme="dark"] .bg-white\/35 {
+    background-color: rgba(11, 15, 25, 0.65) !important;
   }
   
   html[data-theme="dark"] .glass-nav {
@@ -3424,5 +3549,98 @@ function closeBlogArticleModal(triggerHistoryBack = true) {
 // Expose open/close globally
 window.openBlogArticleModal = openBlogArticleModal;
 window.closeBlogArticleModal = closeBlogArticleModal;
+
+// ─── Dynamic CMS Content Injector ─────────────────────────────────────────────
+async function initDynamicPageContent() {
+  try {
+    if (!window.api || !window.api.getSettings) return;
+
+    // Fetch dynamic settings from API
+    const res = await window.api.getSettings().catch(() => null);
+    const settings = res && res.data ? res.data : {};
+
+    // 1. Dynamic Phone & Contact Updates
+    const phoneStr = settings.phone || '+91 80 2658 0000';
+    const emailStr = settings.supportEmail || 'connect@uniwear.co';
+    const addressStr = settings.address || 'No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070';
+    const foundingYear = settings.foundingYear || '1998';
+    const partnerName = settings.managingPartner || 'Suresh H. A.';
+
+    // Inject phone links across header/footer
+    document.querySelectorAll('[data-bind="company-phone"]').forEach(el => {
+      el.textContent = phoneStr;
+      if (el.tagName === 'A') el.href = `tel:${phoneStr.split(',')[0].replace(/[^0-9+]/g, '')}`;
+    });
+    document.querySelectorAll('[data-bind="company-email"]').forEach(el => {
+      el.textContent = emailStr;
+      if (el.tagName === 'A') el.href = `mailto:${emailStr}`;
+    });
+    document.querySelectorAll('[data-bind="company-address"]').forEach(el => {
+      el.textContent = addressStr;
+    });
+    document.querySelectorAll('[data-bind="founding-year"]').forEach(el => {
+      el.textContent = foundingYear;
+    });
+    document.querySelectorAll('[data-bind="managing-partner"]').forEach(el => {
+      el.textContent = partnerName;
+    });
+
+    // 2. Dynamic Hero Content (if on homepage and hero element exists)
+    if (settings.homepageHero && document.querySelector('.hero-section')) {
+      const hero = settings.homepageHero;
+      const h1 = document.querySelector('.hero-section h1');
+      if (h1 && hero.title) h1.innerHTML = hero.title.replace('Your Premium', '<span class="text-reveal-wrap"><span class="hero-reveal block">Your Premium</span></span>').replace('Workwear Partner', '<span class="text-reveal-wrap"><span class="hero-reveal block text-primary">Workwear Partner</span></span>');
+      const p = document.querySelector('.hero-section p');
+      if (p && hero.subtitle) p.textContent = hero.subtitle;
+    }
+
+    // 3. Inject Floating WhatsApp Button & Sticky Quote CTA if not present
+    if (!document.getElementById('floating-whatsapp-btn')) {
+      const waBtn = document.createElement('a');
+      waBtn.id = 'floating-whatsapp-btn';
+      waBtn.href = settings.socialLinks?.whatsapp || 'https://wa.me/919108765831';
+      waBtn.target = '_blank';
+      waBtn.rel = 'noopener';
+      waBtn.className = 'fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-transform hover:scale-110';
+      waBtn.innerHTML = '<i class="ri-whatsapp-line text-3xl"></i>';
+      waBtn.title = 'Chat on WhatsApp';
+      document.body.appendChild(waBtn);
+    }
+
+    // 4. Inject Sticky Request Quote Bar (mobile/desktop trigger)
+    if (!document.getElementById('sticky-quote-bar')) {
+      const bar = document.createElement('div');
+      bar.id = 'sticky-quote-bar';
+      bar.className = 'fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-lightBorder p-3 px-6 z-40 flex items-center justify-between shadow-lg md:hidden';
+      bar.innerHTML = `
+        <div class="flex items-center gap-2">
+          <i class="ri-phone-fill text-primary text-lg"></i>
+          <a href="tel:+918026580000" class="text-xs font-bold text-charcoal">+91 80 2658 0000</a>
+        </div>
+        <a href="contact.html" class="bg-primary text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-wider">Request Quote</a>
+      `;
+      document.body.appendChild(bar);
+    }
+
+    // 5. Dynamic Client Logos
+    if (window.api.getClientLogos && document.getElementById('client-logos-container')) {
+      const logoRes = await window.api.getClientLogos({ active: 'true' }).catch(() => null);
+      if (logoRes && logoRes.data && logoRes.data.length > 0) {
+        const container = document.getElementById('client-logos-container');
+        container.innerHTML = logoRes.data.map(l => `
+          <div class="p-4 bg-white rounded-xl border border-lightBorder flex items-center justify-center shadow-sm hover:shadow-md transition-shadow h-20">
+            <img src="${l.logoUrl}" alt="${l.name}" class="max-h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all">
+          </div>
+        `).join('');
+      }
+    }
+
+  } catch (e) {
+    console.error('[initDynamicPageContent error]', e.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initDynamicPageContent);
+
 
 

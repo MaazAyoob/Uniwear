@@ -1,13 +1,42 @@
 const CompanySettings = require('../models/CompanySettings');
 const { sendMail, emailTemplates } = require('../config/mailer');
 
+const logActivity = async (action, details, user = 'Admin') => {};
+
 // GET /api/company-settings
 const getSettings = async (req, res, next) => {
   try {
     let settings = await CompanySettings.findOne().lean();
     if (!settings) {
-      // Safety: create defaults if somehow missing
-      settings = await CompanySettings.create({});
+      settings = await CompanySettings.create({
+        companyName: 'UNIWEAR',
+        foundingYear: '1998',
+        managingPartner: 'Suresh H. A.',
+        supportEmail: 'connect@uniwear.co',
+        salesEmail: 'sales@uniwear.co',
+        phone: '+91 80 2658 0000, +91 91087 65831',
+        address: 'No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070',
+        homepageHero: {
+          title: 'Uniforms That Represent Your Brand',
+          subtitle: 'Industrial, corporate, hospitality, healthcare and institutional uniforms—along with premium corporate gifting—designed and manufactured in Bengaluru.',
+          bannerUrl: "images/Banner image home page/Banner image'.png",
+          primaryCtaText: 'Request a Quote',
+          primaryCtaLink: 'contact.html',
+          secondaryCtaText: 'Explore Our Solutions',
+          secondaryCtaLink: 'uniforms.html'
+        },
+        homepageStats: [
+          { key: 'founding', label: 'Since 1998', value: '1998', numberValue: 1998 },
+          { key: 'clients', label: '2,000+ Clients Served', value: '2,000+', numberValue: 2000 },
+          { key: 'pincodes', label: '2,000+ Pincodes Served', value: '2,000+', numberValue: 2000 },
+          { key: 'delivery', label: 'Pan-India Delivery', value: 'Pan-India', numberValue: 100 }
+        ],
+        whyChooseUs: [
+          { title: 'On-Time Delivery', subtitle: 'Optimized production scheduling ensuring deadlines are met consistently across bulk shipments.', icon: 'ri-time-line' },
+          { title: 'Best-in-Class', subtitle: 'Rigorous 14-point fabric and stitch testing standards for structural longevity and comfort.', icon: 'ri-award-line' },
+          { title: 'Enhanced Customer Experience', subtitle: 'Dedicated account management, custom fitting sampling, and real-time order tracking.', icon: 'ri-user-heart-line' }
+        ]
+      });
     }
     res.json({ success: true, data: settings });
   } catch (err) {
@@ -20,7 +49,6 @@ const updateSettings = async (req, res, next) => {
   try {
     const updates = { ...req.body };
 
-    // Handle logo/favicon base64 from multer memory upload if provided
     if (req.files) {
       if (req.files.logo) {
         const buf = req.files.logo[0].buffer;
@@ -42,13 +70,11 @@ const updateSettings = async (req, res, next) => {
       await settings.save();
     }
 
-    // Send settings changed email notification (non-blocking & safe try-catch wrapper)
+    await logActivity('Company Settings Updated', 'Global Company Settings and CMS attributes were updated.');
+
     try {
-      sendMail(emailTemplates.settingsUpdated(settings))
-        .catch(err => console.error('[Mailer Trigger Error] settingsUpdated failed:', err.message));
-    } catch (mailErr) {
-      console.error('[Mailer Trigger Error] settingsUpdated generation failed:', mailErr.message);
-    }
+      sendMail(emailTemplates.settingsUpdated(settings)).catch(e => {});
+    } catch (e) {}
 
     res.json({ success: true, data: settings });
   } catch (err) {

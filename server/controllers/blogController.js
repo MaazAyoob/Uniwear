@@ -1,5 +1,4 @@
 const Blog = require('../models/Blog');
-const ActivityLog = require('../models/ActivityLog');
 
 // GET /api/blogs
 const getBlogs = async (req, res, next) => {
@@ -10,7 +9,7 @@ const getBlogs = async (req, res, next) => {
     if (category && category !== 'All') {
       filter.category = category;
     }
-    if (status) {
+    if (status && status !== 'All') {
       filter.status = status;
     }
 

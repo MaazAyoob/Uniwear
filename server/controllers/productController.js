@@ -1,5 +1,4 @@
 const Product = require('../models/Product');
-const ActivityLog = require('../models/ActivityLog');
 
 // GET /api/products
 const getProducts = async (req, res, next) => {
@@ -10,7 +9,7 @@ const getProducts = async (req, res, next) => {
     if (category && category !== 'All') {
       filter.category = category;
     }
-    if (status) {
+    if (status && status !== 'All') {
       filter.status = status;
     }
     if (featured !== undefined) {
@@ -124,14 +123,6 @@ const createProduct = async (req, res, next) => {
     };
 
     const product = await Product.create(payload);
-
-    // Track activity log
-    await ActivityLog.create({
-      action: 'Product Created',
-      details: `Product "${product.name}" created under category "${product.category}".`,
-      user: req.user ? req.user.email : 'Admin'
-    });
-
     res.status(201).json({ success: true, data: product });
   } catch (err) {
     next(err);
@@ -154,7 +145,7 @@ const updateProduct = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Product not found.' });
     }
 
-    const { sku, status, featured } = req.body;
+    const { sku } = req.body;
 
     // SKU check
     if (sku && sku !== product.sku) {
@@ -164,24 +155,12 @@ const updateProduct = async (req, res, next) => {
       }
     }
 
-    // Determine log actions
-    let actionDetails = [];
-    if (status !== undefined && status !== product.status) actionDetails.push(`status to ${status}`);
-    if (featured !== undefined && featured !== product.featured) actionDetails.push(`featured state to ${featured}`);
-
     const updates = { ...req.body };
     if (updates.desc && !updates.description) updates.description = updates.desc;
     if (updates.description && !updates.desc) updates.desc = updates.description;
 
     Object.assign(product, updates);
     await product.save();
-
-    // Track activity log
-    await ActivityLog.create({
-      action: actionDetails.length > 0 ? 'Status Changed' : 'Product Edited',
-      details: `Product "${product.name}" updated.${actionDetails.length > 0 ? ' Adjusted: ' + actionDetails.join(', ') : ''}`,
-      user: req.user ? req.user.email : 'Admin'
-    });
 
     res.json({ success: true, data: product });
   } catch (err) {
@@ -204,13 +183,6 @@ const deleteProduct = async (req, res, next) => {
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found.' });
     }
-
-    // Track activity log
-    await ActivityLog.create({
-      action: 'Product Deleted',
-      details: `Product "${product.name}" (SKU: ${product.sku || 'N/A'}) deleted.`,
-      user: req.user ? req.user.email : 'Admin'
-    });
 
     res.json({ success: true, message: 'Product deleted successfully.' });
   } catch (err) {
