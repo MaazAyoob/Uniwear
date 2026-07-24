@@ -124,22 +124,22 @@
 
     /* Viewport-Driven Layout System for Hero Section (Dual-Axis 2D Fluid Scaling) */
     .hero-headline-fluid {
-      font-size: clamp(2.2rem, 4.2vw, 6.5rem) !important;
+      font-size: clamp(2.2rem, calc(2.8vw + 2.5vh), 6.8rem) !important;
       line-height: 0.96 !important;
       letter-spacing: -0.035em !important;
     }
 
     .hero-subhead-fluid {
-      font-size: clamp(1.2rem, 2.3vw, 3.8rem) !important;
+      font-size: clamp(1.2rem, calc(1.4vw + 1.4vh), 4.0rem) !important;
       line-height: 0.98 !important;
       letter-spacing: -0.025em !important;
-      margin-top: clamp(0.3rem, 0.8vh, 0.8rem);
+      margin-top: clamp(0.4rem, calc(0.5vw + 1vh), 1.5rem);
     }
 
     .hero-desc-fluid {
-      font-size: clamp(0.95rem, 1.35vw, 1.6rem) !important;
+      font-size: clamp(0.95rem, calc(0.7vw + 1vh), 1.65rem) !important;
       line-height: 1.55 !important;
-      margin-top: clamp(0.4rem, 1vh, 1.1rem);
+      margin-top: clamp(0.5rem, calc(0.6vw + 1.2vh), 2.0rem);
     }
 
     /* ============================================
@@ -149,56 +149,66 @@
 
     /* Left column vertical padding */
     .hero-left-col {
-      padding-top: clamp(0.5rem, 1.2vh, 1.5rem);
-      padding-bottom: clamp(0.5rem, 1.2vh, 1.5rem);
+      padding-top: clamp(0.5rem, 1.8vh, 2.8rem);
+      padding-bottom: clamp(0.5rem, 1.8vh, 2.8rem);
     }
 
     /* Zone 2: heading zone inner padding + gap */
     .hero-zone2 {
-      padding-top: clamp(0.5rem, 1.5vh, 2rem);
-      padding-bottom: clamp(0.5rem, 1.5vh, 2rem);
-      gap: clamp(0.5rem, calc(0.4vw + 1vh), 1.6rem);
+      padding-top: clamp(0.5rem, 2vh, 3.2rem);
+      padding-bottom: clamp(0.5rem, 2vh, 3.2rem);
+      gap: clamp(0.75rem, calc(0.8vw + 1.6vh), 2.8rem);
     }
 
     /* Zone 3: buttons + trust zone gap */
     .hero-zone3 {
-      gap: clamp(0.6rem, calc(0.5vw + 1.2vh), 1.8rem);
+      gap: clamp(0.75rem, calc(1vw + 1.8vh), 3.2rem);
+    }
+
+    /* CTA Button row gap */
+    .hero-btn-row {
+      gap: clamp(0.75rem, calc(0.8vw + 1vh), 2.2rem);
     }
 
     /* Badge label */
     .hero-badge-text {
-      font-size: clamp(0.65rem, calc(0.35vw + 0.6vh), 1rem) !important;
+      font-size: clamp(0.65rem, calc(0.35vw + 0.6vh), 1.05rem) !important;
       letter-spacing: 0.14em;
     }
 
     /* CTA Buttons — fluid padding + font */
     .hero-btn-fluid {
-      padding-top: clamp(0.65rem, calc(0.3vw + 1.2vh), 1.3rem) !important;
-      padding-bottom: clamp(0.65rem, calc(0.3vw + 1.2vh), 1.3rem) !important;
-      padding-left: clamp(1.3rem, calc(1vw + 1.5vh), 2.8rem) !important;
-      padding-right: clamp(1.3rem, calc(1vw + 1.5vh), 2.8rem) !important;
-      font-size: clamp(0.85rem, calc(0.45vw + 0.8vh), 1.25rem) !important;
-      border-radius: clamp(0.65rem, 0.9vw, 1.1rem) !important;
+      padding-top: clamp(0.7rem, calc(0.4vw + 1.3vh), 1.4rem) !important;
+      padding-bottom: clamp(0.7rem, calc(0.4vw + 1.3vh), 1.4rem) !important;
+      padding-left: clamp(1.4rem, calc(1.2vw + 1.6vh), 3.2rem) !important;
+      padding-right: clamp(1.4rem, calc(1.2vw + 1.6vh), 3.2rem) !important;
+      font-size: clamp(0.85rem, calc(0.45vw + 0.8vh), 1.3rem) !important;
+      border-radius: clamp(0.65rem, 0.9vw, 1.2rem) !important;
+    }
+
+    /* Trust Divider top padding */
+    .hero-trust-divider {
+      padding-top: clamp(0.75rem, calc(0.6vw + 1.2vh), 2.2rem) !important;
     }
 
     /* Trust metric labels */
     .hero-trust-label {
-      font-size: clamp(0.55rem, calc(0.25vw + 0.5vh), 0.8rem) !important;
+      font-size: clamp(0.55rem, calc(0.25vw + 0.5vh), 0.85rem) !important;
     }
 
     /* Trust metric values */
     .hero-trust-value {
-      font-size: clamp(0.75rem, calc(0.4vw + 0.7vh), 1.25rem) !important;
+      font-size: clamp(0.75rem, calc(0.4vw + 0.7vh), 1.3rem) !important;
     }
 
     /* Trust grid gap */
     .hero-trust-grid {
-      gap: clamp(0.5rem, calc(0.5vw + 1vh), 1.5rem);
+      gap: clamp(0.75rem, calc(0.8vw + 1.5vh), 2.5rem);
     }
 
     /* Grid gap between columns */
     .hero-grid {
-      gap: clamp(1rem, calc(1.5vw + 1vh), 3.5rem);
+      gap: clamp(1.5rem, calc(2.5vw + 2vh), 5rem);
     }
 
     .hero-viewport-card {
@@ -577,8 +587,7 @@
 
             <!-- Zone 3: Buttons + Trust Bar (pinned at bottom) -->
             <div class="hero-zone3 shrink-0 flex flex-col">
-              <!-- CTA Buttons -->
-              <div class="hero-reveal flex flex-col sm:flex-row items-center justify-start gap-3 w-full">
+              <div class="hero-btn-row hero-reveal flex flex-col sm:flex-row items-center justify-start w-full">
                 <a href="contact.html" class="hero-btn-fluid w-full sm:w-auto bg-primary hover:bg-primaryHover text-white font-bold transition-all duration-300 shadow-md shadow-primary/20 flex items-center justify-center gap-2 group">
                   <span>Request Consultation</span>
                   <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform"></i>
