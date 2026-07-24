@@ -216,6 +216,15 @@
       width: 100% !important;
     }
 
+    /* Industry Cards Subtle Bottom Fade (Light & Dark Mode Support) */
+    .industry-card-fade {
+      background: linear-gradient(to top, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0) 100%);
+    }
+
+    [data-theme="dark"] .industry-card-fade {
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.25) 60%, rgba(15, 23, 42, 0) 100%) !important;
+    }
+
     /* =============================================
        HERO SECTION – DATA-THEME DARK MODE OVERRIDES
        ============================================= */
@@ -771,7 +780,7 @@
               <div class="h-60 overflow-hidden relative">
                 <img src="assets/images/industries/industrial-uniforms.png" alt="Industrial Uniforms"
                   class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
               </div>
               <div class="p-8 relative bg-white">
                 <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Industrial Uniforms</h3>
@@ -791,7 +800,7 @@
               <div class="h-60 overflow-hidden relative">
                 <img src="assets/images/industries/corporate-uniforms.png" alt="Corporate Uniforms"
                   class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
               </div>
               <div class="p-8 relative bg-white">
                 <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Corporate Uniforms</h3>
@@ -811,7 +820,7 @@
               <div class="h-60 overflow-hidden relative">
                 <img src="assets/images/industries/hospitality-uniforms.png" alt="Hospitality Uniforms"
                   class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
               </div>
               <div class="p-8 relative bg-white">
                 <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Hospitality Uniforms</h3>
@@ -831,7 +840,7 @@
               <div class="h-60 overflow-hidden relative">
                 <img src="assets/images/industries/institutional-uniforms.png" alt="Institutional Uniforms"
                   class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
               </div>
               <div class="p-8 relative bg-white">
                 <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Institutional Uniforms</h3>
@@ -851,7 +860,7 @@
               <div class="h-60 overflow-hidden relative">
                 <img src="assets/images/industries/corporate-gifting.png" alt="Corporate Gifting"
                   class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
               </div>
               <div class="p-8 relative bg-white">
                 <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Corporate Gifting</h3>
