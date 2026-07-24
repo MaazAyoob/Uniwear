@@ -122,22 +122,83 @@
       font-weight: 700;
     }
 
-    /* Viewport-Driven Layout System for Hero Section */
+    /* Viewport-Driven Layout System for Hero Section (Dual-Axis 2D Fluid Scaling) */
     .hero-headline-fluid {
-      font-size: clamp(1.9rem, 5.5vw, 9rem) !important;
-      line-height: 0.95 !important;
+      font-size: clamp(2.2rem, 4.2vw, 6.5rem) !important;
+      line-height: 0.96 !important;
       letter-spacing: -0.035em !important;
     }
 
     .hero-subhead-fluid {
-      font-size: clamp(1.1rem, 3.0vw, 5rem) !important;
-      line-height: 0.97 !important;
+      font-size: clamp(1.2rem, 2.3vw, 3.8rem) !important;
+      line-height: 0.98 !important;
       letter-spacing: -0.025em !important;
+      margin-top: clamp(0.3rem, 0.8vh, 0.8rem);
     }
 
     .hero-desc-fluid {
-      font-size: clamp(0.8rem, 1.0vw, 1.1rem) !important;
-      line-height: 1.6 !important;
+      font-size: clamp(0.95rem, 1.35vw, 1.6rem) !important;
+      line-height: 1.55 !important;
+      margin-top: clamp(0.4rem, 1vh, 1.1rem);
+    }
+
+    /* ============================================
+       HERO COMPLETE FLUID SCALING SYSTEM
+       Every spacing, font, button scales with vw + vh
+       ============================================ */
+
+    /* Left column vertical padding */
+    .hero-left-col {
+      padding-top: clamp(0.5rem, 1.2vh, 1.5rem);
+      padding-bottom: clamp(0.5rem, 1.2vh, 1.5rem);
+    }
+
+    /* Zone 2: heading zone inner padding + gap */
+    .hero-zone2 {
+      padding-top: clamp(0.5rem, 1.5vh, 2rem);
+      padding-bottom: clamp(0.5rem, 1.5vh, 2rem);
+      gap: clamp(0.5rem, calc(0.4vw + 1vh), 1.6rem);
+    }
+
+    /* Zone 3: buttons + trust zone gap */
+    .hero-zone3 {
+      gap: clamp(0.6rem, calc(0.5vw + 1.2vh), 1.8rem);
+    }
+
+    /* Badge label */
+    .hero-badge-text {
+      font-size: clamp(0.65rem, calc(0.35vw + 0.6vh), 1rem) !important;
+      letter-spacing: 0.14em;
+    }
+
+    /* CTA Buttons — fluid padding + font */
+    .hero-btn-fluid {
+      padding-top: clamp(0.65rem, calc(0.3vw + 1.2vh), 1.3rem) !important;
+      padding-bottom: clamp(0.65rem, calc(0.3vw + 1.2vh), 1.3rem) !important;
+      padding-left: clamp(1.3rem, calc(1vw + 1.5vh), 2.8rem) !important;
+      padding-right: clamp(1.3rem, calc(1vw + 1.5vh), 2.8rem) !important;
+      font-size: clamp(0.85rem, calc(0.45vw + 0.8vh), 1.25rem) !important;
+      border-radius: clamp(0.65rem, 0.9vw, 1.1rem) !important;
+    }
+
+    /* Trust metric labels */
+    .hero-trust-label {
+      font-size: clamp(0.55rem, calc(0.25vw + 0.5vh), 0.8rem) !important;
+    }
+
+    /* Trust metric values */
+    .hero-trust-value {
+      font-size: clamp(0.75rem, calc(0.4vw + 0.7vh), 1.25rem) !important;
+    }
+
+    /* Trust grid gap */
+    .hero-trust-grid {
+      gap: clamp(0.5rem, calc(0.5vw + 1vh), 1.5rem);
+    }
+
+    /* Grid gap between columns */
+    .hero-grid {
+      gap: clamp(1rem, calc(1.5vw + 1vh), 3.5rem);
     }
 
     .hero-viewport-card {
@@ -475,92 +536,86 @@
 
   <!-- MAIN HOMEPAGE CONTENT -->
   <main>
-    <!-- Pure Viewport-Driven 50/50 Hero Section: Calc 100dvh - 80px Navbar, Equal Height Inherited Columns, Vertical Space-Between Distribution -->
-    <section class="hero-section-wrapper relative h-screen min-h-[540px] max-h-[920px] flex flex-col px-4 sm:px-6 lg:px-6 bg-slate-50 border-b border-gray-200/80 overflow-hidden">
-      
-      <!-- Mobile-Only Background Image & Overlays (< lg) -->
+    <!-- 50/50 Fluid Hero Section -->
+    <section class="hero-section-wrapper relative h-screen min-h-[500px] max-h-[1050px] flex flex-col px-4 sm:px-6 lg:px-6 bg-slate-50 border-b border-gray-200/80 overflow-hidden">
+
+      <!-- Mobile background image (hidden on desktop) -->
       <div class="absolute inset-0 select-none pointer-events-none overflow-hidden lg:hidden">
-        <img 
-          src="assets/images/hero/hero-banner.png" 
-          alt="UNIWEAR Premium Workwear Banner" 
-          class="w-full h-full object-cover object-[70%_center] opacity-80 filter brightness-[1.02] contrast-[1.06]"
-        >
+        <img src="assets/images/hero/hero-banner.png" alt="UNIWEAR Premium Workwear Banner"
+          class="w-full h-full object-cover object-[70%_center] opacity-80">
         <div class="hero-mobile-overlay-h absolute inset-0 bg-gradient-to-r from-white/95 via-white/85 to-white/40"></div>
         <div class="hero-mobile-overlay-v absolute inset-0 bg-gradient-to-b from-white/90 via-transparent to-white/95"></div>
       </div>
 
-      <!-- Spacer to push content below fixed 80px navbar -->
+      <!-- 80px spacer for fixed navbar -->
       <div class="shrink-0 h-20"></div>
 
-      <div class="w-full flex-1 z-20 min-h-0">
-        <div class="grid lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 items-stretch h-full py-2 lg:py-3">
-                   <!-- Left Column: 3-zone layout — badge top, heading center fills flex-1, buttons+trust bottom -->
-          <div class="flex flex-col h-full text-left z-10 py-3 lg:py-4">
+      <!-- Content area fills remaining height -->
+      <div class="w-full flex-1 min-h-0 z-20">
+        <div class="hero-grid grid lg:grid-cols-2 items-stretch h-full py-2 lg:py-3">
 
-            <!-- ZONE 1: Badge pinned at top -->
+          <!-- LEFT COLUMN -->
+          <div class="hero-left-col flex flex-col justify-between h-full text-left z-10">
+
+            <!-- Zone 1: Badge -->
             <div class="hero-reveal flex items-center gap-2.5 shrink-0">
               <span class="w-2 h-2 rounded-full bg-primary"></span>
-              <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-primary">SINCE 1998 &middot; BENGALURU, INDIA</span>
+              <span class="hero-badge-text font-bold uppercase tracking-widest text-primary">SINCE 1998 &middot; BENGALURU, INDIA</span>
             </div>
 
-            <!-- ZONE 2: Heading + Description — flex-1 grows to fill all available space, content vertically centred -->
-            <div class="flex-1 flex flex-col justify-center gap-2 min-h-0 py-3">
+            <!-- Zone 2: Heading + Description (grows to fill space) -->
+            <div class="hero-zone2 flex-1 flex flex-col justify-center min-h-0">
               <h1 class="hero-heading font-heading font-extrabold text-slate-900 hero-headline-fluid">
                 India's Premium <br class="hidden sm:inline">
                 <span class="text-primary">Uniform Manufacturer</span> <br class="hidden sm:inline">
                 <span class="hero-subhead text-slate-800 font-bold block hero-subhead-fluid">Trusted by Global Enterprises.</span>
               </h1>
-              <p class="hero-desc hero-desc-fluid text-slate-700 lg:text-slate-600 leading-relaxed font-normal hero-reveal mt-1">
+              <p class="hero-desc hero-desc-fluid text-slate-700 lg:text-slate-600 leading-relaxed font-normal hero-reveal">
                 Co-creating certified workwear ecosystems for corporate headquarters, industrial operations, healthcare networks, and luxury hospitality chains worldwide.
               </p>
             </div>
 
-            <!-- ZONE 3: Buttons + Trust Bar grouped at bottom -->
-            <div class="shrink-0 flex flex-col gap-3">
+            <!-- Zone 3: Buttons + Trust Bar (pinned at bottom) -->
+            <div class="hero-zone3 shrink-0 flex flex-col">
               <!-- CTA Buttons -->
               <div class="hero-reveal flex flex-col sm:flex-row items-center justify-start gap-3 w-full">
-                <a href="contact.html" class="w-full sm:w-auto bg-primary hover:bg-primaryHover text-white px-7 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 shadow-md shadow-primary/20 flex items-center justify-center gap-2 group">
+                <a href="contact.html" class="hero-btn-fluid w-full sm:w-auto bg-primary hover:bg-primaryHover text-white font-bold transition-all duration-300 shadow-md shadow-primary/20 flex items-center justify-center gap-2 group">
                   <span>Request Consultation</span>
                   <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform"></i>
                 </a>
-                <a href="uniforms.html" class="hero-btn-secondary w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 px-7 py-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
+                <a href="uniforms.html" class="hero-btn-fluid hero-btn-secondary w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
                   Explore Collections
                 </a>
               </div>
-              <!-- Trust Pillars Bar -->
-              <div class="hero-trust-divider hero-reveal w-full border-t border-slate-300/80 lg:border-slate-200 pt-3">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
-                  <div>
-                    <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Legacy</span>
-                    <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">25+ Years</span>
-                  </div>
-                  <div>
-                    <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Clientele</span>
-                    <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">2,000+ Brands</span>
-                  </div>
-                  <div>
-                    <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Delivery</span>
-                    <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">Pan-India &amp; Global</span>
-                  </div>
-                  <div>
-                    <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Standards</span>
-                    <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">ISO / SA8000</span>
-                  </div>
+              <!-- Trust Pillars -->
+              <div class="hero-trust-grid hero-trust-divider hero-reveal w-full border-t border-slate-300/80 lg:border-slate-200 pt-3 grid grid-cols-2 sm:grid-cols-4 text-left">
+                <div>
+                  <span class="hero-trust-label font-semibold uppercase tracking-wider block">Legacy</span>
+                  <span class="hero-trust-value font-bold mt-0.5 block">25+ Years</span>
+                </div>
+                <div>
+                  <span class="hero-trust-label font-semibold uppercase tracking-wider block">Clientele</span>
+                  <span class="hero-trust-value font-bold mt-0.5 block">2,000+ Brands</span>
+                </div>
+                <div>
+                  <span class="hero-trust-label font-semibold uppercase tracking-wider block">Delivery</span>
+                  <span class="hero-trust-value font-bold mt-0.5 block">Pan-India &amp; Global</span>
+                </div>
+                <div>
+                  <span class="hero-trust-label font-semibold uppercase tracking-wider block">Standards</span>
+                  <span class="hero-trust-value font-bold mt-0.5 block">ISO / SA8000</span>
                 </div>
               </div>
-            </div>
-          </div><!-- /Left Column -->
+            </div><!-- /zone3 -->
 
-          <!-- Right Column: Full Viewport Height Inherited Image Container -->
+          </div><!-- /LEFT COLUMN -->
+
+          <!-- RIGHT COLUMN: Image -->
           <div class="hidden lg:flex relative hero-reveal items-stretch justify-center h-full pb-3 lg:pb-4">
             <div class="relative w-full h-full hero-viewport-card rounded-3xl overflow-hidden shadow-2xl border border-slate-200/90 bg-white group">
-              <!-- Original Hero Banner Image: absolute fill so it doesn't push layout -->
-              <img 
-                src="assets/images/hero/hero-banner.png" 
-                alt="UNIWEAR Premium Workwear Banner" 
-                class="absolute inset-0 w-full h-full object-cover object-[72%_center] transform group-hover:scale-103 transition-transform duration-700 ease-out"
-              >
-              <!-- Floating Badge -->
+              <img src="assets/images/hero/hero-banner.png" alt="UNIWEAR Premium Workwear Banner"
+                class="absolute inset-0 w-full h-full object-cover object-[72%_center] transform group-hover:scale-103 transition-transform duration-700 ease-out">
+              <!-- Floating badge -->
               <div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/80 shadow-xl flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
                   <i class="ri-shield-check-line text-lg"></i>
@@ -571,11 +626,13 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div><!-- /RIGHT COLUMN -->
 
         </div>
       </div>
     </section>
+
+
 
     <!-- Trust Bar (Infinite Marquee Ticker) -->
     <section class="py-12 border-y border-lightBorder bg-lightCard relative overflow-hidden z-20">
