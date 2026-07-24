@@ -124,15 +124,20 @@
 
     /* Viewport-Driven Layout System for Hero Section */
     .hero-headline-fluid {
-      font-size: clamp(2.4rem, 4.0vw + 0.5rem, 5.2rem) !important;
-      line-height: 0.97 !important;
+      font-size: clamp(1.9rem, 5.5vw, 9rem) !important;
+      line-height: 0.95 !important;
       letter-spacing: -0.035em !important;
     }
 
     .hero-subhead-fluid {
-      font-size: clamp(1.3rem, 2.0vw + 0.2rem, 2.4rem) !important;
-      line-height: 1.0 !important;
-      letter-spacing: -0.02em !important;
+      font-size: clamp(1.1rem, 3.0vw, 5rem) !important;
+      line-height: 0.97 !important;
+      letter-spacing: -0.025em !important;
+    }
+
+    .hero-desc-fluid {
+      font-size: clamp(0.8rem, 1.0vw, 1.1rem) !important;
+      line-height: 1.6 !important;
     }
 
     .hero-viewport-card {
@@ -471,7 +476,7 @@
   <!-- MAIN HOMEPAGE CONTENT -->
   <main>
     <!-- Pure Viewport-Driven 50/50 Hero Section: Calc 100dvh - 80px Navbar, Equal Height Inherited Columns, Vertical Space-Between Distribution -->
-    <section class="hero-section-wrapper relative h-screen min-h-[540px] max-h-[920px] flex flex-col px-4 sm:px-6 lg:px-12 bg-slate-50 border-b border-gray-200/80 overflow-hidden">
+    <section class="hero-section-wrapper relative h-screen min-h-[540px] max-h-[920px] flex flex-col px-4 sm:px-6 lg:px-6 bg-slate-50 border-b border-gray-200/80 overflow-hidden">
       
       <!-- Mobile-Only Background Image & Overlays (< lg) -->
       <div class="absolute inset-0 select-none pointer-events-none overflow-hidden lg:hidden">
@@ -487,63 +492,64 @@
       <!-- Spacer to push content below fixed 80px navbar -->
       <div class="shrink-0 h-20"></div>
 
-      <div class="max-w-7xl mx-auto w-full flex-1 z-20 min-h-0">
-        <div class="grid lg:grid-cols-2 gap-8 lg:gap-10 xl:gap-12 items-stretch h-full py-3 lg:py-4">
-          
-          <!-- Left Column: Equal Height Space-Between Content Distribution -->
-          <div class="flex flex-col justify-center items-start gap-5 h-full text-left z-10 py-1 pb-3 lg:pb-4">
-            <!-- Top: Badge -->
-            <div class="hero-reveal flex items-center justify-start gap-2.5">
+      <div class="w-full flex-1 z-20 min-h-0">
+        <div class="grid lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 items-stretch h-full py-2 lg:py-3">
+                   <!-- Left Column: 3-zone layout — badge top, heading center fills flex-1, buttons+trust bottom -->
+          <div class="flex flex-col h-full text-left z-10 py-3 lg:py-4">
+
+            <!-- ZONE 1: Badge pinned at top -->
+            <div class="hero-reveal flex items-center gap-2.5 shrink-0">
               <span class="w-2 h-2 rounded-full bg-primary"></span>
               <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-primary">SINCE 1998 &middot; BENGALURU, INDIA</span>
             </div>
 
-            <!-- Upper-Middle: Main Heading + Supporting Sub-heading + Description -->
-            <div class="py-0">
-              <h1 class="hero-heading font-heading font-extrabold text-slate-900 hero-headline-fluid mb-2.5 sm:mb-3">
-                India’s Premium <br class="hidden sm:inline">
+            <!-- ZONE 2: Heading + Description — flex-1 grows to fill all available space, content vertically centred -->
+            <div class="flex-1 flex flex-col justify-center gap-2 min-h-0 py-3">
+              <h1 class="hero-heading font-heading font-extrabold text-slate-900 hero-headline-fluid">
+                India's Premium <br class="hidden sm:inline">
                 <span class="text-primary">Uniform Manufacturer</span> <br class="hidden sm:inline">
                 <span class="hero-subhead text-slate-800 font-bold block hero-subhead-fluid">Trusted by Global Enterprises.</span>
               </h1>
-
-              <p class="hero-desc text-xs sm:text-sm md:text-base text-slate-700 lg:text-slate-600 max-w-2xl leading-relaxed font-normal hero-reveal">
+              <p class="hero-desc hero-desc-fluid text-slate-700 lg:text-slate-600 leading-relaxed font-normal hero-reveal mt-1">
                 Co-creating certified workwear ecosystems for corporate headquarters, industrial operations, healthcare networks, and luxury hospitality chains worldwide.
               </p>
             </div>
 
-            <!-- Lower: CTA Action Buttons -->
-            <div class="hero-reveal flex flex-col sm:flex-row items-center justify-start gap-3 w-full">
-              <a href="contact.html" class="w-full sm:w-auto bg-primary hover:bg-primaryHover text-white px-7 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 shadow-md shadow-primary/20 flex items-center justify-center gap-2 group">
-                <span>Request Consultation</span>
-                <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform"></i>
-              </a>
-              <a href="uniforms.html" class="hero-btn-secondary w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 px-7 py-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
-                Explore Collections
-              </a>
-            </div>
-
-            <!-- Bottom Edge: Trust Pillars Bar -->
-            <div class="hero-trust-divider hero-reveal w-full border-t border-slate-300/80 lg:border-slate-200 pt-3">
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
-                <div>
-                  <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Legacy</span>
-                  <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">25+ Years</span>
-                </div>
-                <div>
-                  <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Clientele</span>
-                  <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">2,000+ Brands</span>
-                </div>
-                <div>
-                  <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Delivery</span>
-                  <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">Pan-India &amp; Global</span>
-                </div>
-                <div>
-                  <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Standards</span>
-                  <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">ISO / SA8000</span>
+            <!-- ZONE 3: Buttons + Trust Bar grouped at bottom -->
+            <div class="shrink-0 flex flex-col gap-3">
+              <!-- CTA Buttons -->
+              <div class="hero-reveal flex flex-col sm:flex-row items-center justify-start gap-3 w-full">
+                <a href="contact.html" class="w-full sm:w-auto bg-primary hover:bg-primaryHover text-white px-7 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 shadow-md shadow-primary/20 flex items-center justify-center gap-2 group">
+                  <span>Request Consultation</span>
+                  <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <a href="uniforms.html" class="hero-btn-secondary w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 px-7 py-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
+                  Explore Collections
+                </a>
+              </div>
+              <!-- Trust Pillars Bar -->
+              <div class="hero-trust-divider hero-reveal w-full border-t border-slate-300/80 lg:border-slate-200 pt-3">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
+                  <div>
+                    <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Legacy</span>
+                    <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">25+ Years</span>
+                  </div>
+                  <div>
+                    <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Clientele</span>
+                    <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">2,000+ Brands</span>
+                  </div>
+                  <div>
+                    <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Delivery</span>
+                    <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">Pan-India &amp; Global</span>
+                  </div>
+                  <div>
+                    <span class="hero-trust-label text-[10px] text-slate-500 lg:text-slate-400 font-semibold uppercase tracking-wider block">Standards</span>
+                    <span class="hero-trust-value text-xs sm:text-sm font-bold text-slate-900 mt-0.5 block">ISO / SA8000</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div><!-- /Left Column -->
 
           <!-- Right Column: Full Viewport Height Inherited Image Container -->
           <div class="hidden lg:flex relative hero-reveal items-stretch justify-center h-full pb-3 lg:pb-4">
