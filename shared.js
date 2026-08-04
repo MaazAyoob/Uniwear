@@ -3627,20 +3627,7 @@ async function initDynamicPageContent() {
       document.body.appendChild(waBtn);
     }
 
-    // 4. Inject Sticky Request Quote Bar (mobile/desktop trigger)
-    if (!document.getElementById('sticky-quote-bar')) {
-      const bar = document.createElement('div');
-      bar.id = 'sticky-quote-bar';
-      bar.className = 'fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-lightBorder p-3 px-6 z-40 flex items-center justify-between shadow-lg md:hidden';
-      bar.innerHTML = `
-        <div class="flex items-center gap-2">
-          <i class="ri-phone-fill text-primary text-lg"></i>
-          <a href="tel:+918026580000" class="text-xs font-bold text-charcoal">+91 80 2658 0000</a>
-        </div>
-        <a href="contact.html" class="bg-primary text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-wider">Request Quote</a>
-      `;
-      document.body.appendChild(bar);
-    }
+    // 4. Sticky Request Quote Bar (Removed per user directive)
 
     // 5. Dynamic Client Logos
     if (window.api.getClientLogos && document.getElementById('client-logos-container')) {

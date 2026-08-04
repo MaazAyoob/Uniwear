@@ -286,6 +286,11 @@ img { max-width: 100%; }
   }
 }
 
+/* Hide mobile sticky quote bar per user request */
+#sticky-quote-bar {
+  display: none !important;
+}
+
 /* 3. Typography Reactivity (Headings Hover) */
 h1, h2, h3, h4, h5, .hero-title-accent {
   transition: color 0.25s ease, letter-spacing 0.25s ease, filter 0.25s ease;
