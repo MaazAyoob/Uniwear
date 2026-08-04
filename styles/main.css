@@ -263,6 +263,29 @@ img { max-width: 100%; }
   opacity: 0 !important;
 }
 
+/* Completely Disable Custom Cursor on Mobile, Touch, and Screens < 1024px */
+@media (max-width: 1024px), (pointer: coarse), (hover: none) {
+  .custom-cursor-dot,
+  .custom-cursor-ring,
+  .hero-cursor-spotlight {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  body,
+  body.custom-cursor-enabled,
+  body.custom-cursor-enabled a,
+  body.custom-cursor-enabled button,
+  body.custom-cursor-enabled .btn,
+  body.custom-cursor-enabled [role="button"],
+  body.custom-cursor-enabled input,
+  body.custom-cursor-enabled select,
+  body.custom-cursor-enabled textarea {
+    cursor: auto !important;
+  }
+}
+
 /* 3. Typography Reactivity (Headings Hover) */
 h1, h2, h3, h4, h5, .hero-title-accent {
   transition: color 0.25s ease, letter-spacing 0.25s ease, filter 0.25s ease;

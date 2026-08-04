@@ -3664,7 +3664,7 @@ async function initDynamicPageContent() {
 function initCustomCursor() {
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (window.innerWidth < 768) return;
+  if (window.innerWidth < 1024 || ('ontouchstart' in window || navigator.maxTouchPoints > 0)) return;
   if (document.querySelector('.custom-cursor-dot')) return;
 
   const dot = document.createElement('div');
