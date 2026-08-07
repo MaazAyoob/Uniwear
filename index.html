@@ -668,1092 +668,561 @@
 
   <!-- MAIN HOMEPAGE CONTENT -->
   <main>
-    <!-- REDESIGNED HERO SECTION – LUXURY B2B ENTERPRISE FIRST IMPRESSION -->
-    <section class="hero-section-wrapper relative min-h-0 sm:min-h-[640px] lg:min-h-[740px] xl:min-h-[780px] flex items-center pt-24 pb-8 sm:pt-28 sm:pb-14 lg:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white hero-glow-backdrop border-b border-slate-100/80 overflow-hidden">
+    <!-- REDESIGNED HERO SECTION – CLEAN, PREMIUM, PRODUCT-FIRST B2B HERO -->
+    <section class="hero-section hero-section-wrapper relative pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white border-b border-slate-100 overflow-hidden">
       
-      <!-- Mobile background image (hidden on desktop) -->
-      <div class="absolute inset-0 select-none pointer-events-none overflow-hidden lg:hidden">
-        <img src="assets/images/hero/hero-banner.png" alt="UNIWEAR Premium Workwear Banner"
-          class="w-full h-full object-cover object-center sm:object-[72%_center] opacity-90">
-        <div class="hero-mobile-overlay-h absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/35"></div>
-        <div class="hero-mobile-overlay-v absolute inset-0 bg-gradient-to-b from-white/80 via-white/30 to-white/90"></div>
-      </div>
-
-      <!-- Subtle Architectural Background Grid Mesh -->
-      <div class="absolute inset-0 hero-mesh-grid opacity-60 pointer-events-none"></div>
-
-      <!-- Ambient Light Glow Accent -->
-      <div class="absolute top-1/4 right-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
-
       <div class="max-w-7xl mx-auto w-full relative z-20">
-        <div class="grid lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-12 items-center">
+        <!-- Main Grid: Left Content & Right Product Visual -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center">
 
-          <!-- LEFT COLUMN (Span 7 on LG for stronger typography presence) -->
-          <div class="lg:col-span-7 flex flex-col justify-center text-left">
-
-            <!-- 1. Live Enterprise Credibility Pill & Hairline Kicker -->
-            <div class="animate-luxury-fade-1 flex flex-wrap items-center gap-3 mb-3 sm:mb-5">
-              <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-50/95 border border-slate-200/90 shadow-2xs max-w-full hero-badge-bg">
-                <span class="relative flex h-2 w-2 shrink-0">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                </span>
-                <span class="font-heading text-xs font-semibold uppercase tracking-widest text-slate-800">
-                  Enterprise Workwear Manufacturer &middot; <span class="text-primary font-bold">Since 1998</span>
-                </span>
-              </div>
-            </div>
-
-            <!-- 2. Master Headline Story -->
-            <div class="animate-luxury-fade-2">
-              <h1 class="font-heading font-semibold text-slate-900 tracking-tight text-3xl sm:text-4xl lg:text-5xl xl:text-[3.65rem] leading-[1.06] mb-3 sm:mb-4 hero-heading">
-                Architecting Workwear Ecosystems for <br class="hidden sm:inline">
-                <span class="bg-gradient-to-r from-primary via-red-600 to-red-800 bg-clip-text text-transparent font-semibold">Global Enterprises.</span>
-              </h1>
-              <p class="font-body text-sm sm:text-lg xl:text-xl text-slate-600 leading-relaxed max-w-2xl font-normal hero-desc mb-4 sm:mb-7">
-                End-to-end uniform program management, pan-India manufacturing scale, and certified quality engineered for corporate headquarters, hospital networks, luxury hospitality, and industrial conglomerates.
-              </p>
-            </div>
-
-            <!-- 3. Industry Badges Pill Bar -->
-            <div class="animate-luxury-fade-3 flex flex-wrap items-center gap-2 text-xs text-slate-700 mb-4 sm:mb-7">
-              <span class="font-heading px-3 py-1.5 rounded-lg bg-slate-100/95 hover:bg-slate-200/60 border border-slate-200/80 flex items-center gap-1.5 shadow-2xs font-medium transition-colors cursor-default hero-badge-bg">
-                <i class="ri-building-4-line text-primary"></i> Corporate Executive
-              </span>
-              <span class="font-heading px-3 py-1.5 rounded-lg bg-slate-100/95 hover:bg-slate-200/60 border border-slate-200/80 flex items-center gap-1.5 shadow-2xs font-medium transition-colors cursor-default hero-badge-bg">
-                <i class="ri-hospital-line text-primary"></i> Healthcare &amp; Medical
-              </span>
-              <span class="font-heading px-3 py-1.5 rounded-lg bg-slate-100/95 hover:bg-slate-200/60 border border-slate-200/80 flex items-center gap-1.5 shadow-2xs font-medium transition-colors cursor-default hero-badge-bg">
-                <i class="ri-hotel-line text-primary"></i> Luxury Hospitality
-              </span>
-              <span class="font-heading px-3 py-1.5 rounded-lg bg-slate-100/95 hover:bg-slate-200/60 border border-slate-200/80 flex items-center gap-1.5 shadow-2xs font-medium transition-colors cursor-default hero-badge-bg">
-                <i class="ri-space-ship-line text-primary"></i> High-Tech Industrial
-              </span>
-            </div>
-
-            <!-- 4. CTAs & Response Guarantee -->
-            <div class="animate-luxury-fade-4 flex flex-col gap-2.5 mb-4 sm:mb-8">
-              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-                <a href="contact.html"
-                  class="font-heading btn-shimmer bg-gradient-to-r from-primary to-primaryHover hover:from-primaryHover hover:to-primary text-white font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base transition-all duration-300 shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/35 flex items-center justify-center gap-3 group border border-red-700/20">
-                  <span>Request Enterprise Consultation</span>
-                  <i class="ri-arrow-right-line group-hover:translate-x-1.5 transition-transform duration-300"></i>
-                </a>
-                <a href="uniforms.html"
-                  class="font-heading hero-btn-secondary bg-white hover:bg-slate-50 text-slate-800 font-medium px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base border border-slate-300/90 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:border-slate-400">
-                  <i class="ri-book-open-line text-slate-500"></i>
-                  <span>Explore Industry Catalog</span>
-                </a>
-              </div>
-              <div class="flex items-center gap-2 px-1 text-xs text-slate-500 font-medium">
-                <i class="ri-flashlight-fill text-amber-500"></i>
-                <span>Guaranteed 24-hr Enterprise Quote Response</span>
-              </div>
-            </div>
-
-            <!-- 5. Client Logos Avatar Stack & Social Proof Strip -->
-            <div class="animate-luxury-fade-4 inline-flex items-center gap-3 p-2 pr-4 bg-slate-50/95 border border-slate-200/80 rounded-2xl w-full sm:w-max max-w-full flex-wrap sm:flex-nowrap mb-4 sm:mb-8 shadow-2xs hero-badge-bg">
-              <div class="flex -space-x-2 overflow-hidden shrink-0">
-                <img src="assets/logos/toyota.png" alt="Toyota" class="inline-block h-7 w-7 rounded-full ring-2 ring-white object-contain bg-white p-0.5">
-                <img src="assets/logos/taj-hotels-logo.webp" alt="Taj" class="inline-block h-7 w-7 rounded-full ring-2 ring-white object-contain bg-white p-0.5">
-                <img src="assets/logos/fortis-logo.jpg" alt="Fortis" class="inline-block h-7 w-7 rounded-full ring-2 ring-white object-contain bg-white p-0.5">
-                <img src="assets/logos/bosch-logo.png" alt="Bosch" class="inline-block h-7 w-7 rounded-full ring-2 ring-white object-contain bg-white p-0.5">
-              </div>
-              <div class="flex flex-col">
-                <div class="flex items-center gap-1">
-                  <span class="font-heading text-xs font-bold text-slate-900">2,000+ Enterprises</span>
-                  <div class="flex items-center text-amber-400 text-[10px]">
-                    <i class="ri-star-fill"></i>
-                    <i class="ri-star-fill"></i>
-                    <i class="ri-star-fill"></i>
-                    <i class="ri-star-fill"></i>
-                    <i class="ri-star-fill"></i>
-                  </div>
-                </div>
-                <span class="font-body text-[11px] text-slate-500">Trusted for large-scale enterprise fulfillment</span>
-              </div>
-            </div>
-
-            <!-- 6. Integrated Refined Trust Element -->
-            <div class="animate-luxury-fade-4 pt-3 sm:pt-5 border-t border-slate-200/80 hero-trust-divider">
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 text-left">
-                <div class="flex flex-row items-baseline gap-1 sm:flex-col sm:gap-0.5">
-                  <span class="font-heading text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 hero-trust-label shrink-0">Legacy:</span>
-                  <span class="font-heading text-xs sm:text-base font-bold text-slate-900 hero-trust-value" id="hero-stat-legacy">25+ Years</span>
-                </div>
-                <div class="flex flex-row items-baseline gap-1 sm:flex-col sm:gap-0.5">
-                  <span class="font-heading text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 hero-trust-label shrink-0">Trust:</span>
-                  <span class="font-heading text-xs sm:text-base font-bold text-slate-900 hero-trust-value" id="hero-stat-clients">2,000+ Brands</span>
-                </div>
-                <div class="flex flex-row items-baseline gap-1 sm:flex-col sm:gap-0.5">
-                  <span class="font-heading text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 hero-trust-label shrink-0">Network:</span>
-                  <span class="font-heading text-xs sm:text-base font-bold text-slate-900 hero-trust-value">Pan-India</span>
-                </div>
-                <div class="flex flex-row items-baseline gap-1 sm:flex-col sm:gap-0.5">
-                  <span class="font-heading text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 hero-trust-label shrink-0">Standards:</span>
-                  <span class="font-heading text-xs sm:text-base font-bold text-slate-900 hero-trust-value">ISO 9001</span>
-                </div>
-              </div>
-            </div>
-
-          </div><!-- /LEFT COLUMN -->
-
-
-          <!-- RIGHT COLUMN: Bespoke Art-Directed Campaign Centerpiece (Span 5 on LG, Hidden on Mobile) -->
-          <div class="lg:col-span-5 relative hidden lg:flex items-center justify-center animate-luxury-fade-3">
-
-            <!-- Background Ambient Glow & Offset Card Frame -->
-            <div class="absolute -inset-3 bg-gradient-to-tr from-primary/10 via-slate-100 to-red-500/5 rounded-[2.5rem] blur-2xl opacity-80 pointer-events-none"></div>
-
-            <!-- Outer Card Container -->
-            <div class="relative w-full aspect-[4/5] sm:aspect-[1/1] lg:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-[0_25px_60px_-15px_rgba(15,23,42,0.18)] border border-slate-200/90 bg-white group">
-              
-              <!-- Centerpiece Campaign Image (Original Hero Banner with Premium Framing) -->
-              <img src="assets/images/hero/hero-banner.png" alt="UNIWEAR Premium Enterprise Uniform Banner"
-                class="w-full h-full object-cover object-[72%_center] transform group-hover:scale-[1.03] transition-transform duration-1000 ease-out">
-
-              <!-- Subtle Top Gradient Overlay for Depth -->
-              <div class="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/20 via-transparent to-transparent pointer-events-none"></div>
-
-              <!-- Top Left Floating Dispatch Live Metric -->
-              <div class="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/95 backdrop-blur-md px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-slate-200/80 shadow-lg flex items-center gap-2 animate-micro-float hero-badge-bg">
-                <span class="relative flex h-2 w-2 shrink-0">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span class="font-heading text-[10px] sm:text-xs font-semibold text-slate-800">99.8% On-Time Dispatch</span>
-              </div>
-
-              <!-- Top Right Floating ISO Certification Badge -->
-              <div class="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white/95 backdrop-blur-md px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-slate-200/80 shadow-lg flex items-center gap-2 animate-micro-float hero-badge-bg">
-                <i class="ri-award-fill text-primary text-xs sm:text-sm"></i>
-                <span class="font-heading text-[10px] sm:text-xs font-semibold text-slate-800">ISO 9001 &amp; SA8000</span>
-              </div>
-
-              <!-- Bottom Floating Key Account & Capability Card -->
-              <div class="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-slate-200/90 shadow-2xl transition-all duration-300 hero-badge-bg">
-                <div class="flex items-center justify-between gap-3">
-                  <div class="flex items-center gap-2.5 sm:gap-3">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 font-bold">
-                      <i class="ri-shield-check-fill text-lg sm:text-xl"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-heading text-[11px] sm:text-xs font-bold text-slate-900 uppercase tracking-wider">Enterprise Manufacturing Guarantee</h4>
-                      <p class="font-body text-[10px] sm:text-[11px] text-slate-500 mt-0.5 font-medium">Custom Tailoring &middot; Pan-India Dispatch &middot; Zero Defects</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div><!-- /Outer Card Container -->
-
-          </div><!-- /RIGHT COLUMN -->
-
-        </div>
-      </div>
-    </section>
-
-
-
-    <!-- Trust Bar (Infinite Marquee Ticker) -->
-    <section class="py-12 border-y border-lightBorder bg-lightCard relative overflow-hidden z-20">
-      <div class="max-w-7xl mx-auto px-6 mb-4 text-center">
-        <p class="text-xs uppercase tracking-widest text-mutedText font-semibold">ENGINEERING IDENTITY FOR THE WORLD'S
-          BEST</p>
-      </div>
-      <div class="marquee-container w-full py-4">
-        <div class="marquee-content animate-marquee-infinite gap-12 sm:gap-16 flex items-center">
-          <img src="assets/logos/toyota.png" alt="Toyota"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/taj-hotels-logo.webp" alt="Taj Hotels"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/fortis-logo.jpg" alt="Fortis"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300 rounded">
-          <img src="assets/logos/shell.png" alt="Shell"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/biocon-logo.jpg" alt="Biocon"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300 rounded">
-          <img src="assets/logos/bosch-logo.png" alt="Bosch"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/wipro.png" alt="Wipro"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/infosys-logo.webp" alt="Infosys"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/tata-motors.webp" alt="Tata Motors"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/lt-logo.png" alt="L&T"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/otis.webp" alt="Otis"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/schneider-electric.webp" alt="Schneider Electric"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-        </div>
-        <!-- Duplicated for seamless loop -->
-        <div class="marquee-content animate-marquee-infinite gap-12 sm:gap-16 flex items-center" aria-hidden="true">
-          <img src="assets/logos/toyota.png" alt="Toyota"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/taj-hotels-logo.webp" alt="Taj Hotels"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/fortis-logo.jpg" alt="Fortis"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300 rounded">
-          <img src="assets/logos/shell.png" alt="Shell"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/biocon-logo.jpg" alt="Biocon"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300 rounded">
-          <img src="assets/logos/bosch-logo.png" alt="Bosch"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/wipro.png" alt="Wipro"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/infosys-logo.webp" alt="Infosys"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/tata-motors.webp" alt="Tata Motors"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/lt-logo.png" alt="L&T"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/otis.webp" alt="Otis"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-          <img src="assets/logos/schneider-electric.webp" alt="Schneider Electric"
-            class="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-all duration-300">
-        </div>
-      </div>
-    </section>
-
-    <!-- Verified Statistics Section -->
-    <section class="py-20 bg-gradient-to-b from-white to-gray-50/50 relative z-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div
-          class="text-center p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover-lift relative overflow-hidden group">
-          <div
-            class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          </div>
-          <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-years">
-            1998</h3>
-          <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Since 1998</p>
-        </div>
-        <div
-          class="text-center p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover-lift relative overflow-hidden group">
-          <div
-            class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          </div>
-          <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2" id="stat-clients">
-            2,000+</h3>
-          <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Clients Served</p>
-        </div>
-        <div
-          class="text-center p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover-lift relative overflow-hidden group">
-          <div
-            class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          </div>
-          <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2"
-            id="stat-pincodes">2,000+</h3>
-          <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Pincodes Served</p>
-        </div>
-        <div
-          class="text-center p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover-lift relative overflow-hidden group">
-          <div
-            class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          </div>
-          <h3 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal mb-2"
-            id="stat-delivery">Pan-India</h3>
-          <p class="text-xs text-mutedText uppercase tracking-widest font-semibold">Pan-India Delivery</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Industries Served (Interactive Hover Grid) -->
-    <section class="py-16 sm:py-24 bg-lightCard relative z-20 border-t border-lightBorder">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
-          <div>
-            <span class="text-xs uppercase tracking-widest text-primary font-bold">Uncompromising Quality</span>
-            <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Industries We Serve
-            </h2>
-          </div>
-          <p class="text-mutedText max-w-md mt-4 md:mt-0 leading-relaxed">
-            Every industry demands unique parameters of durability, safety, style, and utility. We engineer workwear
-            custom-tailored for your domain.
-          </p>
-        </div>
-
-        <div class="flex flex-wrap justify-center gap-8">
-          <!-- Industry 1 -->
-          <div
-            class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
-            <div>
-              <div class="h-60 overflow-hidden relative">
-                <img src="assets/images/industries/industrial-uniforms.png" alt="Industrial Uniforms"
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
-              </div>
-              <div class="p-8 relative bg-white">
-                <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Industrial Uniforms</h3>
-                <p class="text-sm text-mutedText leading-relaxed mb-6">Heavy-duty overalls, fire-retardant suits,
-                  anti-static jackets, and safety accessories tested under heavy stress.</p>
-                <a href="uniforms.html"
-                  class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
-                  View Specifications <i class="ri-arrow-right-up-line"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- Industry 2 -->
-          <div
-            class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
-            <div>
-              <div class="h-60 overflow-hidden relative">
-                <img src="assets/images/industries/corporate-uniforms.png" alt="Corporate Uniforms"
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
-              </div>
-              <div class="p-8 relative bg-white">
-                <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Corporate Uniforms</h3>
-                <p class="text-sm text-mutedText leading-relaxed mb-6">Bespoke wool blazers, tailored trousers,
-                  high-thread oxford shirts, and custom-embroidered smart casuals.</p>
-                <a href="uniforms.html"
-                  class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
-                  View Specifications <i class="ri-arrow-right-up-line"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- Industry 3 -->
-          <div
-            class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
-            <div>
-              <div class="h-60 overflow-hidden relative">
-                <img src="assets/images/industries/hospitality-uniforms.png" alt="Hospitality Uniforms"
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
-              </div>
-              <div class="p-8 relative bg-white">
-                <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Hospitality Uniforms</h3>
-                <p class="text-sm text-mutedText leading-relaxed mb-6">Artisanal chef coats, front-desk corporate
-                  blazers, premium aprons, and breathable housekeeping apparel.</p>
-                <a href="uniforms.html"
-                  class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
-                  View Specifications <i class="ri-arrow-right-up-line"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- Industry 4 -->
-          <div
-            class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
-            <div>
-              <div class="h-60 overflow-hidden relative">
-                <img src="assets/images/industries/institutional-uniforms.png" alt="Institutional Uniforms"
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
-              </div>
-              <div class="p-8 relative bg-white">
-                <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Institutional Uniforms</h3>
-                <p class="text-sm text-mutedText leading-relaxed mb-6">High-grade school blazers, collegiate hoodies,
-                  sports activewear, and customized school crest sets.</p>
-                <a href="uniforms.html"
-                  class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
-                  View Specifications <i class="ri-arrow-right-up-line"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- Industry 5 -->
-          <div
-            class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white rounded-2xl overflow-hidden hover:shadow-xl hover:border-primary/20 border border-lightBorder transition-all duration-500 group relative flex flex-col justify-between">
-            <div>
-              <div class="h-60 overflow-hidden relative">
-                <img src="assets/images/industries/corporate-gifting.png" alt="Corporate Gifting"
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="industry-card-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none"></div>
-              </div>
-              <div class="p-8 relative bg-white">
-                <h3 class="font-heading text-2xl font-bold mb-3 text-charcoal">Corporate Gifting</h3>
-                <p class="text-sm text-mutedText leading-relaxed mb-6">Premium full-grain leather planners, copper
-                  roller pens, presentation portfolio cases, and customizable gift boxes.</p>
-                <a href="uniforms.html"
-                  class="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-charcoal transition-colors">
-                  View Specifications <i class="ri-arrow-right-up-line"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Manufacturing Process Timeline -->
-    <section class="py-16 sm:py-24 bg-white relative z-20 border-t border-lightBorder">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-16">
-          <span class="text-xs uppercase tracking-widest text-primary font-bold">The Blueprint of Excellence</span>
-          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Our Manufacturing
-            Lifecycle</h2>
-          <p class="text-mutedText mt-4 max-w-2xl mx-auto text-sm leading-relaxed">From concept to creation, every step
-            is driven by precision, quality, and our commitment to deliver uniform solutions that stand the test of
-            time.</p>
-        </div>
-
-        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          <!-- Timeline Buttons Navigation (Left) -->
-          <div class="lg:col-span-5 space-y-3">
-            <button onclick="setLifecycleStep(1)"
-              class="w-full text-left p-5 rounded-2xl border border-lightBorder bg-lightCard transition-all duration-300 group flex items-start gap-4 focus:outline-none step-btn active-step"
-              id="step-btn-1">
-              <span id="step-circle-1"
-                class="w-9 h-9 rounded-full border flex items-center justify-center font-heading font-bold text-sm shrink-0 transition-colors duration-300"
-                style="border-color:#B91C1C;background-color:#B91C1C;color:#fff">01</span>
-              <div>
-                <h4
-                  class="font-heading text-base font-bold text-charcoal group-[.active-step]:text-primary transition-colors duration-300">
-                  Client Consultation &amp; Swatches</h4>
-                <p class="text-xs text-mutedText mt-1 leading-relaxed">Our specialists meet with your team to evaluate
-                  requirements, present certified swatches, and define tailored specs.</p>
-              </div>
-            </button>
-            <button onclick="setLifecycleStep(2)"
-              class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-lightCard transition-all duration-300 group flex items-start gap-4 focus:outline-none step-btn"
-              id="step-btn-2">
-              <span id="step-circle-2"
-                class="w-9 h-9 rounded-full border flex items-center justify-center font-heading font-bold text-sm shrink-0 transition-colors duration-300"
-                style="border-color:#e5e7eb;color:#9ca3af">02</span>
-              <div>
-                <h4
-                  class="font-heading text-base font-bold text-charcoal group-[.active-step]:text-primary transition-colors duration-300">
-                  Design &amp; Prototyping</h4>
-                <p class="text-xs text-mutedText mt-1 leading-relaxed">Our design experts create technical patterns and
-                  master physical samples blending functionality, comfort, and style.</p>
-              </div>
-            </button>
-            <button onclick="setLifecycleStep(3)"
-              class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-lightCard transition-all duration-300 group flex items-start gap-4 focus:outline-none step-btn"
-              id="step-btn-3">
-              <span id="step-circle-3"
-                class="w-9 h-9 rounded-full border flex items-center justify-center font-heading font-bold text-sm shrink-0 transition-colors duration-300"
-                style="border-color:#e5e7eb;color:#9ca3af">03</span>
-              <div>
-                <h4
-                  class="font-heading text-base font-bold text-charcoal group-[.active-step]:text-primary transition-colors duration-300">
-                  Precision Bulk Manufacturing</h4>
-                <p class="text-xs text-mutedText mt-1 leading-relaxed">Using advanced machinery and skilled
-                  craftsmanship, we ensure every stitch meets high standards of quality and precision.</p>
-              </div>
-            </button>
-            <button onclick="setLifecycleStep(4)"
-              class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-lightCard transition-all duration-300 group flex items-start gap-4 focus:outline-none step-btn"
-              id="step-btn-4">
-              <span id="step-circle-4"
-                class="w-9 h-9 rounded-full border flex items-center justify-center font-heading font-bold text-sm shrink-0 transition-colors duration-300"
-                style="border-color:#e5e7eb;color:#9ca3af">04</span>
-              <div>
-                <h4
-                  class="font-heading text-base font-bold text-charcoal group-[.active-step]:text-primary transition-colors duration-300">
-                  Quality Inspection &amp; Delivery</h4>
-                <p class="text-xs text-mutedText mt-1 leading-relaxed">Every uniform undergoes strict quality checks
-                  before being carefully packed and delivered on time, every time.</p>
-              </div>
-            </button>
-
-            <!-- Promise strip -->
-            <div class="mt-4 p-4 rounded-2xl bg-primary/5 border border-primary/15 flex items-center gap-3">
-              <i class="ri-shield-check-line text-primary text-xl shrink-0"></i>
-              <p class="text-xs text-charcoal font-semibold leading-snug">Quality. Consistency. Commitment. <span
-                  class="text-primary">That's the UNIWEAR promise.</span></p>
-            </div>
-          </div>
-
-          <!-- Infographic Image (Right) -->
-          <div class="lg:col-span-7">
-            <div class="rounded-3xl overflow-hidden border border-lightBorder shadow-xl relative"
-              style="aspect-ratio:4/3;">
-              <img id="lifecycle-img" src="assets/images/manufacturing/client-consultation.jpg"
-                alt="Manufacturing Lifecycle Step"
-                class="w-full h-full object-cover block transition-opacity duration-500" loading="lazy">
-              <!-- Step label badge -->
-              <div id="lifecycle-badge"
-                class="absolute bottom-5 left-5 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-md border border-lightBorder">
-                <p id="lifecycle-badge-label" class="text-xs font-bold uppercase tracking-widest text-primary">Step 01
-                </p>
-                <p id="lifecycle-badge-desc" class="text-xs text-charcoal font-semibold mt-0.5">Client Consultation &
-                  Swatch Selection</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <script>
-      var lifecycleSteps = {
-        1: {
-          src: "assets/images/manufacturing/client-consultation.jpg",
-          label: 'Step 01',
-          desc: 'Client Consultation & Swatch Selection'
-        },
-        2: {
-          src: "assets/images/manufacturing/lifecycle-step-1.png",
-          label: 'Step 02',
-          desc: 'Design & Prototyping'
-        },
-        3: {
-          src: "assets/images/manufacturing/lifecycle-step-2.png",
-          label: 'Step 03',
-          desc: 'Precision Bulk Manufacturing'
-        },
-        4: {
-          src: "assets/images/manufacturing/lifecycle-step-3.png",
-          label: 'Step 04',
-          desc: 'Quality Inspection & Delivery'
-        }
-      };
-
-      function setLifecycleStep(n) {
-        var img = document.getElementById('lifecycle-img');
-        if (!img) return;
-
-        // Fade out → swap src → fade in
-        img.style.transition = 'opacity 0.25s ease';
-        img.style.opacity = '0';
-        setTimeout(function () {
-          img.src = lifecycleSteps[n].src;
-          img.onload = function () { img.style.opacity = '1'; };
-          // If cached the onload won't fire, force it
-          if (img.complete) img.style.opacity = '1';
-        }, 250);
-
-        // Update badge text
-        var lbl = document.getElementById('lifecycle-badge-label');
-        var dsc = document.getElementById('lifecycle-badge-desc');
-        if (lbl) lbl.textContent = lifecycleSteps[n].label;
-        if (dsc) dsc.textContent = lifecycleSteps[n].desc;
-
-        // Reset all buttons to inactive look (1 to 4)
-        for (var i = 1; i <= 4; i++) {
-          var btn = document.getElementById('step-btn-' + i);
-          var circle = document.getElementById('step-circle-' + i);
-          if (!btn) continue;
-          btn.style.backgroundColor = '';
-          btn.style.borderColor = 'transparent';
-          if (circle) {
-            circle.style.backgroundColor = '';
-            circle.style.color = '#9ca3af';
-            circle.style.borderColor = '#e5e7eb';
-          }
-        }
-
-        // Apply active styles to clicked button
-        var activeBtn = document.getElementById('step-btn-' + n);
-        var activeCircle = document.getElementById('step-circle-' + n);
-        if (activeBtn) {
-          activeBtn.style.backgroundColor = '#f3f4f6';
-          activeBtn.style.borderColor = '#e5e7eb';
-        }
-        if (activeCircle) {
-          activeCircle.style.backgroundColor = '#B91C1C';
-          activeCircle.style.color = '#ffffff';
-          activeCircle.style.borderColor = '#B91C1C';
-        }
-      }
-
-      // Init on DOM ready
-      document.addEventListener('DOMContentLoaded', function () {
-        var lbl = document.getElementById('lifecycle-badge-label');
-        var dsc = document.getElementById('lifecycle-badge-desc');
-        if (lbl) lbl.textContent = lifecycleSteps[1].label;
-        if (dsc) dsc.textContent = lifecycleSteps[1].desc;
-        // Apply initial active state styling
-        setLifecycleStep(1);
-      });
-    </script>
-
-    <!-- Why Choose UNIWEAR (Value Pillars) -->
-    <section class="py-16 sm:py-24 bg-lightCard relative z-20 border-t border-lightBorder">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-16">
-          <span class="text-xs uppercase tracking-widest text-primary font-bold">The Uniwear Edge</span>
-          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Why Global Enterprises
-            Choose Us</h2>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div
-            class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
-            <div
-              class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
-              <i class="ri-award-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Industry Expertise</h3>
-            <p class="text-sm text-mutedText leading-relaxed">Manufacturing legacy since 1998 serving industries with
-              tailored uniform solutions.</p>
-          </div>
-          <div
-            class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
-            <div
-              class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
-              <i class="ri-palette-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Tailored Solutions</h3>
-            <p class="text-sm text-mutedText leading-relaxed">Custom uniforms designed to meet your operational and
-              brand requirements.</p>
-          </div>
-          <div
-            class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
-            <div
-              class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
-              <i class="ri-shield-check-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Best-in-Class</h3>
-            <p class="text-sm text-mutedText leading-relaxed">Engineered to best-in-class global standards with rigorous
-              multi-stage quality controls for unmatched durability and finish.</p>
-          </div>
-          <div
-            class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
-            <div
-              class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
-              <i class="ri-truck-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">On-Time Delivery</h3>
-            <p class="text-sm text-mutedText leading-relaxed">Guaranteed on-time production schedules and SLA-backed
-              logistics ensure seamless rollout for your business operations.</p>
-          </div>
-          <div
-            class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
-            <div
-              class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
-              <i class="ri-shirt-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Diverse Product Range</h3>
-            <p class="text-sm text-mutedText leading-relaxed">Offering industrial uniforms, corporate wear, hospitality
-              apparel, and gifting solutions.</p>
-          </div>
-          <div
-            class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover-lift hover:border-primary/30 group">
-            <div
-              class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-red-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
-              <i
-                class="ri-customer-service-2-line text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-heading text-xl font-bold mb-3 text-charcoal">Enhanced Customer Experience</h3>
-            <p class="text-sm text-mutedText leading-relaxed">An elevated customer experience driven by dedicated
-              account managers and proactive support at every stage.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Design Studio -->
-    <section class="py-16 sm:py-24 bg-gradient-to-b from-white to-gray-50/70 border-t border-gray-100">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-
-        <!-- Header -->
-        <div class="text-center mb-12">
-          <span
-            class="inline-flex items-center gap-2 bg-primary/8 border border-primary/15 rounded-full px-4 py-1.5 mb-5">
-            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-            <span class="text-[10px] uppercase tracking-widest text-primary font-black">UNIWEAR Design Studio</span>
-          </span>
-          <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-charcoal leading-tight">Design Your <span
-              class="text-primary">Brand Uniform</span></h2>
-          <p class="text-mutedText mt-3 text-sm max-w-md mx-auto leading-relaxed">Customize your uniform in real-time.
-            Pick a garment type, apply your brand colors, and choose a logo layout.</p>
-        </div>
-
-        <!-- Two-column grid -->
-        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
-
-          <!-- LEFT: Controls Card -->
-          <div
-            class="bg-white border border-gray-100 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
-            <div class="space-y-6">
-              <!-- Garment Selection -->
-              <div>
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">1. Select Garment Style</h3>
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-[11px] text-gray-500 font-semibold mb-1.5">Category</label>
-                    <div class="relative">
-                      <select id="config-product-category" onchange="populateProductsByCategory()"
-                        class="w-full bg-gray-50/80 border border-gray-200/80 rounded-xl py-3 px-3.5 text-sm text-charcoal appearance-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer">
-                        <!-- Dynamically populated -->
-                      </select>
-                      <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                        <i class="ri-arrow-down-s-line"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="block text-[11px] text-gray-500 font-semibold mb-1.5">Product</label>
-                    <div class="relative">
-                      <select id="config-choose-product" onchange="onProductChange()"
-                        class="w-full bg-gray-50/80 border border-gray-200/80 rounded-xl py-3 px-3.5 text-sm text-charcoal appearance-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer">
-                        <!-- Dynamically populated -->
-                      </select>
-                      <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                        <i class="ri-arrow-down-s-line"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Colour Swatches -->
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest">2. Choose Fabric Color</h3>
-                  <span id="primary-color-label"
-                    class="text-[10px] font-bold text-primary bg-primary/5 px-2.5 py-1 rounded-full uppercase tracking-wider">Navy
-                    Blue</span>
-                </div>
-                <div class="flex flex-wrap gap-2.5 py-1">
-                  <button type="button" onclick="selectPrimaryColor('#1e293b','Navy Blue')" title="Navy Blue"
-                    class="swatch-btn w-9 h-9 rounded-full border border-gray-200 transition-all duration-300 hover:scale-110 focus:outline-none"
-                    style="background:#1e293b;" data-color="#1e293b"></button>
-                  <button type="button" onclick="selectPrimaryColor('#374151','Charcoal Grey')" title="Charcoal Grey"
-                    class="swatch-btn w-9 h-9 rounded-full border border-gray-200 transition-all duration-300 hover:scale-110 focus:outline-none"
-                    style="background:#374151;" data-color="#374151"></button>
-                  <button type="button" onclick="selectPrimaryColor('#991b1b','Deep Crimson')" title="Deep Crimson"
-                    class="swatch-btn w-9 h-9 rounded-full border-gray-200 transition-all duration-300 hover:scale-110 focus:outline-none"
-                    style="background:#991b1b;" data-color="#991b1b"></button>
-                  <button type="button" onclick="selectPrimaryColor('#1d4ed8','Royal Blue')" title="Royal Blue"
-                    class="swatch-btn w-9 h-9 rounded-full border-gray-200 transition-all duration-300 hover:scale-110 focus:outline-none"
-                    style="background:#1d4ed8;" data-color="#1d4ed8"></button>
-                  <button type="button" onclick="selectPrimaryColor('#ea580c','Safety Orange')" title="Safety Orange"
-                    class="swatch-btn w-9 h-9 rounded-full border-gray-200 transition-all duration-300 hover:scale-110 focus:outline-none"
-                    style="background:#ea580c;" data-color="#ea580c"></button>
-                  <button type="button" onclick="selectPrimaryColor('#065f46','Forest Green')" title="Forest Green"
-                    class="swatch-btn w-9 h-9 rounded-full border-gray-200 transition-all duration-300 hover:scale-110 focus:outline-none"
-                    style="background:#065f46;" data-color="#065f46"></button>
-                  <button type="button" onclick="selectPrimaryColor('#f3f4f6','Alpine White')" title="Alpine White"
-                    class="swatch-btn w-9 h-9 rounded-full border-gray-200 transition-all duration-300 hover:scale-110 focus:outline-none"
-                    style="background:#f3f4f6;" data-color="#f3f4f6"></button>
-                  <button type="button" onclick="selectPrimaryColor('#d97706','Mustard Yellow')" title="Mustard Yellow"
-                    class="swatch-btn w-9 h-9 rounded-full border-gray-200 transition-all duration-300 hover:scale-110 focus:outline-none"
-                    style="background:#d97706;" data-color="#d97706"></button>
-                </div>
-                <!-- Hidden selects preserved for JS -->
-                <select id="config-primary-color" onchange="updateConfiguratorUI(); syncSwatches()" class="hidden">
-                  <option value="#1e293b" selected>Navy Blue</option>
-                  <option value="#374151">Charcoal Grey</option>
-                  <option value="#991b1b">Deep Crimson</option>
-                  <option value="#1d4ed8">Royal Blue</option>
-                  <option value="#ea580c">Safety Orange</option>
-                  <option value="#065f46">Forest Green</option>
-                  <option value="#f3f4f6">Alpine White</option>
-                  <option value="#d97706">Mustard Yellow</option>
-                </select>
-                <select id="config-secondary-color" onchange="updateConfiguratorUI(); syncSwatches()" class="hidden">
-                  <option value="#1e293b">Navy Blue</option>
-                  <option value="#374151">Charcoal Grey</option>
-                  <option value="#991b1b">Deep Crimson</option>
-                  <option value="#1d4ed8">Royal Blue</option>
-                  <option value="#ea580c">Safety Orange</option>
-                  <option value="#065f46" selected>Forest Green</option>
-                  <option value="#f3f4f6">Alpine White</option>
-                  <option value="#d97706">Mustard Yellow</option>
-                </select>
-                <!-- Hidden fabric/qty for JS -->
-                <select id="config-fabric-type" onchange="updateConfiguratorUI()" class="hidden">
-                  <option value="Cotton" selected>Cotton</option>
-                  <option value="Poly Cotton">Poly Cotton</option>
-                  <option value="Premium Blend">Premium Blend</option>
-                  <option value="Performance Fabric">Performance Fabric</option>
-                </select>
-                <input type="hidden" id="config-qty" value="100">
-                <span id="studio-estimate" class="hidden"></span>
-              </div>
-
-              <!-- Branding & Position -->
-              <div>
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">3. Branding Configuration
-                </h3>
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-[11px] text-gray-500 font-semibold mb-2">Logo Style</label>
-                    <div class="flex bg-gray-50 p-1 rounded-xl border border-gray-150">
-                      <button type="button" id="chip-emb" onclick="selectBrandingType('embroidery')"
-                        class="chip-branding flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300">
-                        Embroidery
-                      </button>
-                      <button type="button" id="chip-print" onclick="selectBrandingType('printed')"
-                        class="chip-branding flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300">
-                        Print
-                      </button>
-                    </div>
-                    <select id="config-branding-type" onchange="updateConfiguratorUI()" class="hidden">
-                      <option value="embroidery" selected>Embroidery</option>
-                      <option value="printed">Printed Logo</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-[11px] text-gray-500 font-semibold mb-2">Placement</label>
-                    <div class="flex bg-gray-50 p-1 rounded-xl border border-gray-150">
-                      <button type="button" id="chip-chest" onclick="selectLogoPos('chest')"
-                        class="chip-pos flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300">
-                        Chest
-                      </button>
-                      <button type="button" id="chip-back" onclick="selectLogoPos('back')"
-                        class="chip-pos flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300">
-                        Back
-                      </button>
-                    </div>
-                    <select id="config-branding-pos" onchange="updateConfiguratorUI()" class="hidden">
-                      <option value="chest" selected>Chest Logo</option>
-                      <option value="back">Back Logo</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
-              <button onclick="openDesignConsultationModal()"
-                class="flex-1 inline-flex items-center justify-center gap-2 bg-primary hover:bg-primaryHover text-white px-6 py-4 rounded-full font-bold transition-all hover:scale-[1.02] shadow-lg shadow-primary/20 text-sm">
-                <i class="ri-sparkling-line"></i> Request Design Consultation <i class="ri-arrow-right-line"></i>
-              </button>
+          <!-- LEFT CONTENT -->
+          <div class="lg:col-span-6 flex flex-col justify-center text-left">
+            <h1 class="font-heading font-bold text-slate-900 text-3xl sm:text-5xl lg:text-5xl xl:text-6xl tracking-tight leading-[1.12] mb-5 sm:mb-6 hero-heading">
+              Uniforms That Represent Your Brand
+            </h1>
+            <p class="font-body text-slate-600 text-base sm:text-lg xl:text-xl leading-relaxed mb-7 sm:mb-9 max-w-2xl font-normal hero-desc">
+              Premium custom uniforms for Industrial, Corporate, Hospitality, Healthcare, Educational Institutions, and Corporate Gifting—designed, manufactured, and delivered across India with a focus on quality, comfort, and consistency.
+            </p>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 hero-btn-row">
               <a href="contact.html"
-                class="inline-flex items-center justify-center gap-2 text-charcoal border border-gray-250 hover:border-primary hover:text-primary px-6 py-4 rounded-full font-semibold transition-all text-sm bg-white">
-                Get a Quote
+                class="font-heading bg-primary hover:bg-primaryHover text-white font-semibold px-7 py-3.5 sm:py-4 rounded-xl text-base transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group">
+                <span>Request a Quote</span>
+                <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform duration-200"></i>
+              </a>
+              <a href="uniforms.html"
+                class="font-heading hero-btn-secondary bg-slate-100 hover:bg-slate-200/80 text-slate-800 font-semibold px-7 py-3.5 sm:py-4 rounded-xl text-base border border-slate-200/90 transition-all duration-200 flex items-center justify-center gap-2">
+                <span>Explore Solutions</span>
               </a>
             </div>
           </div>
 
-          <!-- RIGHT: Live Canvas Preview -->
-          <div class="lg:order-last flex flex-col justify-between">
-            <div class="rounded-3xl overflow-hidden border border-gray-100 shadow-xl bg-white flex flex-col h-full">
-              <!-- Preview Header -->
-              <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 bg-gray-50/50">
-                <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span>
-                  <span class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></span>
-                  <span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span>
-                </div>
-                <span class="text-[10px] text-gray-400 font-mono uppercase tracking-widest font-semibold">UNIWEAR 3D
-                  Previewer</span>
-                <span
-                  class="text-[9px] text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full font-mono font-bold">●
-                  LIVE</span>
+          <!-- RIGHT CONTENT: Single Premium Hero Visual -->
+          <div class="lg:col-span-6 flex items-center justify-center">
+            <div class="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl border border-slate-200/80 bg-slate-50">
+              <img src="assets/images/hero/hero-banner.png" alt="UNIWEAR Premium Product Showcase"
+                class="w-full h-full object-cover object-[72%_center] transition-transform duration-700 ease-out hover:scale-[1.02]">
+            </div>
+          </div>
+
+        </div><!-- /Main Grid -->
+
+        <!-- MINIMAL TRUST STRIP -->
+        <div class="mt-14 sm:mt-16 lg:mt-20 pt-8 sm:pt-10 border-t border-slate-200/80 hero-trust-divider">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+            
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <i class="ri-calendar-event-line text-lg"></i>
               </div>
-
-              <!-- Main Canvas -->
-              <div
-                class="relative overflow-hidden flex-1 min-h-[360px] bg-gradient-to-b from-gray-50 to-slate-100/60 flex items-center justify-center">
-                <!-- Subtle grid background -->
-                <div class="absolute inset-0 pointer-events-none"
-                  style="background-image: radial-gradient(circle, #cbd5e1 1.2px, transparent 1.2px); background-size: 24px 24px; opacity:0.4; z-index:1;">
-                </div>
-
-                <!-- Vector SVG Garment Customization Overlay -->
-                <div id="configurator-svg-container"
-                  class="absolute inset-0 flex items-center justify-center p-8 pointer-events-none transition-all duration-500"
-                  style="opacity:0.95; z-index:4;">
-                  <!-- Injected by Javascript -->
-                </div>
-
-                <!-- Color Tint Overlay (hidden but preserved for JS compatibility) -->
-                <div id="configurator-tint-overlay" class="hidden"></div>
-
-                <!-- Logo Badge Overlay -->
-                <div id="configurator-logo-badge"
-                  class="absolute w-7 h-7 rounded-full border border-white flex items-center justify-center shadow-lg transition-all duration-500 animate-bounce"
-                  style="background-color:#B91C1C; z-index:6;">
-                  <i class="ri-brush-line text-white text-[10px]"></i>
-                </div>
-
-                <!-- Floating realistic photo card -->
-                <div
-                  class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-2xl p-1.5 shadow-md border border-gray-150/70 flex flex-col gap-1.5 z-10 transition-all duration-300 hover:scale-105"
-                  style="width: 84px;">
-                  <div class="h-16 w-full rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
-                    <img id="configurator-product-img" src="" alt="Real Reference" class="w-full h-full object-cover">
-                  </div>
-                  <span class="text-[8px] font-bold text-gray-400 text-center uppercase tracking-widest">Model
-                    view</span>
-                </div>
-
-                <!-- Selected Primary Color Pill (top-right) -->
-                <div
-                  class="absolute top-4 right-4 flex items-center gap-2 bg-white/95 backdrop-blur-sm border border-gray-150/70 rounded-full px-3 py-1.5 shadow-sm z-10">
-                  <span class="w-2.5 h-2.5 rounded-full border border-gray-200 shadow-sm" id="hud-primary-dot"
-                    style="background:#1e293b;"></span>
-                  <span class="w-2.5 h-2.5 rounded-full border border-gray-200 shadow-sm hidden" id="hud-secondary-dot"
-                    style="background:#065f46;"></span>
-                  <span class="text-[10px] font-bold text-charcoal" id="canvas-tag-color">Navy Blue</span>
-                </div>
-
-                <!-- Corner Crosshair Marks for Drafting/Engineering Vibe -->
-                <div class="absolute top-4 left-4 w-4 h-4 border-t border-l border-gray-300 pointer-events-none"></div>
-                <div class="absolute top-4 right-4 w-4 h-4 border-t border-r border-gray-300 pointer-events-none"></div>
-                <div class="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-gray-300 pointer-events-none">
-                </div>
-                <div class="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-gray-300 pointer-events-none">
-                </div>
-
-                <!-- Bottom info HUD -->
-                <div
-                  class="absolute bottom-0 left-0 right-0 px-5 py-3.5 bg-white/95 backdrop-blur-sm border-t border-gray-100 flex items-center justify-between z-10">
-                  <div>
-                    <span class="text-[9px] uppercase tracking-widest text-primary font-black block"
-                      id="canvas-tag-type">Polo T-Shirt</span>
-                    <p class="text-xs text-mutedText mt-0.5 max-w-[200px] truncate" id="canvas-product-desc">Loading
-                      custom styles...</p>
-                  </div>
-                  <div class="flex items-center gap-1.5 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-lg">
-                    <span class="text-[10px] font-bold text-charcoal" id="canvas-tag-branding-type">Embroidery</span>
-                    <span class="w-1 h-1 rounded-full bg-gray-300"></span>
-                    <span class="text-[10px] font-black text-primary uppercase" id="canvas-tag-logo">Chest</span>
-                  </div>
-                </div>
-                <span class="hidden" id="canvas-product-name"></span>
+              <div>
+                <span class="font-heading text-base sm:text-lg font-bold text-slate-900 hero-trust-value block" id="hero-stat-legacy">Since 1998</span>
+                <span class="font-body text-xs text-slate-500 hero-trust-label block">Established Experience</span>
               </div>
+            </div>
 
-              <!-- Trust Certifications & Fast Shipping footer tags -->
-              <div
-                class="flex flex-wrap gap-x-4 gap-y-1.5 px-5 py-3.5 border-t border-gray-100 bg-gray-50/50 justify-center">
-                <span class="text-[10px] text-mutedText flex items-center gap-1.5"><i
-                    class="ri-shield-check-line text-primary text-xs"></i> SA8000 Certified</span>
-                <span class="text-[10px] text-mutedText flex items-center gap-1.5"><i
-                    class="ri-time-line text-primary text-xs"></i> 14-Day Delivery</span>
-                <span class="text-[10px] text-mutedText flex items-center gap-1.5"><i
-                    class="ri-truck-line text-primary text-xs"></i> Pan-India Shipping</span>
-                <span class="text-[10px] text-mutedText flex items-center gap-1.5"><i
-                    class="ri-group-line text-primary text-xs"></i> MOQ: 50 Sets</span>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <i class="ri-building-4-line text-lg"></i>
+              </div>
+              <div>
+                <span class="font-heading text-base sm:text-lg font-bold text-slate-900 hero-trust-value block" id="hero-stat-clients">2,000+ Clients Served</span>
+                <span class="font-body text-xs text-slate-500 hero-trust-label block">Across Corporate &amp; Industry</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <i class="ri-truck-line text-lg"></i>
+              </div>
+              <div>
+                <span class="font-heading text-base sm:text-lg font-bold text-slate-900 hero-trust-value block">Pan-India Delivery</span>
+                <span class="font-body text-xs text-slate-500 hero-trust-label block">Seamless Logistics</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <i class="ri-award-line text-lg"></i>
+              </div>
+              <div>
+                <span class="font-heading text-base sm:text-lg font-bold text-slate-900 hero-trust-value block">Premium Manufacturing</span>
+                <span class="font-body text-xs text-slate-500 hero-trust-label block">Certified Quality Standards</span>
+              </div>
+            </div>
+
+          </div>
+        </div><!-- /Trust Strip -->
+
+      </div>
+    </section>
+
+
+
+    <!-- 2. INDUSTRIES WE SERVE -->
+    <section class="py-20 lg:py-28 bg-slate-50/60 relative z-20 border-b border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold block mb-2">Workwear Portfolio</span>
+          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">
+            Industries We Serve
+          </h2>
+          <p class="text-slate-600 text-base sm:text-lg mt-4 leading-relaxed font-normal">
+            Specialized uniform solutions engineered for distinct operational requirements, durability standards, and corporate brand identities.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Industry 1 -->
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group">
+            <div class="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+              <img src="assets/images/industries/industrial-uniforms.png" alt="Industrial Uniforms"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6 sm:p-8 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 class="font-heading text-xl sm:text-2xl font-bold text-slate-900 mb-3">Industrial Uniforms</h3>
+                <p class="text-slate-600 text-sm leading-relaxed font-normal">
+                  Heavy-duty workwear, fire-retardant suits, anti-static jackets, and high-visibility safety apparel.
+                </p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-slate-100">
+                <a href="uniforms.html" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary hover:text-primaryHover transition-colors">
+                  <span>Explore Specifications</span>
+                  <i class="ri-arrow-right-line"></i>
+                </a>
               </div>
             </div>
           </div>
 
+          <!-- Industry 2 -->
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group">
+            <div class="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+              <img src="assets/images/industries/corporate-uniforms.png" alt="Corporate Uniforms"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6 sm:p-8 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 class="font-heading text-xl sm:text-2xl font-bold text-slate-900 mb-3">Corporate Uniforms</h3>
+                <p class="text-slate-600 text-sm leading-relaxed font-normal">
+                  Bespoke blazers, executive shirts, tailored trousers, and custom-embroidered smart casuals.
+                </p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-slate-100">
+                <a href="uniforms.html" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary hover:text-primaryHover transition-colors">
+                  <span>Explore Specifications</span>
+                  <i class="ri-arrow-right-line"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Industry 3 -->
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group">
+            <div class="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+              <img src="assets/images/industries/hospitality-uniforms.png" alt="Hospitality Uniforms"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6 sm:p-8 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 class="font-heading text-xl sm:text-2xl font-bold text-slate-900 mb-3">Hospitality Uniforms</h3>
+                <p class="text-slate-600 text-sm leading-relaxed font-normal">
+                  Chef coats, front-desk corporate blazers, premium aprons, and breathable housekeeping apparel.
+                </p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-slate-100">
+                <a href="uniforms.html" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary hover:text-primaryHover transition-colors">
+                  <span>Explore Specifications</span>
+                  <i class="ri-arrow-right-line"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Industry 4 -->
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group">
+            <div class="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+              <img src="assets/images/industries/institutional-uniforms.png" alt="Institutional Uniforms"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6 sm:p-8 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 class="font-heading text-xl sm:text-2xl font-bold text-slate-900 mb-3">Institutional &amp; Healthcare</h3>
+                <p class="text-slate-600 text-sm leading-relaxed font-normal">
+                  Medical scrubs, lab coats, school blazers, collegiate hoodies, and sports activewear.
+                </p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-slate-100">
+                <a href="uniforms.html" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary hover:text-primaryHover transition-colors">
+                  <span>Explore Specifications</span>
+                  <i class="ri-arrow-right-line"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Industry 5 -->
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group">
+            <div class="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+              <img src="assets/images/industries/corporate-gifting.png" alt="Corporate Gifting"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6 sm:p-8 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 class="font-heading text-xl sm:text-2xl font-bold text-slate-900 mb-3">Corporate Gifting</h3>
+                <p class="text-slate-600 text-sm leading-relaxed font-normal">
+                  Custom executive gift boxes, leather planners, presentation kits, and premium merchandise.
+                </p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-slate-100">
+                <a href="gifts.html" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary hover:text-primaryHover transition-colors">
+                  <span>View Gifting Catalog</span>
+                  <i class="ri-arrow-right-line"></i>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </section> <!-- Fading Testimonial Slider -->
-    <section class="py-16 sm:py-24 bg-white relative z-20 border-t border-lightBorder">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <span class="text-xs uppercase tracking-widest text-primary font-bold">Trusted Endorsements</span>
-        <h2 class="font-heading text-4xl font-bold mt-2 mb-16 text-charcoal">Client Success Voices</h2>
+    </section>
 
-        <div class="relative min-h-[26rem] md:min-h-[18rem] flex items-center justify-center">
+    <!-- 3. WHY CHOOSE UNIWEAR -->
+    <section class="py-20 lg:py-28 bg-white relative z-20 border-b border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold block mb-2">The Enterprise Advantage</span>
+          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">
+            Why Global Enterprises Choose Us
+          </h2>
+          <p class="text-slate-600 text-base sm:text-lg mt-4 leading-relaxed font-normal">
+            Built to solve complex enterprise workwear challenges with reliability, precision engineering, and dedicated account support.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="p-8 rounded-2xl bg-slate-50/70 border border-slate-200/70 hover:border-slate-300 transition-all duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+              <i class="ri-award-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-slate-900 mb-3">Industry Expertise</h3>
+            <p class="text-slate-600 text-sm leading-relaxed font-normal">Decades of specialized workwear manufacturing experience tailored to corporate and industrial demands.</p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-slate-50/70 border border-slate-200/70 hover:border-slate-300 transition-all duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+              <i class="ri-palette-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-slate-900 mb-3">Custom Manufacturing</h3>
+            <p class="text-slate-600 text-sm leading-relaxed font-normal">Custom uniform designs engineered around your operational requirements, color specs, and brand identity.</p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-slate-50/70 border border-slate-200/70 hover:border-slate-300 transition-all duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+              <i class="ri-shield-check-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-slate-900 mb-3">Certified Quality</h3>
+            <p class="text-slate-600 text-sm leading-relaxed font-normal">Rigorous multi-stage quality control adhering to international ISO 9001 and SA8000 manufacturing standards.</p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-slate-50/70 border border-slate-200/70 hover:border-slate-300 transition-all duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+              <i class="ri-truck-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-slate-900 mb-3">On-Time Delivery</h3>
+            <p class="text-slate-600 text-sm leading-relaxed font-normal">SLA-backed production schedules and Pan-India logistics ensuring seamless rollout across all facility locations.</p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-slate-50/70 border border-slate-200/70 hover:border-slate-300 transition-all duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+              <i class="ri-shirt-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-slate-900 mb-3">Comprehensive Portfolio</h3>
+            <p class="text-slate-600 text-sm leading-relaxed font-normal">Complete coverage across industrial workwear, corporate blazers, hospitality attire, healthcare scrubs, and gifting.</p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-slate-50/70 border border-slate-200/70 hover:border-slate-300 transition-all duration-300">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+              <i class="ri-customer-service-2-line text-2xl"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-slate-900 mb-3">Dedicated Support</h3>
+            <p class="text-slate-600 text-sm leading-relaxed font-normal">Personal key account managers providing end-to-end assistance from initial swatch selection to post-delivery support.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MANUFACTURING CAPABILITY -->
+    <section class="py-20 lg:py-28 bg-slate-50/60 relative z-20 border-b border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold block mb-2">Production Blueprint</span>
+          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">
+            Our Manufacturing Lifecycle
+          </h2>
+          <p class="text-slate-600 text-base sm:text-lg mt-4 leading-relaxed font-normal">
+            A structured four-step engineering process designed to deliver zero-defect uniforms at scale.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <!-- Timeline Buttons Navigation (Left) -->
+          <div class="lg:col-span-5 space-y-3">
+            <button onclick="setLifecycleStep(1)"
+              class="w-full text-left p-5 rounded-2xl border border-slate-200 bg-white transition-all duration-200 group flex items-start gap-4 focus:outline-none step-btn active-step"
+              id="step-btn-1">
+              <span id="step-circle-1"
+                class="w-9 h-9 rounded-full border flex items-center justify-center font-heading font-bold text-sm shrink-0 transition-colors duration-200"
+                style="border-color:#B91C1C;background-color:#B91C1C;color:#fff">01</span>
+              <div>
+                <h4 class="font-heading text-base font-bold text-slate-900 group-[.active-step]:text-primary transition-colors duration-200">
+                  Client Consultation &amp; Swatches
+                </h4>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Evaluating operational requirements, presenting certified fabric swatches, and defining specs.</p>
+              </div>
+            </button>
+
+            <button onclick="setLifecycleStep(2)"
+              class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-white hover:border-slate-200 transition-all duration-200 group flex items-start gap-4 focus:outline-none step-btn"
+              id="step-btn-2">
+              <span id="step-circle-2"
+                class="w-9 h-9 rounded-full border flex items-center justify-center font-heading font-bold text-sm shrink-0 transition-colors duration-200"
+                style="border-color:#e5e7eb;color:#9ca3af">02</span>
+              <div>
+                <h4 class="font-heading text-base font-bold text-slate-900 group-[.active-step]:text-primary transition-colors duration-200">
+                  Design &amp; Prototyping
+                </h4>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Creating technical patterns and pre-production physical samples blending comfort and durability.</p>
+              </div>
+            </button>
+
+            <button onclick="setLifecycleStep(3)"
+              class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-white hover:border-slate-200 transition-all duration-200 group flex items-start gap-4 focus:outline-none step-btn"
+              id="step-btn-3">
+              <span id="step-circle-3"
+                class="w-9 h-9 rounded-full border flex items-center justify-center font-heading font-bold text-sm shrink-0 transition-colors duration-200"
+                style="border-color:#e5e7eb;color:#9ca3af">03</span>
+              <div>
+                <h4 class="font-heading text-base font-bold text-slate-900 group-[.active-step]:text-primary transition-colors duration-200">
+                  Precision Bulk Manufacturing
+                </h4>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Automated cutting, precision stitching, and skilled craftsmanship for high-volume execution.</p>
+              </div>
+            </button>
+
+            <button onclick="setLifecycleStep(4)"
+              class="w-full text-left p-5 rounded-2xl border border-transparent hover:bg-white hover:border-slate-200 transition-all duration-200 group flex items-start gap-4 focus:outline-none step-btn"
+              id="step-btn-4">
+              <span id="step-circle-4"
+                class="w-9 h-9 rounded-full border flex items-center justify-center font-heading font-bold text-sm shrink-0 transition-colors duration-200"
+                style="border-color:#e5e7eb;color:#9ca3af">04</span>
+              <div>
+                <h4 class="font-heading text-base font-bold text-slate-900 group-[.active-step]:text-primary transition-colors duration-200">
+                  Quality Inspection &amp; Delivery
+                </h4>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Strict multi-point quality inspection before custom packing and on-time nationwide dispatch.</p>
+              </div>
+            </button>
+          </div>
+
+          <!-- Infographic Image (Right) -->
+          <div class="lg:col-span-7">
+            <div class="rounded-2xl overflow-hidden border border-slate-200/80 shadow-lg relative aspect-[4/3] bg-white">
+              <img id="lifecycle-img" src="assets/images/manufacturing/client-consultation.jpg"
+                alt="Manufacturing Lifecycle Step"
+                class="w-full h-full object-cover block transition-opacity duration-300" loading="lazy">
+              <div id="lifecycle-badge"
+                class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2.5 shadow-md border border-slate-200/80">
+                <p id="lifecycle-badge-label" class="text-xs font-bold uppercase tracking-widest text-primary">Step 01</p>
+                <p id="lifecycle-badge-desc" class="text-xs text-slate-800 font-semibold mt-0.5">Client Consultation &amp; Swatch Selection</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. TRUSTED BY LEADING BUSINESSES -->
+    <section class="py-20 lg:py-24 bg-white relative z-20 border-b border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+          <span class="text-xs uppercase tracking-widest text-slate-500 font-semibold">Engineering Workwear Identity For Leading Enterprises</span>
+        </div>
+
+        <!-- Marquee Ticker -->
+        <div class="marquee-container w-full py-4 overflow-hidden">
+          <div class="marquee-content animate-marquee-infinite gap-12 sm:gap-16 flex items-center">
+            <img src="assets/logos/toyota.png" alt="Toyota" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/taj-hotels-logo.webp" alt="Taj Hotels" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/fortis-logo.jpg" alt="Fortis" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity rounded">
+            <img src="assets/logos/shell.png" alt="Shell" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/biocon-logo.jpg" alt="Biocon" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity rounded">
+            <img src="assets/logos/bosch-logo.png" alt="Bosch" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/wipro.png" alt="Wipro" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/infosys-logo.webp" alt="Infosys" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/tata-motors.webp" alt="Tata Motors" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/lt-logo.png" alt="L&T" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/otis.webp" alt="Otis" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+            <img src="assets/logos/schneider-electric.webp" alt="Schneider Electric" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+          </div>
+        </div>
+
+        <!-- Single Concise Trust Metric Bar -->
+        <div class="mt-14 pt-10 border-t border-slate-200/80">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+              <span class="font-heading text-3xl sm:text-4xl font-bold text-slate-900 block mb-1">2,000+</span>
+              <span class="text-xs uppercase tracking-wider text-slate-500 font-medium">Enterprises &amp; Corporate Clients</span>
+            </div>
+            <div>
+              <span class="font-heading text-3xl sm:text-4xl font-bold text-slate-900 block mb-1">Pan-India</span>
+              <span class="text-xs uppercase tracking-wider text-slate-500 font-medium">Fulfillment &amp; Distribution</span>
+            </div>
+            <div>
+              <span class="font-heading text-3xl sm:text-4xl font-bold text-slate-900 block mb-1">100%</span>
+              <span class="text-xs uppercase tracking-wider text-slate-500 font-medium">Quality &amp; SLA Compliance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TESTIMONIALS -->
+    <section class="py-20 lg:py-28 bg-slate-50/60 relative z-20 border-b border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        <span class="text-xs uppercase tracking-widest text-primary font-bold block mb-2">Client Endorsements</span>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-14 tracking-tight">What Our Partners Say</h2>
+
+        <div class="relative min-h-[16rem] sm:min-h-[14rem] flex items-center justify-center">
           <!-- Testimonial 1 -->
-          <div
-            class="testimonial-slide absolute inset-0 opacity-100 transition-opacity duration-500 flex flex-col justify-between"
-            id="testimonial-slide-1">
-            <div>
-              <i class="ri-double-quotes-l text-primary text-6xl opacity-10 block mb-4 mx-auto"></i>
-              <p class="text-lg md:text-xl text-charcoal italic mb-6 leading-relaxed max-w-2xl mx-auto">
-                "I have had a good experience with Uniwear! Their attention to the quality of products is very good. I
-                highly recommend Uniwear for anyone looking for premium solutions such as T-Shirts, Shirts, Gifting
-                Solutions."
-              </p>
-            </div>
-            <div class="flex items-center justify-center gap-3 mt-auto">
-              <div
-                class="px-3 py-1.5 bg-white border border-lightBorder rounded-lg shadow-sm flex items-center justify-center h-10 w-24 sm:w-28 shrink-0">
-                <img src="assets/logos/wipro.png" alt="Wipro Logo" class="h-6 sm:h-7 w-auto object-contain">
+          <div class="testimonial-slide absolute inset-0 opacity-100 transition-opacity duration-500 flex flex-col justify-between" id="testimonial-slide-1">
+            <p class="text-lg sm:text-xl text-slate-700 italic leading-relaxed max-w-2xl mx-auto font-normal">
+              "UNIWEAR has been an exceptional manufacturing partner. Their attention to fabric durability and tailoring precision is outstanding across all corporate and gifting orders."
+            </p>
+            <div class="flex items-center justify-center gap-3 mt-6">
+              <div class="px-3 py-1.5 bg-white border border-slate-200/80 rounded-lg shadow-2xs h-9 w-24 flex items-center justify-center shrink-0">
+                <img src="assets/logos/wipro.png" alt="Wipro Logo" class="h-5 w-auto object-contain">
               </div>
               <div class="text-left">
-                <h4 class="font-heading text-base font-bold text-charcoal leading-none">Anjali</h4>
-                <p class="text-[10px] text-mutedText mt-1 font-semibold uppercase tracking-wider">Wipro &middot;
-                  Corporate Partner</p>
+                <h4 class="font-heading text-sm font-bold text-slate-900 leading-none">Anjali</h4>
+                <p class="text-[11px] text-slate-500 mt-1 uppercase tracking-wider font-medium">Wipro &middot; Corporate Procurement</p>
               </div>
             </div>
           </div>
+
           <!-- Testimonial 2 -->
-          <div
-            class="testimonial-slide absolute inset-0 opacity-0 transition-opacity duration-500 flex flex-col justify-between"
-            id="testimonial-slide-2">
-            <div>
-              <i class="ri-double-quotes-l text-primary text-6xl opacity-10 block mb-4 mx-auto"></i>
-              <p class="text-lg md:text-xl text-charcoal italic mb-6 leading-relaxed max-w-2xl mx-auto">
-                "Uniwear's uniforms speak volumes about our company's commitment to excellence. With their durable,
-                comfortable attire, including shirts, trousers, t-shirts, caps, and shoes, our team is always ready to
-                represent our brand."
-              </p>
-            </div>
-            <div class="flex items-center justify-center gap-3 mt-auto">
-              <div
-                class="px-3 py-1.5 bg-white border border-lightBorder rounded-lg shadow-sm flex items-center justify-center h-10 w-24 sm:w-28 shrink-0">
-                <img src="assets/logos/otis.webp" alt="Otis Logo" class="h-6 sm:h-7 w-auto object-contain">
+          <div class="testimonial-slide absolute inset-0 opacity-0 transition-opacity duration-500 flex flex-col justify-between" id="testimonial-slide-2">
+            <p class="text-lg sm:text-xl text-slate-700 italic leading-relaxed max-w-2xl mx-auto font-normal">
+              "UNIWEAR's uniforms speak volumes about quality. With their durable workwear, technical shirts, and safety apparel, our team across nationwide locations is always ready."
+            </p>
+            <div class="flex items-center justify-center gap-3 mt-6">
+              <div class="px-3 py-1.5 bg-white border border-slate-200/80 rounded-lg shadow-2xs h-9 w-24 flex items-center justify-center shrink-0">
+                <img src="assets/logos/otis.webp" alt="Otis Logo" class="h-5 w-auto object-contain">
               </div>
               <div class="text-left">
-                <h4 class="font-heading text-base font-bold text-charcoal leading-none">Bhavya</h4>
-                <p class="text-[10px] text-mutedText mt-1 font-semibold uppercase tracking-wider">OTIS &middot;
-                  Operations Manager</p>
+                <h4 class="font-heading text-sm font-bold text-slate-900 leading-none">Bhavya</h4>
+                <p class="text-[11px] text-slate-500 mt-1 uppercase tracking-wider font-medium">OTIS &middot; Operations Manager</p>
               </div>
             </div>
           </div>
+
           <!-- Testimonial 3 -->
-          <div
-            class="testimonial-slide absolute inset-0 opacity-0 transition-opacity duration-500 flex flex-col justify-between"
-            id="testimonial-slide-3">
-            <div>
-              <i class="ri-double-quotes-l text-primary text-6xl opacity-10 block mb-4 mx-auto"></i>
-              <p class="text-lg md:text-xl text-charcoal italic mb-6 leading-relaxed max-w-2xl mx-auto">
-                "What truly sets Uniwear apart is their professionalism and reliability. They have consistently met our
-                tight deadlines, ensuring timely delivery without compromising on quality. Their proactive communication
-                and attention to detail make the entire process seamless."
-              </p>
-            </div>
-            <div class="flex items-center justify-center gap-3 mt-auto">
-              <div
-                class="px-3 py-1.5 bg-white border border-lightBorder rounded-lg shadow-sm flex items-center justify-center h-10 w-28 sm:w-36 shrink-0">
-                <img src="assets/logos/schneider-electric.webp" alt="Schneider Electric Logo"
-                  class="h-6 sm:h-7 w-auto object-contain">
+          <div class="testimonial-slide absolute inset-0 opacity-0 transition-opacity duration-500 flex flex-col justify-between" id="testimonial-slide-3">
+            <p class="text-lg sm:text-xl text-slate-700 italic leading-relaxed max-w-2xl mx-auto font-normal">
+              "What sets UNIWEAR apart is their reliability. They consistently meet tight enterprise deadlines with zero compromise on quality standards and post-delivery support."
+            </p>
+            <div class="flex items-center justify-center gap-3 mt-6">
+              <div class="px-3 py-1.5 bg-white border border-slate-200/80 rounded-lg shadow-2xs h-9 w-28 flex items-center justify-center shrink-0">
+                <img src="assets/logos/schneider-electric.webp" alt="Schneider Electric Logo" class="h-5 w-auto object-contain">
               </div>
               <div class="text-left">
-                <h4 class="font-heading text-base font-bold text-charcoal leading-none">Sonia Murdeshwar</h4>
-                <p class="text-[10px] text-mutedText mt-1 font-semibold uppercase tracking-wider">Schneider Electric
-                  &middot; Procurement Director</p>
+                <h4 class="font-heading text-sm font-bold text-slate-900 leading-none">Sonia Murdeshwar</h4>
+                <p class="text-[11px] text-slate-500 mt-1 uppercase tracking-wider font-medium">Schneider Electric &middot; Procurement Director</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Slider Controls -->
-        <div class="flex items-center justify-center gap-4 mt-8">
+        <div class="flex items-center justify-center gap-3 mt-8">
           <button onclick="changeTestimonial(-1)"
-            class="w-12 h-12 rounded-full border border-lightBorder bg-lightCard hover:border-primary flex items-center justify-center hover:text-primary transition-colors focus:outline-none">
+            class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:border-primary flex items-center justify-center hover:text-primary transition-colors focus:outline-none shadow-2xs">
             <i class="ri-arrow-left-line"></i>
           </button>
           <button onclick="changeTestimonial(1)"
-            class="w-12 h-12 rounded-full border border-lightBorder bg-lightCard hover:border-primary flex items-center justify-center hover:text-primary transition-colors focus:outline-none">
+            class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:border-primary flex items-center justify-center hover:text-primary transition-colors focus:outline-none shadow-2xs">
             <i class="ri-arrow-right-line"></i>
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Latest Thinking Blog Preview -->
-    <section class="py-16 sm:py-24 bg-lightCard relative z-20 border-t border-lightBorder">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-10 sm:mb-16">
-          <div>
-            <span class="text-xs uppercase tracking-widest text-primary font-bold">Latest Thinking</span>
-            <h2 class="font-heading text-4xl lg:text-5xl font-bold mt-2 text-charcoal">Workwear Insights & Innovations
-            </h2>
-          </div>
-          <a href="blog.html"
-            class="hidden md:flex items-center gap-2 text-sm font-semibold hover:text-primary transition-colors text-charcoal">
-            Browse All Articles <i class="ri-arrow-right-line"></i>
-          </a>
-        </div>
+    <!-- 7. CUSTOM UNIFORM SERVICES (REPLACING PRODUCT CUSTOMIZER) -->
+    <section class="py-20 lg:py-28 bg-white relative z-20 border-b border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-br from-slate-900 via-slate-850 to-charcoal text-white rounded-3xl p-8 sm:p-12 lg:p-16 border border-slate-800 shadow-2xl relative overflow-hidden">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+            <div class="lg:col-span-7 text-left">
+              <span class="text-xs uppercase tracking-widest text-red-400 font-bold block mb-3">Enterprise Customization</span>
+              <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-6 leading-tight">
+                Tailored Uniform Design &amp; Brand Integration
+              </h2>
+              <p class="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 font-normal max-w-2xl">
+                Work directly with our uniform specialists to develop customized apparel tailored to your exact corporate color scheme, fabric specifications, and brand embroidery requirements.
+              </p>
 
-        <div class="grid md:grid-cols-3 gap-8" id="homepage-blog-grid">
-          <!-- Rendered dynamically from storage -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                <div class="flex items-center gap-3">
+                  <i class="ri-checkbox-circle-fill text-primary text-xl"></i>
+                  <span class="text-sm text-slate-200 font-medium">Custom Fabric &amp; Color Swatches</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="ri-checkbox-circle-fill text-primary text-xl"></i>
+                  <span class="text-sm text-slate-200 font-medium">Precision Embroidery &amp; Printing</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="ri-checkbox-circle-fill text-primary text-xl"></i>
+                  <span class="text-sm text-slate-200 font-medium">Ergonomic Fit &amp; Tailoring</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="ri-checkbox-circle-fill text-primary text-xl"></i>
+                  <span class="text-sm text-slate-200 font-medium">Pre-Production Sample Approval</span>
+                </div>
+              </div>
+
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                <a href="contact.html"
+                  class="font-heading bg-primary hover:bg-primaryHover text-white font-semibold px-8 py-4 rounded-xl text-base transition-all duration-200 shadow-lg shadow-primary/30 flex items-center justify-center gap-2 group">
+                  <span>Request a Custom Quote</span>
+                  <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="lg:col-span-5 flex justify-center">
+              <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-slate-700/80 shadow-xl bg-slate-800">
+                <img src="assets/images/manufacturing/client-consultation.jpg" alt="Custom Uniform Design Consultation"
+                  class="w-full h-full object-cover">
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Contact CTA -->
-    <section class="py-16 sm:py-24 bg-white relative z-20 overflow-hidden border-t border-lightBorder">
-      <div
-        class="absolute inset-0 bg-[radial-gradient(rgba(185,28,28,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-60">
-      </div>
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
-        <h2 class="font-heading text-3xl sm:text-4xl md:text-6xl font-bold mb-6 text-charcoal">Let's co-create your
-          brand statement.</h2>
-        <p class="text-lg text-mutedText max-w-2xl mx-auto mb-10 leading-relaxed">
-          Partner with Bengaluru's premier uniform manufacturer to engineer highly custom, functional, and beautiful
-          uniforms for your business.
+    <!-- 8. FINAL CALL TO ACTION -->
+    <section class="py-20 lg:py-28 bg-slate-50/50 relative z-20 border-b border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight mb-5">
+          Ready to Upgrade Your Corporate Uniform Program?
+        </h2>
+        <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-9 leading-relaxed font-normal">
+          Connect with UNIWEAR workwear specialists for fabric swatches, enterprise volume quotes, and custom program proposals.
         </p>
         <a href="contact.html"
-          class="inline-block bg-primary hover:bg-primaryHover text-white px-7 sm:px-10 py-4 sm:py-5 rounded-full text-base sm:text-lg font-bold transition-all shadow-xl shadow-primary/30 transform hover:scale-105">
-          Book Consultation Today
+          class="inline-flex items-center gap-2 bg-primary hover:bg-primaryHover text-white px-9 py-4 rounded-xl text-base font-semibold transition-all duration-200 shadow-lg shadow-primary/20 hover:shadow-xl">
+          <span>Request Enterprise Quote</span>
+          <i class="ri-arrow-right-line text-lg"></i>
         </a>
       </div>
     </section>
