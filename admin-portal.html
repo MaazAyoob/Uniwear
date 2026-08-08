@@ -950,6 +950,45 @@
             </button>
           </form>
         </div>
+
+        <!-- SECURITY & CHANGE PASSWORD CARD -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl border border-lightBorder shadow-sm max-w-2xl mt-8">
+          <div class="flex items-center gap-3 mb-6 pb-4 border-b border-lightBorder">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+              <i class="ri-lock-password-line text-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-heading text-lg font-bold text-charcoal">Security & Credentials</h4>
+              <p class="text-xs text-mutedText">Change your admin portal authentication password.</p>
+            </div>
+          </div>
+
+          <form onsubmit="submitAdminChangePassword(event)" class="space-y-4 font-body">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Current Password *</label>
+              <input type="password" id="admin-pass-current" required placeholder="Enter current password"
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">New Password *</label>
+                <input type="password" id="admin-pass-new" required placeholder="At least 6 characters"
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Confirm New Password *</label>
+                <input type="password" id="admin-pass-confirm" required placeholder="Re-enter new password"
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div class="pt-2">
+              <button type="submit"
+                class="bg-charcoal hover:bg-primary text-white px-6 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-sm">
+                Update Admin Password
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
     </div>
@@ -2035,6 +2074,39 @@
         updateAdminDashboard();
       } catch (err) {
         alert(err.message || 'Failed to update settings.');
+      }
+    }
+
+    async function submitAdminChangePassword(event) {
+      event.preventDefault();
+      const currentPassword = document.getElementById('admin-pass-current').value;
+      const newPassword = document.getElementById('admin-pass-new').value;
+      const confirmPassword = document.getElementById('admin-pass-confirm').value;
+
+      if (newPassword !== confirmPassword) {
+        alert("New password and confirmation password do not match.");
+        return;
+      }
+
+      if (newPassword.length < 6) {
+        alert("New password must be at least 6 characters long.");
+        return;
+      }
+
+      try {
+        const res = await window.api.changePassword({
+          currentPassword,
+          newPassword,
+          confirmPassword
+        });
+
+        alert(res.message || "Password updated successfully. Please log in again with your new password.");
+        event.target.reset();
+
+        // Invalidate current authentication session and redirect to login page
+        handleLogout();
+      } catch (err) {
+        alert(err.message || "Failed to update password.");
       }
     }
 

@@ -327,6 +327,7 @@ const api = {
   login: apiLogin,
   register: apiRegister,
   logout: apiLogout,
+  changePassword: (data) => apiPost('/auth/change-password', data),
 
   // Users (admin)
   getUsers: (params) => apiGet('/users', params),
