@@ -39,6 +39,9 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 
+// Trust single reverse proxy (Nginx) for client IP detection & rate limiting
+app.set('trust proxy', 1);
+
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,

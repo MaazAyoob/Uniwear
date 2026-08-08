@@ -1278,6 +1278,8 @@
               <option value="Hospitality">Hospitality</option>
               <option value="Institutional">Institutional</option>
               <option value="Corporate Gifting">Corporate Gifting</option>
+              <option value="Heritage">Heritage</option>
+              <option value="Sustainability">Sustainability</option>
             </select>
           </div>
           <div>
@@ -2918,10 +2920,21 @@
           return;
         }
 
-        // Use _id preferentially; fall back to stringified numeric id
         document.getElementById('blog-modal-id').value = b._id || String(b.id || '');
         document.getElementById('blog-title').value = b.title;
-        document.getElementById('blog-cat').value = b.category;
+
+        // Ensure category exists in select dropdown, adding dynamically if custom
+        const catSelect = document.getElementById('blog-cat');
+        const catVal = b.category || 'Fabrics';
+        let optionExists = Array.from(catSelect.options).some(opt => opt.value === catVal);
+        if (!optionExists && catVal) {
+          const newOpt = document.createElement('option');
+          newOpt.value = catVal;
+          newOpt.innerText = catVal;
+          catSelect.appendChild(newOpt);
+        }
+        catSelect.value = catVal;
+
         document.getElementById('blog-author').value = b.author;
         document.getElementById('blog-excerpt').value = b.excerpt || '';
         document.getElementById('blog-status').value = b.status || 'Published';
@@ -2953,9 +2966,10 @@
       }
 
       const firstImage = tempBlogImages[0] || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80';
+      const catVal = document.getElementById('blog-cat').value || 'Corporate';
       const payload = {
         title: titleVal,
-        category: document.getElementById('blog-cat').value,
+        category: catVal,
         author: document.getElementById('blog-author').value.trim(),
         status: document.getElementById('blog-status').value,
         excerpt: document.getElementById('blog-excerpt').value.trim(),

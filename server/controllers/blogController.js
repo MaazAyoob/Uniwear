@@ -112,7 +112,16 @@ const updateBlog = async (req, res, next) => {
       }
     }
 
-    Object.assign(blog, req.body);
+    const updates = { ...req.body };
+
+    // Remove undefined fields and empty category to preserve existing values
+    Object.keys(updates).forEach(key => {
+      if (updates[key] === undefined || (key === 'category' && (!updates[key] || updates[key].trim() === ''))) {
+        delete updates[key];
+      }
+    });
+
+    Object.assign(blog, updates);
     await blog.save();
 
     res.json({ success: true, data: blog });
