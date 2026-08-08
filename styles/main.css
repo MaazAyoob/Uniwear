@@ -448,7 +448,115 @@ button, a, input, select, textarea, .btn {
   }
 }
 
+/* DISABLE DARK MODE FOR NOW */
+.theme-toggle-btn {
+  display: none !important;
+}
 
+/* UNIVERSAL DARK MODE HEADER & LOGO CONTRAST SYSTEM */
+html[data-theme="dark"] #global-header,
+html[data-theme="dark"] header {
+  background-color: rgba(9, 9, 11, 0.96) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+  color: #FFFFFF !important;
+}
 
+html[data-theme="dark"] #global-header img,
+html[data-theme="dark"] header img {
+  filter: brightness(0) invert(1) !important;
+}
 
+html[data-theme="dark"] #global-header nav,
+html[data-theme="dark"] header nav {
+  background-color: rgba(24, 24, 27, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
 
+html[data-theme="dark"] #global-header a:not(.bg-primary),
+html[data-theme="dark"] header a:not(.bg-primary),
+html[data-theme="dark"] #global-header .nav-link,
+html[data-theme="dark"] header .nav-link,
+html[data-theme="dark"] #global-header i,
+html[data-theme="dark"] header i {
+  color: #FFFFFF !important;
+}
+
+/* ===================================================
+ * TRUE OBSIDIAN DARK MODE SYSTEM (#09090b / #141416)
+ * =================================================== */
+html[data-theme="dark"],
+html[data-theme="dark"] body,
+html[data-theme="dark"] main,
+html[data-theme="dark"] section,
+html[data-theme="dark"] footer,
+html[data-theme="dark"] #global-footer,
+html[data-theme="dark"] .bg-darkBg,
+html[data-theme="dark"] section[class*="bg-"] {
+  background-color: #09090b !important;
+  color: #FAFAFA !important;
+}
+
+html[data-theme="dark"] div[class*="bg-white"],
+html[data-theme="dark"] div[class*="bg-lightCard"],
+html[data-theme="dark"] div[class*="bg-slate-50"],
+html[data-theme="dark"] div[class*="bg-gray-50"],
+html[data-theme="dark"] article[class*="bg-"],
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-lightCard,
+html[data-theme="dark"] .bg-slate-50,
+html[data-theme="dark"] .bg-slate-50\/60,
+html[data-theme="dark"] .bg-slate-50\/50,
+html[data-theme="dark"] .bg-slate-100,
+html[data-theme="dark"] .bg-gray-50,
+html[data-theme="dark"] .bg-gray-100 {
+  background-color: #141416 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6,
+html[data-theme="dark"] [class*="text-slate-900"],
+html[data-theme="dark"] [class*="text-slate-800"],
+html[data-theme="dark"] [class*="text-slate-700"],
+html[data-theme="dark"] [class*="text-gray-900"],
+html[data-theme="dark"] [class*="text-gray-800"],
+html[data-theme="dark"] [class*="text-gray-700"],
+html[data-theme="dark"] .text-charcoal,
+html[data-theme="dark"] .card-title {
+  color: #FFFFFF !important;
+}
+
+html[data-theme="dark"] p,
+html[data-theme="dark"] li,
+html[data-theme="dark"] [class*="text-slate-600"],
+html[data-theme="dark"] [class*="text-slate-500"],
+html[data-theme="dark"] [class*="text-gray-600"],
+html[data-theme="dark"] [class*="text-gray-500"],
+html[data-theme="dark"] .hero-trust-label,
+html[data-theme="dark"] .text-mutedText {
+  color: #E4E4E7 !important;
+}
+
+html[data-theme="dark"] [class*="text-slate-400"],
+html[data-theme="dark"] [class*="text-gray-400"] {
+  color: #A1A1AA !important;
+}
+
+html[data-theme="dark"] [class*="border-slate-200"],
+html[data-theme="dark"] [class*="border-slate-100"],
+html[data-theme="dark"] [class*="border-gray-200"],
+html[data-theme="dark"] .border-lightBorder {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+  background-color: #09090b !important;
+  color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}

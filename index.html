@@ -342,8 +342,8 @@
        HERO SECTION – DATA-THEME DARK MODE OVERRIDES
        ============================================= */
     [data-theme="dark"] .hero-section-wrapper {
-      background-color: #0f172a;
-      border-color: rgba(255,255,255,0.08);
+      background-color: #09090b;
+      border-color: rgba(255,255,255,0.12);
     }
 
     [data-theme="dark"] .hero-heading {
@@ -351,21 +351,21 @@
     }
 
     [data-theme="dark"] .hero-subhead {
-      color: #cbd5e1 !important;
+      color: #e4e4e7 !important;
     }
 
     [data-theme="dark"] .hero-desc {
-      color: #94a3b8 !important;
+      color: #d4d4d8 !important;
     }
 
     [data-theme="dark"] .hero-btn-secondary {
-      background-color: #1e293b !important;
-      color: #f1f5f9 !important;
-      border-color: #334155 !important;
+      background-color: #18181b !important;
+      color: #f4f4f5 !important;
+      border-color: #27272a !important;
     }
 
     [data-theme="dark"] .hero-btn-secondary:hover {
-      background-color: #334155 !important;
+      background-color: #27272a !important;
     }
 
     [data-theme="dark"] .hero-trust-divider {
@@ -373,19 +373,19 @@
     }
 
     [data-theme="dark"] .hero-trust-label {
-      color: #64748b !important;
+      color: #a1a1aa !important;
     }
 
     [data-theme="dark"] .hero-trust-value {
-      color: #f8fafc !important;
+      color: #ffffff !important;
     }
 
     [data-theme="dark"] .hero-mobile-overlay-h {
-      background: linear-gradient(to right, rgba(15,23,42,0.97), rgba(15,23,42,0.88), rgba(15,23,42,0.5)) !important;
+      background: linear-gradient(to right, rgba(9,9,11,0.97), rgba(9,9,11,0.88), rgba(9,9,11,0.5)) !important;
     }
 
     [data-theme="dark"] .hero-mobile-overlay-v {
-      background: linear-gradient(to bottom, rgba(15,23,42,0.90), transparent, rgba(15,23,42,0.95)) !important;
+      background: linear-gradient(to bottom, rgba(9,9,11,0.90), transparent, rgba(9,9,11,0.95)) !important;
     }
 
     h2 {
@@ -575,44 +575,43 @@
 
   <!-- FLOATING NAVIGATION HEADER -->
   <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2.5 z-50">
-        <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
+    <div class="max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-between">
+      <a href="index.html" id="header-logo-link" class="flex items-center gap-2.5 z-50 hover:opacity-90 transition-opacity">
+        <img id="header-logo-img" src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain transition-all duration-300 brightness-0 invert">
       </a>
 
       <!-- Desktop Navigation Menu -->
       <nav
-        class="hidden lg:flex items-center lg:gap-3 xl:gap-6 glass-card py-2 lg:px-4 xl:px-6 rounded-full border border-lightBorder">
+        class="hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-black/40 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/20 shadow-lg">
         <a href="index.html"
-          class="nav-link lg:text-xs xl:text-sm font-semibold hover:text-primary transition-colors text-charcoal">Home</a>
+          class="nav-link lg:text-xs xl:text-sm font-semibold text-white hover:text-primary transition-colors">Home</a>
         <a href="about.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">About
-          Us</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">About Us</a>
         <a href="uniforms.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Uniforms</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Uniforms</a>
         <a href="gifts.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Gifting</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Gifting</a>
         <a href="catalog.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Catalog</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Catalog</a>
         <a href="clientele.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Clientele</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Clientele</a>
         <a href="blog.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Blog</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Blog</a>
         <a href="contact.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Contact</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Contact</a>
       </nav>
 
       <!-- Desktop CTAs -->
       <div class="hidden lg:flex items-center lg:gap-3 xl:gap-4">
-        <a href="login.html"
-          class="lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Client Portal</a>
+        <a href="login.html" id="header-client-portal"
+          class="lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Client Portal</a>
         <button
-          class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors"
+          class="theme-toggle-btn w-10 h-10 rounded-full bg-white/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-100 hover:text-primary transition-colors shadow-sm"
           title="Toggle Theme">
           <i class="ri-moon-line text-lg"></i>
         </button>
         <a href="contact.html"
-          class="bg-primary hover:bg-primaryHover text-white lg:px-4 xl:px-6 py-2 lg:py-2 xl:py-2.5 rounded-full lg:text-xs xl:text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-primary/20">
+          class="bg-primary hover:bg-primaryHover text-white lg:px-4 xl:px-6 py-2 lg:py-2 xl:py-2.5 rounded-full lg:text-xs xl:text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-primary/30">
           Request Consultation
         </a>
       </div>
@@ -620,11 +619,11 @@
       <!-- Mobile CTAs / Toggle -->
       <div class="flex items-center gap-3 lg:hidden z-50">
         <button
-          class="theme-toggle-btn w-9 h-9 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors"
+          class="theme-toggle-btn w-9 h-9 rounded-full bg-white/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-100 hover:text-primary transition-colors shadow-sm"
           title="Toggle Theme">
           <i class="ri-moon-line text-base"></i>
         </button>
-        <button id="mobile-menu-btn" class="text-charcoal focus:outline-none">
+        <button id="mobile-menu-btn" class="text-white focus:outline-none p-1">
           <i class="ri-menu-line text-2xl" id="menu-icon"></i>
         </button>
       </div>
@@ -636,8 +635,7 @@
       <a href="index.html"
         class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Home</a>
       <a href="about.html"
-        class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">About
-        Us</a>
+        class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">About Us</a>
       <a href="uniforms.html"
         class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Uniforms</a>
       <a href="gifts.html"
@@ -652,8 +650,7 @@
         class="mobile-nav-link font-heading text-2xl font-semibold hover:text-primary transition-colors text-charcoal">Contact</a>
       <div class="h-[1px] w-24 bg-charcoal/10 my-2 shrink-0"></div>
       <a href="login.html"
-        class="mobile-nav-link font-heading text-lg font-medium text-mutedText hover:text-primary transition-colors">Client
-        Portal</a>
+        class="mobile-nav-link font-heading text-lg font-medium text-mutedText hover:text-primary transition-colors">Client Portal</a>
       <button
         class="theme-toggle-btn w-12 h-12 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors my-2"
         title="Toggle Theme">
@@ -668,93 +665,111 @@
 
   <!-- MAIN HOMEPAGE CONTENT -->
   <main>
-    <!-- REDESIGNED HERO SECTION – CLEAN, PREMIUM, PRODUCT-FIRST B2B HERO -->
-    <section class="hero-section hero-section-wrapper relative pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white border-b border-slate-100 overflow-hidden">
+    <!-- FULL-SCREEN EDITORIAL PHOTOGRAPHIC HERO -->
+    <section class="hero-editorial relative w-full min-h-screen flex flex-col justify-between overflow-hidden bg-slate-950 text-white">
       
-      <div class="max-w-7xl mx-auto w-full relative z-20">
-        <!-- Main Grid: Left Content & Right Product Visual -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center">
+      <!-- BACKGROUND SLIDER TRACK -->
+      <div id="hero-slider-track" class="absolute inset-0 w-full h-full z-0 overflow-hidden">
+        <!-- Slide 1: Executive Corporate Uniforms -->
+        <div class="hero-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-1000 ease-in-out z-10" data-slide="0">
+          <img src="assets/images/hero/hero-slide-1.png" alt="UNIWEAR Executive Corporate Uniforms" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[12000ms] ease-linear hover:scale-105">
+        </div>
+        <!-- Slide 2: Industrial Workwear -->
+        <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out z-0" data-slide="1">
+          <img src="assets/images/hero/hero-slide-2.png" alt="UNIWEAR Industrial Workwear Specialists" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[12000ms] ease-linear hover:scale-105">
+        </div>
+        <!-- Slide 3: Hospitality Uniforms -->
+        <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out z-0" data-slide="2">
+          <img src="assets/images/hero/hero-slide-3.png" alt="UNIWEAR Hospitality & Service Attire" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[12000ms] ease-linear hover:scale-105">
+        </div>
+      </div>
 
-          <!-- LEFT CONTENT -->
-          <div class="lg:col-span-6 flex flex-col justify-center text-left">
-            <h1 class="font-heading font-bold text-slate-900 text-3xl sm:text-5xl lg:text-5xl xl:text-6xl tracking-tight leading-[1.12] mb-5 sm:mb-6 hero-heading">
-              Uniforms That Represent Your Brand
-            </h1>
-            <p class="font-body text-slate-600 text-base sm:text-lg xl:text-xl leading-relaxed mb-7 sm:mb-9 max-w-2xl font-normal hero-desc">
-              Premium custom uniforms for Industrial, Corporate, Hospitality, Healthcare, Educational Institutions, and Corporate Gifting—designed, manufactured, and delivered across India with a focus on quality, comfort, and consistency.
-            </p>
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 hero-btn-row">
-              <a href="contact.html"
-                class="font-heading bg-primary hover:bg-primaryHover text-white font-semibold px-7 py-3.5 sm:py-4 rounded-xl text-base transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group">
-                <span>Request a Quote</span>
-                <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform duration-200"></i>
-              </a>
-              <a href="uniforms.html"
-                class="font-heading hero-btn-secondary bg-slate-100 hover:bg-slate-200/80 text-slate-800 font-semibold px-7 py-3.5 sm:py-4 rounded-xl text-base border border-slate-200/90 transition-all duration-200 flex items-center justify-center gap-2">
-                <span>Explore Solutions</span>
-              </a>
-            </div>
-          </div>
+      <!-- EDITORIAL SUBTLE DARK OVERLAY GRADIENT -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/75 pointer-events-none z-10"></div>
 
-          <!-- RIGHT CONTENT: Single Premium Hero Visual -->
-          <div class="lg:col-span-6 flex items-center justify-center">
-            <div class="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl border border-slate-200/80 bg-slate-50">
-              <img src="assets/images/hero/hero-banner.png" alt="UNIWEAR Premium Product Showcase"
-                class="w-full h-full object-cover object-[72%_center] transition-transform duration-700 ease-out hover:scale-[1.02]">
-            </div>
-          </div>
+      <!-- CENTERED HERO CONTENT -->
+      <div class="relative z-20 max-w-5xl mx-auto w-full px-6 pt-36 pb-24 md:pt-44 md:pb-28 flex-1 flex flex-col justify-center items-center text-center">
+        
+        <!-- Primary Headline (Dominant visual text on page) -->
+        <h1 class="font-heading font-bold text-white tracking-tight text-4xl sm:text-6xl lg:text-7xl leading-[1.06] mb-6 max-w-4xl drop-shadow-md">
+          Uniforms That Represent Your Brand
+        </h1>
+        
+        <!-- Concise Supporting Text -->
+        <p class="font-body text-slate-200 text-base sm:text-lg lg:text-xl font-normal max-w-2xl leading-relaxed mb-10 text-slate-200/90 drop-shadow-sm">
+          Premium custom uniforms for businesses and institutions across India — designed for your brand, manufactured for consistency.
+        </p>
 
-        </div><!-- /Main Grid -->
-
-        <!-- MINIMAL TRUST STRIP -->
-        <div class="mt-14 sm:mt-16 lg:mt-20 pt-8 sm:pt-10 border-t border-slate-200/80 hero-trust-divider">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
-            
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <i class="ri-calendar-event-line text-lg"></i>
-              </div>
-              <div>
-                <span class="font-heading text-base sm:text-lg font-bold text-slate-900 hero-trust-value block" id="hero-stat-legacy">Since 1998</span>
-                <span class="font-body text-xs text-slate-500 hero-trust-label block">Established Experience</span>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <i class="ri-building-4-line text-lg"></i>
-              </div>
-              <div>
-                <span class="font-heading text-base sm:text-lg font-bold text-slate-900 hero-trust-value block" id="hero-stat-clients">2,000+ Clients Served</span>
-                <span class="font-body text-xs text-slate-500 hero-trust-label block">Across Corporate &amp; Industry</span>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <i class="ri-truck-line text-lg"></i>
-              </div>
-              <div>
-                <span class="font-heading text-base sm:text-lg font-bold text-slate-900 hero-trust-value block">Pan-India Delivery</span>
-                <span class="font-body text-xs text-slate-500 hero-trust-label block">Seamless Logistics</span>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <i class="ri-award-line text-lg"></i>
-              </div>
-              <div>
-                <span class="font-heading text-base sm:text-lg font-bold text-slate-900 hero-trust-value block">Premium Manufacturing</span>
-                <span class="font-body text-xs text-slate-500 hero-trust-label block">Certified Quality Standards</span>
-              </div>
-            </div>
-
-          </div>
-        </div><!-- /Trust Strip -->
+        <!-- Compact CTAs -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+          <a href="contact.html" class="w-full sm:w-auto font-heading bg-primary hover:bg-primaryHover text-white font-semibold px-8 py-3.5 sm:py-4 rounded-full text-base transition-all duration-300 shadow-xl shadow-primary/30 flex items-center justify-center gap-2.5 hover:scale-[1.03] group">
+            <span>Request a Quote</span>
+            <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform duration-200"></i>
+          </a>
+          <a href="uniforms.html" class="w-full sm:w-auto font-heading bg-white/10 hover:bg-white/20 text-white border border-white/25 backdrop-blur-md font-semibold px-8 py-3.5 sm:py-4 rounded-full text-base transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.03]">
+            <span>Explore Our Solutions</span>
+          </a>
+        </div>
 
       </div>
+
+      <!-- MINIMAL SLIDER DOT INDICATORS -->
+      <div class="relative z-20 pb-8 flex items-center justify-center gap-3">
+        <button class="hero-dot w-8 h-3 rounded-full bg-primary transition-all duration-300 cursor-pointer shadow-md" data-index="0" aria-label="Slide 1"></button>
+        <button class="hero-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white transition-all duration-300 cursor-pointer" data-index="1" aria-label="Slide 2"></button>
+        <button class="hero-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white transition-all duration-300 cursor-pointer" data-index="2" aria-label="Slide 3"></button>
+      </div>
+
     </section>
+
+    <!-- TRUST STRIP (Integrated smoothly below hero) -->
+    <div class="bg-white border-b border-slate-200/80 py-10 relative z-20">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+          
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+              <i class="ri-calendar-event-line text-xl"></i>
+            </div>
+            <div>
+              <span class="font-heading text-base sm:text-lg font-bold text-slate-900 block" id="hero-stat-legacy">Since 1998</span>
+              <span class="font-body text-xs text-slate-500 block">Established Experience</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+              <i class="ri-building-4-line text-xl"></i>
+            </div>
+            <div>
+              <span class="font-heading text-base sm:text-lg font-bold text-slate-900 block" id="hero-stat-clients">2,000+ Clients Served</span>
+              <span class="font-body text-xs text-slate-500 block">Corporate &amp; Industry</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+              <i class="ri-truck-line text-xl"></i>
+            </div>
+            <div>
+              <span class="font-heading text-base sm:text-lg font-bold text-slate-900 block">Pan-India Delivery</span>
+              <span class="font-body text-xs text-slate-500 block">Seamless Logistics</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+              <i class="ri-award-line text-xl"></i>
+            </div>
+            <div>
+              <span class="font-heading text-base sm:text-lg font-bold text-slate-900 block">Premium Manufacturing</span>
+              <span class="font-body text-xs text-slate-500 block">Certified Standards</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
 
 
 
@@ -1229,7 +1244,7 @@
   </main>
 
   <!-- PREMIUM FOOTER -->
-  <footer id="global-footer" class="bg-darkBg border-t border-lightBorder py-16 relative z-30 text-white">
+  <footer id="global-footer" class="bg-darkBg border-t border-slate-800 py-16 relative z-30 text-white">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
       <!-- Branding Column -->
       <div class="lg:col-span-2 space-y-6">
@@ -2137,6 +2152,111 @@
     </div>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // 1. Hero Cross-fade Slider
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots = document.querySelectorAll('.hero-dot');
+      let currentSlide = 0;
+      let slideTimer = null;
+
+      function goToSlide(index) {
+        if (!slides.length) return;
+        slides.forEach((slide, i) => {
+          if (i === index) {
+            slide.classList.remove('opacity-0', 'z-0');
+            slide.classList.add('opacity-100', 'z-10');
+          } else {
+            slide.classList.remove('opacity-100', 'z-10');
+            slide.classList.add('opacity-0', 'z-0');
+          }
+        });
+
+        dots.forEach((dot, i) => {
+          if (i === index) {
+            dot.className = 'hero-dot w-8 h-3 rounded-full bg-primary transition-all duration-300 cursor-pointer shadow-md';
+          } else {
+            dot.className = 'hero-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white transition-all duration-300 cursor-pointer';
+          }
+        });
+
+        currentSlide = index;
+      }
+
+      function nextSlide() {
+        const nextIdx = (currentSlide + 1) % slides.length;
+        goToSlide(nextIdx);
+      }
+
+      function startAutoSlide() {
+        stopAutoSlide();
+        slideTimer = setInterval(nextSlide, 6000);
+      }
+
+      function stopAutoSlide() {
+        if (slideTimer) clearInterval(slideTimer);
+      }
+
+      dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+          const idx = parseInt(dot.getAttribute('data-index'), 10);
+          goToSlide(idx);
+          startAutoSlide();
+        });
+      });
+
+      if (slides.length > 0) {
+        goToSlide(0);
+        startAutoSlide();
+      }
+
+      // 2. Dynamic Header Scroll & Theme State Handler
+      const globalHeader = document.getElementById('global-header');
+      const navPill = globalHeader ? globalHeader.querySelector('nav') : null;
+      const navLinks = globalHeader ? globalHeader.querySelectorAll('.nav-link') : [];
+      const clientPortalLink = document.getElementById('header-client-portal');
+      const mobileMenuIcon = document.getElementById('menu-icon');
+      const logoImg = document.getElementById('header-logo-img');
+
+      function updateHeaderOnScroll() {
+        if (!globalHeader) return;
+        const isScrolled = window.scrollY > 50;
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        if (isScrolled) {
+          globalHeader.classList.remove('py-4');
+          globalHeader.classList.add('py-2.5');
+
+          if (currentTheme === 'dark') {
+            globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 shadow-xl bg-zinc-950/95 backdrop-blur-md border-b border-white/10 text-white';
+            if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-zinc-900/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/15 shadow-inner';
+            navLinks.forEach(l => { l.className = 'nav-link lg:text-xs xl:text-sm font-medium text-zinc-100 hover:text-primary transition-colors'; });
+            if (clientPortalLink) clientPortalLink.className = 'lg:text-xs xl:text-sm font-medium text-zinc-100 hover:text-primary transition-colors';
+            if (mobileMenuIcon) mobileMenuIcon.className = 'ri-menu-line text-2xl text-white';
+            if (logoImg) logoImg.style.filter = 'brightness(0) invert(1)';
+          } else {
+            globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 shadow-md bg-white/95 backdrop-blur-md border-b border-slate-200/80 text-slate-900';
+            if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-slate-100/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/80 shadow-inner';
+            navLinks.forEach(l => { l.className = 'nav-link lg:text-xs xl:text-sm font-medium text-slate-700 hover:text-primary transition-colors'; });
+            if (clientPortalLink) clientPortalLink.className = 'lg:text-xs xl:text-sm font-medium text-slate-700 hover:text-primary transition-colors';
+            if (mobileMenuIcon) mobileMenuIcon.className = 'ri-menu-line text-2xl text-slate-900';
+            if (logoImg) logoImg.style.filter = 'none';
+          }
+        } else {
+          // Top of page over hero (dark photographic overlay)
+          globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 bg-transparent text-white';
+          if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-black/40 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/20 shadow-lg';
+          navLinks.forEach(l => { l.className = 'nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors'; });
+          if (clientPortalLink) clientPortalLink.className = 'lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors';
+          if (mobileMenuIcon) mobileMenuIcon.className = 'ri-menu-line text-2xl text-white';
+          if (logoImg) logoImg.style.filter = 'brightness(0) invert(1)';
+        }
+      }
+
+      window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+      const themeObserver = new MutationObserver(updateHeaderOnScroll);
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      updateHeaderOnScroll();
+
+      // 3. Stat counters
       const animateCount = (element, target, suffix = '') => {
         let current = 0;
         const duration = 1400;

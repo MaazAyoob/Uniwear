@@ -167,38 +167,46 @@
 
   <!-- NAVIGATION HEADER -->
   <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2.5 z-50">
-        <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain">
+    <div class="max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-between">
+      <a href="index.html" id="header-logo-link" class="flex items-center gap-2.5 z-50 hover:opacity-90 transition-opacity">
+        <img id="header-logo-img" src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain transition-all duration-300 brightness-0 invert">
       </a>
-      
-      <nav class="hidden lg:flex items-center lg:gap-3 xl:gap-6 glass-card py-2 lg:px-4 xl:px-6 rounded-full border border-lightBorder">
-        <a href="index.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Home</a>
-        <a href="about.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">About Us</a>
-        <a href="uniforms.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Uniforms</a>
-        <a href="gifts.html" class="nav-link lg:text-xs xl:text-sm font-semibold hover:text-primary transition-colors text-charcoal">Gifting</a>
-        <a href="catalog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Catalog</a>
-        <a href="clientele.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Clientele</a>
-        <a href="blog.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Blog</a>
-        <a href="contact.html" class="nav-link lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Contact</a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav
+        class="hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-black/40 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/20 shadow-lg">
+        <a href="index.html" class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Home</a>
+        <a href="about.html" class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">About Us</a>
+        <a href="uniforms.html" class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Uniforms</a>
+        <a href="gifts.html" class="nav-link lg:text-xs xl:text-sm font-semibold text-white hover:text-primary transition-colors">Gifting</a>
+        <a href="catalog.html" class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Catalog</a>
+        <a href="clientele.html" class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Clientele</a>
+        <a href="blog.html" class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Blog</a>
+        <a href="contact.html" class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Contact</a>
       </nav>
 
+      <!-- Desktop CTAs -->
       <div class="hidden lg:flex items-center lg:gap-3 xl:gap-4">
-        <a href="login.html" class="lg:text-xs xl:text-sm font-medium hover:text-primary transition-colors text-charcoal">Client Portal</a>
-        <button class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+        <a href="login.html" id="header-client-portal" class="lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Client Portal</a>
+        <button
+          class="theme-toggle-btn w-10 h-10 rounded-full bg-white/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-100 hover:text-primary transition-colors shadow-sm"
+          title="Toggle Theme">
           <i class="ri-moon-line text-lg"></i>
         </button>
-        <a href="contact.html" class="bg-primary hover:bg-primaryHover text-white lg:px-4 xl:px-6 py-2 lg:py-2 xl:py-2.5 rounded-full lg:text-xs xl:text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-primary/20">
+        <a href="contact.html"
+          class="bg-primary hover:bg-primaryHover text-white lg:px-4 xl:px-6 py-2 lg:py-2 xl:py-2.5 rounded-full lg:text-xs xl:text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-primary/30">
           Request Consultation
         </a>
       </div>
 
       <!-- Mobile CTAs / Toggle -->
       <div class="flex items-center gap-3 lg:hidden z-50">
-        <button class="theme-toggle-btn w-9 h-9 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-charcoal hover:text-primary transition-colors" title="Toggle Theme">
+        <button
+          class="theme-toggle-btn w-9 h-9 rounded-full bg-white/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-100 hover:text-primary transition-colors shadow-sm"
+          title="Toggle Theme">
           <i class="ri-moon-line text-base"></i>
         </button>
-        <button id="mobile-menu-btn" class="text-charcoal focus:outline-none">
+        <button id="mobile-menu-btn" class="text-white focus:outline-none p-1">
           <i class="ri-menu-line text-2xl" id="menu-icon"></i>
         </button>
       </div>
