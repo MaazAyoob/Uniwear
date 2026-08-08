@@ -1,10 +1,10 @@
 // ==========================================
 // UNIWEAR FRONTEND API HELPER
-// api.js — v1.5
+// api.js — v2.0 (Production)
 // ==========================================
-// Clean explicit API functions. No global overrides.
-// localStorage is used only as a session cache.
-// Always call API helpers for writes/reads that need persistence.
+// Clean explicit API functions. No silent fallbacks on mutations.
+// Writes (POST/PATCH/PUT/DELETE) throw real errors — the UI must handle them.
+// Reads (GET) fall back to localStorage cache when offline, but log clearly.
 // ==========================================
 
 function getApiBase() {
@@ -53,6 +53,12 @@ async function safeParseResponse(res) {
     if (res.status === 404) {
       throw new Error(`Backend API route not found (404). Check backend deployment or proxy URL.`);
     }
+    if (res.status === 401) {
+      throw new Error(`Unauthorized (401). Please log in again.`);
+    }
+    if (res.status === 403) {
+      throw new Error(`Access denied (403). Insufficient permissions.`);
+    }
     const snippet = text.length > 60 ? text.slice(0, 60) + '...' : text;
     throw new Error(`Server returned non-JSON response (${res.status}): "${snippet.replace(/[\r\n]+/g, ' ')}"`);
   }
@@ -66,8 +72,9 @@ async function safeParseResponse(res) {
 
 /**
  * Perform an authenticated GET request.
+ * Falls back to localStorage cache if the backend is unreachable.
  * @param {string} path  - API path, e.g. '/leads'
- * @param {Object} query - Optional query params object, e.g. { clientEmail: 'x@y.com' }
+ * @param {Object} query - Optional query params object
  * @returns {Promise<Object>} Parsed JSON response body
  */
 async function apiGet(path, query = {}) {
@@ -95,37 +102,46 @@ async function apiGet(path, query = {}) {
     if (!data.success) throw new Error(data.message || 'API error');
     return data;
   } catch (err) {
-    console.warn(`[apiGet ${path} fallback]`, err.message);
+    console.warn(`[apiGet ${path}] Backend unavailable, using localStorage cache:`, err.message);
+    // Read-only localStorage fallback — acceptable for offline/degraded mode
     const basePath = path.split('?')[0];
-    const mockMap = {
-      '/users': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []) }),
-      '/leads': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_leads')) || (typeof defaultLeads !== 'undefined' ? defaultLeads : []) }),
-      '/quotations': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_quotations')) || (typeof defaultQuotations !== 'undefined' ? defaultQuotations : []) }),
-      '/orders': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_orders')) || (typeof defaultOrders !== 'undefined' ? defaultOrders : []) }),
-      '/tickets': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_tickets')) || [] }),
-      '/company-settings': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_company_settings')) || (typeof defaultCompanySettings !== 'undefined' ? defaultCompanySettings : {}) }),
-      '/notifications': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_notifications')) || [] }),
-      '/products': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_products')) || (typeof defaultProducts !== 'undefined' ? defaultProducts : []) }),
-      '/blogs': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_blogs')) || (typeof defaultBlogs !== 'undefined' ? defaultBlogs : []) }),
-      '/catalogs': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_catalogs')) || (typeof defaultCatalogs !== 'undefined' ? defaultCatalogs : []) }),
-      '/catalog': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_catalogs')) || (typeof defaultCatalogs !== 'undefined' ? defaultCatalogs : []) }),
-      '/dashboard/stats': () => ({
-        success: true,
-        data: {
-          products: (JSON.parse(localStorage.getItem('uniwear_products')) || (typeof defaultProducts !== 'undefined' ? defaultProducts : [])).length,
-          blogs: (JSON.parse(localStorage.getItem('uniwear_blogs')) || (typeof defaultBlogs !== 'undefined' ? defaultBlogs : [])).length,
-          leads: (JSON.parse(localStorage.getItem('uniwear_leads')) || (typeof defaultLeads !== 'undefined' ? defaultLeads : [])).length,
-          quotes: (JSON.parse(localStorage.getItem('uniwear_quotations')) || (typeof defaultQuotations !== 'undefined' ? defaultQuotations : [])).length,
-          orders: (JSON.parse(localStorage.getItem('uniwear_orders')) || (typeof defaultOrders !== 'undefined' ? defaultOrders : [])).length,
-          activeCustomers: (JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : [])).filter(u => u.status === 'Active' && u.role === 'Customer').length,
-          pendingCustomers: (JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : [])).filter(u => u.status === 'Pending').length,
-          categoriesCount: 6,
-          recentActivity: []
-        }
-      })
+    const cacheMap = {
+      '/users':            () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_users')) || [] }),
+      '/leads':            () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_leads')) || [] }),
+      '/quotations':       () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_quotations')) || [] }),
+      '/orders':           () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_orders')) || [] }),
+      '/tickets':          () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_tickets')) || [] }),
+      '/company-settings': () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_company_settings')) || {} }),
+      '/notifications':    () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_notifications')) || [] }),
+      '/products':         () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_products')) || [] }),
+      '/blogs':            () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_blogs')) || [] }),
+      '/catalogs':         () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_catalogs')) || [] }),
+      '/catalog':          () => ({ success: true, data: JSON.parse(localStorage.getItem('uniwear_catalogs')) || [] }),
+      '/dashboard/stats':  () => {
+        const products = JSON.parse(localStorage.getItem('uniwear_products')) || [];
+        const blogs    = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
+        const leads    = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
+        const quotes   = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+        const orders   = JSON.parse(localStorage.getItem('uniwear_orders')) || [];
+        const users    = JSON.parse(localStorage.getItem('uniwear_users')) || [];
+        return {
+          success: true,
+          data: {
+            products: products.length,
+            blogs: blogs.length,
+            leads: leads.length,
+            quotes: quotes.length,
+            orders: orders.length,
+            activeCustomers: users.filter(u => u.status === 'Active' && u.role === 'Customer').length,
+            pendingCustomers: users.filter(u => u.status === 'Pending').length,
+            categoriesCount: 6,
+            recentActivity: []
+          }
+        };
+      }
     };
-    if (mockMap[basePath]) {
-      return mockMap[basePath]();
+    if (cacheMap[basePath]) {
+      return cacheMap[basePath]();
     }
     return { success: true, data: [] };
   }
@@ -133,6 +149,7 @@ async function apiGet(path, query = {}) {
 
 /**
  * Perform a POST request (public or authenticated).
+ * THROWS real errors — no silent fallback.
  * @param {string} path    - API path, e.g. '/leads'
  * @param {Object} payload - Request body
  * @param {boolean} auth   - Whether to include the JWT token (default true)
@@ -141,30 +158,34 @@ async function apiGet(path, query = {}) {
 async function apiPost(path, payload = {}, auth = true) {
   const headers = { 'Content-Type': 'application/json' };
   if (auth) headers['Authorization'] = `Bearer ${getToken()}`;
+  
+  let res;
   try {
-    const res = await fetch(API_BASE + path, {
+    res = await fetch(API_BASE + path, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload)
     });
-    const data = await safeParseResponse(res);
-    if (!data.success) throw new Error(data.message || 'API error');
-    return data;
-  } catch (err) {
-    console.warn(`[apiPost ${path} fallback]`, err.message);
-    return { success: true, message: 'Action saved.', data: payload };
+  } catch (networkErr) {
+    throw new Error(`Network error: Cannot reach the server. Is the backend running? (${networkErr.message})`);
   }
+  
+  const data = await safeParseResponse(res);
+  if (!data.success) throw new Error(data.message || `POST ${path} failed (${res.status})`);
+  return data;
 }
 
 /**
  * Perform an authenticated PATCH request.
- * @param {string} path    - API path including ID, e.g. '/users/abc123'
+ * THROWS real errors — no silent fallback.
+ * @param {string} path    - API path including ID
  * @param {Object} payload - Fields to update
  * @returns {Promise<Object>} Parsed JSON response body
  */
 async function apiPatch(path, payload = {}) {
+  let res;
   try {
-    const res = await fetch(API_BASE + path, {
+    res = await fetch(API_BASE + path, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -172,18 +193,23 @@ async function apiPatch(path, payload = {}) {
       },
       body: JSON.stringify(payload)
     });
-    const data = await safeParseResponse(res);
-    if (!data.success) throw new Error(data.message || 'API error');
-    return data;
-  } catch (err) {
-    console.warn(`[apiPatch ${path} fallback]`, err.message);
-    return { success: true, message: 'Updated successfully.', data: payload };
+  } catch (networkErr) {
+    throw new Error(`Network error: Cannot reach the server. Is the backend running? (${networkErr.message})`);
   }
+
+  const data = await safeParseResponse(res);
+  if (!data.success) throw new Error(data.message || `PATCH ${path} failed (${res.status})`);
+  return data;
 }
 
+/**
+ * Perform an authenticated PUT request.
+ * THROWS real errors — no silent fallback.
+ */
 async function apiPut(path, payload = {}) {
+  let res;
   try {
-    const res = await fetch(API_BASE + path, {
+    res = await fetch(API_BASE + path, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -191,143 +217,94 @@ async function apiPut(path, payload = {}) {
       },
       body: JSON.stringify(payload)
     });
-    const data = await safeParseResponse(res);
-    if (!data.success) throw new Error(data.message || 'API error');
-    return data;
-  } catch (err) {
-    console.warn(`[apiPut ${path} fallback]`, err.message);
-    return { success: true, message: 'Updated successfully.', data: payload };
+  } catch (networkErr) {
+    throw new Error(`Network error: Cannot reach the server. Is the backend running? (${networkErr.message})`);
   }
+
+  const data = await safeParseResponse(res);
+  if (!data.success) throw new Error(data.message || `PUT ${path} failed (${res.status})`);
+  return data;
 }
 
 /**
  * Perform an authenticated DELETE request.
+ * THROWS real errors — no silent fallback.
  * @param {string} path - API path including ID
  * @returns {Promise<Object>} Parsed JSON response body
  */
 async function apiDelete(path) {
+  let res;
   try {
-    const res = await fetch(API_BASE + path, {
+    res = await fetch(API_BASE + path, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${getToken()}`
       }
     });
-    const data = await safeParseResponse(res);
-    if (!data.success) throw new Error(data.message || 'API error');
-    return data;
-  } catch (err) {
-    console.warn(`[apiDelete ${path} fallback]`, err.message);
-    return { success: true, message: 'Deleted successfully.' };
+  } catch (networkErr) {
+    throw new Error(`Network error: Cannot reach the server. Is the backend running? (${networkErr.message})`);
   }
+
+  const data = await safeParseResponse(res);
+  if (!data.success) throw new Error(data.message || `DELETE ${path} failed (${res.status})`);
+  return data;
 }
 
 // ─── Auth API ─────────────────────────────────────────────────────────────────
 
 /**
  * Log in a user. Stores JWT and auth state in localStorage on success.
+ * THROWS real errors — requires a working backend.
  * @param {string} email
  * @param {string} password
  * @returns {Promise<Object>} { token, authRole, user }
  */
 async function apiLogin(email, password) {
+  let res;
   try {
-    const res = await fetch(API_BASE + '/auth/login', {
+    res = await fetch(API_BASE + '/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
-    const data = await safeParseResponse(res);
-    if (!data.success) throw new Error(data.message || 'Login failed');
-
-    // Cache auth state in localStorage (session cache only)
-    setToken(data.token);
-    localStorage.setItem('uniwear_auth_role', data.authRole);
-    localStorage.setItem('uniwear_auth_role_details', data.user.role);
-    localStorage.setItem('uniwear_auth_email', data.user.email);
-    localStorage.setItem('uniwear_auth_id', data.user._id || data.user.id);
-
-    if (data.authRole === 'client') {
-      const profile = {
-        _id: data.user._id || data.user.id,
-        companyName: data.user.companyName || '',
-        representative: data.user.representative || '',
-        email: data.user.email,
-        phone: data.user.phone || '',
-        address: data.user.address || ''
-      };
-      localStorage.setItem('uniwear_profile', JSON.stringify(profile));
-    }
-
-    return data;
-  } catch (err) {
-    console.warn('[apiLogin fallback]', err.message);
-    const users = JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []);
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-    if (user) {
-      const authRole = (user.role === 'Customer' || user.role === 'client') ? 'client' : 'admin';
-      setToken('mock-jwt-token-' + Date.now());
-      localStorage.setItem('uniwear_auth_role', authRole);
-      localStorage.setItem('uniwear_auth_role_details', user.role);
-      localStorage.setItem('uniwear_auth_email', user.email);
-      localStorage.setItem('uniwear_auth_id', String(user.id || user._id || '1'));
-
-      if (authRole === 'client') {
-        const profile = {
-          _id: user._id || user.id,
-          companyName: user.companyName || 'Corporate Client',
-          representative: user.representative || 'Client Representative',
-          email: user.email,
-          phone: user.phone || '',
-          address: user.address || ''
-        };
-        localStorage.setItem('uniwear_profile', JSON.stringify(profile));
-      }
-
-      return {
-        success: true,
-        token: 'mock-jwt-token-' + Date.now(),
-        authRole,
-        user
-      };
-    }
-    throw err;
+  } catch (networkErr) {
+    throw new Error(`Cannot connect to server. Please ensure the backend is running and try again. (${networkErr.message})`);
   }
+
+  const data = await safeParseResponse(res);
+  if (!data.success) throw new Error(data.message || 'Login failed');
+
+  // Cache auth state in localStorage (session cache only)
+  setToken(data.token);
+  localStorage.setItem('uniwear_auth_role', data.authRole);
+  localStorage.setItem('uniwear_auth_role_details', data.user.role);
+  localStorage.setItem('uniwear_auth_email', data.user.email);
+  localStorage.setItem('uniwear_auth_id', data.user._id || data.user.id);
+
+  if (data.authRole === 'client') {
+    const profile = {
+      _id: data.user._id || data.user.id,
+      companyName: data.user.companyName || '',
+      representative: data.user.representative || '',
+      email: data.user.email,
+      phone: data.user.phone || '',
+      address: data.user.address || ''
+    };
+    localStorage.setItem('uniwear_profile', JSON.stringify(profile));
+  }
+
+  return data;
 }
 
 /**
  * Register a new customer account.
+ * THROWS real errors — requires a working backend.
  * @param {Object} payload - { companyName, representative, email, phone, password }
  * @returns {Promise<Object>} API response
  */
 async function apiRegister(payload) {
-  try {
-    return await apiPost('/auth/register', payload, false);
-  } catch (err) {
-    if (err.name === 'TypeError' || err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('non-JSON') || err.message.includes('Invalid JSON')) {
-      let users = JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []);
-      const exists = users.find(u => u.email.toLowerCase() === payload.email.toLowerCase());
-      if (exists) throw new Error("An account with this email address is already registered.");
-
-      const newUser = {
-        id: users.length + 1,
-        _id: 'user_' + Date.now(),
-        email: payload.email,
-        password: payload.password,
-        companyName: payload.companyName,
-        representative: payload.representative,
-        phone: payload.phone,
-        role: 'Customer',
-        status: 'Pending',
-        regDate: new Date().toISOString().split('T')[0]
-      };
-      users.push(newUser);
-      localStorage.setItem('uniwear_users', JSON.stringify(users));
-      return { success: true, message: "Registration submitted successfully.", user: newUser };
-    }
-    throw err;
-  }
+  return await apiPost('/auth/register', payload, false);
 }
 
 /**
@@ -363,22 +340,22 @@ const api = {
   deleteLead: (id) => apiDelete(`/leads/${id}`),
 
   // Quotations
-  getQuotations: (clientEmail) => apiGet('/quotations', clientEmail ? { clientEmail } : {}),
+  getQuotations: (param) => apiGet('/quotations', param ? (typeof param === 'string' ? { clientEmail: param } : param) : {}),
   createQuotation: (data) => apiPost('/quotations', data),
   updateQuotation: (id, data) => apiPatch(`/quotations/${id}`, data),
 
   // Orders
-  getOrders: (clientEmail) => apiGet('/orders', clientEmail ? { clientEmail } : {}),
+  getOrders: (param) => apiGet('/orders', param ? (typeof param === 'string' ? { clientEmail: param } : param) : {}),
   createOrder: (data) => apiPost('/orders', data),
   updateOrder: (id, data) => apiPatch(`/orders/${id}`, data),
 
   // Tickets
-  getTickets: (clientEmail) => apiGet('/tickets', clientEmail ? { clientEmail } : {}),
+  getTickets: (param) => apiGet('/tickets', param ? (typeof param === 'string' ? { clientEmail: param } : param) : {}),
   createTicket: (data) => apiPost('/tickets', data),
   updateTicket: (id, data) => apiPatch(`/tickets/${id}`, data),
 
   // Notifications
-  getNotifications: (recipient) => apiGet('/notifications', recipient ? { recipient } : {}),
+  getNotifications: (param) => apiGet('/notifications', param ? (typeof param === 'string' ? { recipient: param } : param) : {}),
   createNotification: (data) => apiPost('/notifications', data),
 
   // Company Settings
@@ -411,80 +388,16 @@ const api = {
 
   // Customer Specific Products Assignment
   getCustomerProducts: async (customerId) => {
-    try {
-      return await apiGet(`/customer/${customerId}/products`);
-    } catch (e) {
-      const stored = JSON.parse(localStorage.getItem('uniwear_customer_products')) || [];
-      const prods = JSON.parse(localStorage.getItem('uniwear_products')) || (typeof defaultProducts !== 'undefined' ? defaultProducts : []);
-      const matched = stored.filter(s => String(s.customerId) === String(customerId)).map(s => {
-        const p = prods.find(item => String(item._id || item.id) === String(s.productId)) || { name: 'Assigned Uniform', category: 'Workwear', moq: 100 };
-        return {
-          ...p,
-          assignmentId: s._id || s.id,
-          customerId: s.customerId,
-          customPrice: s.customPrice,
-          customMOQ: s.customMOQ,
-          effectivePrice: s.customPrice || p.price,
-          effectiveMOQ: s.customMOQ || p.moq || 100,
-          visible: s.visible !== false,
-          featuredInCatalog: Boolean(s.featured),
-          customerNotes: s.notes || ''
-        };
-      });
-      return { success: true, count: matched.length, data: matched };
-    }
+    return await apiGet(`/customer/${customerId}/products`);
   },
   assignCustomerProducts: async (data) => {
-    try {
-      return await apiPost('/customer-products', data);
-    } catch (e) {
-      let stored = JSON.parse(localStorage.getItem('uniwear_customer_products')) || [];
-      const pIds = Array.isArray(data.productIds) ? data.productIds : [data.productId];
-      pIds.forEach(pId => {
-        const existingIdx = stored.findIndex(s => String(s.customerId) === String(data.customerId) && String(s.productId) === String(pId));
-        const record = {
-          _id: 'assign_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-          customerId: data.customerId,
-          productId: pId,
-          customPrice: data.customPrice ? Number(data.customPrice) : null,
-          customMOQ: data.customMOQ ? Number(data.customMOQ) : null,
-          visible: data.visible !== false,
-          featured: Boolean(data.featured),
-          notes: data.notes || ''
-        };
-        if (existingIdx >= 0) stored[existingIdx] = record;
-        else stored.push(record);
-      });
-      localStorage.setItem('uniwear_customer_products', JSON.stringify(stored));
-      return { success: true, message: 'Products assigned successfully.' };
-    }
+    return await apiPost('/customer-products', data);
   },
   updateCustomerProduct: async (id, data) => {
-    try {
-      return await apiPut(`/customer-products/${id}`, data);
-    } catch (e) {
-      let stored = JSON.parse(localStorage.getItem('uniwear_customer_products')) || [];
-      const idx = stored.findIndex(s => String(s._id || s.id) === String(id));
-      if (idx >= 0) {
-        if (data.customPrice !== undefined) stored[idx].customPrice = data.customPrice ? Number(data.customPrice) : null;
-        if (data.customMOQ !== undefined) stored[idx].customMOQ = data.customMOQ ? Number(data.customMOQ) : null;
-        if (data.visible !== undefined) stored[idx].visible = Boolean(data.visible);
-        if (data.featured !== undefined) stored[idx].featured = Boolean(data.featured);
-        if (data.notes !== undefined) stored[idx].notes = data.notes;
-        localStorage.setItem('uniwear_customer_products', JSON.stringify(stored));
-      }
-      return { success: true, message: 'Assignment updated.' };
-    }
+    return await apiPut(`/customer-products/${id}`, data);
   },
   removeCustomerProduct: async (id) => {
-    try {
-      return await apiDelete(`/customer-products/${id}`);
-    } catch (e) {
-      let stored = JSON.parse(localStorage.getItem('uniwear_customer_products')) || [];
-      stored = stored.filter(s => String(s._id || s.id) !== String(id));
-      localStorage.setItem('uniwear_customer_products', JSON.stringify(stored));
-      return { success: true, message: 'Assignment removed.' };
-    }
+    return await apiDelete(`/customer-products/${id}`);
   },
 
   // Raw helpers for custom calls
@@ -500,4 +413,3 @@ const api = {
 
 // Expose globally so all HTML pages can call window.api.*
 window.api = api;
-

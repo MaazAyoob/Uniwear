@@ -11,9 +11,16 @@ const logActivity = async (action, details, user = 'Admin') => {};
 // GET /api/quotations
 const getQuotations = async (req, res, next) => {
   try {
-    const { clientEmail, search, status, salesperson, dateFrom, dateTo, minAmount, maxAmount } = req.query;
+    const { search, status, salesperson, dateFrom, dateTo, minAmount, maxAmount } = req.query;
     const filter = {};
-    if (clientEmail) filter.clientEmail = clientEmail.toLowerCase();
+
+    // SECURITY: Customers can only view their own quotations.
+    // Ignore any clientEmail query param from the browser for Customer role.
+    if (req.user && req.user.role === 'Customer') {
+      filter.clientEmail = req.user.email.toLowerCase();
+    } else if (req.query.clientEmail) {
+      filter.clientEmail = req.query.clientEmail.toLowerCase();
+    }
     if (status && status !== 'All') filter.status = status;
     if (salesperson) filter.assignedSalesperson = salesperson;
     

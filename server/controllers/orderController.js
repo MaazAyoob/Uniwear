@@ -8,9 +8,16 @@ const logActivity = async (action, details, user = 'Admin') => {};
 // GET /api/orders
 const getOrders = async (req, res, next) => {
   try {
-    const { clientEmail, search, stage, onSchedule, delayed } = req.query;
+    const { search, stage, onSchedule, delayed } = req.query;
     const filter = {};
-    if (clientEmail) filter.clientEmail = clientEmail.toLowerCase();
+
+    // SECURITY: Customers can only view their own orders.
+    // Ignore any clientEmail query param from the browser for Customer role.
+    if (req.user && req.user.role === 'Customer') {
+      filter.clientEmail = req.user.email.toLowerCase();
+    } else if (req.query.clientEmail) {
+      filter.clientEmail = req.query.clientEmail.toLowerCase();
+    }
     if (search) {
       filter.$or = [
         { id: { $regex: search, $options: 'i' } },

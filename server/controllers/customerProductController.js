@@ -9,12 +9,26 @@ const User = require('../models/User');
 exports.getCustomerProducts = async (req, res) => {
   try {
     const customerId = req.params.id;
-    const isAdmin = req.user && (req.user.role === 'Admin' || req.user.role === 'Super Admin' || req.user.role === 'Sales Executive');
+    const isAdmin = req.user && (req.user.role === 'Admin' || req.user.role === 'Super Admin' || req.user.role === 'Sales Executive' || req.user.role === 'Production Manager');
 
-    // Build query filter
-    const query = { customerId: customerId };
-    if (!isAdmin) {
-      query.visible = true; // Customers only see visible assigned products
+    // SECURITY: Customers can only view their OWN assigned products.
+    // They cannot supply a different customer's ID in the URL.
+    if (!isAdmin && req.user.role === 'Customer') {
+      const requestedId = customerId;
+      const userId = String(req.user.id || req.user._id);
+      const userEmail = (req.user.email || '').toLowerCase();
+
+      // Allow if the customerId matches the JWT user ID or email
+      const customerRecord = await User.findById(userId).catch(() => null)
+        || await User.findOne({ email: userEmail }).catch(() => null);
+
+      const isOwner = requestedId === userId ||
+        (customerRecord && String(customerRecord._id) === requestedId) ||
+        (customerRecord && customerRecord.email === requestedId);
+
+      if (!isOwner) {
+        return res.status(403).json({ success: false, message: 'Access denied. You can only view your own products.' });
+      }
     }
 
     let assignments = await CustomerProduct.find({

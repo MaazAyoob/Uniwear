@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const blogSchema = new mongoose.Schema({
-  id: { type: Number, required: true }, // Backwards compatibility for numeric IDs
+  id: { type: Number }, // Auto-generated sequential ID (not user-supplied — do NOT mark required)
   title: { type: String, required: true },
   slug: { type: String, required: true, unique: true },
   category: { type: String, required: true },

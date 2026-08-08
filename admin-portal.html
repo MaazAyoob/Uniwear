@@ -1500,13 +1500,15 @@
   <script src="js/utils/shared.js"></script>
   <script>
     // ─── GLOBAL ADMIN STATE ────────────────────────────────────────────────────
-    let globalUsers = (JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []));
-    let globalLeads = (JSON.parse(localStorage.getItem('uniwear_leads')) || (typeof defaultLeads !== 'undefined' ? defaultLeads : []));
-    let globalQuotations = (JSON.parse(localStorage.getItem('uniwear_quotations')) || (typeof defaultQuotations !== 'undefined' ? defaultQuotations : []));
-    let globalNotifications = (JSON.parse(localStorage.getItem('uniwear_notifications')) || []);
-    let globalProducts = (JSON.parse(localStorage.getItem('uniwear_products')) || (typeof defaultProducts !== 'undefined' ? defaultProducts : []));
-    let globalBlogs = (JSON.parse(localStorage.getItem('uniwear_blogs')) || (typeof defaultBlogs !== 'undefined' ? defaultBlogs : []));
-    let globalCatalogs = (JSON.parse(localStorage.getItem('uniwear_catalogs')) || (typeof defaultCatalogs !== 'undefined' ? defaultCatalogs : []));
+    // Initialized as empty arrays — data is loaded exclusively from the API on DOMContentLoaded.
+    // localStorage is only used as a write-through cache (not as source-of-truth on init).
+    let globalUsers = [];
+    let globalLeads = [];
+    let globalQuotations = [];
+    let globalNotifications = [];
+    let globalProducts = [];
+    let globalBlogs = [];
+    let globalCatalogs = [];
     let globalDashboardStats = {};
 
     let activeLeadFilter = 'All';
@@ -1720,55 +1722,77 @@
 
     // Sync data from server
     async function syncAdminData() {
-      try {
-        const [
-          usersRes,
-          leadsRes,
-          quotesRes,
-          settingsRes,
-          notificationsRes,
-          productsRes,
-          blogsRes,
-          catalogsRes,
-          statsRes
-        ] = await Promise.all([
-          window.api.getUsers(),
-          window.api.getLeads(),
-          window.api.getQuotations(),
-          window.api.getSettings(),
-          window.api.getNotifications('admin'),
-          window.api.getProducts(),
-          window.api.getBlogs(),
-          window.api.getCatalogs(),
-          window.api.getDashboardStats()
-        ]);
+      // Use Promise.allSettled so a single failed API call doesn't block all the others
+      const results = await Promise.allSettled([
+        window.api.getUsers(),
+        window.api.getLeads(),
+        window.api.getQuotations(),
+        window.api.getSettings(),
+        window.api.getNotifications('admin'),
+        window.api.getProducts(),
+        window.api.getBlogs(),
+        window.api.getCatalogs(),
+        window.api.getDashboardStats()
+      ]);
 
-        if (usersRes.success) {
-          globalUsers = usersRes.data;
-          localStorage.setItem('uniwear_users', JSON.stringify(usersRes.data));
-        }
-        if (leadsRes.success) {
-          globalLeads = leadsRes.data;
-          localStorage.setItem('uniwear_leads', JSON.stringify(leadsRes.data));
-        }
-        if (quotesRes.success) {
-          globalQuotations = quotesRes.data;
-          localStorage.setItem('uniwear_quotations', JSON.stringify(quotesRes.data));
-        }
-        if (settingsRes.success) {
-          localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsRes.data));
-        }
-        if (notificationsRes.success) {
-          globalNotifications = notificationsRes.data;
-          localStorage.setItem('uniwear_notifications', JSON.stringify(notificationsRes.data));
-        }
-        if (productsRes.success) globalProducts = productsRes.data;
-        if (blogsRes.success) globalBlogs = blogsRes.data;
-        if (catalogsRes.success) globalCatalogs = catalogsRes.data;
-        if (statsRes.success) globalDashboardStats = statsRes.data;
+      const [usersR, leadsR, quotesR, settingsR, notifR, productsR, blogsR, catalogsR, statsR] = results;
 
-      } catch (err) {
-        console.error("Failed to sync admin data:", err);
+      if (usersR.status === 'fulfilled' && usersR.value.success) {
+        globalUsers = usersR.value.data;
+        localStorage.setItem('uniwear_users', JSON.stringify(usersR.value.data));
+      } else if (usersR.status === 'rejected') {
+        console.warn('[syncAdminData] getUsers failed:', usersR.reason);
+      }
+
+      if (leadsR.status === 'fulfilled' && leadsR.value.success) {
+        globalLeads = leadsR.value.data;
+        localStorage.setItem('uniwear_leads', JSON.stringify(leadsR.value.data));
+      } else if (leadsR.status === 'rejected') {
+        console.warn('[syncAdminData] getLeads failed:', leadsR.reason);
+      }
+
+      if (quotesR.status === 'fulfilled' && quotesR.value.success) {
+        globalQuotations = quotesR.value.data;
+        localStorage.setItem('uniwear_quotations', JSON.stringify(quotesR.value.data));
+      } else if (quotesR.status === 'rejected') {
+        console.warn('[syncAdminData] getQuotations failed:', quotesR.reason);
+      }
+
+      if (settingsR.status === 'fulfilled' && settingsR.value.success) {
+        localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsR.value.data));
+      } else if (settingsR.status === 'rejected') {
+        console.warn('[syncAdminData] getSettings failed:', settingsR.reason);
+      }
+
+      if (notifR.status === 'fulfilled' && notifR.value.success) {
+        globalNotifications = notifR.value.data;
+        localStorage.setItem('uniwear_notifications', JSON.stringify(notifR.value.data));
+      } else if (notifR.status === 'rejected') {
+        console.warn('[syncAdminData] getNotifications failed:', notifR.reason);
+      }
+
+      if (productsR.status === 'fulfilled' && productsR.value.success) {
+        globalProducts = productsR.value.data;
+      } else if (productsR.status === 'rejected') {
+        console.warn('[syncAdminData] getProducts failed:', productsR.reason);
+      }
+
+      if (blogsR.status === 'fulfilled' && blogsR.value.success) {
+        globalBlogs = blogsR.value.data;
+      } else if (blogsR.status === 'rejected') {
+        console.warn('[syncAdminData] getBlogs failed:', blogsR.reason);
+      }
+
+      if (catalogsR.status === 'fulfilled' && catalogsR.value.success) {
+        globalCatalogs = catalogsR.value.data;
+      } else if (catalogsR.status === 'rejected') {
+        console.warn('[syncAdminData] getCatalogs failed:', catalogsR.reason);
+      }
+
+      if (statsR.status === 'fulfilled' && statsR.value.success) {
+        globalDashboardStats = statsR.value.data;
+      } else if (statsR.status === 'rejected') {
+        console.warn('[syncAdminData] getDashboardStats failed:', statsR.reason);
       }
     }
 
@@ -1876,18 +1900,33 @@
       }
     }
 
-    function loadCompanySettingsForm() {
-      const settings = JSON.parse(localStorage.getItem('uniwear_company_settings')) || {
-        companyName: "UNIWEAR",
-        supportEmail: "connect@uniwear.co",
-        salesEmail: "sales@uniwear.co",
-        phone: "91087 65831, 98459 32201",
-        address: "No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070",
-        logoUrl: "",
-        faviconUrl: "",
-        notificationEmail: "connect@uniwear.co",
-        ccEmail: ""
-      };
+    async function loadCompanySettingsForm() {
+      // Always fetch fresh settings from the API (not just localStorage cache)
+      let settings = {};
+      try {
+        const res = await window.api.getSettings();
+        if (res.success && res.data) {
+          settings = res.data;
+          // Update cache with fresh data
+          localStorage.setItem('uniwear_company_settings', JSON.stringify(settings));
+        }
+      } catch (err) {
+        console.warn('[Settings] API unavailable, falling back to localStorage cache:', err.message);
+        settings = JSON.parse(localStorage.getItem('uniwear_company_settings')) || {};
+      }
+
+      // Apply defaults for any missing fields
+      settings = Object.assign({
+        companyName: 'UNIWEAR',
+        supportEmail: 'connect@uniwear.co',
+        salesEmail: 'sales@uniwear.co',
+        phone: '91087 65831, 98459 32201',
+        address: 'No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070',
+        logoUrl: '',
+        faviconUrl: '',
+        notificationEmail: 'connect@uniwear.co',
+        ccEmail: ''
+      }, settings);
 
       document.getElementById('settings-company-name').value = settings.companyName || '';
       document.getElementById('settings-support-email').value = settings.supportEmail || '';
@@ -2425,8 +2464,8 @@
                 <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${b.status || 'Published'}</span>
               </td>
               <td class="p-4 text-right flex justify-end gap-2 pt-6">
-                <button onclick="openBlogModal('edit', '${b._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors"><i class="ri-edit-line"></i></button>
-                <button onclick="deleteBlog('${b._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all"><i class="ri-delete-bin-line"></i></button>
+                <button onclick="openBlogModal('edit', '${b._id || String(b.id || '')}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit"><i class="ri-edit-line"></i></button>
+                <button onclick="deleteBlog('${b._id || String(b.id || '')}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete"><i class="ri-delete-bin-line"></i></button>
               </td>
             `;
             tbodyBlogs.appendChild(tr);
@@ -2869,10 +2908,18 @@
         renderBlogImagesPreview();
       } else {
         document.getElementById('blog-modal-title').innerText = 'Edit Blog Post';
-        const b = globalBlogs.find(item => item && (item._id === blogId || item.id === blogId));
-        if (!b) return;
+        // Match by _id (MongoDB) or id (legacy numeric), comparing as strings
+        const b = globalBlogs.find(item => item && (
+          String(item._id || '') === String(blogId) ||
+          String(item.id || '') === String(blogId)
+        ));
+        if (!b) {
+          alert('Blog post not found. Please refresh the page.');
+          return;
+        }
 
-        document.getElementById('blog-modal-id').value = b._id;
+        // Use _id preferentially; fall back to stringified numeric id
+        document.getElementById('blog-modal-id').value = b._id || String(b.id || '');
         document.getElementById('blog-title').value = b.title;
         document.getElementById('blog-cat').value = b.category;
         document.getElementById('blog-author').value = b.author;
@@ -2926,23 +2973,32 @@
           alert('Blog article published!');
         } else {
           const id = document.getElementById('blog-modal-id').value;
+          if (!id) throw new Error('Blog ID missing. Please close and reopen the form.');
           await window.api.updateBlog(id, payload);
           alert('Blog article updated!');
         }
-        await syncAdminData();
         toggleModal('admin-blog-modal', false);
+        await syncAdminData();
         updateAdminDashboard();
+        // Explicitly re-render blog table so new/updated entry is visible immediately
+        if (typeof renderBlogsTable === 'function') renderBlogsTable();
       } catch (err) {
         alert(err.message || 'Failed to save blog post.');
       }
     }
 
     async function deleteBlog(blogId) {
-      if (!confirm('Delete this blog article?')) return;
+      if (!blogId || blogId === 'undefined') {
+        alert('Cannot delete: Blog ID is missing. Please refresh the page.');
+        return;
+      }
+      if (!confirm('Delete this blog article? This cannot be undone.')) return;
       try {
         await window.api.deleteBlog(blogId);
         await syncAdminData();
         updateAdminDashboard();
+        // Explicitly re-render blog table so deleted entry disappears immediately
+        if (typeof renderBlogsTable === 'function') renderBlogsTable();
       } catch (err) {
         alert(err.message || 'Failed to delete blog.');
       }

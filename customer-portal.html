@@ -694,26 +694,38 @@
       const userId = localStorage.getItem('uniwear_auth_id');
       if (!email) return;
 
-      try {
-        const [quotesRes, ordersRes, ticketsRes, notisRes, settingsRes, productsRes, assignedRes] = await Promise.all([
-          window.api.getQuotations(email),
-          window.api.getOrders(email),
-          window.api.getTickets(email),
-          window.api.getNotifications(email),
-          window.api.getSettings(),
-          window.api.getProducts(),
-          userId ? window.api.getCustomerProducts(userId).catch(() => null) : Promise.resolve(null)
-        ]);
+      const results = await Promise.allSettled([
+        window.api.getQuotations(email),
+        window.api.getOrders(email),
+        window.api.getTickets(email),
+        window.api.getNotifications(email),
+        window.api.getSettings(),
+        window.api.getProducts(),
+        userId ? window.api.getCustomerProducts(userId) : Promise.resolve({ success: false })
+      ]);
 
-        if (quotesRes.success) localStorage.setItem('uniwear_quotations', JSON.stringify(quotesRes.data));
-        if (ordersRes.success) localStorage.setItem('uniwear_orders', JSON.stringify(ordersRes.data));
-        if (ticketsRes.success) localStorage.setItem('uniwear_tickets', JSON.stringify(ticketsRes.data));
-        if (notisRes.success) localStorage.setItem('uniwear_notifications', JSON.stringify(notisRes.data));
-        if (settingsRes.success) localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsRes.data));
-        if (productsRes.success) globalProducts = productsRes.data;
-        if (assignedRes && assignedRes.success) customerAssignedProducts = assignedRes.data;
-      } catch (err) {
-        console.error("Failed to sync customer data:", err);
+      const [quotesR, ordersR, ticketsR, notisR, settingsR, productsR, assignedR] = results;
+
+      if (quotesR.status === 'fulfilled' && quotesR.value && quotesR.value.success) {
+        localStorage.setItem('uniwear_quotations', JSON.stringify(quotesR.value.data));
+      }
+      if (ordersR.status === 'fulfilled' && ordersR.value && ordersR.value.success) {
+        localStorage.setItem('uniwear_orders', JSON.stringify(ordersR.value.data));
+      }
+      if (ticketsR.status === 'fulfilled' && ticketsR.value && ticketsR.value.success) {
+        localStorage.setItem('uniwear_tickets', JSON.stringify(ticketsR.value.data));
+      }
+      if (notisR.status === 'fulfilled' && notisR.value && notisR.value.success) {
+        localStorage.setItem('uniwear_notifications', JSON.stringify(notisR.value.data));
+      }
+      if (settingsR.status === 'fulfilled' && settingsR.value && settingsR.value.success) {
+        localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsR.value.data));
+      }
+      if (productsR.status === 'fulfilled' && productsR.value && productsR.value.success) {
+        globalProducts = productsR.value.data;
+      }
+      if (assignedR.status === 'fulfilled' && assignedR.value && assignedR.value.success) {
+        customerAssignedProducts = assignedR.value.data;
       }
     }
 

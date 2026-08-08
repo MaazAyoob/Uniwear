@@ -22,11 +22,17 @@ const getCatalogs = async (req, res, next) => {
     }
 
     const catalogs = await Catalog.find(filter)
-      .populate('products')
+      .populate({ path: 'products', options: { strictPopulate: false } })
       .sort({ displayOrder: 1, createdAt: -1 })
       .lean();
 
-    res.json({ success: true, data: catalogs });
+    // Filter out null product refs (orphaned ObjectIds from deleted products)
+    const sanitized = catalogs.map(cat => ({
+      ...cat,
+      products: (cat.products || []).filter(Boolean)
+    }));
+
+    res.json({ success: true, data: sanitized });
   } catch (err) {
     next(err);
   }
