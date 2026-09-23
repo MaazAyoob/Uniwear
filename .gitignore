@@ -11,6 +11,18 @@ backend/node_modules/
 backend/.env
 backend/.env.*
 
+# Allow sanitized example templates
+!.env.example
+!*/.env.example
+!backend/.env.example
+
+# SSL / TLS Certificates & Private Keys
+*.pem
+*.key
+*.crt
+*.csr
+certs/
+
 # Persistent Production Storage (Never commit production media)
 storage/
 */storage/
