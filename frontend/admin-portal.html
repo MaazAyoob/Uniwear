@@ -1,0 +1,3696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | UNIWEAR</title>
+  <meta name="description" content="Operations management dashboard for UNIWEAR administration.">
+
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicons/favicon.png">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#B91C1C',
+            primaryHover: '#991B1B',
+            darkBg: '#111827',
+            lightBg: '#FFFFFF',
+            lightCard: '#F9FAFB',
+            mutedText: '#4B5563',
+            charcoal: '#111827',
+            lightBorder: 'rgba(0, 0, 0, 0.08)'
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    /* Premium Typography & Hierarchy System */
+    h1,
+    h2,
+    .font-display {
+      font-family: 'Clash Display', sans-serif !important;
+    }
+
+    h3,
+    h4,
+    h5,
+    h6,
+    nav a,
+    .mobile-nav-link,
+    button,
+    .btn,
+    .font-heading {
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    body,
+    input,
+    textarea,
+    select,
+    label,
+    p,
+    span,
+    li,
+    .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hierarchy, Line Height, and Letter Spacing Adjustments */
+    h1 {
+      font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem) !important;
+      /* Responsive fluid text scaling */
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 3vw + 1rem, 3.5rem) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.02em !important;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h3,
+    .card-title {
+      line-height: 1.3 !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Section & Container Breathing Room */
+    section:not(.hero-section):not(.min-h-screen):not([class*="h-"]) {
+      padding-top: clamp(4rem, 8vw, 8rem);
+      padding-bottom: clamp(4rem, 8vw, 8rem);
+    }
+
+    /* Navigation & CTA Optimization */
+    nav a,
+    .mobile-nav-link {
+      letter-spacing: -0.01em;
+    }
+
+    button,
+    .btn {
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    input,
+    textarea,
+    select {
+      font-family: 'Inter', sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+
+    /* Dashboard Metrics & Numbers Overrides */
+    .metric-value,
+    .stat-value,
+    [id^="stat-"],
+    .metric-number,
+    [id^="dash-widget-"] {
+      font-family: 'Outfit', sans-serif !important;
+      font-size: clamp(2rem, 3.5vw, 3.25rem) !important;
+      /* Larger display */
+      font-weight: 800 !important;
+      letter-spacing: -0.03em !important;
+      line-height: 1.1 !important;
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-label,
+    .stat-label {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.75rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.05em !important;
+      text-transform: uppercase;
+      color: #4B5563 !important;
+      /* Slate 600 */
+    }
+  </style>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body class="bg-lightCard text-charcoal font-body overflow-x-hidden antialiased min-h-screen flex">
+
+
+
+  <!-- Sweep Curtain -->
+  <div id="transition-overlay"
+    class="fixed inset-0 bg-primary z-[9999] transform translate-y-full flex items-center justify-center pointer-events-none">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 border-t-4 border-r-4 border-white rounded-full animate-spin"></div>
+      <div class="mt-4 font-heading text-xl uppercase tracking-widest text-white">UNIWEAR</div>
+    </div>
+  </div>
+
+  <!-- Sidebar Overlay for Mobile -->
+  <div id="sidebar-overlay" onclick="toggleSidebar(false)"
+    class="fixed inset-0 bg-charcoal/30 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0"></div>
+
+  <!-- ADMIN SIDEBAR -->
+  <aside id="admin-sidebar"
+    class="w-64 bg-white border-r border-lightBorder flex flex-col justify-between shrink-0 fixed inset-y-0 left-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:flex">
+    <div>
+      <div class="p-6 border-b border-lightBorder flex items-center justify-between">
+        <a href="index.html" class="flex items-center">
+          <img src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-7 w-auto object-contain">
+        </a>
+        <span
+          class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-bold uppercase font-mono">Admin</span>
+      </div>
+
+      <nav class="p-4 space-y-1" id="admin-sidebar-nav">
+        <button onclick="setAdminTab('admin-dash')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors bg-primary text-white"
+          id="admin-tab-admin-dash">
+          <i class="ri-dashboard-line"></i> Dashboard
+        </button>
+        <button onclick="setAdminTab('admin-customers')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-customers">
+          <i class="ri-user-line"></i> Customers
+        </button>
+        <button onclick="setAdminTab('admin-assign-products')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-assign-products">
+          <i class="ri-user-shared-line"></i> Customer Product Assignment
+        </button>
+        <button onclick="setAdminTab('admin-leads')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-leads">
+          <i class="ri-contacts-line"></i> Leads
+        </button>
+        <button onclick="setAdminTab('admin-quotes')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-quotes">
+          <i class="ri-file-copy-2-line"></i> Quotations
+        </button>
+        <button onclick="setAdminTab('admin-products')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-products">
+          <i class="ri-shirt-line"></i> Products
+        </button>
+        <button onclick="setAdminTab('admin-catalog')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-catalog">
+          <i class="ri-book-open-line"></i> Catalog
+        </button>
+        <button onclick="setAdminTab('admin-orders')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-orders">
+          <i class="ri-route-line"></i> Orders & Production
+        </button>
+        <button onclick="setAdminTab('admin-blogs')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-blogs">
+          <i class="ri-article-line"></i> Blog
+        </button>
+        <button onclick="setAdminTab('admin-settings')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-settings">
+          <i class="ri-settings-4-line"></i> Settings
+        </button>
+      </nav>
+    </div>
+
+    <div class="p-4 border-t border-lightBorder space-y-2 font-body">
+      <div class="flex items-center gap-3 px-4 py-2">
+        <div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">A</div>
+        <div>
+          <p class="text-xs font-bold text-charcoal">System Admin</p>
+          <p class="text-[10px] text-mutedText font-mono">Operations HQ</p>
+        </div>
+      </div>
+      <button onclick="handleLogout()"
+        class="w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
+        <i class="ri-logout-box-r-line"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <header class="bg-white border-b border-lightBorder py-4 px-6 md:px-8 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar(true)"
+          class="md:hidden text-charcoal focus:outline-none hover:text-primary transition-colors">
+          <i class="ri-menu-2-line text-2xl"></i>
+        </button>
+        <h2 class="font-heading text-lg md:text-xl font-extrabold text-charcoal" id="admin-portal-title">Dashboard</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <!-- Theme Switcher -->
+        <button
+          class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-mutedText hover:text-charcoal focus:outline-none"
+          title="Toggle Theme">
+          <i class="ri-moon-line text-lg"></i>
+        </button>
+        <button onclick="handleLogout()"
+          class="md:hidden text-red-500 text-sm font-semibold px-3 py-1.5 rounded hover:bg-red-50">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <div class="p-6 md:p-8 flex-1">
+
+      <!-- TAB 1: ADMIN DASHBOARD -->
+      <div id="admin-dash" class="admin-portal-view space-y-8">
+
+        <!-- Phase 1 Summary Widgets: 6 cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+
+          <!-- 1. Total Leads -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Total Leads</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="admin-stat-leads">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">CRM board</p>
+          </div>
+
+          <!-- 2. Active Quotations -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Active Quotations</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="admin-stat-open-quotes">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Price review</p>
+          </div>
+
+          <!-- 3. Total Products -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Total Products</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="admin-stat-products">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Catalog Registry</p>
+          </div>
+
+          <!-- 4. Blog Posts -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Blog Posts</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="admin-stat-blogs">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Published articles</p>
+          </div>
+
+          <!-- 5. Total Customers -->
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Customers</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-green-600" id="admin-stat-active-customers">0</h4>
+            <p class="text-[9px] text-mutedText mt-1 font-semibold">Registered accounts</p>
+          </div>
+
+          <!-- 6. Pending Registrations -->
+          <div
+            class="bg-white p-4 rounded-2xl border border-yellow-200 shadow-sm cursor-pointer hover:border-yellow-400 hover:shadow-md transition-all group"
+            onclick="openPendingCustomers()" title="Click to review pending registrations">
+            <span
+              class="text-[10px] font-bold text-yellow-600 uppercase tracking-widest block flex items-center gap-1"><i
+                class="ri-user-add-line"></i> Pending</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-yellow-600" id="admin-stat-pending-customers">0
+            </h4>
+            <p class="text-[9px] text-yellow-500 mt-1 font-semibold group-hover:text-yellow-700">Awaiting approval ›</p>
+          </div>
+
+        </div>
+
+        <!-- Recent Leads Preview -->
+        <div class="bg-white rounded-2xl border border-lightBorder shadow-sm overflow-x-auto">
+          <div class="p-5 border-b border-lightBorder flex items-center justify-between">
+            <h4 class="font-heading text-base font-bold text-charcoal">Recent Leads</h4>
+            <button onclick="setAdminTab('admin-leads')" class="text-primary text-xs font-semibold hover:underline">View
+              All &rarr;</button>
+          </div>
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Name</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Company</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Stage</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Date</th>
+              </tr>
+            </thead>
+            <tbody id="admin-dash-recent-leads">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+</div>
+        </div>
+
+        <!-- Recent Quotations Preview -->
+        <div class="bg-white rounded-2xl border border-lightBorder shadow-sm overflow-x-auto">
+          <div class="p-5 border-b border-lightBorder flex items-center justify-between">
+            <h4 class="font-heading text-base font-bold text-charcoal">Recent Quotations</h4>
+            <button onclick="setAdminTab('admin-quotes')"
+              class="text-primary text-xs font-semibold hover:underline">View All &rarr;</button>
+          </div>
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Quote ID</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Client Email</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product Line</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+              </tr>
+            </thead>
+            <tbody id="admin-dash-recent-quotes">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+</div>
+        </div>
+
+        <!-- Recent Activity Logs -->
+        <div class="bg-white rounded-2xl border border-lightBorder shadow-sm overflow-x-auto">
+          <div class="p-5 border-b border-lightBorder flex items-center justify-between">
+            <h4 class="font-heading text-base font-bold text-charcoal">System Recent Activity Logs</h4>
+            <span class="text-xs text-mutedText font-semibold">Real-time DB audit trail</span>
+          </div>
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[600px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Action</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Details</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">User</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="admin-dash-recent-activity">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+</div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: LEADS -->
+      <div id="admin-leads" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Incoming Consultation Leads</h3>
+          <button onclick="exportModule('leads')"
+            class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+            <i class="ri-download-line"></i> Export CSV
+          </button>
+        </div>
+
+        <!-- Source Filter Bar & Search -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <button onclick="filterLeadsBySource('All')" id="lead-filter-All"
+              class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white">All
+              Leads</button>
+            <button onclick="filterLeadsBySource('Design Studio')" id="lead-filter-DesignStudio"
+              class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Design
+              Studio</button>
+            <button onclick="filterLeadsBySource('Contact Form')" id="lead-filter-ContactForm"
+              class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Contact
+              Form</button>
+            <button onclick="filterLeadsBySource('Chatbot')" id="lead-filter-Chatbot"
+              class="lead-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder hover:border-primary/40 text-mutedText bg-white">Chatbot</button>
+          </div>
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="leads-search-input" onkeyup="handleLeadsSearch()" placeholder="Search leads..."
+              class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            <i class="ri-search-line absolute left-3 top-2.5 text-mutedText text-xs"></i>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Name</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Company</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Email</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Mobile</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Source</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Date Submitted</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Stage</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-leads-table-body">
+              <!-- Dynamically injected leads -->
+            </tbody>
+          </table>
+</div>
+        </div>
+      </div>
+
+      <!-- TAB 3: QUOTATIONS -->
+      <div id="admin-quotes" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Quotations Manager</h3>
+          <div class="flex items-center gap-3">
+            <button onclick="exportModule('quotations')"
+              class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+              <i class="ri-download-line"></i> Export CSV
+            </button>
+            <div class="relative w-48 sm:w-64">
+              <input type="text" id="quotes-search-input" onkeyup="handleQuotesSearch()" placeholder="Search quotes..."
+                class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+              <i class="ri-search-line absolute left-3 top-2.5 text-mutedText text-xs"></i>
+            </div>
+            <button onclick="openCreateQuoteModal()"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              Create Quotation
+            </button>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[900px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Quote ID</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Client Email</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product Line</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Volume</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Specs</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-quotes-table-body">
+              <!-- Dynamically injected quotations -->
+            </tbody>
+          </table>
+</div>
+        </div>
+      </div>
+
+      <!-- TAB 4: PRODUCTS CATALOG -->
+      <div id="admin-products" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Apparel Catalog Registry</h3>
+          <div class="flex items-center gap-3">
+            <button onclick="exportModule('products')"
+              class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+              <i class="ri-download-line"></i> Export CSV
+            </button>
+            <button onclick="openProductModal('add')"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              + Add Product
+            </button>
+          </div>
+        </div>
+
+        <!-- Search, Filter & Sort Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+          <div class="relative w-full sm:w-72">
+            <input type="text" id="product-search-input" onkeyup="handleProductSearch()" placeholder="Search products..."
+              class="w-full bg-lightCard border border-lightBorder rounded-full py-2 px-5 pl-10 text-xs text-charcoal focus:outline-none focus:border-primary">
+            <i class="ri-search-line absolute left-4 top-2.5 text-mutedText text-xs"></i>
+          </div>
+          <div class="flex items-center gap-3">
+            <select id="product-filter-category" onchange="handleProductSearch()"
+              class="bg-lightCard border border-lightBorder rounded-full py-1.5 px-4 text-xs text-charcoal focus:outline-none focus:border-primary font-semibold font-body">
+              <option value="All">All Categories</option>
+              <option value="Industrial">Industrial</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Institutional">Institutional</option>
+              <option value="Corporate Gifting">Corporate Gifting</option>
+            </select>
+            <select id="product-sort-by" onchange="handleProductSearch()"
+              class="bg-lightCard border border-lightBorder rounded-full py-1.5 px-4 text-xs text-charcoal focus:outline-none focus:border-primary font-semibold font-body">
+              <option value="displayOrder-asc">Sort: Display Order</option>
+              <option value="name-asc">Sort: Name (A-Z)</option>
+              <option value="name-desc">Sort: Name (Z-A)</option>
+              <option value="moq-asc">Sort: MOQ (Low-High)</option>
+              <option value="moq-desc">Sort: MOQ (High-Low)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Image</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product Name</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Fabric</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">MOQ</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Description</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Visibility</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-table-body">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+</div>
+        </div>
+      </div>
+
+      <!-- TAB 4.5: CATALOG CMS -->
+      <div id="admin-catalog" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Catalog CMS Manager</h3>
+          <div class="flex items-center gap-3">
+            <div class="relative w-48 sm:w-64">
+              <input type="text" id="catalog-search-input" onkeyup="handleCatalogSearch()" placeholder="Search catalogs..."
+                class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <i class="ri-search-line absolute left-3 top-2 text-mutedText text-xs"></i>
+            </div>
+            <button onclick="openCatalogModal('add')"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              Add Collection
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Image</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Collection Name</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Display Order</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Format & Pages</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-catalog-table-body">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+</div>
+        </div>
+      </div>
+
+      <!-- TAB 5: BLOG PUBLISHING -->
+      <div id="admin-blogs" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Editorial Desk</h3>
+          <div class="flex items-center gap-3">
+            <div class="relative w-48 sm:w-64">
+              <input type="text" id="blogs-search-input" onkeyup="handleBlogsSearch()" placeholder="Search blogs..."
+                class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+              <i class="ri-search-line absolute left-3 top-2.5 text-mutedText text-xs"></i>
+            </div>
+            <button onclick="openBlogModal('add')"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              Publish Article
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[800px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Title</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Category</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Author</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Date</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-blogs-table-body">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+</div>
+        </div>
+      </div>
+
+      <!-- TAB 6: CUSTOMERS DIRECTORY -->
+      <div id="admin-customers" class="admin-portal-view hidden space-y-8">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Registered Customer Accounts</h3>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-mutedText font-semibold" id="admin-customers-count-label"></span>
+            <button onclick="exportModule('customers')"
+              class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+              <i class="ri-download-line"></i> Export CSV
+            </button>
+          </div>
+        </div>        <!-- Customer Filter Bar & Search -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3 pb-1">
+            <button onclick="filterCustomersByStatus('All')" id="cust-filter-All"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-primary bg-primary text-white font-body">All</button>
+            <button onclick="filterCustomersByStatus('Pending')" id="cust-filter-Pending"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-yellow-400 text-yellow-700 bg-yellow-50 hover:bg-yellow-100 font-body">⏳
+              Pending</button>
+            <button onclick="filterCustomersByStatus('Active')" id="cust-filter-Active"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-green-400 hover:text-green-700 font-body">✓
+              Active</button>
+            <button onclick="filterCustomersByStatus('Disabled')" id="cust-filter-Disabled"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-red-400 hover:text-red-600 font-body">✗
+              Disabled</button>
+            <button onclick="filterCustomersByStatus('Rejected')" id="cust-filter-Rejected"
+              class="cust-filter-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all border border-lightBorder text-mutedText bg-white hover:border-gray-400 font-body">⊘
+              Rejected</button>
+          </div>
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="customers-search-input" onkeyup="handleCustomersSearch()" placeholder="Search customers..."
+              class="w-full bg-white border border-lightBorder rounded-full py-1.5 px-4 pl-9 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            <i class="ri-search-line absolute left-3 top-2.5 text-mutedText text-xs"></i>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[1100px]">
+            <thead>
+              <tr
+                class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Company</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Contact Person</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Email</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Phone</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Reg. Date</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-customers-table-body">
+              <!-- Dynamically list clients -->
+            </tbody>
+          </table>
+</div>
+        </div>
+      </div>
+
+      <!-- TAB: ORDERS & 14-STAGE PRODUCTION TRACKER -->
+      <div id="admin-orders" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h3 class="font-heading text-2xl font-bold text-charcoal">14-Stage Production Workflow</h3>
+            <p class="text-xs text-mutedText mt-1">Track orders from confirmed booking to final delivery.</p>
+          </div>
+          <button onclick="exportModule('orders')" class="bg-charcoal hover:bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2">
+            <i class="ri-download-line"></i> Export CSV
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">On Schedule</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-green-600" id="dash-orders-on-schedule">0</h4>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Delayed Orders</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-red-600" id="dash-orders-delayed">0</h4>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Awaiting Approval</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-amber-600" id="dash-orders-approval">0</h4>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Ready for Dispatch</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-blue-600" id="dash-orders-dispatch">0</h4>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-lightBorder shadow-sm">
+            <span class="text-[10px] font-bold text-mutedText uppercase tracking-widest block">Completed</span>
+            <h4 class="font-heading text-2xl font-extrabold mt-1 text-charcoal" id="dash-orders-completed">0</h4>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
+            <thead>
+              <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Order #</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Client / Company</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Product / Volume</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Current Stage (1-14)</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Schedule Status</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-orders-table-body">
+              <!-- Dynamically listed -->
+            </tbody>
+          </table>
+</div>
+        </div>
+      </div>
+
+
+
+      <!-- TAB: CUSTOMER PRODUCT ASSIGNMENT -->
+      <div id="admin-assign-products" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h3 class="font-heading text-2xl font-bold text-charcoal">Customer Product Assignment</h3>
+            <p class="text-xs text-mutedText mt-1">Assign custom products, set client-specific pricing, custom MOQs, and notes for B2B portal clients.</p>
+          </div>
+          <button onclick="openAssignProductsModal()" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">
+            + Assign Products
+          </button>
+        </div>
+
+        <!-- Customer Selector Card -->
+        <div class="bg-white p-6 rounded-2xl border border-lightBorder shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="w-full md:w-1/2">
+            <label class="block text-xs uppercase font-bold text-mutedText mb-2">Select Target Enterprise Customer *</label>
+            <select id="assign-customer-select" onchange="handleCustomerSelectChange()" class="w-full bg-lightCard border border-lightBorder rounded-xl p-3 text-xs text-charcoal font-semibold focus:outline-none focus:border-primary">
+              <!-- Dynamically populated with approved/pending customers -->
+            </select>
+          </div>
+          <div id="customer-approval-status-box" class="p-4 bg-lightCard rounded-xl border border-lightBorder w-full md:w-auto flex items-center gap-4">
+            <div>
+              <span class="text-[9px] uppercase font-bold text-mutedText tracking-wider block">Account Approval Status</span>
+              <span id="assign-customer-status-badge" class="px-2.5 py-1 rounded text-[10px] font-bold uppercase block mt-1 bg-yellow-100 text-yellow-800">Pending</span>
+            </div>
+            <div id="assign-customer-status-actions" class="flex gap-2">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Assigned Products Table -->
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
+          <div class="overflow-x-auto w-full border-t border-lightBorder">
+  <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
+            <thead>
+              <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                <th class="p-4 font-heading font-semibold text-charcoal">Product</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Std MOQ / Price</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Custom Price (₹)</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Custom MOQ</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Visible</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Featured</th>
+                <th class="p-4 font-heading font-semibold text-charcoal">Customer Notes</th>
+                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-assigned-products-table-body">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+</div>
+        </div>
+      </div>
+
+      <!-- TAB 7: SETTINGS -->
+      <div id="admin-settings" class="admin-portal-view hidden space-y-8">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Company & Branding Settings</h3>
+        <div class="bg-white p-6 md:p-8 rounded-2xl border border-lightBorder shadow-sm max-w-2xl">
+          <form onsubmit="submitCompanySettings(event)" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Company
+                  Name</label>
+                <input type="text" id="settings-company-name" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Support
+                  Email</label>
+                <input type="email" id="settings-support-email" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Sales Email</label>
+                <input type="email" id="settings-sales-email" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Phone
+                  Numbers</label>
+                <input type="text" id="settings-phone" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Office
+                Address</label>
+              <textarea id="settings-address" rows="3" required
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Notification
+                  Email</label>
+                <input type="email" id="settings-notification-email" required
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">CC Email</label>
+                <input type="email" id="settings-cc-email"
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Long / Main Logo
+                    (Header & Footer)</label>
+                  <div class="flex items-center gap-4">
+                    <div id="settings-logo-preview-container"
+                      class="w-16 h-16 rounded-xl border border-lightBorder bg-lightCard flex items-center justify-center overflow-hidden shrink-0">
+                      <img id="settings-logo-preview" src="assets/logos/logo-full.png" class="w-10 h-10 object-contain">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <div class="flex gap-1.5">
+                        <button type="button" onclick="triggerLogoUpload('long')"
+                          class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">
+                          Upload
+                        </button>
+                        <button type="button" onclick="resetLogoToDefault('long')"
+                          class="border border-lightBorder text-charcoal hover:bg-lightCard px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors">
+                          Reset
+                        </button>
+                      </div>
+                      <p class="text-[9px] text-mutedText">Horizontal format recommended.</p>
+                    </div>
+                  </div>
+                  <input type="file" id="settings-logo-file" accept="image/*" class="hidden"
+                    onchange="handleLogoUpload(event, 'long')">
+                  <input type="hidden" id="settings-logo-data">
+                </div>
+
+                <div>
+                  <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-2">Favicon / Icon
+                    Logo (Browser Tab)</label>
+                  <div class="flex items-center gap-4">
+                    <div id="settings-favicon-preview-container"
+                      class="w-16 h-16 rounded-xl border border-lightBorder bg-lightCard flex items-center justify-center overflow-hidden shrink-0">
+                      <img id="settings-favicon-preview" src="assets/logos/logo-icon.png" class="w-10 h-10 object-contain">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <div class="flex gap-1.5">
+                        <button type="button" onclick="triggerLogoUpload('favicon')"
+                          class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">
+                          Upload
+                        </button>
+                        <button type="button" onclick="resetLogoToDefault('favicon')"
+                          class="border border-lightBorder text-charcoal hover:bg-lightCard px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors">
+                          Reset
+                        </button>
+                      </div>
+                      <p class="text-[9px] text-mutedText">Square format (SVG/PNG) recommended.</p>
+                    </div>
+                  </div>
+                  <input type="file" id="settings-favicon-file" accept="image/*" class="hidden"
+                    onchange="handleLogoUpload(event, 'favicon')">
+                  <input type="hidden" id="settings-favicon-data">
+                </div>
+              </div>
+            </div>
+            <button type="submit"
+              class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+              Save Settings & Apply Branding
+            </button>
+          </form>
+        </div>
+
+        <!-- SECURITY & CHANGE PASSWORD CARD -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl border border-lightBorder shadow-sm max-w-2xl mt-8">
+          <div class="flex items-center gap-3 mb-6 pb-4 border-b border-lightBorder">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+              <i class="ri-lock-password-line text-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-heading text-lg font-bold text-charcoal">Security & Credentials</h4>
+              <p class="text-xs text-mutedText">Change your admin portal authentication password.</p>
+            </div>
+          </div>
+
+          <form onsubmit="submitAdminChangePassword(event)" class="space-y-4 font-body">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Current Password *</label>
+              <input type="password" id="admin-pass-current" required placeholder="Enter current password"
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">New Password *</label>
+                <input type="password" id="admin-pass-new" required placeholder="At least 6 characters"
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Confirm New Password *</label>
+                <input type="password" id="admin-pass-confirm" required placeholder="Re-enter new password"
+                  class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+            <div class="pt-2">
+              <button type="submit"
+                class="bg-charcoal hover:bg-primary text-white px-6 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-sm">
+                Update Admin Password
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: Add/Edit Product -->
+  <div id="admin-product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-product-modal', false)">
+    </div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal" id="product-modal-title">Add New Product</h3>
+        <button onclick="toggleModal('admin-product-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitAdminProduct(event)" class="space-y-4">
+        <input type="hidden" id="product-modal-action">
+        <input type="hidden" id="product-modal-id">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product Name</label>
+          <input type="text" id="prod-name" required placeholder="AeroGuard Scrubs"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Category</label>
+            <select id="prod-cat"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Industrial">Industrial</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Institutional">Institutional</option>
+              <option value="Corporate Gifting">Corporate Gifting</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Fabric Base</label>
+            <input type="text" id="prod-fabric" required placeholder="65% Cotton / 35% Poly"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">GSM Density</label>
+            <input type="text" id="prod-gsm" required placeholder="180 GSM"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">MOQ Limit</label>
+            <input type="number" id="prod-moq" required placeholder="100"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product Image</label>
+          <div id="product-img-upload-zone"
+            class="border-2 border-dashed border-lightBorder hover:border-primary/50 rounded-xl p-4 text-center cursor-pointer transition-all bg-lightCard relative flex flex-col items-center justify-center min-h-[140px] group">
+
+            <!-- When image is uploaded -->
+            <div id="upload-zone-preview" class="hidden flex-col items-center space-y-2">
+              <img id="upload-preview-thumb" src=""
+                class="w-20 h-20 object-cover rounded-lg border border-lightBorder shadow-sm">
+              <button type="button" onclick="removeModalImage(event)"
+                class="text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1"><i
+                  class="ri-delete-bin-line"></i> Remove Image</button>
+            </div>
+
+            <!-- When no image is uploaded -->
+            <div id="upload-zone-prompt" class="flex flex-col items-center space-y-2">
+              <div
+                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+                <i class="ri-image-add-line text-lg"></i></div>
+              <p class="text-xs text-charcoal font-semibold">Click to upload or drag image here</p>
+              <p class="text-[10px] text-mutedText">PNG, JPG, JPEG, or WEBP up to 2MB</p>
+            </div>
+
+            <!-- Dragover overlay highlight -->
+            <div id="upload-zone-overlay"
+              class="absolute inset-0 bg-primary/5 border-2 border-primary border-dashed rounded-xl flex items-center justify-center z-10 hidden">
+              <div class="text-center text-primary font-bold text-xs uppercase tracking-wider">Drop image here</div>
+            </div>
+          </div>
+          <!-- Hidden Inputs -->
+          <input type="file" id="prod-img-file" accept="image/*" class="hidden">
+          <input type="hidden" id="prod-img-url" value="assets/images/products/corporate-blazer-detail.png">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Description</label>
+          <textarea id="prod-desc" rows="3" required placeholder="Describe technical performance specs..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <input type="checkbox" id="prod-featured"
+            class="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded">
+          <label for="prod-featured"
+            class="text-xs font-bold text-mutedText uppercase tracking-widest select-none">Featured Product</label>
+        </div>
+
+        <!-- Website Visibility & CMS Controls -->
+        <div class="border-t border-lightBorder pt-4 mt-2 space-y-3">
+          <h4 class="text-xs font-bold text-charcoal uppercase tracking-widest flex items-center gap-1.5"><i class="ri-global-line text-primary"></i> Website Visibility Controls</h4>
+          
+          <div class="flex items-center justify-between p-3 bg-lightCard rounded-lg border border-lightBorder">
+            <div>
+              <label for="prod-is-public" class="text-xs font-bold text-charcoal block">Show on Public Website</label>
+              <p class="text-[10px] text-mutedText">Controls if website visitors can see this product.</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="prod-is-public" class="sr-only peer">
+              <div class="w-9 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] uppercase tracking-widest text-mutedText font-bold mb-1">Product Status</label>
+              <select id="prod-status" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2 px-2.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+                <option value="Active">Active</option>
+                <option value="Draft">Draft</option>
+                <option value="Archived">Archived</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] uppercase tracking-widest text-mutedText font-bold mb-1">Display Sort Order</label>
+              <input type="number" id="prod-sort-order" value="0" placeholder="0" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2 px-2.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] uppercase tracking-widest text-mutedText font-bold mb-1">Public Display Locations</label>
+            <div class="grid grid-cols-2 gap-2 bg-lightCard p-3 rounded-lg border border-lightBorder text-xs">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="loc-uniforms" value="uniforms" class="rounded text-primary focus:ring-primary" checked>
+                <span>Uniforms Page</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="loc-gifting" value="gifting" class="rounded text-primary focus:ring-primary" checked>
+                <span>Corporate Gifting</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="loc-featured" value="featured" class="rounded text-primary focus:ring-primary" checked>
+                <span>Homepage Featured</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="loc-new-arrivals" value="new_arrivals" class="rounded text-primary focus:ring-primary">
+                <span>New Arrivals</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Save Catalog Entry
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add/Edit Catalog -->
+  <div id="admin-catalog-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-catalog-modal', false)">
+    </div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal" id="catalog-modal-title">Add Catalog Collection</h3>
+        <button onclick="toggleModal('admin-catalog-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitAdminCatalog(event)" class="space-y-4 font-body">
+        <input type="hidden" id="catalog-modal-action">
+        <input type="hidden" id="catalog-modal-id">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Collection Title</label>
+          <input type="text" id="cat-title" required placeholder="Bespoke Executive Weaves"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Category</label>
+            <input type="text" id="cat-category" required placeholder="Corporate & Executive"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Slug (URL Name)</label>
+            <input type="text" id="cat-slug" placeholder="bespoke-executive-weaves"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Format</label>
+            <input type="text" id="cat-format" required placeholder="PDF Brochure"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Pages</label>
+            <input type="number" id="cat-pages" required placeholder="32"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">File Size</label>
+            <input type="text" id="cat-size" required placeholder="6.2 MB"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Display Order</label>
+            <input type="number" id="cat-order" required placeholder="1"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Status</label>
+            <select id="cat-status"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Publish">Publish</option>
+              <option value="Draft">Draft</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Description</label>
+          <textarea id="cat-description" rows="2" required placeholder="Describe what specifications are inside..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+
+        <div class="border-t border-lightBorder pt-4 space-y-3">
+          <h4 class="font-heading text-sm font-bold text-charcoal">Design & Cover Images</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Cover Image URL/Path</label>
+              <input type="text" id="cat-img" placeholder="assets/images/industries/corporate-uniforms.png"
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Banner Image URL</label>
+              <input type="text" id="cat-banner-image" placeholder="https://images.unsplash.com/photo..."
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Banner Title</label>
+              <input type="text" id="cat-banner-title" placeholder="Corporate Blazers Collection"
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Banner Desc</label>
+              <input type="text" id="cat-banner-desc" placeholder="View our bespoke coordinates..."
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-lightBorder pt-4 space-y-3">
+          <h4 class="font-heading text-sm font-bold text-charcoal">SEO & Meta Configuration</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">SEO Title</label>
+              <input type="text" id="cat-seo-title" placeholder="Executive Catalogs | UNIWEAR"
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Meta Image URL</label>
+              <input type="text" id="cat-meta-image" placeholder="https://..."
+                class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">SEO Description</label>
+            <input type="text" id="cat-seo-desc" placeholder="Brief metadata description..."
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary font-body">
+          </div>
+        </div>
+
+        <div class="border-t border-lightBorder pt-4">
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Assign Products</label>
+          <div id="catalog-products-checkboxes" class="max-h-32 overflow-y-auto p-3 bg-lightCard border border-lightBorder rounded-lg space-y-1 text-xs">
+            <!-- Dynamically populated products checkbox list -->
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Save Catalog Collection
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add/Edit Blog -->
+  <div id="admin-blog-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-blog-modal', false)">
+    </div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal" id="blog-modal-title">Publish Blog Post</h3>
+        <button onclick="toggleModal('admin-blog-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitAdminBlog(event)" class="space-y-4">
+        <input type="hidden" id="blog-modal-action">
+        <input type="hidden" id="blog-modal-id">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Article Title</label>
+          <input type="text" id="blog-title" required placeholder="Sourcing Linen Safely"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Category</label>
+            <select id="blog-cat"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Fabrics">Fabrics</option>
+              <option value="Branding">Branding</option>
+              <option value="Industrial">Industrial</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Institutional">Institutional</option>
+              <option value="Corporate Gifting">Corporate Gifting</option>
+              <option value="Heritage">Heritage</option>
+              <option value="Sustainability">Sustainability</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Author</label>
+            <input type="text" id="blog-author" required placeholder="Dr. Anjali Sen"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Status</label>
+            <select id="blog-status"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Published">Published</option>
+              <option value="Draft">Draft</option>
+              <option value="Scheduled">Scheduled</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Slug (URL Name)</label>
+            <input type="text" id="blog-slug" placeholder="sourcing-linen-safely"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Reading Time (e.g. 5 min read)</label>
+            <input type="text" id="blog-reading-time" placeholder="Leave blank to auto-calculate"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Article Images (Multiple)</label>
+          <input type="file" id="blog-images-file" accept="image/*" multiple class="hidden">
+          <div onclick="document.getElementById('blog-images-file').click()" class="border-2 border-dashed border-lightBorder hover:border-primary/40 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-colors bg-lightCard">
+            <i class="ri-image-add-line text-xl text-mutedText"></i>
+            <span class="text-xs font-semibold text-charcoal mt-1">Upload Multiple Images</span>
+            <span class="text-[9px] text-gray-400">Click to browse or drop files here</span>
+          </div>
+          <div id="blog-images-preview" class="grid grid-cols-4 gap-2 mt-2"></div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Short Excerpt</label>
+          <textarea id="blog-excerpt" rows="2" required placeholder="Summary of the article content..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Complete Article Content</label>
+          <textarea id="blog-content" rows="6" required placeholder="Write the complete article body here (double enter for new paragraphs)..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Save Editorial Post
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Revise Quotation -->
+  <div id="admin-revise-quote-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md"
+      onclick="toggleModal('admin-revise-quote-modal', false)"></div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Revise Quotation</h3>
+        <button onclick="toggleModal('admin-revise-quote-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitReviseQuotation(event)" class="space-y-4">
+        <input type="hidden" id="revise-quote-id">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product / Apparel
+            Base</label>
+          <input type="text" id="revise-quote-cat" required placeholder="Corporate Blazer"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Volume</label>
+            <input type="number" id="revise-quote-volume" required placeholder="500"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Price Value</label>
+            <input type="text" id="revise-quote-value" required placeholder="₹125,000"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Save Revised Proposal
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Assign Products to Customer (Bulk / Single) -->
+  <div id="admin-assign-products-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-assign-products-modal', false)"></div>
+    <div class="relative w-full max-w-2xl bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h3 class="font-heading text-2xl font-bold text-charcoal">Assign Products to Customer</h3>
+          <p class="text-xs text-mutedText mt-0.5">Select existing products to expose in the customer's private portal.</p>
+        </div>
+        <button onclick="toggleModal('admin-assign-products-modal', false)" class="text-gray-400 hover:text-charcoal"><i class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitCustomerProductAssignment(event)" class="space-y-6">
+        <div>
+          <label class="block text-xs uppercase font-bold text-mutedText mb-2">Target Customer</label>
+          <input type="text" id="modal-assign-customer-name" readonly class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs font-bold text-charcoal">
+          <input type="hidden" id="modal-assign-customer-id">
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="block text-xs uppercase font-bold text-mutedText">Select Product(s) to Assign *</label>
+            <button type="button" onclick="toggleSelectAllProductsToAssign()" class="text-[10px] text-primary font-bold hover:underline">Select All</button>
+          </div>
+          <div class="max-h-60 overflow-y-auto border border-lightBorder rounded-xl p-3 space-y-2 bg-lightCard" id="modal-products-assign-checkbox-list">
+            <!-- Dynamically rendered checkbox list of global products -->
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase font-bold text-mutedText mb-1">Custom Price (₹) <span class="text-gray-400 font-normal">(Optional)</span></label>
+            <input type="number" id="modal-assign-custom-price" placeholder="Leave empty for standard" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-xs uppercase font-bold text-mutedText mb-1">Custom MOQ <span class="text-gray-400 font-normal">(Optional)</span></label>
+            <input type="number" id="modal-assign-custom-moq" placeholder="Leave empty for standard" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-charcoal">
+            <input type="checkbox" id="modal-assign-visible" checked class="rounded text-primary focus:ring-primary">
+            <span>Visible to Customer</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-charcoal">
+            <input type="checkbox" id="modal-assign-featured" class="rounded text-primary focus:ring-primary">
+            <span>Mark Featured</span>
+          </label>
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase font-bold text-mutedText mb-1">Customer-Specific Notes</label>
+          <textarea id="modal-assign-notes" rows="2" placeholder="Mention bespoke fabric specifications or contract details..." class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors shadow-sm">
+          Confirm Product Assignment
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+
+  <!-- MODAL: Create Quotation -->
+  <div id="admin-create-quote-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md"
+      onclick="toggleModal('admin-create-quote-modal', false)"></div>
+    <div
+      class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal">Create New Quotation</h3>
+        <button onclick="toggleModal('admin-create-quote-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <form onsubmit="submitCreateQuotation(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Client Email</label>
+          <input type="email" id="create-quote-email" required placeholder="client@tajhotels.com"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Product Line</label>
+            <select id="create-quote-cat"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+              <option value="Industrial">Industrial</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Institutional">Institutional</option>
+              <option value="Corporate Gifting">Corporate Gifting</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Volume (Sets)</label>
+            <input type="number" id="create-quote-volume" required placeholder="100"
+              class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Price Value</label>
+          <input type="text" id="create-quote-value" required placeholder="₹85,000"
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Specifications</label>
+          <textarea id="create-quote-specs" rows="3" required
+            placeholder="Describe fabrics, size matrix, custom logos, etc..."
+            class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+          Publish Quotation Proposal
+        </button>
+  <script src="js/config/config.js"></script>
+  <script src="js/api/api.js"></script>
+  <script src="js/utils/shared.js"></script>
+  <script>
+    // ─── GLOBAL ADMIN STATE ────────────────────────────────────────────────────
+    // Initialized as empty arrays — data is loaded exclusively from the API on DOMContentLoaded.
+    // localStorage is only used as a write-through cache (not as source-of-truth on init).
+    let globalUsers = [];
+    let globalLeads = [];
+    let globalQuotations = [];
+    let globalNotifications = [];
+    let globalProducts = [];
+    let globalBlogs = [];
+    let globalCatalogs = [];
+    let globalDashboardStats = {};
+
+    let activeLeadFilter = 'All';
+    let activeCustomerFilter = 'All';
+
+    // ─── SEARCH & FILTER STATES ────────────────────────────────────────────────
+    let productSearchQuery = "";
+    let productCategoryFilter = "All";
+    let productSort = "displayOrder";
+    let productSortOrder = "asc";
+
+    // ─── PRODUCT IMAGE UPLOAD PARAMETERS & HANDLERS ────────────────────────────
+    let currentTableUploadProductId = null;
+
+    function triggerTableImageUpload(prodId) {
+      currentTableUploadProductId = prodId;
+      let input = document.getElementById('table-image-input');
+      if (!input) {
+        input = document.createElement('input');
+        input.type = 'file';
+        input.id = 'table-image-input';
+        input.accept = 'image/*';
+        input.className = 'hidden';
+        input.addEventListener('change', handleTableImageUpload);
+        document.body.appendChild(input);
+      }
+      input.click();
+    }
+
+    function handleTableImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file || !currentTableUploadProductId) return;
+
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (PNG, JPG, JPEG, WEBP).');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert('File size exceeds 2MB limit.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Url = e.target.result;
+        const p = globalProducts.find(item => item && (item._id === currentTableUploadProductId || item.id === currentTableUploadProductId));
+        if (p) {
+          window.api.updateProduct(p._id, { img: base64Url, image: base64Url })
+            .then(async () => {
+              await syncAdminData();
+              updateAdminDashboard();
+              alert('Product image updated successfully!');
+            })
+            .catch(err => alert(err.message || 'Failed to update product image.'));
+        }
+        currentTableUploadProductId = null;
+        event.target.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function removeTableImage(prodId) {
+      if (!confirm('Are you sure you want to remove the product image? It will revert to the fallback image.')) return;
+      const p = globalProducts.find(item => item && (item._id === prodId || item.id === prodId));
+      if (p) {
+        try {
+          await window.api.updateProduct(p._id, { img: 'assets/images/products/corporate-blazer-detail.png', image: 'assets/images/products/corporate-blazer-detail.png' });
+          await syncAdminData();
+          updateAdminDashboard();
+          alert('Product image reverted to default.');
+        } catch (err) {
+          alert(err.message || 'Failed to revert product image.');
+        }
+      }
+    }
+
+    function initProductImageUpload() {
+      const zone = document.getElementById('product-img-upload-zone');
+      const fileInput = document.getElementById('prod-img-file');
+
+      if (!zone || !fileInput) return;
+
+      zone.addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) handleFileSelected(file);
+      });
+
+      const overlay = document.getElementById('upload-zone-overlay');
+
+      if (overlay) {
+        zone.addEventListener('dragenter', (e) => {
+          e.preventDefault();
+          overlay.classList.remove('hidden');
+        });
+
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          overlay.classList.remove('hidden');
+        });
+
+        overlay.addEventListener('dragleave', (e) => {
+          e.preventDefault();
+          overlay.classList.add('hidden');
+        });
+
+        overlay.addEventListener('drop', (e) => {
+          e.preventDefault();
+          overlay.classList.add('hidden');
+          const file = e.dataTransfer.files[0];
+          if (file) handleFileSelected(file);
+        });
+      }
+    }
+
+    function handleFileSelected(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (PNG, JPG, JPEG, WEBP).');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert('File size exceeds 2MB limit.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Url = e.target.result;
+        document.getElementById('prod-img-url').value = base64Url;
+        updateUploadZonePreview(base64Url);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeModalImage(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('prod-img-url').value = 'assets/images/products/corporate-blazer-detail.png';
+      updateUploadZonePreview('assets/images/products/corporate-blazer-detail.png');
+      document.getElementById('prod-img-file').value = '';
+    }
+
+    function updateUploadZonePreview(src) {
+      const previewZone = document.getElementById('upload-zone-preview');
+      const promptZone = document.getElementById('upload-zone-prompt');
+      const thumb = document.getElementById('upload-preview-thumb');
+
+      if (src && src !== 'assets/images/products/corporate-blazer-detail.png' && src !== '') {
+        if (thumb) thumb.src = src;
+        if (previewZone) previewZone.classList.remove('hidden');
+        if (promptZone) promptZone.classList.add('hidden');
+      } else {
+        if (thumb) thumb.src = '';
+        if (previewZone) previewZone.classList.add('hidden');
+        if (promptZone) promptZone.classList.remove('hidden');
+      }
+    }
+
+    let tempBlogImages = [];
+
+    function initBlogImageUploadListener() {
+      const fileInput = document.getElementById('blog-images-file');
+      if (!fileInput) return;
+      fileInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+          if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            return;
+          }
+          if (file.size > 2 * 1024 * 1024) {
+            alert('Image size exceeds 2MB limit.');
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            tempBlogImages.push(evt.target.result);
+            renderBlogImagesPreview();
+          };
+          reader.readAsDataURL(file);
+        });
+        fileInput.value = '';
+      });
+    }
+
+    function renderBlogImagesPreview() {
+      const previewContainer = document.getElementById('blog-images-preview');
+      if (!previewContainer) return;
+      previewContainer.innerHTML = '';
+      tempBlogImages.forEach((imgSrc, idx) => {
+        const div = document.createElement('div');
+        div.className = 'relative h-16 rounded-lg overflow-hidden border border-lightBorder';
+        div.innerHTML = `
+          <img src="${imgSrc}" class="w-full h-full object-cover">
+          <button type="button" onclick="removeBlogImage(${idx})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/75 hover:bg-primary text-white flex items-center justify-center text-[10px] transition-colors">
+            <i class="ri-close-line"></i>
+          </button>
+        `;
+        previewContainer.appendChild(div);
+      });
+    }
+
+    function removeBlogImage(idx) {
+      tempBlogImages.splice(idx, 1);
+      renderBlogImagesPreview();
+    }
+    window.removeBlogImage = removeBlogImage;
+
+    // Sync data from server
+    async function syncAdminData() {
+      // Use Promise.allSettled so a single failed API call doesn't block all the others
+      const results = await Promise.allSettled([
+        window.api.getUsers(),
+        window.api.getLeads(),
+        window.api.getQuotations(),
+        window.api.getSettings(),
+        window.api.getNotifications('admin'),
+        window.api.getProducts(),
+        window.api.getBlogs(),
+        window.api.getCatalogs(),
+        window.api.getDashboardStats()
+      ]);
+
+      const [usersR, leadsR, quotesR, settingsR, notifR, productsR, blogsR, catalogsR, statsR] = results;
+
+      if (usersR.status === 'fulfilled' && usersR.value.success) {
+        globalUsers = usersR.value.data;
+        localStorage.setItem('uniwear_users', JSON.stringify(usersR.value.data));
+      } else if (usersR.status === 'rejected') {
+        console.warn('[syncAdminData] getUsers failed:', usersR.reason);
+      }
+
+      if (leadsR.status === 'fulfilled' && leadsR.value.success) {
+        globalLeads = leadsR.value.data;
+        localStorage.setItem('uniwear_leads', JSON.stringify(leadsR.value.data));
+      } else if (leadsR.status === 'rejected') {
+        console.warn('[syncAdminData] getLeads failed:', leadsR.reason);
+      }
+
+      if (quotesR.status === 'fulfilled' && quotesR.value.success) {
+        globalQuotations = quotesR.value.data;
+        localStorage.setItem('uniwear_quotations', JSON.stringify(quotesR.value.data));
+      } else if (quotesR.status === 'rejected') {
+        console.warn('[syncAdminData] getQuotations failed:', quotesR.reason);
+      }
+
+      if (settingsR.status === 'fulfilled' && settingsR.value.success) {
+        localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsR.value.data));
+      } else if (settingsR.status === 'rejected') {
+        console.warn('[syncAdminData] getSettings failed:', settingsR.reason);
+      }
+
+      if (notifR.status === 'fulfilled' && notifR.value.success) {
+        globalNotifications = notifR.value.data;
+        localStorage.setItem('uniwear_notifications', JSON.stringify(notifR.value.data));
+      } else if (notifR.status === 'rejected') {
+        console.warn('[syncAdminData] getNotifications failed:', notifR.reason);
+      }
+
+      if (productsR.status === 'fulfilled' && productsR.value.success) {
+        globalProducts = productsR.value.data;
+      } else if (productsR.status === 'rejected') {
+        console.warn('[syncAdminData] getProducts failed:', productsR.reason);
+      }
+
+      if (blogsR.status === 'fulfilled' && blogsR.value.success) {
+        globalBlogs = blogsR.value.data;
+      } else if (blogsR.status === 'rejected') {
+        console.warn('[syncAdminData] getBlogs failed:', blogsR.reason);
+      }
+
+      if (catalogsR.status === 'fulfilled' && catalogsR.value.success) {
+        globalCatalogs = catalogsR.value.data;
+      } else if (catalogsR.status === 'rejected') {
+        console.warn('[syncAdminData] getCatalogs failed:', catalogsR.reason);
+      }
+
+      if (statsR.status === 'fulfilled' && statsR.value.success) {
+        globalDashboardStats = statsR.value.data;
+      } else if (statsR.status === 'rejected') {
+        console.warn('[syncAdminData] getDashboardStats failed:', statsR.reason);
+      }
+    }
+
+    // Strict Auth guard (Requires authenticated JWT token & approved Staff Role)
+    window.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem('uniwear_jwt_token');
+      const role = localStorage.getItem('uniwear_auth_role');
+      const roleDetails = localStorage.getItem('uniwear_auth_role_details');
+      
+      const allowedRoles = ['Super Admin', 'Admin', 'Sales Executive', 'Production Manager'];
+      const isStaff = (role === 'admin' || role === 'Admin' || allowedRoles.includes(roleDetails));
+
+      // Redirect to login if token is missing or user does not possess an authorized staff role
+      if (!token || !role || !isStaff) {
+        if (role === 'client') {
+          window.location.href = 'customer-portal.html';
+        } else {
+          window.location.href = 'login.html';
+        }
+        return;
+      }
+
+      // 1. Initial immediate dashboard render from local state
+      updateAdminDashboard();
+      initProductImageUpload();
+      initBlogImageUploadListener();
+
+      // 2. Fetch live data from backend MongoDB REST API
+      try {
+        await syncAdminData();
+      } catch (err) {
+        console.error("Failed to sync data on page load", err);
+      }
+
+      // 3. Re-render with synchronized live database records
+      updateAdminDashboard();
+    });
+
+    // ─── TAB NAVIGATION ───────────────────────────────────────────────────────
+    const TAB_TITLES = {
+      'admin-dash': 'Dashboard',
+      'admin-customers': 'Customers',
+      'admin-assign-products': 'Customer Product Assignment',
+      'admin-leads': 'Leads',
+      'admin-quotes': 'Quotations',
+      'admin-products': 'Products',
+      'admin-catalog': 'Catalog',
+      'admin-orders': 'Orders & Production Tracker',
+      'admin-blogs': 'Blog',
+      'admin-settings': 'Settings'
+    };
+
+    function setAdminTab(tabId) {
+      // Hide all views
+      document.querySelectorAll('.admin-portal-view').forEach(view => view.classList.add('hidden'));
+
+      // Show target view
+      const target = document.getElementById(tabId);
+      if (!target) return;
+      target.classList.remove('hidden');
+
+      // Reset all sidebar buttons to inactive style
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('text-mutedText', 'hover:bg-lightCard', 'hover:text-charcoal');
+      });
+
+      // Activate the clicked button
+      const activeBtn = document.getElementById('admin-tab-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-mutedText', 'hover:bg-lightCard', 'hover:text-charcoal');
+        activeBtn.classList.add('bg-primary', 'text-white');
+      }
+
+      // Update header title
+      document.getElementById('admin-portal-title').innerText = TAB_TITLES[tabId] || 'Admin Portal';
+
+      // Tab specific hooks
+      if (tabId === 'admin-settings') {
+        loadCompanySettingsForm();
+      } else if (tabId === 'admin-assign-products') {
+        initCustomerProductAssignmentTab();
+      } else if (tabId === 'admin-orders') {
+        renderOrdersTable();
+      } else if (tabId === 'admin-leads') {
+        if (typeof renderLeadsTable === 'function') renderLeadsTable();
+      } else if (tabId === 'admin-quotes') {
+        if (typeof renderQuotationsTable === 'function') renderQuotationsTable();
+      } else if (tabId === 'admin-products') {
+        if (typeof renderProductsTable === 'function') renderProductsTable();
+      } else if (tabId === 'admin-catalog') {
+        if (typeof renderCatalogsTable === 'function') renderCatalogsTable();
+      } else if (tabId === 'admin-blogs') {
+        if (typeof renderBlogsTable === 'function') renderBlogsTable();
+      } else if (tabId === 'admin-customers') {
+        if (typeof renderCustomersTable === 'function') renderCustomersTable();
+      }
+
+      // Refresh data
+      updateAdminDashboard();
+
+      // Auto-close sidebar on mobile
+      if (window.innerWidth < 768) {
+        toggleSidebar(false);
+      }
+    }
+
+    async function loadCompanySettingsForm() {
+      // Always fetch fresh settings from the API (not just localStorage cache)
+      let settings = {};
+      try {
+        const res = await window.api.getSettings();
+        if (res.success && res.data) {
+          settings = res.data;
+          // Update cache with fresh data
+          localStorage.setItem('uniwear_company_settings', JSON.stringify(settings));
+        }
+      } catch (err) {
+        console.warn('[Settings] API unavailable, falling back to localStorage cache:', err.message);
+        settings = JSON.parse(localStorage.getItem('uniwear_company_settings')) || {};
+      }
+
+      // Apply defaults for any missing fields
+      settings = Object.assign({
+        companyName: 'UNIWEAR',
+        supportEmail: 'connect@uniwear.co',
+        salesEmail: 'sales@uniwear.co',
+        phone: '91087 65831, 98459 32201',
+        address: 'No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070',
+        logoUrl: '',
+        faviconUrl: '',
+        notificationEmail: 'connect@uniwear.co',
+        ccEmail: ''
+      }, settings);
+
+      document.getElementById('settings-company-name').value = settings.companyName || '';
+      document.getElementById('settings-support-email').value = settings.supportEmail || '';
+      document.getElementById('settings-sales-email').value = settings.salesEmail || '';
+      document.getElementById('settings-phone').value = settings.phone || '';
+      document.getElementById('settings-address').value = settings.address || '';
+      document.getElementById('settings-notification-email').value = settings.notificationEmail || '';
+      document.getElementById('settings-cc-email').value = settings.ccEmail || '';
+
+      // Main/Long Logo Preview
+      const previewLong = document.getElementById('settings-logo-preview');
+      const hiddenInputLong = document.getElementById('settings-logo-data');
+      if (settings.logoUrl) {
+        previewLong.src = settings.logoUrl;
+        hiddenInputLong.value = settings.logoUrl;
+      } else {
+        previewLong.src = 'assets/logos/logo-icon.svg';
+        hiddenInputLong.value = '';
+      }
+
+      // Favicon Logo Preview
+      const previewFavicon = document.getElementById('settings-favicon-preview');
+      const hiddenInputFavicon = document.getElementById('settings-favicon-data');
+      if (settings.faviconUrl) {
+        previewFavicon.src = settings.faviconUrl;
+        hiddenInputFavicon.value = settings.faviconUrl;
+      } else {
+        previewFavicon.src = 'assets/logos/logo-icon.svg';
+        hiddenInputFavicon.value = '';
+      }
+    }
+
+    function triggerLogoUpload(type) {
+      if (type === 'long') {
+        document.getElementById('settings-logo-file').click();
+      } else if (type === 'favicon') {
+        document.getElementById('settings-favicon-file').click();
+      }
+    }
+
+    function handleLogoUpload(event, type) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (PNG, JPG, JPEG, WEBP, SVG).');
+        return;
+      }
+      if (file.size > 500 * 1024) {
+        alert('Logo file size exceeds 500KB limit.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Url = e.target.result;
+        if (type === 'long') {
+          document.getElementById('settings-logo-preview').src = base64Url;
+          document.getElementById('settings-logo-data').value = base64Url;
+        } else if (type === 'favicon') {
+          document.getElementById('settings-favicon-preview').src = base64Url;
+          document.getElementById('settings-favicon-data').value = base64Url;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetLogoToDefault(type) {
+      if (type === 'long') {
+        document.getElementById('settings-logo-preview').src = 'assets/logos/logo-icon.svg';
+        document.getElementById('settings-logo-data').value = '';
+        document.getElementById('settings-logo-file').value = '';
+      } else if (type === 'favicon') {
+        document.getElementById('settings-favicon-preview').src = 'assets/logos/logo-icon.svg';
+        document.getElementById('settings-favicon-data').value = '';
+        document.getElementById('settings-favicon-file').value = '';
+      }
+    }
+
+    async function submitCompanySettings(event) {
+      event.preventDefault();
+      const settings = {
+        companyName: document.getElementById('settings-company-name').value.trim(),
+        supportEmail: document.getElementById('settings-support-email').value.trim(),
+        salesEmail: document.getElementById('settings-sales-email').value.trim(),
+        phone: document.getElementById('settings-phone').value.trim(),
+        address: document.getElementById('settings-address').value.trim(),
+        logoUrl: document.getElementById('settings-logo-data').value,
+        faviconUrl: document.getElementById('settings-favicon-data').value,
+        notificationEmail: document.getElementById('settings-notification-email').value.trim(),
+        ccEmail: document.getElementById('settings-cc-email').value.trim()
+      };
+
+      try {
+        await window.api.updateSettings(settings);
+        await syncAdminData();
+
+        // Apply branding changes instantly
+        if (typeof applyCompanySettings === 'function') {
+          applyCompanySettings();
+        }
+
+        alert('Branding and company settings updated successfully!');
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to update settings.');
+      }
+    }
+
+    async function submitAdminChangePassword(event) {
+      event.preventDefault();
+      const currentPassword = document.getElementById('admin-pass-current').value;
+      const newPassword = document.getElementById('admin-pass-new').value;
+      const confirmPassword = document.getElementById('admin-pass-confirm').value;
+
+      if (newPassword !== confirmPassword) {
+        alert("New password and confirmation password do not match.");
+        return;
+      }
+
+      if (newPassword.length < 6) {
+        alert("New password must be at least 6 characters long.");
+        return;
+      }
+
+      try {
+        const res = await window.api.changePassword({
+          currentPassword,
+          newPassword,
+          confirmPassword
+        });
+
+        alert(res.message || "Password updated successfully. Please log in again with your new password.");
+        event.target.reset();
+
+        // Invalidate current authentication session and redirect to login page
+        handleLogout();
+      } catch (err) {
+        alert(err.message || "Failed to update password.");
+      }
+    }
+
+    // ─── LOGOUT ────────────────────────────────────────────────────────────────
+    function handleLogout() {
+      localStorage.removeItem('uniwear_auth_role');
+      localStorage.removeItem('uniwear_auth_role_details');
+      localStorage.removeItem('uniwear_auth_email');
+      window.location.href = 'login.html';
+    }
+
+    // ─── MODAL HELPER ──────────────────────────────────────────────────────────
+    function toggleModal(modalId, show) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      if (show) {
+        modal.classList.remove('hidden');
+        const inner = modal.querySelector('.relative');
+        if (inner && typeof gsap !== 'undefined') {
+          gsap.from(inner, { scale: 0.95, opacity: 0, duration: 0.25 });
+        }
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    async function filterLeadsBySource(source) {
+      activeLeadFilter = source;
+      document.querySelectorAll('.lead-filter-btn').forEach(btn => {
+        btn.classList.remove('border-primary', 'bg-primary', 'text-white');
+        btn.classList.add('border-lightBorder', 'text-mutedText', 'bg-white');
+      });
+      const btnId = 'lead-filter-' + source.replace(/\s+/g, '');
+      const activeBtn = document.getElementById(btnId);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-lightBorder', 'text-mutedText', 'bg-white');
+        activeBtn.classList.add('border-primary', 'bg-primary', 'text-white');
+      }
+      const q = document.getElementById('leads-search-input') ? document.getElementById('leads-search-input').value.trim() : '';
+      try {
+        const res = await window.api.getLeads({ search: q, source: activeLeadFilter });
+        if (res.success) {
+          globalLeads = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    // ─── BACKEND SEARCH HANDLERS ────────────────────────────────────────────────
+    async function handleProductSearch() {
+      productSearchQuery = document.getElementById('product-search-input').value.trim();
+      productCategoryFilter = document.getElementById('product-filter-category').value;
+      const sortVal = document.getElementById('product-sort-by').value.split('-');
+      productSort = sortVal[0];
+      productSortOrder = sortVal[1];
+
+      try {
+        const queryParams = {
+          search: productSearchQuery,
+          category: productCategoryFilter,
+          sort: productSort,
+          order: productSortOrder
+        };
+        const res = await window.api.getProducts(queryParams);
+        if (res.success) {
+          globalProducts = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) {
+        console.error("Failed to search products:", err);
+      }
+    }
+
+    async function handleLeadsSearch() {
+      const q = document.getElementById('leads-search-input').value.trim();
+      try {
+        const res = await window.api.getLeads({ search: q, source: activeLeadFilter });
+        if (res.success) {
+          globalLeads = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function handleQuotesSearch() {
+      const q = document.getElementById('quotes-search-input').value.trim();
+      try {
+        const res = await window.api.getQuotations({ search: q });
+        if (res.success) {
+          globalQuotations = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function handleCustomersSearch() {
+      const q = document.getElementById('customers-search-input').value.trim();
+      try {
+        const res = await window.api.getUsers({ search: q, status: activeCustomerFilter });
+        if (res.success) {
+          globalUsers = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function handleBlogsSearch() {
+      const q = document.getElementById('blogs-search-input').value.trim();
+      try {
+        const res = await window.api.getBlogs({ search: q });
+        if (res.success) {
+          globalBlogs = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function exportModule(moduleName) {
+      if (window.api && typeof window.api.getExportUrl === 'function') {
+        window.open(window.api.getExportUrl(moduleName), '_blank');
+      } else {
+        window.open('/api/export/' + moduleName, '_blank');
+      }
+    }
+    window.exportModule = exportModule;
+
+    async function handleCatalogSearch() {
+      const q = document.getElementById('catalog-search-input').value.trim();
+      try {
+        const res = await window.api.getCatalogs({ search: q });
+        if (res.success) {
+          globalCatalogs = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    // ─── DASHBOARD DATA RENDER ─────────────────────────────────────────────────
+    function updateAdminDashboard() {
+      // ── Stat counters ──
+      const elLeads = document.getElementById('admin-stat-leads');
+      if (elLeads) elLeads.innerText = (globalDashboardStats && globalDashboardStats.leads !== undefined) ? globalDashboardStats.leads : (globalLeads ? globalLeads.length : 0);
+
+      const elQuotes = document.getElementById('admin-stat-open-quotes');
+      if (elQuotes) elQuotes.innerText = (globalDashboardStats && globalDashboardStats.quotes !== undefined) ? globalDashboardStats.quotes : (globalQuotations ? globalQuotations.length : 0);
+
+      const elProds = document.getElementById('admin-stat-products');
+      if (elProds) elProds.innerText = (globalDashboardStats && globalDashboardStats.products !== undefined) ? globalDashboardStats.products : (globalProducts ? globalProducts.length : 0);
+
+      const elBlogs = document.getElementById('admin-stat-blogs');
+      if (elBlogs) elBlogs.innerText = (globalDashboardStats && globalDashboardStats.blogs !== undefined) ? globalDashboardStats.blogs : (globalBlogs ? globalBlogs.length : 0);
+
+      const elCust = document.getElementById('admin-stat-active-customers');
+      if (elCust) elCust.innerText = (globalDashboardStats && globalDashboardStats.activeCustomers !== undefined) ? globalDashboardStats.activeCustomers : (globalUsers ? globalUsers.filter(u => u.status === 'Active').length : 0);
+
+      const elPending = document.getElementById('admin-stat-pending-customers');
+      if (elPending) elPending.innerText = (globalDashboardStats && globalDashboardStats.pendingCustomers !== undefined) ? globalDashboardStats.pendingCustomers : (globalUsers ? globalUsers.filter(u => u.status === 'Pending').length : 0);
+
+      // ── Dashboard: Recent Activity Logs ──
+      const recentActivityBody = document.getElementById('admin-dash-recent-activity');
+      if (recentActivityBody) {
+        recentActivityBody.innerHTML = '';
+        const logs = globalDashboardStats.recentActivity || [];
+        if (logs.length === 0) {
+          recentActivityBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-mutedText text-xs font-body">No activity logged yet.</td></tr>`;
+        } else {
+          logs.forEach(log => {
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+            tr.innerHTML = `
+              <td class="p-4 font-bold text-charcoal">
+                <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-gray-100 text-gray-700">${log.action}</span>
+              </td>
+              <td class="p-4 font-semibold text-mutedText">${log.details}</td>
+              <td class="p-4 font-mono text-xs">${log.user}</td>
+              <td class="p-4 font-mono text-gray-400">${new Date(log.timestamp).toLocaleString()}</td>
+            `;
+            recentActivityBody.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Dashboard: Recent Leads (last 5) ──
+      const recentLeadsBody = document.getElementById('admin-dash-recent-leads');
+      if (recentLeadsBody) {
+        recentLeadsBody.innerHTML = '';
+        const recentLeads = globalLeads.slice(0, 5);
+        if (recentLeads.length === 0) {
+          recentLeadsBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-mutedText text-xs font-body">No leads yet.</td></tr>`;
+        } else {
+          recentLeads.forEach(l => {
+            if (!l) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+            const stageColors = { 'Won': 'bg-green-100 text-green-700', 'Lost': 'bg-red-100 text-red-600', 'New Lead': 'bg-blue-100 text-blue-700' };
+            const stageStyle = stageColors[l.stage] || 'bg-gray-100 text-gray-600';
+            tr.innerHTML = `
+              <td class="p-4 font-bold text-charcoal">${l.name || ''}</td>
+              <td class="p-4 font-semibold text-mutedText">${l.company || ''}</td>
+              <td class="p-4">${l.category || ''}</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase ${stageStyle}">${l.stage || ''}</span></td>
+              <td class="p-4 font-mono text-gray-400">${l.date || ''}</td>
+            `;
+            recentLeadsBody.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Dashboard: Recent Quotations (last 5) ──
+      const recentQuotesBody = document.getElementById('admin-dash-recent-quotes');
+      if (recentQuotesBody) {
+        recentQuotesBody.innerHTML = '';
+        const recentQuotes = globalQuotations.slice(0, 5);
+        if (recentQuotes.length === 0) {
+          recentQuotesBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-mutedText text-xs font-body">No quotations yet.</td></tr>`;
+        } else {
+          recentQuotes.forEach(q => {
+            if (!q) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+            const qColors = { 'Approved': 'bg-green-100 text-green-700', 'Rejected': 'bg-red-100 text-red-600', 'Declined': 'bg-red-100 text-red-600', 'Revised': 'bg-blue-100 text-blue-700' };
+            const qStyle = qColors[q.status] || 'bg-yellow-100 text-yellow-700';
+            tr.innerHTML = `
+              <td class="p-4 font-mono font-bold text-charcoal">${q.id || ''}</td>
+              <td class="p-4 text-mutedText">${q.clientEmail || ''}</td>
+              <td class="p-4 font-semibold">${q.productClass || ''}</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase ${qStyle}">${q.status || ''}</span></td>
+            `;
+            recentQuotesBody.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Leads Table ──
+      const tbodyLeads = document.getElementById('admin-leads-table-body');
+      if (tbodyLeads) {
+        tbodyLeads.innerHTML = '';
+        if (globalLeads.length === 0) {
+          tbodyLeads.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-mutedText text-xs font-body">No active business leads.</td></tr>`;
+        } else {
+          globalLeads.forEach((l) => {
+            if (!l) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+
+            const stages = ['New Lead', 'Contacted', 'Quotation Sent', 'Negotiation', 'Won', 'Lost'];
+            let options = '';
+            stages.forEach(s => {
+              options += `<option value="${s}" ${l.stage === s ? 'selected' : ''}>${s}</option>`;
+            });
+
+            let sourceBadge = '';
+            if (l.source === 'Design Studio') {
+              sourceBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-indigo-100 text-indigo-700 border border-indigo-200">Design Studio</span>`;
+            } else if (l.source === 'Contact Form') {
+              sourceBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700 border border-blue-200">Contact Form</span>`;
+            } else if (l.source === 'Chatbot' || l.source === 'AI Assistant') {
+              sourceBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-100 text-purple-700 border border-purple-200">Chatbot</span>`;
+            } else {
+              sourceBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-gray-100 text-gray-700 border border-gray-200">${l.source || 'Website'}</span>`;
+            }
+
+            tr.innerHTML = `
+              <td class="p-4 font-bold text-charcoal">${l.name || ''}</td>
+              <td class="p-4 font-semibold">${l.company || ''}</td>
+              <td class="p-4 font-mono select-all">${l.email || ''}</td>
+              <td class="p-4 font-mono">${l.phone || ''}</td>
+              <td class="p-4">${l.category || ''}</td>
+              <td class="p-4">${sourceBadge}</td>
+              <td class="p-4 font-mono text-gray-500">${l.date || ''}</td>
+              <td class="p-4">
+                <select onchange="updateLeadStage('${l._id}', this.value)" class="bg-lightCard border border-lightBorder rounded py-1 px-2 text-[10px] text-charcoal font-semibold focus:outline-none focus:border-primary font-body">
+                  ${options}
+                </select>
+              </td>
+              <td class="p-4 text-right flex justify-end gap-2 pt-6">
+                <button onclick="convertLeadToQuote('${l._id}')" class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">Convert to Quote</button>
+                <button onclick="deleteLead('${l._id}')" class="bg-gray-100 hover:bg-red-50 text-mutedText hover:text-red-500 p-1.5 rounded transition-colors"><i class="ri-delete-bin-line"></i></button>
+              </td>
+            `;
+            tbodyLeads.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Quotes Table ──
+      const tbodyQuotes = document.getElementById('admin-quotes-table-body');
+      if (tbodyQuotes) {
+        tbodyQuotes.innerHTML = '';
+        if (globalQuotations.length === 0) {
+          tbodyQuotes.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No quotation requests cataloged.</td></tr>`;
+        } else {
+          globalQuotations.forEach(q => {
+            if (!q) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+
+            let btnGroup = '';
+            if (q.status !== 'Approved' && q.status !== 'Rejected' && q.status !== 'Declined' && q.status !== 'Converted to Order') {
+              btnGroup = `
+                <div class="flex justify-end gap-2">
+                  <button onclick="approveDirectQuote('${q.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Approve</button>
+                  <button onclick="openReviseQuoteModal('${q.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Revise</button>
+                  <button onclick="declineDirectQuote('${q.id}')" class="bg-charcoal hover:bg-black text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Reject</button>
+                </div>
+              `;
+            } else {
+              btnGroup = `<span class="text-gray-400 italic text-[10px]">Processed (${q.status})</span>`;
+            }
+
+            const statusColors = { 'Approved': 'bg-green-100 text-green-700', 'Revised': 'bg-blue-100 text-blue-700', 'Rejected': 'bg-red-100 text-red-600', 'Declined': 'bg-red-100 text-red-600' };
+            const statusStyle = statusColors[q.status] || 'bg-yellow-100 text-yellow-700';
+
+            tr.innerHTML = `
+              <td class="p-4 font-mono font-bold text-charcoal">${q.id}</td>
+              <td class="p-4 font-semibold text-gray-500">${q.clientEmail || ''}</td>
+              <td class="p-4 font-semibold">${q.productClass || ''}</td>
+              <td class="p-4">${q.volume || 0} Sets</td>
+              <td class="p-4 text-xs text-mutedText max-w-xs truncate" title="${q.specs || 'None'}">${q.specs || 'None'}</td>
+              <td class="p-4">
+                <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${q.status || ''}</span>
+              </td>
+              <td class="p-4 text-right pt-6">${btnGroup}</td>
+            `;
+            tbodyQuotes.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Products Table ──
+      const tbodyProds = document.getElementById('admin-products-table-body');
+      if (tbodyProds) {
+        tbodyProds.innerHTML = '';
+        if (globalProducts.length === 0) {
+          tbodyProds.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No products in catalog.</td></tr>`;
+        } else {
+          globalProducts.forEach(p => {
+            if (!p) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+            const featuredBadge = p.featured ? `<span class="ml-2 bg-yellow-100 text-yellow-800 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider inline-flex items-center gap-0.5 font-body"><i class="ri-star-fill text-[9px]"></i> Featured</span>` : '';
+            const imgPath = p.img || 'assets/images/products/corporate-blazer-detail.png';
+            tr.innerHTML = `
+              <td class="p-4">
+                <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard group/img cursor-pointer" onclick="triggerTableImageUpload('${p._id}')">
+                  <img src="${imgPath}" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-charcoal/50 flex items-center justify-center text-white opacity-0 group-hover/img:opacity-100 transition-opacity">
+                    <i class="ri-upload-2-line text-xs"></i>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4 font-bold text-charcoal">${p.name || ''} ${featuredBadge}</td>
+              <td class="p-4 text-primary font-bold text-[10px] uppercase font-heading">${p.category || ''}</td>
+              <td class="p-4 font-medium">${p.fabric || ''} (${p.gsm || ''})</td>
+              <td class="p-4 font-semibold">${p.moq || 0} Sets</td>
+              <td class="p-4 text-mutedText truncate max-w-xs">${p.desc || ''}</td>
+              <td class="p-4">
+                ${(p.isPublic !== false) ? `<button onclick="toggleProductPublic('${p._id}', false)" class="px-2.5 py-1 rounded-full text-[9px] font-bold uppercase bg-green-100 text-green-700 border border-green-200 hover:bg-green-200 transition-colors inline-flex items-center gap-1 cursor-pointer" title="Click to Hide from Website"><i class="ri-global-line"></i> Public</button>` : `<button onclick="toggleProductPublic('${p._id}', true)" class="px-2.5 py-1 rounded-full text-[9px] font-bold uppercase bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200 transition-colors inline-flex items-center gap-1 cursor-pointer" title="Click to Make Public"><i class="ri-lock-line"></i> Hidden</button>`}
+              </td>
+              <td class="p-4 text-right pt-6">
+                <div class="flex justify-end items-center gap-2">
+                  <button onclick="triggerTableImageUpload('${p._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Upload/Replace Image"><i class="ri-image-add-line"></i></button>
+                  ${(p.img && p.img !== 'assets/images/products/corporate-blazer-detail.png') ? `<button onclick="removeTableImage('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Remove Image"><i class="ri-close-line text-xs"></i></button>` : ''}
+                  <button onclick="openProductModal('edit', '${p._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Product"><i class="ri-edit-line"></i></button>
+                  <button onclick="deleteProduct('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Product"><i class="ri-delete-bin-line"></i></button>
+                </div>
+              </td>
+            `;
+            tbodyProds.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Catalog Table ──
+      const tbodyCatalog = document.getElementById('admin-catalog-table-body');
+      if (tbodyCatalog) {
+        tbodyCatalog.innerHTML = '';
+        if (globalCatalogs.length === 0) {
+          tbodyCatalog.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No catalog collections managed.</td></tr>`;
+        } else {
+          globalCatalogs.forEach(cat => {
+            if (!cat) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+            const statusStyle = cat.status === 'Publish' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600';
+            
+            tr.innerHTML = `
+              <td class="p-4">
+                <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard">
+                  <img src="${cat.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-full h-full object-cover">
+                </div>
+              </td>
+              <td class="p-4 font-bold text-charcoal">${cat.title || ''}</td>
+              <td class="p-4 text-primary font-bold text-[10px] uppercase font-heading">${cat.category || ''}</td>
+              <td class="p-4 font-mono font-semibold">${cat.displayOrder || 0}</td>
+              <td class="p-4 font-medium">${cat.format || 'PDF Brochure'} (${cat.pages || 0} pages)</td>
+              <td class="p-4">
+                <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${cat.status || 'Publish'}</span>
+              </td>
+              <td class="p-4 text-right flex justify-end gap-2 pt-6">
+                <button onclick="openCatalogModal('edit', '${cat._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Collection"><i class="ri-edit-line"></i></button>
+                <button onclick="deleteCatalog('${cat._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Collection"><i class="ri-delete-bin-line"></i></button>
+              </td>
+            `;
+            tbodyCatalog.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Blogs Table ──
+      const tbodyBlogs = document.getElementById('admin-blogs-table-body');
+      if (tbodyBlogs) {
+        tbodyBlogs.innerHTML = '';
+        if (globalBlogs.length === 0) {
+          tbodyBlogs.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-mutedText text-xs font-body">No blog articles published.</td></tr>`;
+        } else {
+          globalBlogs.forEach(b => {
+            if (!b) return;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs';
+            const statusColors = { 'Published': 'bg-green-100 text-green-700', 'Draft': 'bg-gray-100 text-gray-600', 'Scheduled': 'bg-blue-100 text-blue-700' };
+            const statusStyle = statusColors[b.status] || 'bg-gray-100 text-gray-600';
+            tr.innerHTML = `
+              <td class="p-4 font-bold text-charcoal">${b.title || ''}</td>
+              <td class="p-4 text-primary font-bold text-[10px] uppercase font-heading">${b.category || ''}</td>
+              <td class="p-4 font-semibold">${b.author || ''}</td>
+              <td class="p-4 text-gray-400 font-mono">${b.date || ''}</td>
+              <td class="p-4">
+                <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${b.status || 'Published'}</span>
+              </td>
+              <td class="p-4 text-right flex justify-end gap-2 pt-6">
+                <button onclick="openBlogModal('edit', '${b._id || String(b.id || '')}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit"><i class="ri-edit-line"></i></button>
+                <button onclick="deleteBlog('${b._id || String(b.id || '')}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete"><i class="ri-delete-bin-line"></i></button>
+              </td>
+            `;
+            tbodyBlogs.appendChild(tr);
+          });
+        }
+      }
+
+      // ── Full Customers Table ──
+      renderCustomersTable(globalUsers);
+
+      if (window.refreshHoverables) window.refreshHoverables();
+    }
+
+    // ─── LEADS ─────────────────────────────────────────────────────────────────
+    async function updateLeadStage(leadId, newStage) {
+      try {
+        await window.api.updateLead(leadId, { stage: newStage });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to update lead stage.');
+      }
+    }
+
+    async function deleteLead(leadId) {
+      if (!confirm('Delete this lead?')) return;
+      try {
+        await window.api.deleteLead(leadId);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to delete lead.');
+      }
+    }
+
+    async function convertLeadToQuote(leadId) {
+      const lead = globalLeads.find(l => l._id === leadId);
+      if (!lead) return;
+
+      const qId = 'UW-Quote-' + Math.floor(100 + Math.random() * 900);
+      const quotePayload = {
+        id: qId,
+        clientEmail: lead.email || 'client@uniwear.co',
+        productClass: lead.category,
+        volume: lead.volume || 0,
+        date: new Date().toISOString().split('T')[0],
+        value: '₹' + ((lead.volume || 0) * 850).toLocaleString(),
+        status: 'Approved',
+        specs: lead.details || 'Converted from sales consultation lead.'
+      };
+
+      try {
+        await window.api.createQuotation(quotePayload);
+        await window.api.deleteLead(lead._id);
+
+        // Notify
+        await window.api.createNotification({
+          recipient: 'admin',
+          title: 'Lead Converted',
+          text: `Lead from ${lead.company} converted to quotation ${qId}.`
+        });
+
+        await syncAdminData();
+        alert('Lead converted successfully to quotation ' + qId + '.');
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to convert lead to quote.');
+      }
+    }
+
+    // ─── QUOTATIONS ────────────────────────────────────────────────────────────
+    async function approveDirectQuote(quoteId) {
+      const q = globalQuotations.find(item => item.id === quoteId);
+      if (!q) return;
+
+      try {
+        const val = '₹' + ((q.volume || 0) * 850).toLocaleString();
+        await window.api.updateQuotation(q._id, { status: 'Approved', value: val });
+        await syncAdminData();
+        alert('Quotation approved with value: ' + val);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to approve quotation.');
+      }
+    }
+
+    async function declineDirectQuote(quoteId) {
+      if (!confirm('Reject this quotation?')) return;
+      const q = globalQuotations.find(item => item.id === quoteId);
+      if (!q) return;
+
+      try {
+        await window.api.updateQuotation(q._id, { status: 'Rejected' });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to reject quotation.');
+      }
+    }
+
+    function openReviseQuoteModal(quoteId) {
+      const q = globalQuotations.find(item => item.id === quoteId);
+      if (!q) return;
+
+      document.getElementById('revise-quote-id').value = q.id;
+      document.getElementById('revise-quote-cat').value = q.productClass;
+      document.getElementById('revise-quote-volume').value = q.volume;
+      document.getElementById('revise-quote-value').value = q.value || ('₹' + ((q.volume || 0) * 850).toLocaleString());
+
+      toggleModal('admin-revise-quote-modal', true);
+    }
+
+    async function submitReviseQuotation(event) {
+      event.preventDefault();
+      const qId = document.getElementById('revise-quote-id').value;
+      const cat = document.getElementById('revise-quote-cat').value;
+      const vol = parseInt(document.getElementById('revise-quote-volume').value);
+      const val = document.getElementById('revise-quote-value').value;
+
+      const q = globalQuotations.find(item => item.id === qId);
+      if (!q) return;
+
+      try {
+        await window.api.updateQuotation(q._id, {
+          productClass: cat,
+          volume: vol,
+          value: val,
+          status: 'Revised'
+        });
+        await syncAdminData();
+        toggleModal('admin-revise-quote-modal', false);
+        alert('Quotation revised successfully.');
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to revise quotation.');
+      }
+    }
+
+    function openCreateQuoteModal() {
+      document.getElementById('create-quote-email').value = '';
+      document.getElementById('create-quote-volume').value = '';
+      document.getElementById('create-quote-value').value = '';
+      document.getElementById('create-quote-specs').value = '';
+      toggleModal('admin-create-quote-modal', true);
+    }
+
+    async function submitCreateQuotation(event) {
+      event.preventDefault();
+      const email = document.getElementById('create-quote-email').value.trim().toLowerCase();
+      const prodLine = document.getElementById('create-quote-cat').value;
+      const volume = parseInt(document.getElementById('create-quote-volume').value);
+      let valueVal = document.getElementById('create-quote-value').value.trim();
+      const specs = document.getElementById('create-quote-specs').value.trim();
+
+      if (!valueVal.startsWith('₹')) valueVal = '₹' + valueVal;
+
+      const qId = 'UW-Quote-' + Math.floor(100 + Math.random() * 900);
+
+      const quotePayload = {
+        id: qId,
+        clientEmail: email,
+        productClass: prodLine,
+        volume: volume,
+        date: new Date().toISOString().split('T')[0],
+        value: valueVal,
+        status: 'Awaiting Admin Review',
+        specs: specs
+      };
+
+      try {
+        await window.api.createQuotation(quotePayload);
+        await syncAdminData();
+        toggleModal('admin-create-quote-modal', false);
+        alert('Quotation ' + qId + ' created for ' + email + '.');
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to create quotation.');
+      }
+    }
+
+    // ─── PRODUCTS CRUD ─────────────────────────────────────────────────────────
+    function openProductModal(action, prodId) {
+      document.getElementById('product-modal-action').value = action;
+
+      if (action === 'add') {
+        document.getElementById('product-modal-title').innerText = 'Add New Product';
+        document.getElementById('prod-name').value = '';
+        document.getElementById('prod-fabric').value = '';
+        document.getElementById('prod-gsm').value = '';
+        document.getElementById('prod-moq').value = '';
+        document.getElementById('prod-img-url').value = 'assets/images/products/corporate-blazer-detail.png';
+        updateUploadZonePreview('assets/images/products/corporate-blazer-detail.png');
+        document.getElementById('prod-desc').value = '';
+        document.getElementById('prod-featured').checked = false;
+        if (document.getElementById('prod-is-public')) document.getElementById('prod-is-public').checked = false;
+        if (document.getElementById('prod-status')) document.getElementById('prod-status').value = 'Active';
+        if (document.getElementById('prod-sort-order')) document.getElementById('prod-sort-order').value = '0';
+        if (document.getElementById('loc-uniforms')) document.getElementById('loc-uniforms').checked = true;
+        if (document.getElementById('loc-gifting')) document.getElementById('loc-gifting').checked = true;
+        if (document.getElementById('loc-featured')) document.getElementById('loc-featured').checked = false;
+        if (document.getElementById('loc-new-arrivals')) document.getElementById('loc-new-arrivals').checked = false;
+        document.getElementById('product-modal-id').value = '';
+      } else {
+        document.getElementById('product-modal-title').innerText = 'Edit Product';
+        const p = globalProducts.find(item => item && (item._id === prodId || item.id === prodId));
+        if (!p) return;
+
+        document.getElementById('product-modal-id').value = p._id;
+        document.getElementById('prod-name').value = p.name;
+        document.getElementById('prod-cat').value = p.category;
+        document.getElementById('prod-fabric').value = p.fabric || '';
+        document.getElementById('prod-gsm').value = p.gsm || '';
+        document.getElementById('prod-moq').value = p.moq || '';
+        document.getElementById('prod-img-url').value = p.img || 'assets/images/products/corporate-blazer-detail.png';
+        updateUploadZonePreview(p.img || 'assets/images/products/corporate-blazer-detail.png');
+        document.getElementById('prod-desc').value = p.desc || p.description || '';
+        document.getElementById('prod-featured').checked = p.featured || false;
+        if (document.getElementById('prod-is-public')) document.getElementById('prod-is-public').checked = (p.isPublic !== false);
+        if (document.getElementById('prod-status')) document.getElementById('prod-status').value = p.status || 'Active';
+        if (document.getElementById('prod-sort-order')) document.getElementById('prod-sort-order').value = p.sortOrder || p.displayOrder || 0;
+        const locs = p.displayLocations || ['uniforms', 'gifting', 'featured'];
+        if (document.getElementById('loc-uniforms')) document.getElementById('loc-uniforms').checked = locs.includes('uniforms');
+        if (document.getElementById('loc-gifting')) document.getElementById('loc-gifting').checked = locs.includes('gifting');
+        if (document.getElementById('loc-featured')) document.getElementById('loc-featured').checked = locs.includes('featured');
+        if (document.getElementById('loc-new-arrivals')) document.getElementById('loc-new-arrivals').checked = locs.includes('new_arrivals');
+      }
+
+      toggleModal('admin-product-modal', true);
+    }
+
+    async function submitAdminProduct(event) {
+      event.preventDefault();
+      const action = document.getElementById('product-modal-action').value;
+      const payload = {
+        name: document.getElementById('prod-name').value.trim(),
+        category: document.getElementById('prod-cat').value,
+        fabric: document.getElementById('prod-fabric').value.trim(),
+        gsm: document.getElementById('prod-gsm').value.trim(),
+        moq: parseInt(document.getElementById('prod-moq').value) || 50,
+        img: document.getElementById('prod-img-url').value || 'assets/images/products/corporate-blazer-detail.png',
+        image: document.getElementById('prod-img-url').value || 'assets/images/products/corporate-blazer-detail.png',
+        desc: document.getElementById('prod-desc').value.trim(),
+        description: document.getElementById('prod-desc').value.trim(),
+        featured: document.getElementById('prod-featured').checked,
+        isPublic: document.getElementById('prod-is-public') ? document.getElementById('prod-is-public').checked : false,
+        status: document.getElementById('prod-status') ? document.getElementById('prod-status').value : 'Active',
+        sortOrder: parseInt(document.getElementById('prod-sort-order').value) || 0,
+        displayLocations: [
+          document.getElementById('loc-uniforms')?.checked ? 'uniforms' : null,
+          document.getElementById('loc-gifting')?.checked ? 'gifting' : null,
+          document.getElementById('loc-featured')?.checked ? 'featured' : null,
+          document.getElementById('loc-new-arrivals')?.checked ? 'new_arrivals' : null
+        ].filter(Boolean)
+      };
+
+      try {
+        if (action === 'add') {
+          await window.api.createProduct(payload);
+          alert('Product added successfully!');
+        } else {
+          const id = document.getElementById('product-modal-id').value;
+          await window.api.updateProduct(id, payload);
+          alert('Product updated successfully!');
+        }
+        await syncAdminData();
+        toggleModal('admin-product-modal', false);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to save product.');
+      }
+    }
+
+    
+    async function toggleProductPublic(prodId, isPublic) {
+      try {
+        await window.api.updateProduct(prodId, { isPublic: isPublic });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to toggle product visibility.');
+      }
+    }
+
+    async function deleteProduct(prodId) {
+      if (!confirm('Delete this product?')) return;
+      try {
+        await window.api.deleteProduct(prodId);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to delete product.');
+      }
+    }
+
+    // ─── CATALOG CMS CRUD ──────────────────────────────────────────────────────
+    function openCatalogModal(action, catalogId) {
+      document.getElementById('catalog-modal-action').value = action;
+      populateCatalogProductsCheckboxes();
+
+      if (action === 'add') {
+        document.getElementById('catalog-modal-title').innerText = 'Add Catalog Collection';
+        document.getElementById('cat-title').value = '';
+        document.getElementById('cat-category').value = '';
+        document.getElementById('cat-slug').value = '';
+        document.getElementById('cat-format').value = 'PDF Brochure';
+        document.getElementById('cat-pages').value = '32';
+        document.getElementById('cat-size').value = '5.0 MB';
+        document.getElementById('cat-order').value = '';
+        document.getElementById('cat-status').value = 'Publish';
+        document.getElementById('cat-description').value = '';
+        document.getElementById('cat-img').value = '';
+        document.getElementById('cat-banner-image').value = '';
+        document.getElementById('cat-banner-title').value = '';
+        document.getElementById('cat-banner-desc').value = '';
+        document.getElementById('cat-seo-title').value = '';
+        document.getElementById('cat-meta-image').value = '';
+        document.getElementById('cat-seo-desc').value = '';
+        document.getElementById('catalog-modal-id').value = '';
+      } else {
+        document.getElementById('catalog-modal-title').innerText = 'Edit Catalog';
+        const c = globalCatalogs.find(item => item && (item._id === catalogId || item.slug === catalogId));
+        if (!c) return;
+
+        document.getElementById('catalog-modal-id').value = c._id;
+        document.getElementById('cat-title').value = c.title || '';
+        document.getElementById('cat-category').value = c.category || '';
+        document.getElementById('cat-slug').value = c.slug || '';
+        document.getElementById('cat-format').value = c.format || 'PDF Brochure';
+        document.getElementById('cat-pages').value = c.pages || '32';
+        document.getElementById('cat-size').value = c.size || '5.0 MB';
+        document.getElementById('cat-order').value = c.displayOrder || '';
+        document.getElementById('cat-status').value = c.status || 'Publish';
+        document.getElementById('cat-description').value = c.description || '';
+        document.getElementById('cat-img').value = c.img || '';
+        document.getElementById('cat-banner-image').value = c.bannerImage || '';
+        document.getElementById('cat-banner-title').value = c.bannerTitle || '';
+        document.getElementById('cat-banner-desc').value = c.bannerDescription || '';
+        document.getElementById('cat-seo-title').value = c.seoTitle || '';
+        document.getElementById('cat-meta-image').value = c.metaImage || '';
+        document.getElementById('cat-seo-desc').value = c.seoDescription || '';
+
+        // Pre-select checkbox products
+        const assignedProductIds = (c.products || []).map(p => typeof p === 'object' ? p._id : p);
+        document.querySelectorAll('.catalog-product-cb').forEach(cb => {
+          cb.checked = assignedProductIds.includes(cb.value);
+        });
+      }
+
+      toggleModal('admin-catalog-modal', true);
+    }
+
+    function populateCatalogProductsCheckboxes() {
+      const container = document.getElementById('catalog-products-checkboxes');
+      if (!container) return;
+      container.innerHTML = globalProducts.map(p => `
+        <label class="flex items-center gap-2 cursor-pointer py-0.5 hover:bg-gray-100 rounded px-1 font-body">
+          <input type="checkbox" value="${p._id}" class="catalog-product-cb rounded border-gray-300 text-primary focus:ring-primary">
+          <span>${p.name} <span class="text-[9px] text-mutedText uppercase font-semibold">(${p.category})</span></span>
+        </label>
+      `).join('') || '<span class="text-mutedText">No products available.</span>';
+    }
+
+    async function submitAdminCatalog(event) {
+      event.preventDefault();
+      const action = document.getElementById('catalog-modal-action').value;
+      const titleVal = document.getElementById('cat-title').value.trim();
+      let slugVal = document.getElementById('cat-slug').value.trim();
+      if (!slugVal) {
+        slugVal = titleVal.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+
+      const assignedProducts = [];
+      document.querySelectorAll('.catalog-product-cb:checked').forEach(cb => {
+        assignedProducts.push(cb.value);
+      });
+
+      const payload = {
+        title: titleVal,
+        category: document.getElementById('cat-category').value.trim(),
+        slug: slugVal,
+        format: document.getElementById('cat-format').value.trim(),
+        pages: parseInt(document.getElementById('cat-pages').value) || 32,
+        size: document.getElementById('cat-size').value.trim(),
+        displayOrder: parseInt(document.getElementById('cat-order').value) || 0,
+        status: document.getElementById('cat-status').value,
+        description: document.getElementById('cat-description').value.trim(),
+        img: document.getElementById('cat-img').value.trim(),
+        bannerImage: document.getElementById('cat-banner-image').value.trim(),
+        bannerTitle: document.getElementById('cat-banner-title').value.trim(),
+        bannerDescription: document.getElementById('cat-banner-desc').value.trim(),
+        seoTitle: document.getElementById('cat-seo-title').value.trim(),
+        metaImage: document.getElementById('cat-meta-image').value.trim(),
+        seoDescription: document.getElementById('cat-seo-desc').value.trim(),
+        products: assignedProducts
+      };
+
+      try {
+        if (action === 'add') {
+          await window.api.createCatalog(payload);
+          alert('Catalog Collection added successfully!');
+        } else {
+          const id = document.getElementById('catalog-modal-id').value;
+          await window.api.updateCatalog(id, payload);
+          alert('Catalog Collection updated successfully!');
+        }
+        await syncAdminData();
+        toggleModal('admin-catalog-modal', false);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to save Catalog collection.');
+      }
+    }
+
+    async function deleteCatalog(catalogId) {
+      if (!confirm('Delete this Catalog collection?')) return;
+      try {
+        await window.api.deleteCatalog(catalogId);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to delete Catalog collection.');
+      }
+    }
+
+    // ─── BLOGS CRUD ────────────────────────────────────────────────────────────
+    function openBlogModal(action, blogId) {
+      document.getElementById('blog-modal-action').value = action;
+
+      if (action === 'add') {
+        document.getElementById('blog-modal-title').innerText = 'Publish Blog Post';
+        document.getElementById('blog-title').value = '';
+        document.getElementById('blog-author').value = '';
+        document.getElementById('blog-excerpt').value = '';
+        document.getElementById('blog-status').value = 'Published';
+        document.getElementById('blog-modal-id').value = '';
+        document.getElementById('blog-slug').value = '';
+        document.getElementById('blog-reading-time').value = '';
+        document.getElementById('blog-content').value = '';
+        tempBlogImages = [];
+        renderBlogImagesPreview();
+      } else {
+        document.getElementById('blog-modal-title').innerText = 'Edit Blog Post';
+        // Match by _id (MongoDB) or id (legacy numeric), comparing as strings
+        const b = globalBlogs.find(item => item && (
+          String(item._id || '') === String(blogId) ||
+          String(item.id || '') === String(blogId)
+        ));
+        if (!b) {
+          alert('Blog post not found. Please refresh the page.');
+          return;
+        }
+
+        document.getElementById('blog-modal-id').value = b._id || String(b.id || '');
+        document.getElementById('blog-title').value = b.title;
+
+        // Ensure category exists in select dropdown, adding dynamically if custom
+        const catSelect = document.getElementById('blog-cat');
+        const catVal = b.category || 'Fabrics';
+        let optionExists = Array.from(catSelect.options).some(opt => opt.value === catVal);
+        if (!optionExists && catVal) {
+          const newOpt = document.createElement('option');
+          newOpt.value = catVal;
+          newOpt.innerText = catVal;
+          catSelect.appendChild(newOpt);
+        }
+        catSelect.value = catVal;
+
+        document.getElementById('blog-author').value = b.author;
+        document.getElementById('blog-excerpt').value = b.excerpt || '';
+        document.getElementById('blog-status').value = b.status || 'Published';
+        document.getElementById('blog-slug').value = b.slug || '';
+        document.getElementById('blog-reading-time').value = b.readingTime || '';
+        document.getElementById('blog-content').value = b.content || '';
+        tempBlogImages = b.images ? [...b.images] : (b.featuredImage || b.img ? [b.featuredImage || b.img] : []);
+        renderBlogImagesPreview();
+      }
+
+      toggleModal('admin-blog-modal', true);
+    }
+
+    async function submitAdminBlog(event) {
+      event.preventDefault();
+      const action = document.getElementById('blog-modal-action').value;
+      const titleVal = document.getElementById('blog-title').value.trim();
+      let slugVal = document.getElementById('blog-slug').value.trim();
+      if (!slugVal) {
+        slugVal = titleVal.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+
+      const contentVal = document.getElementById('blog-content').value.trim();
+      let readingTimeVal = document.getElementById('blog-reading-time').value.trim();
+      if (!readingTimeVal) {
+        const words = contentVal.split(/\s+/).length;
+        const mins = Math.max(1, Math.ceil(words / 200));
+        readingTimeVal = `${mins} min read`;
+      }
+
+      const firstImage = tempBlogImages[0] || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80';
+      const catVal = document.getElementById('blog-cat').value || 'Corporate';
+      const payload = {
+        title: titleVal,
+        category: catVal,
+        author: document.getElementById('blog-author').value.trim(),
+        status: document.getElementById('blog-status').value,
+        excerpt: document.getElementById('blog-excerpt').value.trim(),
+        slug: slugVal,
+        content: contentVal,
+        readingTime: readingTimeVal,
+        img: firstImage,
+        featuredImage: firstImage,
+        images: tempBlogImages
+      };
+
+      try {
+        if (action === 'add') {
+          await window.api.createBlog(payload);
+          alert('Blog article published!');
+        } else {
+          const id = document.getElementById('blog-modal-id').value;
+          if (!id) throw new Error('Blog ID missing. Please close and reopen the form.');
+          await window.api.updateBlog(id, payload);
+          alert('Blog article updated!');
+        }
+        toggleModal('admin-blog-modal', false);
+        await syncAdminData();
+        updateAdminDashboard();
+        // Explicitly re-render blog table so new/updated entry is visible immediately
+        if (typeof renderBlogsTable === 'function') renderBlogsTable();
+      } catch (err) {
+        alert(err.message || 'Failed to save blog post.');
+      }
+    }
+
+    async function deleteBlog(blogId) {
+      if (!blogId || blogId === 'undefined') {
+        alert('Cannot delete: Blog ID is missing. Please refresh the page.');
+        return;
+      }
+      if (!confirm('Delete this blog article? This cannot be undone.')) return;
+      try {
+        await window.api.deleteBlog(blogId);
+        await syncAdminData();
+        updateAdminDashboard();
+        // Explicitly re-render blog table so deleted entry disappears immediately
+        if (typeof renderBlogsTable === 'function') renderBlogsTable();
+      } catch (err) {
+        alert(err.message || 'Failed to delete blog.');
+      }
+    }
+
+    // ─── CUSTOMER STATUS MANAGEMENT ────────────────────────────────────────────
+    async function filterCustomersByStatus(status) {
+      activeCustomerFilter = status;
+      document.querySelectorAll('.cust-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+        btn.classList.add('bg-white', 'text-mutedText', 'border-lightBorder');
+      });
+      const activeBtn = document.getElementById('cust-filter-' + status);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'text-mutedText', 'border-lightBorder');
+        activeBtn.classList.add('bg-primary', 'text-white', 'border-primary');
+      }
+      const q = document.getElementById('customers-search-input') ? document.getElementById('customers-search-input').value.trim() : '';
+      try {
+        const res = await window.api.getUsers({ search: q, status: activeCustomerFilter });
+        if (res.success) {
+          globalUsers = res.data;
+          updateAdminDashboard();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function openPendingCustomers() {
+      setAdminTab('admin-customers');
+      filterCustomersByStatus('Pending');
+    }
+
+    function renderCustomersTable(users) {
+      const tbodyClients = document.getElementById('admin-customers-table-body');
+      if (!tbodyClients) return;
+      tbodyClients.innerHTML = '';
+
+      const targetUsers = (Array.isArray(users) && users.length > 0) ? users : (globalUsers || []);
+      let customers = targetUsers.filter(u => u && (u.role === 'Customer' || !u.role || String(u.role).toLowerCase() === 'customer'));
+
+      if (typeof activeCustomerFilter !== 'undefined' && activeCustomerFilter && activeCustomerFilter !== 'All') {
+        customers = customers.filter(u => u && u.status === activeCustomerFilter);
+      }
+
+      const countLabel = document.getElementById('admin-customers-count-label');
+      if (countLabel) countLabel.innerText = `${customers.length} account${customers.length !== 1 ? 's' : ''} shown`;
+
+      if (customers.length === 0) {
+        tbodyClients.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No customer accounts match this filter.</td></tr>`;
+        return;
+      }
+
+      customers.forEach(u => {
+        const ctr = document.createElement('tr');
+        ctr.className = 'border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body';
+
+        const statusBadges = {
+          'Active': 'bg-green-100 text-green-700 border border-green-200',
+          'Disabled': 'bg-red-100 text-red-600 border border-red-200',
+          'Pending': 'bg-yellow-100 text-yellow-700 border border-yellow-200',
+          'Rejected': 'bg-gray-100 text-gray-500 border border-gray-200'
+        };
+        const statusStyle = statusBadges[u.status] || 'bg-gray-100 text-gray-600';
+
+        let actionHtml = '';
+        if (u.status === 'Pending') {
+          actionHtml = `
+            <div class="flex justify-end gap-1.5 font-body">
+              <button onclick="approveUser('${u._id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-check-line"></i> Approve</button>
+              <button onclick="confirmRejectUser('${u._id}')" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-close-line"></i> Reject</button>
+            </div>`;
+        } else if (u.status === 'Active') {
+          actionHtml = `
+            <div class="flex justify-end font-body">
+              <button onclick="toggleUserStatus('${u._id}', 'Disabled')" class="bg-charcoal hover:bg-black text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-forbid-line"></i> Disable</button>
+            </div>`;
+        } else if (u.status === 'Disabled') {
+          actionHtml = `
+            <div class="flex justify-end font-body">
+              <button onclick="toggleUserStatus('${u._id}', 'Active')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-shield-check-line"></i> Enable</button>
+            </div>`;
+        } else if (u.status === 'Rejected') {
+          actionHtml = `<span class="text-gray-400 italic text-[10px] font-body">Rejected</span>`;
+        }
+
+        ctr.innerHTML = `
+          <td class="p-4 font-bold text-charcoal">${u.companyName || 'N/A'}</td>
+          <td class="p-4 font-semibold">${u.representative || ''}</td>
+          <td class="p-4 font-semibold text-primary font-mono select-all text-[10px]">${u.email || ''}</td>
+          <td class="p-4 font-mono">${u.phone || 'N/A'}</td>
+          <td class="p-4 font-mono text-gray-400">${u.regDate || '—'}</td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${statusStyle}">${u.status || ''}</span></td>
+          <td class="p-4 text-right pt-6">${actionHtml}</td>
+        `;
+        tbodyClients.appendChild(ctr);
+      });
+    }
+
+    async function approveUser(userId) {
+      try {
+        await window.api.updateUser(userId, { status: 'Active' });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to approve user.');
+      }
+    }
+
+    let _rejectTargetUserId = null;
+
+    function confirmRejectUser(userId) {
+      const u = globalUsers.find(user => user._id === userId || user.id === userId);
+      if (!u) return;
+      _rejectTargetUserId = userId;
+
+      document.getElementById('reject-modal-company').innerText = u.companyName || u.email;
+      document.getElementById('reject-modal-email').innerText = u.email;
+      toggleModal('admin-reject-user-modal', true);
+    }
+
+    async function executeRejectUser(option) {
+      const userId = _rejectTargetUserId;
+      if (!userId) return;
+
+      const u = globalUsers.find(user => user._id === userId || user.id === userId);
+      if (!u) { toggleModal('admin-reject-user-modal', false); return; }
+
+      try {
+        if (option === 'delete') {
+          await window.api.deleteUser(u._id);
+        } else {
+          await window.api.updateUser(u._id, { status: 'Rejected' });
+        }
+        await syncAdminData();
+        _rejectTargetUserId = null;
+        toggleModal('admin-reject-user-modal', false);
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to reject user.');
+      }
+    }
+
+    async function toggleUserStatus(userId, newStatus) {
+      const u = globalUsers.find(user => user._id === userId || user.id === userId);
+      if (!u) return;
+
+      try {
+        await window.api.updateUser(u._id, { status: newStatus });
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to toggle user status.');
+      }
+    }
+
+    // ─── CUSTOMER PRODUCT ASSIGNMENT CONTROLLER ─────────────────────────────
+    let currentAssignedProducts = [];
+
+    async function initCustomerProductAssignmentTab() {
+      const select = document.getElementById('assign-customer-select');
+      if (!select) return;
+      select.innerHTML = "";
+
+      // Ensure globalUsers is populated from API, localStorage or defaultUsers
+      if (!globalUsers || globalUsers.length === 0) {
+        try {
+          const uRes = await window.api.getUsers();
+          if (uRes.success && uRes.data && uRes.data.length > 0) {
+            globalUsers = uRes.data;
+          }
+        } catch (e) {
+          console.warn("API getUsers fallback", e);
+        }
+        if (!globalUsers || globalUsers.length === 0) {
+          try {
+            globalUsers = JSON.parse(localStorage.getItem('uniwear_users')) || (typeof defaultUsers !== 'undefined' ? defaultUsers : []);
+          } catch (e) {
+            globalUsers = typeof defaultUsers !== 'undefined' ? defaultUsers : [];
+          }
+        }
+      }
+
+      const customers = (globalUsers || []).filter(u => {
+        if (!u.role) return true;
+        const r = String(u.role).toLowerCase();
+        return r === 'customer' || r === 'client' || (r !== 'admin' && r !== 'super admin' && r !== 'sales executive' && r !== 'production manager');
+      });
+
+      if (customers.length === 0) {
+        select.innerHTML = '<option value="">No customer accounts found</option>';
+        document.getElementById('admin-assigned-products-table-body').innerHTML = '<tr><td colspan="8" class="p-8 text-center text-mutedText text-xs">No customer accounts registered.</td></tr>';
+        return;
+      }
+
+      customers.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c._id || c.id;
+        opt.textContent = `${c.companyName || 'Corporate Client'} (${c.representative || c.email}) - [${c.status || 'Active'}]`;
+        select.appendChild(opt);
+      });
+
+      handleCustomerSelectChange();
+    }
+
+    async function handleCustomerSelectChange() {
+      const select = document.getElementById('assign-customer-select');
+      const customerId = select ? select.value : null;
+      if (!customerId) return;
+
+      const customer = (globalUsers || []).find(u => (u._id || u.id) === customerId);
+      const statusBadge = document.getElementById('assign-customer-status-badge');
+      const actionsBox = document.getElementById('assign-customer-status-actions');
+
+      if (customer && statusBadge && actionsBox) {
+        const status = customer.status || 'Active';
+        statusBadge.textContent = status;
+        if (status === 'Active') {
+          statusBadge.className = 'px-2.5 py-1 rounded text-[10px] font-bold uppercase block mt-1 bg-green-100 text-green-800';
+          actionsBox.innerHTML = `
+            <button onclick="changeCustomerAccountStatus('${customerId}', 'Pending')" class="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded text-[10px] font-bold">Set Pending</button>
+          `;
+        } else if (status === 'Pending') {
+          statusBadge.className = 'px-2.5 py-1 rounded text-[10px] font-bold uppercase block mt-1 bg-yellow-100 text-yellow-800';
+          actionsBox.innerHTML = `
+            <button onclick="changeCustomerAccountStatus('${customerId}', 'Active')" class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-[10px] font-bold">Approve Account</button>
+            <button onclick="changeCustomerAccountStatus('${customerId}', 'Rejected')" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold">Reject</button>
+          `;
+        } else {
+          statusBadge.className = 'px-2.5 py-1 rounded text-[10px] font-bold uppercase block mt-1 bg-red-100 text-red-800';
+          actionsBox.innerHTML = `
+            <button onclick="changeCustomerAccountStatus('${customerId}', 'Active')" class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-[10px] font-bold">Approve Account</button>
+          `;
+        }
+      }
+
+      await loadAssignedProductsForSelectedCustomer(customerId);
+    }
+
+    async function changeCustomerAccountStatus(userId, newStatus) {
+      try {
+        await window.api.updateUser(userId, { status: newStatus });
+        const userObj = (globalUsers || []).find(u => (u._id || u.id) === userId);
+        if (userObj) userObj.status = newStatus;
+        alert(`Customer account status updated to ${newStatus}`);
+        handleCustomerSelectChange();
+      } catch (err) {
+        alert(err.message || 'Failed to update account status.');
+      }
+    }
+
+    async function loadAssignedProductsForSelectedCustomer(customerId) {
+      const tbody = document.getElementById('admin-assigned-products-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-mutedText text-xs">Loading assigned products...</td></tr>';
+
+      try {
+        const res = await window.api.getCustomerProducts(customerId);
+        currentAssignedProducts = res.data || [];
+
+        if (currentAssignedProducts.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-mutedText text-xs">No products assigned to this customer yet. Click "+ Assign Products" to add.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = currentAssignedProducts.map(p => `
+          <tr class="border-b border-lightBorder hover:bg-lightCard text-xs transition-colors" id="assignment-row-${p.assignmentId}">
+            <td class="p-4 font-semibold text-charcoal flex items-center gap-3">
+              <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-10 h-10 object-cover rounded-lg border border-lightBorder shrink-0">
+              <div>
+                <p class="font-bold text-charcoal">${p.name}</p>
+                <span class="text-[9px] uppercase text-primary font-bold">${p.category}</span>
+              </div>
+            </td>
+            <td class="p-4">
+              <span class="block text-gray-500 font-mono">MOQ: ${p.moq || 100}</span>
+              <span class="block font-bold text-charcoal mt-0.5">${p.price ? '₹' + p.price : 'Custom Quote'}</span>
+            </td>
+            <td class="p-4">
+              <input type="number" id="assign-price-${p.assignmentId}" value="${p.customPrice || ''}" placeholder="Standard" class="w-24 p-1.5 border border-lightBorder rounded text-xs font-mono">
+            </td>
+            <td class="p-4">
+              <input type="number" id="assign-moq-${p.assignmentId}" value="${p.customMOQ || ''}" placeholder="Standard" class="w-20 p-1.5 border border-lightBorder rounded text-xs font-mono">
+            </td>
+            <td class="p-4">
+              <input type="checkbox" id="assign-visible-${p.assignmentId}" ${p.visible !== false ? 'checked' : ''} class="rounded text-primary">
+            </td>
+            <td class="p-4">
+              <input type="checkbox" id="assign-featured-${p.assignmentId}" ${p.featuredInCatalog ? 'checked' : ''} class="rounded text-primary">
+            </td>
+            <td class="p-4">
+              <input type="text" id="assign-notes-${p.assignmentId}" value="${p.customerNotes || ''}" placeholder="Notes..." class="w-36 p-1.5 border border-lightBorder rounded text-xs">
+            </td>
+            <td class="p-4 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="saveAssignmentRow('${p.assignmentId}')" class="px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-[10px] font-bold">Save</button>
+                <button onclick="removeAssignmentRow('${p.assignmentId}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded text-[10px] font-bold">Remove</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.warn("getCustomerProducts fetch warning:", err);
+        currentAssignedProducts = [];
+        tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-mutedText text-xs">No products assigned to this customer yet. Click "+ Assign Products" to add.</td></tr>';
+      }
+    }
+
+    async function openAssignProductsModal() {
+      const select = document.getElementById('assign-customer-select');
+      const customerId = select ? select.value : null;
+      if (!customerId) {
+        alert("Please select a customer first.");
+        return;
+      }
+
+      if (!globalProducts || globalProducts.length === 0) {
+        try {
+          const pRes = await window.api.getProducts();
+          if (pRes.success && pRes.data && pRes.data.length > 0) globalProducts = pRes.data;
+        } catch (e) {}
+        if (!globalProducts || globalProducts.length === 0) {
+          globalProducts = typeof defaultProducts !== 'undefined' ? defaultProducts : [];
+        }
+      }
+
+      const customer = (globalUsers || []).find(u => (u._id || u.id) === customerId);
+      document.getElementById('modal-assign-customer-name').value = customer ? `${customer.companyName || customer.email} (${customer.representative || ''})` : customerId;
+      document.getElementById('modal-assign-customer-id').value = customerId;
+
+      // Render product checkbox list
+      const listContainer = document.getElementById('modal-products-assign-checkbox-list');
+      if (listContainer) {
+        if (!globalProducts || globalProducts.length === 0) {
+          listContainer.innerHTML = '<p class="text-xs text-mutedText text-center py-4">No master products available in database.</p>';
+        } else {
+          listContainer.innerHTML = (globalProducts || []).map(p => `
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border border-lightBorder cursor-pointer hover:border-primary/40">
+              <div class="flex items-center gap-3">
+                <input type="checkbox" name="assign_prod_checkbox" value="${p._id || p.id}" class="rounded text-primary">
+                <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-8 h-8 object-cover rounded">
+                <div>
+                  <span class="text-xs font-bold text-charcoal block">${p.name}</span>
+                  <span class="text-[9px] uppercase text-primary font-semibold">${p.category}</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono text-gray-400">MOQ: ${p.moq || 100}</span>
+            </label>
+          `).join('');
+        }
+      }
+
+      toggleModal('admin-assign-products-modal', true);
+    }
+
+    function toggleSelectAllProductsToAssign() {
+      const checkboxes = document.querySelectorAll('input[name="assign_prod_checkbox"]');
+      const allChecked = Array.from(checkboxes).every(c => c.checked);
+      checkboxes.forEach(c => c.checked = !allChecked);
+    }
+
+    async function submitCustomerProductAssignment(event) {
+      event.preventDefault();
+      const customerId = document.getElementById('modal-assign-customer-id').value;
+      const checkboxes = document.querySelectorAll('input[name="assign_prod_checkbox"]:checked');
+      const productIds = Array.from(checkboxes).map(c => c.value);
+
+      if (productIds.length === 0) {
+        alert("Please select at least one product to assign.");
+        return;
+      }
+
+      const payload = {
+        customerId,
+        productIds,
+        customPrice: document.getElementById('modal-assign-custom-price').value,
+        customMOQ: document.getElementById('modal-assign-custom-moq').value,
+        visible: document.getElementById('modal-assign-visible').checked,
+        featured: document.getElementById('modal-assign-featured').checked,
+        notes: document.getElementById('modal-assign-notes').value
+      };
+
+      try {
+        await window.api.assignCustomerProducts(payload);
+        alert("Product assignment successfully saved!");
+        toggleModal('admin-assign-products-modal', false);
+        loadAssignedProductsForSelectedCustomer(customerId);
+      } catch (err) {
+        alert(err.message || 'Failed to assign products.');
+      }
+    }
+
+    async function saveAssignmentRow(assignmentId) {
+      const priceVal = document.getElementById(`assign-price-${assignmentId}`).value;
+      const moqVal = document.getElementById(`assign-moq-${assignmentId}`).value;
+      const visVal = document.getElementById(`assign-visible-${assignmentId}`).checked;
+      const featVal = document.getElementById(`assign-featured-${assignmentId}`).checked;
+      const notesVal = document.getElementById(`assign-notes-${assignmentId}`).value;
+
+      try {
+        await window.api.updateCustomerProduct(assignmentId, {
+          customPrice: priceVal,
+          customMOQ: moqVal,
+          visible: visVal,
+          featured: featVal,
+          notes: notesVal
+        });
+        alert("Assignment parameters saved!");
+      } catch (err) {
+        alert(err.message || 'Failed to save assignment row.');
+      }
+    }
+
+    async function removeAssignmentRow(assignmentId) {
+      if (!confirm("Are you sure you want to remove this product assignment from this customer?")) return;
+
+      try {
+        await window.api.removeCustomerProduct(assignmentId);
+        const select = document.getElementById('assign-customer-select');
+        if (select && select.value) loadAssignedProductsForSelectedCustomer(select.value);
+      } catch (err) {
+        alert(err.message || 'Failed to remove product assignment.');
+      }
+    }
+
+
+
+    // ─── ORDERS & 14-STAGE TRACKER TAB HANDLERS ─────────────────────────────
+    async function renderOrdersTable() {
+      const body = document.getElementById('admin-orders-table-body');
+      if (!body) return;
+
+      try {
+        const res = await window.api.getOrders();
+        const orders = (res.success && Array.isArray(res.data) && res.data.length > 0)
+          ? res.data
+          : (JSON.parse(localStorage.getItem('uniwear_orders')) || (typeof defaultOrders !== 'undefined' ? defaultOrders : [
+            {
+              _id: 'ord_1',
+              orderNo: 'UW-ORD-2026-101',
+              clientCompany: 'Taj Resorts & Hotels Group',
+              clientEmail: 'client@uniwear.co',
+              productName: 'Executive Wool Blazer Set',
+              volume: '1,200 Sets',
+              currentStageIndex: 8,
+              stageName: '08. Sewing & Stitch Assembly',
+              status: 'On Schedule'
+            },
+            {
+              _id: 'ord_2',
+              orderNo: 'UW-ORD-2026-102',
+              clientCompany: 'Infosys Tech Park Division',
+              clientEmail: 'infosys@uniwear.co',
+              productName: 'Corporate Polo Shirts',
+              volume: '5,000 Pcs',
+              currentStageIndex: 12,
+              stageName: '12. Quality Audit & Metal Detect',
+              status: 'Ready for Dispatch'
+            },
+            {
+              _id: 'ord_3',
+              orderNo: 'UW-ORD-2026-103',
+              clientCompany: 'Toyota Kirloskar Motors',
+              clientEmail: 'toyota@uniwear.co',
+              productName: 'Industrial Anti-Static Coveralls',
+              volume: '3,500 Sets',
+              currentStageIndex: 5,
+              stageName: '05. Precision CNC Fabric Cutting',
+              status: 'Delayed'
+            }
+          ]));
+
+        // Calculate stage metric counters
+        let onSchedule = 0, delayed = 0, approval = 0, dispatch = 0, completed = 0;
+        orders.forEach(o => {
+          const st = (o.status || 'On Schedule').toLowerCase();
+          if (st.includes('schedule')) onSchedule++;
+          else if (st.includes('delay')) delayed++;
+          else if (st.includes('approval')) approval++;
+          else if (st.includes('dispatch') || st.includes('ready')) dispatch++;
+          else if (st.includes('complete')) completed++;
+          else onSchedule++;
+        });
+
+        if (document.getElementById('dash-orders-on-schedule')) document.getElementById('dash-orders-on-schedule').innerText = onSchedule;
+        if (document.getElementById('dash-orders-delayed')) document.getElementById('dash-orders-delayed').innerText = delayed;
+        if (document.getElementById('dash-orders-approval')) document.getElementById('dash-orders-approval').innerText = approval;
+        if (document.getElementById('dash-orders-dispatch')) document.getElementById('dash-orders-dispatch').innerText = dispatch;
+        if (document.getElementById('dash-orders-completed')) document.getElementById('dash-orders-completed').innerText = completed;
+
+        if (orders.length === 0) {
+          body.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-mutedText text-xs font-body">No production orders found.</td></tr>`;
+          return;
+        }
+
+        const STAGES_LIST = [
+          "01. Quotation & Contract Finalized",
+          "02. Fabric Sourcing & Mill Reservation",
+          "03. Lab Dip & Color Dye Approval",
+          "04. Pre-Production Sample Sign-Off",
+          "05. Precision CNC Fabric Cutting",
+          "06. Logo Embroidery & Screen Printing",
+          "07. Component Bundling & Panel Prep",
+          "08. Sewing & Stitch Assembly",
+          "09. Quality Control & Inline Inspection",
+          "10. Thread Trimming & Steam Pressing",
+          "11. Poly-Bags & Barcode Labeling",
+          "12. Final Quality Audit & Metal Detect",
+          "13. Carton Packing & Palletization",
+          "14. Dispatch & Logistics Tracking"
+        ];
+
+        body.innerHTML = orders.map(o => {
+          const statusBadge = o.status === 'Delayed'
+            ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-red-100 text-red-700">Delayed</span>`
+            : o.status === 'Ready for Dispatch'
+            ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-blue-100 text-blue-700">Ready for Dispatch</span>`
+            : o.status === 'Completed'
+            ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-gray-100 text-gray-700">Completed</span>`
+            : `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700">On Schedule</span>`;
+
+          const stageOptionsHtml = STAGES_LIST.map((st, idx) => `
+            <option value="${idx + 1}" ${Number(o.currentStageIndex || 1) === (idx + 1) ? 'selected' : ''}>${st}</option>
+          `).join('');
+
+          return `
+            <tr class="border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body">
+              <td class="p-4 font-mono font-bold text-primary">${o.orderNo || 'UW-ORD-' + (o._id || '101')}</td>
+              <td class="p-4 font-bold text-charcoal">
+                ${o.clientCompany || o.clientEmail || 'Corporate Client'}
+                <span class="block text-[10px] text-mutedText font-normal">${o.clientEmail || ''}</span>
+              </td>
+              <td class="p-4 font-semibold text-charcoal">
+                ${o.productName || 'Custom Workwear'}
+                <span class="block text-[10px] text-mutedText font-normal">${o.volume || '1,000 Pcs'}</span>
+              </td>
+              <td class="p-4">
+                <select onchange="updateOrderStage('${o._id || o.id}', this.value)" class="bg-white border border-lightBorder rounded-lg p-1.5 text-xs text-charcoal font-semibold focus:outline-none focus:border-primary">
+                  ${stageOptionsHtml}
+                </select>
+              </td>
+              <td class="p-4">${statusBadge}</td>
+              <td class="p-4 text-right">
+                <button onclick="alert('Updating stage tracker for ${o.orderNo || 'Order'}')" class="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-colors">
+                  Update Tracker
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error("Failed to render orders table:", err);
+      }
+    }
+    window.renderOrdersTable = renderOrdersTable;
+
+    async function updateOrderStage(orderId, newStageIndex) {
+      try {
+        await window.api.updateOrder(orderId, { currentStageIndex: Number(newStageIndex) });
+        alert(`Order stage updated to Stage ${newStageIndex}!`);
+        renderOrdersTable();
+      } catch (err) {
+        alert(err.message || "Failed to update order stage.");
+      }
+    }
+    window.updateOrderStage = updateOrderStage;
+
+
+  </script>
+
+  <!-- MODAL: Reject User -->
+  <div id="admin-reject-user-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md"
+      onclick="toggleModal('admin-reject-user-modal', false)"></div>
+    <div class="relative w-full max-w-md bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="font-heading text-xl font-bold text-charcoal">Reject Registration</h3>
+        <button onclick="toggleModal('admin-reject-user-modal', false)" class="text-gray-400 hover:text-charcoal"><i
+            class="ri-close-line text-xl"></i></button>
+      </div>
+
+      <div class="p-4 bg-red-50 border border-red-100 rounded-2xl mb-6">
+        <p class="text-xs font-bold text-charcoal mb-0.5" id="reject-modal-company">Company Name</p>
+        <p class="text-[10px] text-mutedText font-mono" id="reject-modal-email">email@example.com</p>
+      </div>
+
+      <p class="text-xs text-mutedText leading-relaxed mb-6">Choose how to handle this rejection. Deleting removes the
+        account entirely; keeping the record retains it with a <strong class="text-charcoal">Rejected</strong> status
+        for audit purposes.</p>
+
+      <div class="space-y-3">
+        <button onclick="executeRejectUser('keep')"
+          class="w-full bg-charcoal hover:bg-black text-white py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors shadow-sm flex items-center justify-center gap-2">
+          <i class="ri-archive-line"></i> Reject &amp; Keep Record
+        </button>
+        <button onclick="executeRejectUser('delete')"
+          class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors shadow-sm flex items-center justify-center gap-2">
+          <i class="ri-delete-bin-line"></i> Reject &amp; Delete Account
+        </button>
+        <button onclick="toggleModal('admin-reject-user-modal', false)"
+          class="w-full bg-lightCard hover:bg-gray-100 text-mutedText py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors border border-lightBorder">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

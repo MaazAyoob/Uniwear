@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">
+  <!-- Outer collar shield shape -->
+  <path d="M6 4 L16 10 L26 4 L26 18 C26 24 21.5 28 16 28 C10.5 28 6 24 6 18 Z" fill="none" stroke="#111827" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Left Lapel in Dark Slate -->
+  <path d="M6 4 L14 14 L14 22 C12 21 8 18 8 14 Z" fill="#111827"/>
+  <!-- Right Lapel in Crimson Red -->
+  <path d="M26 4 L18 14 L18 22 C20 21 24 18 24 14 Z" fill="#B91C1C"/>
+</svg>
