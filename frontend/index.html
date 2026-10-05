@@ -27,11 +27,11 @@
   <!-- Canonical Link -->
   <link rel="canonical" href="https://uniwear.co/">
 
-  <!-- Google Fonts: Outfit & Inter -->
+  <!-- Google Fonts: Editorial Serif (Playfair Display & Cormorant Garamond), Modern Sans (Inter & Outfit) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
     rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
 
@@ -51,24 +51,29 @@
             primary: '#B91C1C', // Deep Crimson Red
             primaryHover: '#991B1B',
             darkBg: '#111827', // Footer Charcoal
-            lightBg: '#FFFFFF', // Clean White
-            lightCard: '#F9FAFB', // Off-White
-            mutedText: '#4B5563', // Gray 600
-            charcoal: '#111827', // Slate Gray 900
+            lightBg: '#FAF9F5', // Warm luxury off-white
+            warmIvory: '#FAF9F5',
+            warmWhite: '#FFFFFF',
+            warmCard: '#FAF8F5',
+            warmBorder: '#E7E5E0',
+            lightCard: '#FDFCF9', // Off-White
+            mutedText: '#57534E', // Warm Gray 600
+            charcoal: '#1C1917', // Slate/Stone 900
             lightBorder: 'rgba(0, 0, 0, 0.08)'
           },
           fontFamily: {
-            display: ['"Clash Display"', 'sans-serif'],
+            editorial: ['"Playfair Display"', '"Cormorant Garamond"', 'Georgia', 'serif'],
+            display: ['"Playfair Display"', '"Clash Display"', 'Georgia', 'serif'],
             heading: ['Outfit', 'sans-serif'],
             body: ['Inter', 'sans-serif']
           },
           animation: {
-            'marquee-infinite': 'marquee 25s linear infinite',
+            'marquee-infinite': 'marquee 35s linear infinite',
           },
           keyframes: {
             marquee: {
               '0%': { transform: 'translateX(0%)' },
-              '100%': { transform: 'translateX(-50%)' }
+              '100%': { transform: 'translateX(-100%)' }
             }
           }
         }
@@ -83,11 +88,18 @@
 
   <!-- Custom Styling Extensions -->
   <style>
-    /* Premium Typography & Hierarchy System */
+    /* Premium Editorial Typography & Hierarchy System */
+    .font-editorial,
+    .hero-editorial-h1,
+    h1.editorial,
+    h2.editorial {
+      font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif !important;
+    }
+
     h1,
     h2,
     .font-display {
-      font-family: 'Clash Display', sans-serif !important;
+      font-family: 'Playfair Display', 'Clash Display', Georgia, serif !important;
     }
 
     h3,
@@ -131,6 +143,22 @@
       font-size: clamp(2.25rem, 3vw + 0.9rem, 3.65rem) !important;
       line-height: 1.06 !important;
       letter-spacing: -0.02em !important;
+    }
+
+    /* Editorial Split Hero Serif Heading */
+    .hero-editorial-h1 {
+      font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif !important;
+      font-size: clamp(2.65rem, 5.2vw, 5.5rem) !important;
+      line-height: 1.04 !important;
+      letter-spacing: -0.025em !important;
+      font-weight: 500 !important;
+    }
+
+    @media (max-width: 640px) {
+      .hero-editorial-h1 {
+        font-size: clamp(2.25rem, 9.2vw, 3.25rem) !important;
+        line-height: 1.08 !important;
+      }
     }
 
     /* Luxury Button Shimmer Hover Effect */
@@ -574,37 +602,37 @@
   </div>
 
   <!-- FLOATING NAVIGATION HEADER -->
-  <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-between">
+  <header id="global-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 bg-transparent text-slate-900 dark:text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
       <a href="index.html" id="header-logo-link" class="flex items-center gap-2.5 z-50 hover:opacity-90 transition-opacity">
-        <img id="header-logo-img" src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain transition-all duration-300 brightness-0 invert">
+        <img id="header-logo-img" src="assets/logos/logo-full.png" alt="UNIWEAR Logo" class="h-8 md:h-9 w-auto object-contain transition-all duration-300">
       </a>
 
       <!-- Desktop Navigation Menu -->
       <nav
-        class="hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-black/40 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/20 shadow-lg">
+        class="hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/80 dark:border-white/15 shadow-sm">
         <a href="index.html"
-          class="nav-link lg:text-xs xl:text-sm font-semibold text-white hover:text-primary transition-colors">Home</a>
+          class="nav-link lg:text-xs xl:text-sm font-semibold text-slate-900 dark:text-white hover:text-primary transition-colors">Home</a>
         <a href="about.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">About Us</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-slate-700 dark:text-zinc-200 hover:text-primary transition-colors">About Us</a>
         <a href="uniforms.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Uniforms</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-slate-700 dark:text-zinc-200 hover:text-primary transition-colors">Uniforms</a>
         <a href="gifts.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Gifting</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-slate-700 dark:text-zinc-200 hover:text-primary transition-colors">Gifting</a>
         <a href="catalog.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Catalog</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-slate-700 dark:text-zinc-200 hover:text-primary transition-colors">Catalog</a>
         <a href="clientele.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Clientele</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-slate-700 dark:text-zinc-200 hover:text-primary transition-colors">Clientele</a>
         <a href="blog.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Blog</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-slate-700 dark:text-zinc-200 hover:text-primary transition-colors">Blog</a>
         <a href="contact.html"
-          class="nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Contact</a>
+          class="nav-link lg:text-xs xl:text-sm font-medium text-slate-700 dark:text-zinc-200 hover:text-primary transition-colors">Contact</a>
       </nav>
 
       <!-- Desktop CTAs -->
       <div class="hidden lg:flex items-center lg:gap-3 xl:gap-4">
         <a href="login.html" id="header-client-portal"
-          class="lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors">Client Portal</a>
+          class="lg:text-xs xl:text-sm font-medium text-slate-700 dark:text-zinc-200 hover:text-primary transition-colors">Client Portal</a>
         <button
           class="theme-toggle-btn w-10 h-10 rounded-full bg-white/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-100 hover:text-primary transition-colors shadow-sm"
           title="Toggle Theme">
@@ -623,7 +651,7 @@
           title="Toggle Theme">
           <i class="ri-moon-line text-base"></i>
         </button>
-        <button id="mobile-menu-btn" class="text-white focus:outline-none p-1">
+        <button id="mobile-menu-btn" class="text-slate-900 dark:text-white focus:outline-none p-1">
           <i class="ri-menu-line text-2xl" id="menu-icon"></i>
         </button>
       </div>
@@ -665,107 +693,102 @@
 
   <!-- MAIN HOMEPAGE CONTENT -->
   <main>
-    <!-- FULL-SCREEN EDITORIAL PHOTOGRAPHIC HERO -->
-    <section class="hero-editorial relative w-full min-h-screen flex flex-col justify-between overflow-hidden bg-slate-950 text-white">
-      
-      <!-- BACKGROUND SLIDER TRACK -->
-      <div id="hero-slider-track" class="absolute inset-0 w-full h-full z-0 overflow-hidden">
-        <!-- Slide 1: Executive Corporate Uniforms -->
-        <div class="hero-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-1000 ease-in-out z-10" data-slide="0">
-          <img src="assets/images/hero/hero-slide-1.png" alt="UNIWEAR Executive Corporate Uniforms" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[12000ms] ease-linear hover:scale-105">
+    <!-- REFERENCE-INSPIRED EDITORIAL SPLIT HERO -->
+    <section id="hero-section" class="hero-section relative w-full bg-[#FAF9F5] text-stone-900 overflow-hidden" style="padding: 0 !important;">
+      <!-- Hidden elements to preserve JS counter scripts without error -->
+      <span id="hero-stat-legacy" class="hidden">Since 1998</span>
+      <span id="hero-stat-clients" class="hidden">3,000+ Clients Served</span>
+
+      <div class="w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+          
+          <!-- LEFT CONTENT COLUMN (approx 42%) -->
+          <div class="lg:col-span-5 xl:col-span-5 flex flex-col justify-center px-6 sm:px-10 lg:pl-12 xl:pl-20 lg:pr-6 pt-16 sm:pt-20 lg:pt-16 xl:pt-18 pb-6 sm:pb-8 lg:pb-6 text-left">
+            
+            <!-- Red Horizontal Accent Line (Exact to reference) -->
+            <div class="w-8 h-[2px] bg-[#B91C1C] mb-3.5"></div>
+
+            <!-- Small Uppercase Eyebrow -->
+            <p class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-[#78716C] mb-2.5 sm:mb-3 font-sans">
+              UNIFORMS. GIFTS. BRAND IDENTITY.
+            </p>
+
+            <!-- Large Editorial Serif Headline (Exact 3-line break to reference) -->
+            <h1 class="font-editorial text-[2.1rem] sm:text-[2.5rem] lg:text-[2.85rem] xl:text-[3.25rem] font-normal text-[#111111] leading-[1.0] tracking-[-0.03em] mb-3 sm:mb-3.5">
+              Your identity.<br>
+              Beautifully<br>
+              made.
+            </h1>
+
+            <!-- Supporting Modern Sans-Serif Text -->
+            <p class="font-body text-[#57534E] text-xs sm:text-[13.5px] leading-[1.5] max-w-[360px] mb-4 sm:mb-4.5 font-normal">
+              Custom uniforms and corporate gifting, thoughtfully crafted around your brand.
+            </p>
+
+            <!-- Action CTAs Row -->
+            <div class="flex flex-wrap items-center gap-3.5 sm:gap-4 mb-2.5 sm:mb-3">
+              <!-- Primary CTA: Red rounded-lg button with arrow -->
+              <a href="contact.html"
+                class="font-heading bg-[#B91C1C] hover:bg-[#991B1B] text-white font-semibold px-5 py-2.5 rounded-lg text-xs sm:text-[13px] transition-all duration-200 shadow-sm flex items-center gap-2 group">
+                <span>Request a Quote</span>
+                <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
+              </a>
+
+              <!-- Secondary CTA: Beside the red button -->
+              <a href="uniforms.html"
+                class="font-heading text-[#111111] hover:text-[#B91C1C] font-semibold text-xs sm:text-[13px] transition-colors flex items-center gap-1.5 group">
+                <span>Explore Uniforms</span>
+                <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
+              </a>
+            </div>
+
+            <!-- Smaller Link Below -->
+            <div>
+              <a href="gifts.html"
+                class="font-heading text-[#78716C] hover:text-[#111111] text-[11px] sm:text-[11.5px] font-medium transition-colors inline-flex items-center gap-1.5 group">
+                <span>Discover Corporate Gifting</span>
+                <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- RIGHT PHOTOGRAPH COLUMN (Edge-to-edge full bleed display, seamlessly touching category strip) -->
+          <div class="lg:col-span-7 xl:col-span-7 relative min-h-[280px] sm:min-h-[320px] lg:min-h-0 w-full overflow-hidden flex items-stretch self-stretch bg-stone-100">
+            <img src="file:///C:/Users/Avita/.gemini/antigravity-ide/brain/ff624fd8-bfef-4d93-b27c-caf512251183/hero_atelier_showcase_1791032551447.jpg"
+              onerror="this.src='hero_atelier_showcase_1791032551447.jpg'; this.onerror=function(){this.src='assets/images/hero/hero-authentic-manufacturing.png';};"
+              alt="UNIWEAR Atelier - Handcrafted Uniforms, Apparel Rack & Corporate Gifting Box"
+              class="w-full h-full object-cover object-[center_32%] block transform scale-100 hover:scale-[1.01] transition-transform duration-700 ease-out"
+              loading="eager">
+          </div>
+
         </div>
-        <!-- Slide 2: Industrial Workwear -->
-        <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out z-0" data-slide="1">
-          <img src="assets/images/hero/hero-slide-2.png" alt="UNIWEAR Industrial Workwear Specialists" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[12000ms] ease-linear hover:scale-105">
-        </div>
-        <!-- Slide 3: Hospitality Uniforms -->
-        <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out z-0" data-slide="2">
-          <img src="assets/images/hero/hero-slide-3.png" alt="UNIWEAR Hospitality & Service Attire" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[12000ms] ease-linear hover:scale-105">
-        </div>
-      </div>
-
-      <!-- EDITORIAL SUBTLE DARK OVERLAY GRADIENT -->
-      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/75 pointer-events-none z-10"></div>
-
-      <!-- CENTERED HERO CONTENT -->
-      <div class="relative z-20 max-w-5xl mx-auto w-full px-6 pt-36 pb-24 md:pt-44 md:pb-28 flex-1 flex flex-col justify-center items-center text-center">
-        
-        <!-- Primary Headline (Dominant visual text on page) -->
-        <h1 class="font-heading font-bold text-white tracking-tight text-4xl sm:text-6xl lg:text-7xl leading-[1.06] mb-6 max-w-4xl drop-shadow-md">
-          Uniforms That Represent Your Brand
-        </h1>
-        
-        <!-- Concise Supporting Text -->
-        <p class="font-body text-slate-200 text-base sm:text-lg lg:text-xl font-normal max-w-2xl leading-relaxed mb-10 text-slate-200/90 drop-shadow-sm">
-          Premium custom uniforms for businesses and institutions across India — designed for your brand, manufactured for consistency.
-        </p>
-
-        <!-- Compact CTAs -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-          <a href="contact.html" class="w-full sm:w-auto font-heading bg-primary hover:bg-primaryHover text-white font-semibold px-8 py-3.5 sm:py-4 rounded-full text-base transition-all duration-300 shadow-xl shadow-primary/30 flex items-center justify-center gap-2.5 hover:scale-[1.03] group">
-            <span>Request a Quote</span>
-            <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform duration-200"></i>
-          </a>
-          <a href="uniforms.html" class="w-full sm:w-auto font-heading bg-white/10 hover:bg-white/20 text-white border border-white/25 backdrop-blur-md font-semibold px-8 py-3.5 sm:py-4 rounded-full text-base transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.03]">
-            <span>Explore Our Solutions</span>
-          </a>
-        </div>
-
-      </div>
-
-      <!-- MINIMAL SLIDER DOT INDICATORS -->
-      <div class="relative z-20 pb-8 flex items-center justify-center gap-3">
-        <button class="hero-dot w-8 h-3 rounded-full bg-primary transition-all duration-300 cursor-pointer shadow-md" data-index="0" aria-label="Slide 1"></button>
-        <button class="hero-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white transition-all duration-300 cursor-pointer" data-index="1" aria-label="Slide 2"></button>
-        <button class="hero-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white transition-all duration-300 cursor-pointer" data-index="2" aria-label="Slide 3"></button>
       </div>
 
     </section>
 
-    <!-- TRUST STRIP (Integrated smoothly below hero) -->
-    <div class="bg-white border-b border-slate-200/80 py-10 relative z-20">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+    <!-- SLIM CATEGORY STRIP (Exact reference design: ■ Category Name) -->
+    <div class="bg-[#FAF9F5] border-y border-stone-200/80 py-1.5 sm:py-2 relative z-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200/80 text-center">
           
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-              <i class="ri-calendar-event-line text-xl"></i>
-            </div>
-            <div>
-              <span class="font-heading text-base sm:text-lg font-bold text-slate-900 block" id="hero-stat-legacy">Since 1998</span>
-              <span class="font-body text-xs text-slate-500 block">Established Experience</span>
-            </div>
-          </div>
+          <!-- Item 1: Uniforms -->
+          <a href="uniforms.html" class="flex items-center justify-center gap-2 py-1 px-4 text-xs sm:text-[13px] font-medium text-[#111111] hover:text-[#B91C1C] transition-colors group">
+            <span class="w-1.5 h-1.5 bg-[#B91C1C] inline-block shrink-0 transition-transform group-hover:scale-110"></span>
+            <span class="font-heading tracking-wide">Uniforms</span>
+          </a>
 
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-              <i class="ri-building-4-line text-xl"></i>
-            </div>
-            <div>
-              <span class="font-heading text-base sm:text-lg font-bold text-slate-900 block" id="hero-stat-clients">3,000+ Clients Served</span>
-              <span class="font-body text-xs text-slate-500 block">Corporate &amp; Industry</span>
-            </div>
-          </div>
+          <!-- Item 2: Corporate Gifting -->
+          <a href="gifts.html" class="flex items-center justify-center gap-2 py-1 px-4 text-xs sm:text-[13px] font-medium text-[#111111] hover:text-[#B91C1C] transition-colors group">
+            <span class="w-1.5 h-1.5 bg-[#B91C1C] inline-block shrink-0 transition-transform group-hover:scale-110"></span>
+            <span class="font-heading tracking-wide">Corporate Gifting</span>
+          </a>
 
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-              <i class="ri-truck-line text-xl"></i>
-            </div>
-            <div>
-              <span class="font-heading text-base sm:text-lg font-bold text-slate-900 block">Pan-India Delivery</span>
-              <span class="font-body text-xs text-slate-500 block">Seamless Logistics</span>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-              <i class="ri-award-line text-xl"></i>
-            </div>
-            <div>
-              <span class="font-heading text-base sm:text-lg font-bold text-slate-900 block">Premium Manufacturing</span>
-              <span class="font-body text-xs text-slate-500 block">Quality Assured</span>
-            </div>
-          </div>
+          <!-- Item 3: Brand Merchandise -->
+          <a href="catalog.html" class="flex items-center justify-center gap-2 py-1 px-4 text-xs sm:text-[13px] font-medium text-[#111111] hover:text-[#B91C1C] transition-colors group">
+            <span class="w-1.5 h-1.5 bg-[#B91C1C] inline-block shrink-0 transition-transform group-hover:scale-110"></span>
+            <span class="font-heading tracking-wide">Brand Merchandise</span>
+          </a>
 
         </div>
       </div>
@@ -774,14 +797,14 @@
 
 
     <!-- 2. INDUSTRIES WE SERVE -->
-    <section class="py-20 lg:py-28 bg-slate-50/60 relative z-20 border-b border-slate-200/80">
+    <section id="industries-section" class="pb-16 lg:pb-24 bg-slate-50/60 relative z-20 border-b border-slate-200/80" style="padding-top: 1rem !important;">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-          <span class="text-xs uppercase tracking-widest text-primary font-bold block mb-2">Workwear Portfolio</span>
+        <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold block mb-1.5">Workwear Portfolio</span>
           <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">
             Industries We Serve
           </h2>
-          <p class="text-slate-600 text-base sm:text-lg mt-4 leading-relaxed font-normal">
+          <p class="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed font-normal">
             Specialized uniform solutions engineered for distinct operational requirements, durability standards, and corporate brand identities.
           </p>
         </div>
@@ -1055,28 +1078,175 @@
       </div>
     </section>
 
-    <!-- 5. TRUSTED BY LEADING BUSINESSES -->
-    <section class="py-20 lg:py-24 bg-white relative z-20 border-b border-slate-200/80">
+    <!-- 5. TRUSTED BY LEADING BUSINESSES / CLIENTS -->
+    <section class="py-20 lg:py-24 bg-white relative z-20 border-b border-slate-200/80" aria-labelledby="clients-heading">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10">
-          <span class="text-xs uppercase tracking-widest text-slate-500 font-semibold">Engineering Workwear Identity For Leading Enterprises</span>
+        <div class="text-center mb-10 md:mb-12">
+          <span class="text-xs uppercase tracking-widest text-primary font-bold">CLIENTS / TRUSTED BY</span>
+          <h2 id="clients-heading" class="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">
+            Trusted by Organizations Across Industries
+          </h2>
+          <p class="text-sm text-slate-500 max-w-2xl mx-auto mt-3">
+            Engineering bespoke corporate workwear and institutional apparel for leading Indian and multinational enterprises.
+          </p>
         </div>
 
-        <!-- Marquee Ticker -->
-        <div class="marquee-container w-full py-4 overflow-hidden">
-          <div class="marquee-content animate-marquee-infinite gap-12 sm:gap-16 flex items-center">
-            <img src="assets/logos/toyota.png" alt="Toyota" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/taj-hotels-logo.webp" alt="Taj Hotels" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/fortis-logo.jpg" alt="Fortis" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity rounded">
-            <img src="assets/logos/shell.png" alt="Shell" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/biocon-logo.jpg" alt="Biocon" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity rounded">
-            <img src="assets/logos/bosch-logo.png" alt="Bosch" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/wipro.png" alt="Wipro" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/infosys-logo.webp" alt="Infosys" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/tata-motors.webp" alt="Tata Motors" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/lt-logo.png" alt="L&T" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/otis.webp" alt="Otis" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
-            <img src="assets/logos/schneider-electric.webp" alt="Schneider Electric" class="h-8 md:h-9 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity">
+        <!-- Premium Infinite Logo Marquee Slider -->
+        <div class="marquee-container w-full py-6 overflow-hidden relative flex">
+          <!-- Gradient Edge Fade Masks -->
+          <div class="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-white to-transparent z-10"></div>
+          <div class="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-white to-transparent z-10"></div>
+
+          <!-- Track 1: First 18 Logos -->
+          <div class="marquee-track flex items-center shrink-0 animate-marquee-infinite gap-10 sm:gap-14 pr-10 sm:pr-14">
+            <!-- 1. Toyota -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/toyota.svg" alt="Toyota" class="h-6 sm:h-7 w-auto max-w-[125px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 2. Schneider Electric -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/schneider-electric.svg" alt="Schneider Electric" class="h-7 sm:h-8 w-auto max-w-[135px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 3. MTR -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/mtr.svg" alt="MTR Foods" class="h-8 sm:h-9 w-auto max-w-[85px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 4. Aditya Birla Group -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/aditya-birla.svg" alt="Aditya Birla Group" class="h-8 sm:h-9 w-auto max-w-[130px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 5. Hindalco -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/hindalco.svg" alt="Hindalco" class="h-6 sm:h-7 w-auto max-w-[130px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 6. Kawasaki -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/kawasaki.svg" alt="Kawasaki" class="h-5 sm:h-6 w-auto max-w-[115px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 7. Karnataka State Cricket Association -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/ksca.png" alt="Karnataka State Cricket Association" class="h-10 sm:h-11 w-auto max-w-[50px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 8. Samsung -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/samsung.svg" alt="Samsung" class="h-5 sm:h-6 w-auto max-w-[105px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 9. Collins Aerospace -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/aerospace.svg" alt="Collins Aerospace" class="h-6 sm:h-7 w-auto max-w-[130px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 10. Café Coffee Day -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/cafe-coffee-day.svg" alt="Café Coffee Day" class="h-9 sm:h-10 w-auto max-w-[48px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 11. Lifestyle -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/lifestyle.svg" alt="Lifestyle" class="h-6 sm:h-7 w-auto max-w-[110px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 12. Tata Advanced Systems -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/tata-advanced-systems.svg" alt="Tata Advanced Systems" class="h-8 sm:h-9 w-auto max-w-[80px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 13. Mahindra REVA -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/mahindra-reva.svg" alt="Mahindra REVA" class="h-7 sm:h-8 w-auto max-w-[125px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 14. DAV Public School -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/dav-public-school.png" alt="DAV Public School" class="h-10 sm:h-11 w-auto max-w-[50px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 15. TITAN -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/titan.png" alt="TITAN" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 16. OTIS -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/otis.svg" alt="OTIS" class="h-6 sm:h-7 w-auto max-w-[85px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 17. Orkla India -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/orkla-india.svg" alt="Orkla India" class="h-6 sm:h-7 w-auto max-w-[95px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 18. Wipro -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/wipro.svg" alt="Wipro" class="h-8 sm:h-9 w-auto max-w-[95px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+          </div>
+
+          <!-- Track 2: Duplicate 18 Logos for seamless infinite continuous loop -->
+          <div class="marquee-track flex items-center shrink-0 animate-marquee-infinite gap-10 sm:gap-14 pr-10 sm:pr-14" aria-hidden="true">
+            <!-- 1. Toyota -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/toyota.svg" alt="Toyota" class="h-6 sm:h-7 w-auto max-w-[125px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 2. Schneider Electric -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/schneider-electric.svg" alt="Schneider Electric" class="h-7 sm:h-8 w-auto max-w-[135px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 3. MTR -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/mtr.svg" alt="MTR Foods" class="h-8 sm:h-9 w-auto max-w-[85px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 4. Aditya Birla Group -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/aditya-birla.svg" alt="Aditya Birla Group" class="h-8 sm:h-9 w-auto max-w-[130px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 5. Hindalco -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/hindalco.svg" alt="Hindalco" class="h-6 sm:h-7 w-auto max-w-[130px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 6. Kawasaki -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/kawasaki.svg" alt="Kawasaki" class="h-5 sm:h-6 w-auto max-w-[115px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 7. Karnataka State Cricket Association -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/ksca.png" alt="Karnataka State Cricket Association" class="h-10 sm:h-11 w-auto max-w-[50px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 8. Samsung -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/samsung.svg" alt="Samsung" class="h-5 sm:h-6 w-auto max-w-[105px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 9. Collins Aerospace -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/aerospace.svg" alt="Collins Aerospace" class="h-6 sm:h-7 w-auto max-w-[130px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 10. Café Coffee Day -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/cafe-coffee-day.svg" alt="Café Coffee Day" class="h-9 sm:h-10 w-auto max-w-[48px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 11. Lifestyle -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/lifestyle.svg" alt="Lifestyle" class="h-6 sm:h-7 w-auto max-w-[110px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 12. Tata Advanced Systems -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/tata-advanced-systems.svg" alt="Tata Advanced Systems" class="h-8 sm:h-9 w-auto max-w-[80px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 13. Mahindra REVA -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/mahindra-reva.svg" alt="Mahindra REVA" class="h-7 sm:h-8 w-auto max-w-[125px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 14. DAV Public School -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/dav-public-school.png" alt="DAV Public School" class="h-10 sm:h-11 w-auto max-w-[50px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 15. TITAN -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/titan.png" alt="TITAN" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 16. OTIS -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/otis.svg" alt="OTIS" class="h-6 sm:h-7 w-auto max-w-[85px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 17. Orkla India -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/orkla-india.svg" alt="Orkla India" class="h-6 sm:h-7 w-auto max-w-[95px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
+            <!-- 18. Wipro -->
+            <div class="logo-item flex items-center justify-center shrink-0 h-12 sm:h-14 px-2">
+              <img src="assets/logos/clients/wipro.svg" alt="Wipro" class="h-8 sm:h-9 w-auto max-w-[95px] object-contain transition-transform duration-300 hover:scale-105" loading="lazy">
+            </div>
           </div>
         </div>
 
@@ -1106,7 +1276,7 @@
         <span class="text-xs uppercase tracking-widest text-primary font-bold block mb-2">Client Endorsements</span>
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-14 tracking-tight">What Our Partners Say</h2>
 
-        <div class="relative min-h-[16rem] sm:min-h-[14rem] flex items-center justify-center">
+        <div id="testimonials-slider-container" class="relative min-h-[16rem] sm:min-h-[14rem] flex items-center justify-center">
           <!-- Testimonial 1 -->
           <div class="testimonial-slide absolute inset-0 opacity-100 transition-opacity duration-500 flex flex-col justify-between" id="testimonial-slide-1">
             <p class="text-lg sm:text-xl text-slate-700 italic leading-relaxed max-w-2xl mx-auto font-normal">
@@ -1114,7 +1284,7 @@
             </p>
             <div class="flex items-center justify-center gap-3 mt-6">
               <div class="px-3 py-1.5 bg-white border border-slate-200/80 rounded-lg shadow-2xs h-9 w-24 flex items-center justify-center shrink-0">
-                <img src="assets/logos/wipro.png" alt="Wipro Logo" class="h-5 w-auto object-contain">
+                <img src="assets/logos/clients/wipro.svg" alt="Wipro Logo" class="h-5 w-auto object-contain">
               </div>
               <div class="text-left">
                 <h4 class="font-heading text-sm font-bold text-slate-900 leading-none">Anjali</h4>
@@ -1130,7 +1300,7 @@
             </p>
             <div class="flex items-center justify-center gap-3 mt-6">
               <div class="px-3 py-1.5 bg-white border border-slate-200/80 rounded-lg shadow-2xs h-9 w-24 flex items-center justify-center shrink-0">
-                <img src="assets/logos/otis.webp" alt="Otis Logo" class="h-5 w-auto object-contain">
+                <img src="assets/logos/clients/otis.svg" alt="Otis Logo" class="h-5 w-auto object-contain">
               </div>
               <div class="text-left">
                 <h4 class="font-heading text-sm font-bold text-slate-900 leading-none">Bhavya</h4>
@@ -1146,7 +1316,7 @@
             </p>
             <div class="flex items-center justify-center gap-3 mt-6">
               <div class="px-3 py-1.5 bg-white border border-slate-200/80 rounded-lg shadow-2xs h-9 w-28 flex items-center justify-center shrink-0">
-                <img src="assets/logos/schneider-electric.webp" alt="Schneider Electric Logo" class="h-5 w-auto object-contain">
+                <img src="assets/logos/clients/schneider-electric.svg" alt="Schneider Electric Logo" class="h-5 w-auto object-contain">
               </div>
               <div class="text-left">
                 <h4 class="font-heading text-sm font-bold text-slate-900 leading-none">Sonia Murdeshwar</h4>
@@ -1276,16 +1446,11 @@
       <div>
         <h5 class="font-heading text-sm font-bold uppercase tracking-widest text-white mb-6">Collections</h5>
         <ul class="space-y-3 text-sm">
-          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Industrial Wear</a>
-          </li>
-          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Executive Blouse &
-              Suit</a></li>
-          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">Fine Dining Kitchen
-              Wear</a></li>
-          <li><a href="uniforms.html" class="text-gray-400 hover:text-primary transition-colors">School & University
-              Sets</a></li>
-          <li><a href="gifts.html" class="text-gray-400 hover:text-primary transition-colors">Corporate Gifting
-              Options</a></li>
+          <li><a href="uniforms.html#industrial" class="text-gray-400 hover:text-primary transition-colors">Industrial Wear</a></li>
+          <li><a href="uniforms.html#corporate" class="text-gray-400 hover:text-primary transition-colors">Executive Blouse & Suit</a></li>
+          <li><a href="uniforms.html#hospitality" class="text-gray-400 hover:text-primary transition-colors">Fine Dining Kitchen Wear</a></li>
+          <li><a href="uniforms.html#institutional" class="text-gray-400 hover:text-primary transition-colors">School & University Sets</a></li>
+          <li><a href="gifts.html" class="text-gray-400 hover:text-primary transition-colors">Corporate Gifting Options</a></li>
         </ul>
       </div>
 
@@ -1324,8 +1489,7 @@
 
     <div
       class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-xs text-gray-500">Copyright © 2026 <span class="company-name">UNIWEAR</span>. Premium Uniform
-        Manufacturing partner, Bengaluru.</p>
+      <p class="text-xs text-gray-500">Copyright © 2026 <span class="company-name">UNIWEAR</span>. Premium uniform manufacturing partner in Bengaluru.</p>
       <div class="flex gap-6 text-xs text-gray-500">
         <a href="#" class="hover:text-primary transition-colors">Privacy Charter</a>
         <a href="#" class="hover:text-primary transition-colors">SLA Mandate</a>
@@ -1423,13 +1587,17 @@
 
       // Editorial hero entry animation
       gsap.fromTo('.hero-reveal',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: "power2.out" }
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out" }
+      );
+      gsap.fromTo('.hero-card-container',
+        { y: 32, opacity: 0, scale: 0.98 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.9, delay: 0.2, ease: "power3.out" }
       );
 
       // Trigger counter counters
       const statItems = [
-        { id: 'stat-clients', target: 2000, suffix: '+' },
+        { id: 'stat-clients', target: 3000, suffix: '+' },
         { id: 'stat-pincodes', target: 2000, suffix: '+' }
       ];
 
@@ -1455,83 +1623,149 @@
       });
     });
 
-    // Timeline Process Stepper State
-    const stepDetails = {
+    // Manufacturing Lifecycle Interactive Stepper State
+    const lifecycleSteps = {
       1: {
-        num: "PHASE 01",
-        title: "Design & Development",
-        desc: "Understanding your requirements, our design experts create patterns and samples that blend functionality, comfort, and style. We assess safety requirements, movement needs, branding guidelines, and fabric performance to deliver the perfect uniform specification.",
-        img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=80"
+        num: "01",
+        label: "Step 01",
+        title: "Client Consultation & Swatches",
+        badgeDesc: "Client Consultation & Swatch Selection",
+        img: "assets/images/manufacturing/client-consultation.jpg",
+        alt: "Client Consultation and Fabric Swatch Selection"
       },
       2: {
-        num: "PHASE 02",
-        title: "Sourcing & Fabric Selection",
-        desc: "We source premium quality fabrics and trims from trusted partners, ensuring durability, comfort, and consistent performance. Every roll of fabric is inspected for GSM, colourfastness, shrinkage, and tensile strength before approval.",
-        img: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=900&q=80"
+        num: "02",
+        label: "Step 02",
+        title: "Design & Prototyping",
+        badgeDesc: "CAD Design & Pattern Prototyping",
+        img: "assets/images/manufacturing/lifecycle-step-1.png",
+        alt: "CAD Uniform Design and Pattern Prototyping"
       },
       3: {
-        num: "PHASE 03",
-        title: "Manufacturing",
-        desc: "Using advanced industrial machinery and skilled craftsmanship, we ensure every stitch meets our high standards of quality and precision. Our production floor operates with strict cut-make-trim protocols, delivering consistent results at scale.",
-        img: "https://images.unsplash.com/photo-1612833606695-d4d11df4f864?auto=format&fit=crop&w=900&q=80"
+        num: "03",
+        label: "Step 03",
+        title: "Precision Bulk Manufacturing",
+        badgeDesc: "Precision Bulk Manufacturing & Stitching",
+        img: "assets/images/manufacturing/lifecycle-step-2.png",
+        alt: "Automated Stitching and High-Volume Manufacturing"
       },
       4: {
-        num: "PHASE 04",
-        title: "Quality Check & Delivery",
-        desc: "Every uniform undergoes strict quality checks before being carefully packed and delivered on time, every time. We deliver size-sorted, barcode-tracked packages directly to your corporate campuses or logistics hubs to complete purchase orders seamlessly.",
-        img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80"
+        num: "04",
+        label: "Step 04",
+        title: "Quality Inspection & Delivery",
+        badgeDesc: "Quality Inspection & Nationwide Dispatch",
+        img: "assets/images/manufacturing/lifecycle-step-3.png",
+        alt: "Quality Inspection and Pan-India Distribution"
       }
     };
 
-    function setActiveStep(stepNum) {
-      document.querySelectorAll('.step-btn').forEach(btn => {
-        btn.classList.remove('active-step', 'bg-lightCard', 'border-lightBorder');
-        btn.classList.add('border-transparent');
+    // Preload lifecycle images for instant switching
+    try {
+      Object.values(lifecycleSteps).forEach(s => {
+        const pre = new Image();
+        pre.src = s.img;
       });
+    } catch (e) {}
 
-      const activeBtn = document.getElementById(`step-btn-${stepNum}`);
-      activeBtn.classList.add('active-step', 'bg-lightCard', 'border-lightBorder');
-      activeBtn.classList.remove('border-transparent');
+    function setLifecycleStep(stepNum) {
+      const step = lifecycleSteps[stepNum];
+      if (!step) return;
 
-      const detailCard = document.getElementById('step-detail-card');
-      gsap.to(detailCard, {
-        opacity: 0,
-        y: 10,
-        duration: 0.2,
-        onComplete: () => {
-          document.getElementById('step-detail-num').innerText = stepDetails[stepNum].num;
-          document.getElementById('step-detail-title').innerText = stepDetails[stepNum].title;
-          document.getElementById('step-detail-desc').innerText = stepDetails[stepNum].desc;
-          document.getElementById('step-detail-image').src = stepDetails[stepNum].img;
+      // Update Stepper Buttons & Circles
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`step-btn-${i}`);
+        const circle = document.getElementById(`step-circle-${i}`);
+        if (!btn || !circle) continue;
 
-          gsap.to(detailCard, { opacity: 1, y: 0, duration: 0.3 });
+        if (i === stepNum) {
+          btn.classList.add('active-step', 'bg-white', 'border-slate-200', 'shadow-sm');
+          btn.classList.remove('border-transparent');
+          circle.style.borderColor = '#B91C1C';
+          circle.style.backgroundColor = '#B91C1C';
+          circle.style.color = '#ffffff';
+        } else {
+          btn.classList.remove('active-step', 'bg-white', 'border-slate-200', 'shadow-sm');
+          btn.classList.add('border-transparent');
+          circle.style.borderColor = '#e5e7eb';
+          circle.style.backgroundColor = 'transparent';
+          circle.style.color = '#9ca3af';
         }
-      });
+      }
+
+      // Update Infographic Image & Badges
+      const img = document.getElementById('lifecycle-img');
+      const badge = document.getElementById('lifecycle-badge');
+      const badgeLabel = document.getElementById('lifecycle-badge-label');
+      const badgeDesc = document.getElementById('lifecycle-badge-desc');
+
+      if (img) {
+        if (typeof gsap !== 'undefined') {
+          gsap.to([img, badge], {
+            opacity: 0,
+            duration: 0.15,
+            onComplete: () => {
+              img.src = step.img;
+              img.alt = step.alt;
+              if (badgeLabel) badgeLabel.textContent = step.label;
+              if (badgeDesc) badgeDesc.textContent = step.badgeDesc;
+              gsap.to([img, badge], { opacity: 1, duration: 0.25 });
+            }
+          });
+        } else {
+          img.style.opacity = '0';
+          if (badge) badge.style.opacity = '0';
+          setTimeout(() => {
+            img.src = step.img;
+            img.alt = step.alt;
+            if (badgeLabel) badgeLabel.textContent = step.label;
+            if (badgeDesc) badgeDesc.textContent = step.badgeDesc;
+            img.style.opacity = '1';
+            if (badge) badge.style.opacity = '1';
+          }, 150);
+        }
+      }
     }
 
-    // Fading Testimonial Slider Controls
+    // Expose both setLifecycleStep and legacy alias setActiveStep
+    window.setLifecycleStep = setLifecycleStep;
+    window.setActiveStep = setLifecycleStep;
+
+    // Dynamic Testimonial Slider Controls
     let activeTestimonialIndex = 1;
     function changeTestimonial(direction) {
+      const slides = document.querySelectorAll('.testimonial-slide');
+      const totalSlides = slides.length || 3;
+      if (totalSlides <= 1) return;
+
       const current = document.getElementById(`testimonial-slide-${activeTestimonialIndex}`);
       let nextIndex = activeTestimonialIndex + direction;
-      if (nextIndex > 3) nextIndex = 1;
-      if (nextIndex < 1) nextIndex = 3;
+      if (nextIndex > totalSlides) nextIndex = 1;
+      if (nextIndex < 1) nextIndex = totalSlides;
 
       const next = document.getElementById(`testimonial-slide-${nextIndex}`);
+      if (!current || !next) return;
 
-      gsap.to(current, {
-        opacity: 0, duration: 0.3, onComplete: () => {
-          current.classList.add('opacity-0');
-          current.classList.remove('opacity-100');
+      if (typeof gsap !== 'undefined') {
+        gsap.to(current, {
+          opacity: 0, duration: 0.3, onComplete: () => {
+            current.classList.add('opacity-0');
+            current.classList.remove('opacity-100');
 
-          next.classList.remove('opacity-0');
-          next.classList.add('opacity-100');
-          gsap.to(next, { opacity: 1, duration: 0.3 });
-        }
-      });
+            next.classList.remove('opacity-0');
+            next.classList.add('opacity-100');
+            gsap.to(next, { opacity: 1, duration: 0.3 });
+          }
+        });
+      } else {
+        current.classList.add('opacity-0');
+        current.classList.remove('opacity-100');
+        next.classList.remove('opacity-0');
+        next.classList.add('opacity-100');
+      }
 
       activeTestimonialIndex = nextIndex;
     }
+    window.changeTestimonial = changeTestimonial;
 
     function handleNewsletterSubmit(event) {
       event.preventDefault();
@@ -1652,7 +1886,6 @@
         const productSelect = document.getElementById('config-choose-product');
 
         if (!categorySelect || !productSelect) {
-          console.error("Design Studio Error: Category or Product selector DOM elements not found!");
           return;
         }
 
@@ -1714,8 +1947,11 @@
     }
 
     function onProductChange() {
+      const productEl = document.getElementById('config-choose-product');
+      if (!productEl) return;
       const products = globalProducts;
-      const productId = parseInt(document.getElementById('config-choose-product').value);
+      const productId = parseInt(productEl.value);
+      if (isNaN(productId)) return;
       const selectedProduct = products.find(p => p.id === productId);
       if (!selectedProduct) return;
 
@@ -1776,16 +2012,19 @@
     }
 
     function updateConfiguratorUI() {
+      const productEl = document.getElementById('config-choose-product');
+      if (!productEl) return;
       const products = globalProducts;
-      const productId = parseInt(document.getElementById('config-choose-product').value);
+      const productId = parseInt(productEl.value);
+      if (isNaN(productId)) return;
       const selectedProduct = products.find(p => p.id === productId);
       if (!selectedProduct) return;
 
-      const primary = document.getElementById('config-primary-color').value;
-      const secondary = document.getElementById('config-secondary-color').value;
-      const brandingType = document.getElementById('config-branding-type').value;
-      const brandingPos = document.getElementById('config-branding-pos').value;
-      const fabric = document.getElementById('config-fabric-type').value;
+      const primary = document.getElementById('config-primary-color')?.value || '#1e293b';
+      const secondary = document.getElementById('config-secondary-color')?.value || '#1e293b';
+      const brandingType = document.getElementById('config-branding-type')?.value || 'embroidery';
+      const brandingPos = document.getElementById('config-branding-pos')?.value || 'chest';
+      const fabric = document.getElementById('config-fabric-type')?.value || 'Cotton';
 
       // 1. Tint Overlay color
       const tint = document.getElementById('configurator-tint-overlay');
@@ -2148,65 +2387,11 @@
         Dismiss
       </button>
     </div>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Hero Cross-fade Slider
-      const slides = document.querySelectorAll('.hero-slide');
-      const dots = document.querySelectorAll('.hero-dot');
-      let currentSlide = 0;
-      let slideTimer = null;
-
-      function goToSlide(index) {
-        if (!slides.length) return;
-        slides.forEach((slide, i) => {
-          if (i === index) {
-            slide.classList.remove('opacity-0', 'z-0');
-            slide.classList.add('opacity-100', 'z-10');
-          } else {
-            slide.classList.remove('opacity-100', 'z-10');
-            slide.classList.add('opacity-0', 'z-0');
-          }
-        });
-
-        dots.forEach((dot, i) => {
-          if (i === index) {
-            dot.className = 'hero-dot w-8 h-3 rounded-full bg-primary transition-all duration-300 cursor-pointer shadow-md';
-          } else {
-            dot.className = 'hero-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white transition-all duration-300 cursor-pointer';
-          }
-        });
-
-        currentSlide = index;
-      }
-
-      function nextSlide() {
-        const nextIdx = (currentSlide + 1) % slides.length;
-        goToSlide(nextIdx);
-      }
-
-      function startAutoSlide() {
-        stopAutoSlide();
-        slideTimer = setInterval(nextSlide, 6000);
-      }
-
-      function stopAutoSlide() {
-        if (slideTimer) clearInterval(slideTimer);
-      }
-
-      dots.forEach((dot) => {
-        dot.addEventListener('click', () => {
-          const idx = parseInt(dot.getAttribute('data-index'), 10);
-          goToSlide(idx);
-          startAutoSlide();
-        });
-      });
-
-      if (slides.length > 0) {
-        goToSlide(0);
-        startAutoSlide();
-      }
-
-      // 2. Dynamic Header Scroll & Theme State Handler
+      // 1. Dynamic Header Scroll & Theme State Handler
       const globalHeader = document.getElementById('global-header');
       const navPill = globalHeader ? globalHeader.querySelector('nav') : null;
       const navLinks = globalHeader ? globalHeader.querySelectorAll('.nav-link') : [];
@@ -2216,22 +2401,22 @@
 
       function updateHeaderOnScroll() {
         if (!globalHeader) return;
-        const isScrolled = window.scrollY > 50;
+        const isScrolled = window.scrollY > 40;
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
 
         if (isScrolled) {
-          globalHeader.classList.remove('py-4');
-          globalHeader.classList.add('py-2.5');
+          globalHeader.classList.remove('py-2.5');
+          globalHeader.classList.add('py-2');
 
           if (currentTheme === 'dark') {
-            globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 shadow-xl bg-zinc-950/95 backdrop-blur-md border-b border-white/10 text-white';
+            globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2 shadow-xl bg-zinc-950/95 backdrop-blur-md border-b border-white/10 text-white';
             if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-zinc-900/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/15 shadow-inner';
             navLinks.forEach(l => { l.className = 'nav-link lg:text-xs xl:text-sm font-medium text-zinc-100 hover:text-primary transition-colors'; });
             if (clientPortalLink) clientPortalLink.className = 'lg:text-xs xl:text-sm font-medium text-zinc-100 hover:text-primary transition-colors';
             if (mobileMenuIcon) mobileMenuIcon.className = 'ri-menu-line text-2xl text-white';
             if (logoImg) logoImg.style.filter = 'brightness(0) invert(1)';
           } else {
-            globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 shadow-md bg-white/95 backdrop-blur-md border-b border-slate-200/80 text-slate-900';
+            globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2 shadow-md bg-white/95 backdrop-blur-md border-b border-slate-200/80 text-slate-900';
             if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-slate-100/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/80 shadow-inner';
             navLinks.forEach(l => { l.className = 'nav-link lg:text-xs xl:text-sm font-medium text-slate-700 hover:text-primary transition-colors'; });
             if (clientPortalLink) clientPortalLink.className = 'lg:text-xs xl:text-sm font-medium text-slate-700 hover:text-primary transition-colors';
@@ -2239,13 +2424,25 @@
             if (logoImg) logoImg.style.filter = 'none';
           }
         } else {
-          // Top of page over hero (dark photographic overlay)
-          globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 bg-transparent text-white';
-          if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-black/40 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/20 shadow-lg';
-          navLinks.forEach(l => { l.className = 'nav-link lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors'; });
-          if (clientPortalLink) clientPortalLink.className = 'lg:text-xs xl:text-sm font-medium text-white/90 hover:text-white transition-colors';
-          if (mobileMenuIcon) mobileMenuIcon.className = 'ri-menu-line text-2xl text-white';
-          if (logoImg) logoImg.style.filter = 'brightness(0) invert(1)';
+          // Top of page over hero (clean transparent header)
+          globalHeader.classList.remove('py-2');
+          globalHeader.classList.add('py-2.5');
+
+          if (currentTheme === 'dark') {
+            globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 bg-transparent text-white';
+            if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-zinc-900/85 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/10 shadow-sm';
+            navLinks.forEach(l => { l.className = 'nav-link lg:text-xs xl:text-sm font-medium text-zinc-100 hover:text-primary transition-colors'; });
+            if (clientPortalLink) clientPortalLink.className = 'lg:text-xs xl:text-sm font-medium text-zinc-100 hover:text-primary transition-colors';
+            if (mobileMenuIcon) mobileMenuIcon.className = 'ri-menu-line text-2xl text-white';
+            if (logoImg) logoImg.style.filter = 'brightness(0) invert(1)';
+          } else {
+            globalHeader.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 bg-transparent text-slate-900';
+            if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-white/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/80 shadow-sm';
+            navLinks.forEach(l => { l.className = 'nav-link lg:text-xs xl:text-sm font-medium text-slate-700 hover:text-primary transition-colors'; });
+            if (clientPortalLink) clientPortalLink.className = 'lg:text-xs xl:text-sm font-medium text-slate-700 hover:text-primary transition-colors';
+            if (mobileMenuIcon) mobileMenuIcon.className = 'ri-menu-line text-2xl text-slate-900';
+            if (logoImg) logoImg.style.filter = 'none';
+          }
         }
       }
 
@@ -2276,8 +2473,8 @@
         const legacyEl = document.getElementById('hero-stat-legacy');
         const clientsEl = document.getElementById('hero-stat-clients');
 
-        if (legacyEl) animateCount(legacyEl, 25, '+ Years');
-        if (clientsEl) animateCount(clientsEl, 2000, '+ Brands');
+        if (legacyEl) animateCount(legacyEl, 28, '+ Years');
+        if (clientsEl) animateCount(clientsEl, 3000, '+ Clients Served');
       }, 300);
     });
   </script>

@@ -1,9 +1,36 @@
+const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const CompanySettings = require('../models/CompanySettings');
 const { sendMail, emailTemplates } = require('../config/mailer');
 
+const getOrderQuery = (id) => (mongoose.isValidObjectId(id) ? { _id: id } : { id: id });
+
+const FACTORY_STAGE_NAMES = [
+  '01. Quotation & Contract Finalized',
+  '02. Fabric Sourcing & Mill Reservation',
+  '03. Lab Dip & Color Dye Approval',
+  '04. Pre-Production Sample Sign-Off',
+  '05. Precision CNC Fabric Cutting',
+  '06. Logo Embroidery & Screen Printing',
+  '07. Component Bundling & Panel Prep',
+  '08. Sewing & Stitch Assembly',
+  '09. Quality Control & Inline Inspection',
+  '10. Thread Trimming & Steam Pressing',
+  '11. Poly-Bags & Barcode Labeling',
+  '12. Final Quality Audit & Metal Detect',
+  '13. Carton Packing & Palletization',
+  '14. Dispatch & Logistics Tracking'
+];
+
 // Helper to log admin actions
-const logActivity = async (action, details, user = 'Admin') => {};
+const Notification = require('../models/Notification');
+const logActivity = async (action, details, user = 'Admin') => {
+  try {
+    await Notification.create({ recipient: 'admin', title: action, text: details || action, time: 'Just now' });
+  } catch (err) {
+    console.error('[logActivity Error]', err.message);
+  }
+};
 
 // GET /api/orders
 const getOrders = async (req, res, next) => {
@@ -53,7 +80,11 @@ const getOrders = async (req, res, next) => {
 // POST /api/orders
 const createOrder = async (req, res, next) => {
   try {
-    const order = await Order.create(req.body);
+    const payload = { ...req.body };
+    if (payload.volume !== undefined) {
+      payload.volume = parseInt(String(payload.volume).replace(/[^0-9]/g, '')) || 0;
+    }
+    const order = await Order.create(payload);
     await logActivity('Order Created', `Order ${order.id} logged for ${order.clientEmail}`);
 
     try {
@@ -71,26 +102,26 @@ const createOrder = async (req, res, next) => {
 // PATCH /api/orders/:id
 const updateOrder = async (req, res, next) => {
   try {
-    const oldOrder = await Order.findById(req.params.id);
+    const targetQuery = getOrderQuery(req.params.id);
+    const oldOrder = await Order.findOne(targetQuery);
     if (!oldOrder) return res.status(404).json({ success: false, message: 'Order not found.' });
 
     // Handle stage updates
     const updates = { ...req.body };
+    if (updates.volume !== undefined) {
+      updates.volume = parseInt(String(updates.volume).replace(/[^0-9]/g, '')) || 0;
+    }
     if (updates.currentStageIndex) {
-      const stageNames = [
-        'Order Confirmed', 'Measurement Collection', 'Fabric Procurement', 'Sampling', 'Sample Approval',
-        'Cutting', 'Stitching', 'Branding', 'Quality Check', 'Packing',
-        'Ready for Dispatch', 'Dispatched', 'Delivered', 'Completed'
-      ];
-      updates.statusStep = updates.currentStageIndex;
-      updates.currentStageName = stageNames[updates.currentStageIndex - 1] || 'Order Confirmed';
+      const idx = Number(updates.currentStageIndex);
+      updates.statusStep = idx;
+      updates.currentStageName = FACTORY_STAGE_NAMES[idx - 1] || `Stage ${idx}`;
       updates.statusText = updates.currentStageName;
-      if (updates.currentStageIndex === 14) updates.isCompleted = true;
-      if (updates.currentStageIndex === 11) updates.readyForDispatch = true;
-      if (updates.currentStageIndex === 5) updates.awaitingApproval = true;
+      if (idx === 14) updates.isCompleted = true;
+      if (idx === 11) updates.readyForDispatch = true;
+      if (idx === 4 || idx === 5) updates.awaitingApproval = true;
     }
 
-    const order = await Order.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
+    const order = await Order.findOneAndUpdate(targetQuery, updates, { new: true, runValidators: true });
     await logActivity('Order Updated', `Order ${order.id} stage updated to ${order.currentStageName}`);
 
     try {

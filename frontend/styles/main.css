@@ -150,6 +150,12 @@ img { max-width: 100%; }
   overflow: hidden;
   white-space: nowrap;
   display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.marquee-container:hover .animate-marquee-infinite {
+  animation-play-state: paused;
 }
 
 .marquee-content {
@@ -158,6 +164,25 @@ img { max-width: 100%; }
   min-width: 100%;
   justify-content: space-around;
   align-items: center;
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  will-change: transform;
+}
+
+.logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.logo-item:hover {
+  transform: translateY(-2px) scale(1.03);
 }
 
 /* ==========================================
@@ -350,6 +375,10 @@ nav a::after, .nav-link::after {
   background-color: #B91C1C;
   border-radius: 1px;
   transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), left 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+nav a:hover, .nav-link:hover, #header-client-portal:hover {
+  color: #B91C1C !important;
 }
 
 nav a:hover::after, .nav-link:hover::after {

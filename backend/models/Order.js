@@ -13,20 +13,20 @@ const orderStageSchema = new mongoose.Schema({
 }, { _id: false });
 
 const DEFAULT_STAGES = [
-  { stageIndex: 1, stageName: 'Order Confirmed', status: 'Completed', responsiblePerson: 'Sales Team' },
-  { stageIndex: 2, stageName: 'Measurement Collection', status: 'In Progress', responsiblePerson: 'Sizing Spec' },
-  { stageIndex: 3, stageName: 'Fabric Procurement', status: 'Not Started', responsiblePerson: 'Procurement' },
-  { stageIndex: 4, stageName: 'Sampling', status: 'Not Started', responsiblePerson: 'Sample Room' },
-  { stageIndex: 5, stageName: 'Sample Approval', status: 'Not Started', responsiblePerson: 'Client & QA' },
-  { stageIndex: 6, stageName: 'Cutting', status: 'Not Started', responsiblePerson: 'Cutting Master' },
-  { stageIndex: 7, stageName: 'Stitching', status: 'Not Started', responsiblePerson: 'Production Floor' },
-  { stageIndex: 8, stageName: 'Branding', status: 'Not Started', responsiblePerson: 'Embroidery Desk' },
-  { stageIndex: 9, stageName: 'Quality Check', status: 'Not Started', responsiblePerson: 'QA Inspector' },
-  { stageIndex: 10, stageName: 'Packing', status: 'Not Started', responsiblePerson: 'Dispatch Team' },
-  { stageIndex: 11, stageName: 'Ready for Dispatch', status: 'Not Started', responsiblePerson: 'Logistics' },
-  { stageIndex: 12, stageName: 'Dispatched', status: 'Not Started', responsiblePerson: 'Courier Partner' },
-  { stageIndex: 13, stageName: 'Delivered', status: 'Not Started', responsiblePerson: 'Logistics' },
-  { stageIndex: 14, stageName: 'Completed', status: 'Not Started', responsiblePerson: 'Account Manager' }
+  { stageIndex: 1, stageName: '01. Quotation & Contract Finalized', status: 'Completed', responsiblePerson: 'Sales Team' },
+  { stageIndex: 2, stageName: '02. Fabric Sourcing & Mill Reservation', status: 'In Progress', responsiblePerson: 'Procurement Team' },
+  { stageIndex: 3, stageName: '03. Lab Dip & Color Dye Approval', status: 'Not Started', responsiblePerson: 'Dyeing Lab' },
+  { stageIndex: 4, stageName: '04. Pre-Production Sample Sign-Off', status: 'Not Started', responsiblePerson: 'Sample Room & Client' },
+  { stageIndex: 5, stageName: '05. Precision CNC Fabric Cutting', status: 'Not Started', responsiblePerson: 'CNC Cutting Master' },
+  { stageIndex: 6, stageName: '06. Logo Embroidery & Screen Printing', status: 'Not Started', responsiblePerson: 'Branding Desk' },
+  { stageIndex: 7, stageName: '07. Component Bundling & Panel Prep', status: 'Not Started', responsiblePerson: 'Bundling Unit' },
+  { stageIndex: 8, stageName: '08. Sewing & Stitch Assembly', status: 'Not Started', responsiblePerson: 'Sewing Floor' },
+  { stageIndex: 9, stageName: '09. Quality Control & Inline Inspection', status: 'Not Started', responsiblePerson: 'QA Inspection' },
+  { stageIndex: 10, stageName: '10. Thread Trimming & Steam Pressing', status: 'Not Started', responsiblePerson: 'Finishing Team' },
+  { stageIndex: 11, stageName: '11. Poly-Bags & Barcode Labeling', status: 'Not Started', responsiblePerson: 'Packaging Desk' },
+  { stageIndex: 12, stageName: '12. Final Quality Audit & Metal Detect', status: 'Not Started', responsiblePerson: 'Audit QA' },
+  { stageIndex: 13, stageName: '13. Carton Packing & Palletization', status: 'Not Started', responsiblePerson: 'Warehouse Team' },
+  { stageIndex: 14, stageName: '14. Dispatch & Logistics Tracking', status: 'Not Started', responsiblePerson: 'Logistics Partner' }
 ];
 
 const orderSchema = new mongoose.Schema({

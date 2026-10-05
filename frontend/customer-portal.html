@@ -688,45 +688,54 @@
     let globalProducts = [];
     let customerAssignedProducts = [];
 
-    // Sync customer specific data from server
+    // Sync customer specific data from server with deduplication
+    let _syncCustomerDataPromise = null;
     async function syncCustomerData() {
-      const email = localStorage.getItem('uniwear_auth_email');
-      const userId = localStorage.getItem('uniwear_auth_id');
-      if (!email) return;
+      if (_syncCustomerDataPromise) return _syncCustomerDataPromise;
+      _syncCustomerDataPromise = (async () => {
+        try {
+          const email = localStorage.getItem('uniwear_auth_email');
+          const userId = localStorage.getItem('uniwear_auth_id');
+          if (!email) return;
 
-      const results = await Promise.allSettled([
-        window.api.getQuotations(email),
-        window.api.getOrders(email),
-        window.api.getTickets(email),
-        window.api.getNotifications(email),
-        window.api.getSettings(),
-        window.api.getProducts(),
-        userId ? window.api.getCustomerProducts(userId) : Promise.resolve({ success: false })
-      ]);
+          const results = await Promise.allSettled([
+            window.api.getQuotations(email),
+            window.api.getOrders(email),
+            window.api.getTickets(email),
+            window.api.getNotifications(email),
+            window.api.getSettings(),
+            window.api.getProducts(),
+            userId ? window.api.getCustomerProducts(userId) : Promise.resolve({ success: false })
+          ]);
 
-      const [quotesR, ordersR, ticketsR, notisR, settingsR, productsR, assignedR] = results;
+          const [quotesR, ordersR, ticketsR, notisR, settingsR, productsR, assignedR] = results;
 
-      if (quotesR.status === 'fulfilled' && quotesR.value && quotesR.value.success) {
-        localStorage.setItem('uniwear_quotations', JSON.stringify(quotesR.value.data));
-      }
-      if (ordersR.status === 'fulfilled' && ordersR.value && ordersR.value.success) {
-        localStorage.setItem('uniwear_orders', JSON.stringify(ordersR.value.data));
-      }
-      if (ticketsR.status === 'fulfilled' && ticketsR.value && ticketsR.value.success) {
-        localStorage.setItem('uniwear_tickets', JSON.stringify(ticketsR.value.data));
-      }
-      if (notisR.status === 'fulfilled' && notisR.value && notisR.value.success) {
-        localStorage.setItem('uniwear_notifications', JSON.stringify(notisR.value.data));
-      }
-      if (settingsR.status === 'fulfilled' && settingsR.value && settingsR.value.success) {
-        localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsR.value.data));
-      }
-      if (productsR.status === 'fulfilled' && productsR.value && productsR.value.success) {
-        globalProducts = productsR.value.data;
-      }
-      if (assignedR.status === 'fulfilled' && assignedR.value && assignedR.value.success) {
-        customerAssignedProducts = assignedR.value.data;
-      }
+          if (quotesR.status === 'fulfilled' && quotesR.value && quotesR.value.success) {
+            localStorage.setItem('uniwear_quotations', JSON.stringify(quotesR.value.data));
+          }
+          if (ordersR.status === 'fulfilled' && ordersR.value && ordersR.value.success) {
+            localStorage.setItem('uniwear_orders', JSON.stringify(ordersR.value.data));
+          }
+          if (ticketsR.status === 'fulfilled' && ticketsR.value && ticketsR.value.success) {
+            localStorage.setItem('uniwear_tickets', JSON.stringify(ticketsR.value.data));
+          }
+          if (notisR.status === 'fulfilled' && notisR.value && notisR.value.success) {
+            localStorage.setItem('uniwear_notifications', JSON.stringify(notisR.value.data));
+          }
+          if (settingsR.status === 'fulfilled' && settingsR.value && settingsR.value.success) {
+            localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsR.value.data));
+          }
+          if (productsR.status === 'fulfilled' && productsR.value && productsR.value.success) {
+            globalProducts = productsR.value.data;
+          }
+          if (assignedR.status === 'fulfilled' && assignedR.value && assignedR.value.success) {
+            customerAssignedProducts = assignedR.value.data;
+          }
+        } finally {
+          _syncCustomerDataPromise = null;
+        }
+      })();
+      return _syncCustomerDataPromise;
     }
 
     // Guard authentication check
@@ -784,7 +793,17 @@
     }
 
     function handleLogout() {
-      localStorage.removeItem('uniwear_auth_role');
+      if (window.api && typeof window.api.logout === 'function') {
+        window.api.logout();
+      } else {
+        localStorage.removeItem('uniwear_jwt_token');
+        localStorage.removeItem('uniwear_auth_token');
+        localStorage.removeItem('uniwear_auth_role');
+        localStorage.removeItem('uniwear_auth_role_details');
+        localStorage.removeItem('uniwear_auth_email');
+        localStorage.removeItem('uniwear_auth_id');
+        localStorage.removeItem('uniwear_profile');
+      }
       window.location.href = 'login.html';
     }
 

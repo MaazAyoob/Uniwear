@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin-portal.html
+Disallow: /customer-portal.html
+Disallow: /api/
+
+Sitemap: https://uniwear.co/sitemap.xml

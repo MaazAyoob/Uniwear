@@ -28,6 +28,7 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const exportRoutes = require('./routes/exportRoutes');
 const customerProductRoutes = require('./routes/customerProductRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const chatbotRoutes = require('./routes/chatbotRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -40,17 +41,76 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 
-// Trust single reverse proxy (Nginx) for client IP detection & rate limiting
-app.set('trust proxy', 1);
+// Trust reverse proxy for client IP detection & rate limiting
+app.set('trust proxy', true);
 
-const apiLimiter = rateLimit({
+const jwt = require('jsonwebtoken');
+
+const getClientIp = (req) => {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) {
+    const ips = forwarded.split(',').map(s => s.trim()).filter(Boolean);
+    if (ips.length > 0) return ips[0];
+  }
+  return req.headers['x-real-ip'] || req.ip || (req.socket && req.socket.remoteAddress) || '127.0.0.1';
+};
+
+// 1. Strict Auth Limiter (Prevents brute-force on login/register/password change)
+const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 300,
+  max: 30,
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: getClientIp,
+  message: { success: false, message: 'Too many authentication attempts from this IP, please try again after 15 minutes.' }
+});
+
+// 2. Public submission limiter (Leads / Chatbot)
+const writeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: getClientIp,
+  message: { success: false, message: 'Too many submissions from this IP, please try again later.' }
+});
+
+const isStaffUser = (req) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    try {
+      const token = authHeader.split(' ')[1];
+      const decoded = jwt.decode(token);
+      const allowedRoles = ['Super Admin', 'Admin', 'Sales Executive', 'Production Manager'];
+      if (decoded && allowedRoles.includes(decoded.role)) {
+        return true; // Staff are never throttled during admin operations
+      }
+    } catch (_) {}
+  }
+  return false;
+};
+
+// 3. General API Limiter (Production tier: 1500 req/15min, bypass for authenticated staff)
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1500,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: getClientIp,
+  skip: (req) => {
+    // Never rate limit internal health checks
+    if (req.path === '/health' || req.originalUrl === '/api/health') return true;
+    return isStaffUser(req);
+  },
   message: { success: false, message: 'Too many requests from this IP, please try again after 15 minutes.' }
 });
+
 app.use('/api', apiLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+app.use('/api/auth/change-password', authLimiter);
+app.use('/api/leads', writeLimiter);
+
 
 app.use(compression());
 
@@ -82,11 +142,14 @@ app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// Serve persistent storage files
+// Serve persistent storage files (/var/www/uniwear/storage)
 const fs = require('fs');
-const primaryStorage = path.resolve(__dirname, '..', '..', 'storage');
-const fallbackStorage = path.resolve(__dirname, '..', 'storage');
+const primaryStorage = path.resolve(__dirname, '..', 'storage');
+const fallbackStorage = path.resolve(__dirname, 'storage');
 const activeStorageDir = fs.existsSync(primaryStorage) ? primaryStorage : fallbackStorage;
+if (!fs.existsSync(activeStorageDir)) {
+  fs.mkdirSync(activeStorageDir, { recursive: true });
+}
 app.use('/storage', express.static(activeStorageDir));
 
 // API Routes
@@ -104,6 +167,7 @@ app.use('/api/blogs', blogRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 app.use('/api', customerProductRoutes);
 
 app.get('/api/health', (req, res) => {
@@ -113,6 +177,11 @@ app.get('/api/health', (req, res) => {
 // Unmatched API route handler (returns JSON 404 instead of index.html)
 app.use('/api/*', (req, res) => {
   res.status(404).json({ success: false, message: `API endpoint ${req.originalUrl} not found.` });
+});
+
+// 301 Permanent Redirect for legacy /about-us
+app.get(['/about-us', '/about-us.html'], (req, res) => {
+  res.redirect(301, '/about.html');
 });
 
 app.get('*', (req, res) => {

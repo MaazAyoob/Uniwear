@@ -6,7 +6,13 @@ const { sendMail, emailTemplates } = require('../config/mailer');
 const CompanySettings = require('../models/CompanySettings');
 
 // Activity logger helper
-const logActivity = async (action, details, user = 'Admin') => {};
+const logActivity = async (action, details, user = 'Admin') => {
+  try {
+    await Notification.create({ recipient: 'admin', title: action, text: details || action, time: 'Just now' });
+  } catch (err) {
+    console.error('[logActivity Error]', err.message);
+  }
+};
 
 // GET /api/quotations
 const getQuotations = async (req, res, next) => {
@@ -58,6 +64,15 @@ const createQuotation = async (req, res, next) => {
     if (!quotationData.quotationNumber) {
       quotationData.quotationNumber = quotationData.id;
     }
+    if (quotationData.volume !== undefined) {
+      quotationData.volume = parseInt(String(quotationData.volume).replace(/[^0-9]/g, '')) || 0;
+    }
+    if (!quotationData.amount && quotationData.value) {
+      quotationData.amount = parseInt(String(quotationData.value).replace(/[^0-9]/g, '')) || 0;
+    }
+    if (quotationData.amount && !quotationData.value) {
+      quotationData.value = '₹' + Number(quotationData.amount).toLocaleString('en-IN');
+    }
 
     const quotation = await Quotation.create(quotationData);
     await logActivity('Quotation Created', `Quotation ${quotation.id} created for ${quotation.clientEmail}`);
@@ -83,7 +98,18 @@ const updateQuotation = async (req, res, next) => {
     const oldQuotation = await Quotation.findById(req.params.id);
     if (!oldQuotation) return res.status(404).json({ success: false, message: 'Quotation not found.' });
 
-    const quotation = await Quotation.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const updates = { ...req.body };
+    if (updates.volume !== undefined) {
+      updates.volume = parseInt(String(updates.volume).replace(/[^0-9]/g, '')) || 0;
+    }
+    if (!updates.amount && updates.value) {
+      updates.amount = parseInt(String(updates.value).replace(/[^0-9]/g, '')) || 0;
+    }
+    if (updates.amount && !updates.value) {
+      updates.value = '₹' + Number(updates.amount).toLocaleString('en-IN');
+    }
+
+    const quotation = await Quotation.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
     await logActivity('Quotation Updated', `Quotation ${quotation.id} status set to ${quotation.status}`);
 
     const settings = await CompanySettings.findOne().lean() || {};
@@ -95,6 +121,7 @@ const updateQuotation = async (req, res, next) => {
     // Convert to order when status becomes Approved or Converted to Order
     if ((req.body.status === 'Approved' || req.body.status === 'Converted to Order') && oldQuotation.status !== 'Approved' && oldQuotation.status !== 'Converted to Order') {
       const orderId = `UW-ORD-${Math.floor(800 + Math.random() * 199)}`;
+      const cleanVolume = parseInt(String(quotation.volume).replace(/[^0-9]/g, '')) || 0;
       const order = await Order.create({
         id: orderId,
         clientEmail: quotation.clientEmail,
@@ -102,13 +129,13 @@ const updateQuotation = async (req, res, next) => {
         contactPerson: quotation.contactPerson || '',
         contactNumber: quotation.contactNumber || '',
         productName: quotation.productClass,
-        volume: quotation.volume,
-        value: quotation.value || `₹${quotation.grandTotal || quotation.amount || 0}`,
+        volume: cleanVolume,
+        value: quotation.value || `₹${(quotation.grandTotal || quotation.amount || 0).toLocaleString('en-IN')}`,
         deliveryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         statusStep: 1,
-        statusText: 'Order Confirmed',
+        statusText: '01. Quotation & Contract Finalized',
         currentStageIndex: 1,
-        currentStageName: 'Order Confirmed'
+        currentStageName: '01. Quotation & Contract Finalized'
       });
 
       await Notification.create({

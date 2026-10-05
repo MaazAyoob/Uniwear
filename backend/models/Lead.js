@@ -11,7 +11,7 @@ const leadSchema = new mongoose.Schema({
   details: { type: String, default: '' },
   stage: {
     type: String,
-    enum: ['New Lead', 'Contacted', 'Quotation Sent', 'Negotiation', 'Closed Won', 'Closed Lost', 'Human Handoff'],
+    enum: ['New Lead', 'Contacted', 'Quotation Sent', 'Negotiation', 'Won', 'Lost', 'Closed Won', 'Closed Lost', 'Human Handoff'],
     default: 'New Lead'
   },
   source: { type: String, default: 'Contact Form' },

@@ -4,7 +4,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 // Resolve the root storage directory
-const STORAGE_ROOT = path.resolve(__dirname, '..', '..', 'storage');
+const STORAGE_ROOT = process.env.STORAGE_PATH || path.resolve(__dirname, '..', '..', 'storage');
 
 // Ensure root subdirectories exist
 const SUBDIRS = ['products', 'blogs', 'catalogs', 'logos', 'general'];

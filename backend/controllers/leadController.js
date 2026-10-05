@@ -92,4 +92,37 @@ const deleteLead = async (req, res, next) => {
   }
 };
 
-module.exports = { getLeads, createLead, updateLead, deleteLead };
+// POST /api/leads/subscribe
+const subscribeNewsletter = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({ success: false, message: 'Please provide a valid email address.' });
+    }
+    const cleanEmail = email.trim().toLowerCase();
+    const existing = await Lead.findOne({ email: cleanEmail, source: 'Newsletter' });
+    if (existing) {
+      return res.json({ success: true, message: 'This email is already registered in our newsletter registry.', duplicate: true });
+    }
+    const lead = await Lead.create({
+      name: cleanEmail.split('@')[0],
+      email: cleanEmail,
+      company: 'Newsletter Subscriber',
+      category: 'General',
+      source: 'Newsletter',
+      details: 'Subscribed to UNIWEAR product updates and company announcements.'
+    });
+    await Notification.create({
+      recipient: 'admin',
+      title: 'New Newsletter Subscription',
+      text: `${cleanEmail} subscribed to the UNIWEAR newsletter registry.`,
+      time: 'Just now'
+    });
+    res.status(201).json({ success: true, message: 'Successfully subscribed to UNIWEAR updates.' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getLeads, createLead, updateLead, deleteLead, subscribeNewsletter };
+

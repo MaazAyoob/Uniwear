@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { getLeads, createLead, updateLead, deleteLead } = require('../controllers/leadController');
+const { getLeads, createLead, updateLead, deleteLead, subscribeNewsletter } = require('../controllers/leadController');
 const { protect, adminOnly } = require('../middleware/auth');
 
 // POST is public (contact form, design studio, chatbot – no auth)
 router.post('/', createLead);
+router.post('/subscribe', subscribeNewsletter);
 
 // GET, PATCH and DELETE are admin-only
 router.get('/', protect, adminOnly, getLeads);

@@ -48,7 +48,19 @@ const companySettingsSchema = new mongoose.Schema({
   ],
   homepageSectionsOrder: [
     { type: String }
-  ]
+  ],
+  videoReviews: [
+    {
+      customerName: { type: String, required: true },
+      projectLocation: { type: String, default: '' },
+      youtubeUrl: { type: String, required: true },
+      thumbnailUrl: { type: String, default: '' },
+      testimonialSummary: { type: String, default: '' },
+      visible: { type: Boolean, default: true },
+      order: { type: Number, default: 0 }
+    }
+  ],
+  videoDisplayLimit: { type: Number, default: 3 }
 }, { timestamps: true });
 
 module.exports = mongoose.model('CompanySettings', companySettingsSchema);

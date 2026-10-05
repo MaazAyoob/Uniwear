@@ -237,6 +237,16 @@
           id="admin-tab-admin-blogs">
           <i class="ri-article-line"></i> Blog
         </button>
+        <button onclick="setAdminTab('admin-sections')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-sections">
+          <i class="ri-layout-masonry-line"></i> Section Editor
+        </button>
+        <button onclick="setAdminTab('admin-video-reviews')"
+          class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
+          id="admin-tab-admin-video-reviews">
+          <i class="ri-video-line"></i> Video Reviews
+        </button>
         <button onclick="setAdminTab('admin-settings')"
           class="admin-tab-btn w-full flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal"
           id="admin-tab-admin-settings">
@@ -991,6 +1001,231 @@
         </div>
       </div>
 
+      <!-- TAB: HOMEPAGE SECTION EDITOR (CMS) -->
+      <div id="admin-sections" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h3 class="font-heading text-2xl font-bold text-charcoal">Homepage Section Editor</h3>
+            <p class="text-xs text-mutedText mt-1">Configure and manage live homepage content sections, headlines, and call-to-actions.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold text-mutedText">Select Section:</span>
+            <select id="section-selector" onchange="switchSectionEditor(this.value)" class="bg-white border border-lightBorder rounded-xl px-4 py-2 text-xs font-bold text-charcoal focus:outline-none focus:border-primary shadow-xs">
+              <option value="homepageHero">Hero Section</option>
+              <option value="whyChooseUs">Why Choose Us (3 Features)</option>
+              <option value="homepageStats">Company Stats Bar</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 1: Hero Section Editor -->
+        <div id="section-panel-homepageHero" class="section-editor-panel bg-white p-6 md:p-8 rounded-2xl border border-lightBorder shadow-sm max-w-3xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-lightBorder">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <i class="ri-home-smile-line text-lg"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Hero Section Editor</h4>
+                <p class="text-xs text-mutedText">Edit headline, subtitle, action buttons and banner asset.</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded bg-slate-100 text-slate-700">Live Homepage</span>
+          </div>
+
+          <form onsubmit="handleSectionSave(event, 'homepageHero')" class="space-y-5 font-body">
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1.5">Hero Headline *</label>
+              <input type="text" id="hero-title" required class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal font-semibold focus:outline-none focus:border-primary">
+            </div>
+
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1.5">Hero Subtitle / Description *</label>
+              <textarea id="hero-subtitle" rows="3" required class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal leading-relaxed focus:outline-none focus:border-primary"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1.5">Primary CTA Button Text</label>
+                <input type="text" id="hero-cta-text" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1.5">Primary CTA Link URL</label>
+                <input type="text" id="hero-cta-link" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1.5">Secondary CTA Button Text</label>
+                <input type="text" id="hero-sec-cta-text" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1.5">Secondary CTA Link URL</label>
+                <input type="text" id="hero-sec-cta-link" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1.5">Hero Banner Image Path / URL</label>
+              <input type="text" id="hero-banner-url" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+            </div>
+
+            <div class="pt-2 flex items-center justify-between">
+              <span id="hero-save-status" class="text-xs font-semibold text-green-600 hidden"></span>
+              <button type="submit" id="hero-save-btn" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-sm flex items-center gap-2">
+                <i class="ri-save-line"></i> Save Hero Section
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Section 2: Why Choose Us Section Editor -->
+        <div id="section-panel-whyChooseUs" class="section-editor-panel hidden bg-white p-6 md:p-8 rounded-2xl border border-lightBorder shadow-sm max-w-3xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-lightBorder">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <i class="ri-award-line text-lg"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Why Choose Us Pillars</h4>
+                <p class="text-xs text-mutedText">Edit the 3 core value proposition cards on the homepage.</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded bg-slate-100 text-slate-700">3 Pillars</span>
+          </div>
+
+          <form onsubmit="handleSectionSave(event, 'whyChooseUs')" class="space-y-6 font-body">
+            <!-- Pillar 1 -->
+            <div class="p-4 bg-lightCard rounded-xl border border-lightBorder space-y-3">
+              <h5 class="text-xs font-bold text-charcoal uppercase tracking-wider">Pillar 1: On-Time Delivery</h5>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <input type="text" id="why-title-0" placeholder="Title" required class="bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal">
+                <input type="text" id="why-icon-0" placeholder="Icon Class (e.g. ri-time-line)" required class="bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal">
+              </div>
+              <textarea id="why-sub-0" rows="2" placeholder="Description" required class="w-full bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal"></textarea>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="p-4 bg-lightCard rounded-xl border border-lightBorder space-y-3">
+              <h5 class="text-xs font-bold text-charcoal uppercase tracking-wider">Pillar 2: Quality & Standards</h5>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <input type="text" id="why-title-1" placeholder="Title" required class="bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal">
+                <input type="text" id="why-icon-1" placeholder="Icon Class (e.g. ri-award-line)" required class="bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal">
+              </div>
+              <textarea id="why-sub-1" rows="2" placeholder="Description" required class="w-full bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal"></textarea>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="p-4 bg-lightCard rounded-xl border border-lightBorder space-y-3">
+              <h5 class="text-xs font-bold text-charcoal uppercase tracking-wider">Pillar 3: Customer Experience</h5>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <input type="text" id="why-title-2" placeholder="Title" required class="bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal">
+                <input type="text" id="why-icon-2" placeholder="Icon Class (e.g. ri-user-heart-line)" required class="bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal">
+              </div>
+              <textarea id="why-sub-2" rows="2" placeholder="Description" required class="w-full bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal"></textarea>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between">
+              <span id="why-save-status" class="text-xs font-semibold text-green-600 hidden"></span>
+              <button type="submit" id="why-save-btn" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-sm flex items-center gap-2">
+                <i class="ri-save-line"></i> Save Why Choose Us
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Section 3: Company Stats Section Editor -->
+        <div id="section-panel-homepageStats" class="section-editor-panel hidden bg-white p-6 md:p-8 rounded-2xl border border-lightBorder shadow-sm max-w-3xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-lightBorder">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <i class="ri-bar-chart-2-line text-lg"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-lg font-bold text-charcoal">Homepage Stats Bar</h4>
+                <p class="text-xs text-mutedText">Configure the high-level impact statistics bar.</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded bg-slate-100 text-slate-700">4 Metrics</span>
+          </div>
+
+          <form onsubmit="handleSectionSave(event, 'homepageStats')" class="space-y-4 font-body">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="stats-inputs-container">
+              <!-- Dynamically populated or 4 default stat cards -->
+            </div>
+
+            <div class="pt-2 flex items-center justify-between">
+              <span id="stats-save-status" class="text-xs font-semibold text-green-600 hidden"></span>
+              <button type="submit" id="stats-save-btn" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-sm flex items-center gap-2">
+                <i class="ri-save-line"></i> Save Stats Section
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB: VIDEO REVIEWS CMS -->
+      <div id="admin-video-reviews" class="admin-portal-view hidden space-y-8">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h3 class="font-heading text-2xl font-bold text-charcoal">Video Reviews &amp; Endorsements CMS</h3>
+            <p class="text-xs text-mutedText mt-1">Manage client video testimonials, YouTube links, thumbnail assets, display ordering and limits.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="openVideoReviewModal('add')" class="bg-primary hover:bg-primaryHover text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5">
+              <i class="ri-add-line"></i> Add Video Review
+            </button>
+          </div>
+        </div>
+
+        <!-- Video Display Limit Control Card -->
+        <div class="bg-white p-6 rounded-2xl border border-lightBorder shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+              <i class="ri-film-line text-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-heading text-sm font-bold text-charcoal">Public Video Display Limit</h4>
+              <p class="text-xs text-mutedText">Controls maximum number of videos shown on public homepage (currently configured: <span id="current-display-limit-label" class="font-bold text-primary font-mono">3</span>).</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="number" id="video-display-limit-input" min="1" max="12" value="3" class="w-20 bg-lightCard border border-lightBorder rounded-lg p-2 text-xs font-mono font-bold text-center focus:outline-none focus:border-primary">
+            <button onclick="saveVideoDisplayLimit()" class="bg-charcoal hover:bg-primary text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors shadow-xs">
+              Save Limit
+            </button>
+          </div>
+        </div>
+
+        <!-- Video Reviews Registry Table -->
+        <div class="bg-white rounded-2xl border border-lightBorder overflow-hidden shadow-sm">
+          <div class="p-5 border-b border-lightBorder flex items-center justify-between">
+            <h4 class="font-heading text-base font-bold text-charcoal">Registered Video Reviews (<span id="video-reviews-count">0</span>)</h4>
+            <span class="text-xs text-mutedText font-semibold">Ordered display sequence</span>
+          </div>
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left text-sm border-collapse font-body min-w-[900px]">
+              <thead>
+                <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                  <th class="p-4 font-heading font-semibold text-charcoal">Order</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Thumbnail</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Customer &amp; Client</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">YouTube URL</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Testimonial Summary</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Visible</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-video-reviews-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
     </div>
   </div>
 
@@ -1536,6 +1771,77 @@
           class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
           Publish Quotation Proposal
         </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add/Edit Video Review -->
+  <div id="admin-video-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden font-body">
+    <div class="absolute inset-0 bg-charcoal/40 backdrop-blur-md" onclick="toggleModal('admin-video-modal', false)"></div>
+    <div class="relative w-full max-w-lg bg-white border border-lightBorder rounded-3xl p-8 shadow-2xl z-10 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-heading text-2xl font-bold text-charcoal" id="video-modal-title">Add Video Review</h3>
+        <button onclick="toggleModal('admin-video-modal', false)" class="text-gray-400 hover:text-charcoal">
+          <i class="ri-close-line text-xl"></i>
+        </button>
+      </div>
+
+      <form onsubmit="submitVideoReview(event)" class="space-y-4">
+        <input type="hidden" id="video-modal-action" value="add">
+        <input type="hidden" id="video-modal-id" value="">
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Customer / Contact Person *</label>
+          <input type="text" id="video-customer-name" required placeholder="e.g. Anjali" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Company &amp; Project / Location</label>
+          <input type="text" id="video-project-location" placeholder="e.g. Wipro · Corporate Procurement (Bengaluru)" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">YouTube Video URL *</label>
+          <input type="url" id="video-youtube-url" required placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+          <p class="text-[10px] text-mutedText mt-1">Supports standard YouTube URLs or share links.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Thumbnail Image URL / Asset</label>
+          <div class="flex gap-2">
+            <input type="text" id="video-thumbnail-url" placeholder="assets/images/industries/corporate-uniforms.png" class="flex-1 bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary">
+            <button type="button" onclick="triggerVideoThumbUpload()" class="bg-lightCard hover:bg-gray-100 text-charcoal border border-lightBorder px-3 py-2 rounded-lg text-xs font-bold uppercase transition-colors shrink-0">Upload</button>
+          </div>
+          <input type="file" id="video-thumb-file" accept="image/*" class="hidden" onchange="handleVideoThumbUpload(event)">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Testimonial Summary</label>
+          <textarea id="video-summary" rows="3" placeholder="Enter key quote or testimonial summary..." class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 pt-1">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-mutedText font-bold mb-1">Display Order</label>
+            <input type="number" id="video-order" min="1" value="1" class="w-full bg-lightCard border border-lightBorder rounded-lg py-2.5 px-3 text-xs text-charcoal font-mono focus:outline-none focus:border-primary">
+          </div>
+          <div class="flex items-center pt-5">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="video-visible" checked class="w-4 h-4 rounded text-primary focus:ring-primary">
+              <span class="text-xs font-bold text-charcoal">Show on Website</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" id="video-submit-btn" class="w-full bg-primary hover:bg-primaryHover text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors shadow-sm">
+            Save Video Review
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="js/config/config.js"></script>
   <script src="js/api/api.js"></script>
   <script src="js/utils/shared.js"></script>
@@ -1579,7 +1885,7 @@
       input.click();
     }
 
-    function handleTableImageUpload(event) {
+    async function handleTableImageUpload(event) {
       const file = event.target.files[0];
       if (!file || !currentTableUploadProductId) return;
 
@@ -1587,28 +1893,28 @@
         alert('Please select a valid image file (PNG, JPG, JPEG, WEBP).');
         return;
       }
-      if (file.size > 2 * 1024 * 1024) {
-        alert('File size exceeds 2MB limit.');
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size exceeds 10MB limit.');
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64Url = e.target.result;
-        const p = globalProducts.find(item => item && (item._id === currentTableUploadProductId || item.id === currentTableUploadProductId));
+      const prodId = currentTableUploadProductId;
+      currentTableUploadProductId = null;
+      event.target.value = '';
+
+      try {
+        const uploadRes = await window.api.uploadImage(file, 'products');
+        const imageUrl = uploadRes.url || uploadRes.path;
+        const p = globalProducts.find(item => item && (item._id === prodId || item.id === prodId));
         if (p) {
-          window.api.updateProduct(p._id, { img: base64Url, image: base64Url })
-            .then(async () => {
-              await syncAdminData();
-              updateAdminDashboard();
-              alert('Product image updated successfully!');
-            })
-            .catch(err => alert(err.message || 'Failed to update product image.'));
+          await window.api.updateProduct(p._id, { img: imageUrl, image: imageUrl });
+          await syncAdminData();
+          updateAdminDashboard();
+          alert('Product image updated successfully!');
         }
-        currentTableUploadProductId = null;
-        event.target.value = '';
-      };
-      reader.readAsDataURL(file);
+      } catch (err) {
+        alert(err.message || 'Failed to update product image.');
+      }
     }
 
     async function removeTableImage(prodId) {
@@ -1669,23 +1975,24 @@
       }
     }
 
-    function handleFileSelected(file) {
+    async function handleFileSelected(file) {
       if (!file.type.startsWith('image/')) {
         alert('Please select a valid image file (PNG, JPG, JPEG, WEBP).');
         return;
       }
-      if (file.size > 2 * 1024 * 1024) {
-        alert('File size exceeds 2MB limit.');
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size exceeds 10MB limit.');
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64Url = e.target.result;
-        document.getElementById('prod-img-url').value = base64Url;
-        updateUploadZonePreview(base64Url);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const uploadRes = await window.api.uploadImage(file, 'products');
+        const imageUrl = uploadRes.url || uploadRes.path;
+        document.getElementById('prod-img-url').value = imageUrl;
+        updateUploadZonePreview(imageUrl);
+      } catch (err) {
+        alert(err.message || 'Image upload failed.');
+      }
     }
 
     function removeModalImage(event) {
@@ -1716,24 +2023,26 @@
     function initBlogImageUploadListener() {
       const fileInput = document.getElementById('blog-images-file');
       if (!fileInput) return;
-      fileInput.addEventListener('change', function(e) {
+      fileInput.addEventListener('change', async function(e) {
         const files = Array.from(e.target.files);
-        files.forEach(file => {
+        for (const file of files) {
           if (!file.type.startsWith('image/')) {
             alert('Please select a valid image file.');
-            return;
+            continue;
           }
-          if (file.size > 2 * 1024 * 1024) {
-            alert('Image size exceeds 2MB limit.');
-            return;
+          if (file.size > 10 * 1024 * 1024) {
+            alert('Image size exceeds 10MB limit.');
+            continue;
           }
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            tempBlogImages.push(evt.target.result);
+          try {
+            const uploadRes = await window.api.uploadImage(file, 'blogs');
+            const imageUrl = uploadRes.url || uploadRes.path;
+            tempBlogImages.push(imageUrl);
             renderBlogImagesPreview();
-          };
-          reader.readAsDataURL(file);
-        });
+          } catch (err) {
+            alert('Failed to upload blog image: ' + (err.message || ''));
+          }
+        }
         fileInput.value = '';
       });
     }
@@ -1761,80 +2070,89 @@
     }
     window.removeBlogImage = removeBlogImage;
 
-    // Sync data from server
+    // Sync data from server with deduplication
+    let _syncAdminDataPromise = null;
     async function syncAdminData() {
-      // Use Promise.allSettled so a single failed API call doesn't block all the others
-      const results = await Promise.allSettled([
-        window.api.getUsers(),
-        window.api.getLeads(),
-        window.api.getQuotations(),
-        window.api.getSettings(),
-        window.api.getNotifications('admin'),
-        window.api.getProducts(),
-        window.api.getBlogs(),
-        window.api.getCatalogs(),
-        window.api.getDashboardStats()
-      ]);
+      if (_syncAdminDataPromise) return _syncAdminDataPromise;
+      _syncAdminDataPromise = (async () => {
+        try {
+          // Use Promise.allSettled so a single failed API call doesn't block all the others
+          const results = await Promise.allSettled([
+            window.api.getUsers(),
+            window.api.getLeads(),
+            window.api.getQuotations(),
+            window.api.getSettings(),
+            window.api.getNotifications('admin'),
+            window.api.getProducts(),
+            window.api.getBlogs(),
+            window.api.getCatalogs(),
+            window.api.getDashboardStats()
+          ]);
 
-      const [usersR, leadsR, quotesR, settingsR, notifR, productsR, blogsR, catalogsR, statsR] = results;
+          const [usersR, leadsR, quotesR, settingsR, notifR, productsR, blogsR, catalogsR, statsR] = results;
 
-      if (usersR.status === 'fulfilled' && usersR.value.success) {
-        globalUsers = usersR.value.data;
-        localStorage.setItem('uniwear_users', JSON.stringify(usersR.value.data));
-      } else if (usersR.status === 'rejected') {
-        console.warn('[syncAdminData] getUsers failed:', usersR.reason);
-      }
+          if (usersR.status === 'fulfilled' && usersR.value.success) {
+            globalUsers = usersR.value.data;
+            localStorage.setItem('uniwear_users', JSON.stringify(usersR.value.data));
+          } else if (usersR.status === 'rejected') {
+            console.warn('[syncAdminData] getUsers failed:', usersR.reason);
+          }
 
-      if (leadsR.status === 'fulfilled' && leadsR.value.success) {
-        globalLeads = leadsR.value.data;
-        localStorage.setItem('uniwear_leads', JSON.stringify(leadsR.value.data));
-      } else if (leadsR.status === 'rejected') {
-        console.warn('[syncAdminData] getLeads failed:', leadsR.reason);
-      }
+          if (leadsR.status === 'fulfilled' && leadsR.value.success) {
+            globalLeads = leadsR.value.data;
+            localStorage.setItem('uniwear_leads', JSON.stringify(leadsR.value.data));
+          } else if (leadsR.status === 'rejected') {
+            console.warn('[syncAdminData] getLeads failed:', leadsR.reason);
+          }
 
-      if (quotesR.status === 'fulfilled' && quotesR.value.success) {
-        globalQuotations = quotesR.value.data;
-        localStorage.setItem('uniwear_quotations', JSON.stringify(quotesR.value.data));
-      } else if (quotesR.status === 'rejected') {
-        console.warn('[syncAdminData] getQuotations failed:', quotesR.reason);
-      }
+          if (quotesR.status === 'fulfilled' && quotesR.value.success) {
+            globalQuotations = quotesR.value.data;
+            localStorage.setItem('uniwear_quotations', JSON.stringify(quotesR.value.data));
+          } else if (quotesR.status === 'rejected') {
+            console.warn('[syncAdminData] getQuotations failed:', quotesR.reason);
+          }
 
-      if (settingsR.status === 'fulfilled' && settingsR.value.success) {
-        localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsR.value.data));
-      } else if (settingsR.status === 'rejected') {
-        console.warn('[syncAdminData] getSettings failed:', settingsR.reason);
-      }
+          if (settingsR.status === 'fulfilled' && settingsR.value.success) {
+            localStorage.setItem('uniwear_company_settings', JSON.stringify(settingsR.value.data));
+          } else if (settingsR.status === 'rejected') {
+            console.warn('[syncAdminData] getSettings failed:', settingsR.reason);
+          }
 
-      if (notifR.status === 'fulfilled' && notifR.value.success) {
-        globalNotifications = notifR.value.data;
-        localStorage.setItem('uniwear_notifications', JSON.stringify(notifR.value.data));
-      } else if (notifR.status === 'rejected') {
-        console.warn('[syncAdminData] getNotifications failed:', notifR.reason);
-      }
+          if (notifR.status === 'fulfilled' && notifR.value.success) {
+            globalNotifications = notifR.value.data;
+            localStorage.setItem('uniwear_notifications', JSON.stringify(notifR.value.data));
+          } else if (notifR.status === 'rejected') {
+            console.warn('[syncAdminData] getNotifications failed:', notifR.reason);
+          }
 
-      if (productsR.status === 'fulfilled' && productsR.value.success) {
-        globalProducts = productsR.value.data;
-      } else if (productsR.status === 'rejected') {
-        console.warn('[syncAdminData] getProducts failed:', productsR.reason);
-      }
+          if (productsR.status === 'fulfilled' && productsR.value.success) {
+            globalProducts = productsR.value.data;
+          } else if (productsR.status === 'rejected') {
+            console.warn('[syncAdminData] getProducts failed:', productsR.reason);
+          }
 
-      if (blogsR.status === 'fulfilled' && blogsR.value.success) {
-        globalBlogs = blogsR.value.data;
-      } else if (blogsR.status === 'rejected') {
-        console.warn('[syncAdminData] getBlogs failed:', blogsR.reason);
-      }
+          if (blogsR.status === 'fulfilled' && blogsR.value.success) {
+            globalBlogs = blogsR.value.data;
+          } else if (blogsR.status === 'rejected') {
+            console.warn('[syncAdminData] getBlogs failed:', blogsR.reason);
+          }
 
-      if (catalogsR.status === 'fulfilled' && catalogsR.value.success) {
-        globalCatalogs = catalogsR.value.data;
-      } else if (catalogsR.status === 'rejected') {
-        console.warn('[syncAdminData] getCatalogs failed:', catalogsR.reason);
-      }
+          if (catalogsR.status === 'fulfilled' && catalogsR.value.success) {
+            globalCatalogs = catalogsR.value.data;
+          } else if (catalogsR.status === 'rejected') {
+            console.warn('[syncAdminData] getCatalogs failed:', catalogsR.reason);
+          }
 
-      if (statsR.status === 'fulfilled' && statsR.value.success) {
-        globalDashboardStats = statsR.value.data;
-      } else if (statsR.status === 'rejected') {
-        console.warn('[syncAdminData] getDashboardStats failed:', statsR.reason);
-      }
+          if (statsR.status === 'fulfilled' && statsR.value.success) {
+            globalDashboardStats = statsR.value.data;
+          } else if (statsR.status === 'rejected') {
+            console.warn('[syncAdminData] getDashboardStats failed:', statsR.reason);
+          }
+        } finally {
+          _syncAdminDataPromise = null;
+        }
+      })();
+      return _syncAdminDataPromise;
     }
 
     // Strict Auth guard (Requires authenticated JWT token & approved Staff Role)
@@ -1883,6 +2201,8 @@
       'admin-catalog': 'Catalog',
       'admin-orders': 'Orders & Production Tracker',
       'admin-blogs': 'Blog',
+      'admin-sections': 'Homepage Section Editor',
+      'admin-video-reviews': 'Video Reviews CMS',
       'admin-settings': 'Settings'
     };
 
@@ -1914,6 +2234,10 @@
       // Tab specific hooks
       if (tabId === 'admin-settings') {
         loadCompanySettingsForm();
+      } else if (tabId === 'admin-sections') {
+        loadSectionEditorData();
+      } else if (tabId === 'admin-video-reviews') {
+        renderVideoReviewsAdmin();
       } else if (tabId === 'admin-assign-products') {
         initCustomerProductAssignmentTab();
       } else if (tabId === 'admin-orders') {
@@ -2008,7 +2332,7 @@
       }
     }
 
-    function handleLogoUpload(event, type) {
+    async function handleLogoUpload(event, type) {
       const file = event.target.files[0];
       if (!file) return;
 
@@ -2016,23 +2340,24 @@
         alert('Please select a valid image file (PNG, JPG, JPEG, WEBP, SVG).');
         return;
       }
-      if (file.size > 500 * 1024) {
-        alert('Logo file size exceeds 500KB limit.');
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Logo file size exceeds 5MB limit.');
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64Url = e.target.result;
+      try {
+        const uploadRes = await window.api.uploadImage(file, 'logos');
+        const imageUrl = uploadRes.url || uploadRes.path;
         if (type === 'long') {
-          document.getElementById('settings-logo-preview').src = base64Url;
-          document.getElementById('settings-logo-data').value = base64Url;
+          document.getElementById('settings-logo-preview').src = imageUrl;
+          document.getElementById('settings-logo-data').value = imageUrl;
         } else if (type === 'favicon') {
-          document.getElementById('settings-favicon-preview').src = base64Url;
-          document.getElementById('settings-favicon-data').value = base64Url;
+          document.getElementById('settings-favicon-preview').src = imageUrl;
+          document.getElementById('settings-favicon-data').value = imageUrl;
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (err) {
+        alert('Failed to upload image: ' + (err.message || ''));
+      }
     }
 
     function resetLogoToDefault(type) {
@@ -2077,6 +2402,451 @@
       }
     }
 
+    // ─── HOMEPAGE SECTION EDITOR (CMS) HANDLERS ─────────────────────────────────
+    function switchSectionEditor(sectionKey) {
+      document.querySelectorAll('.section-editor-panel').forEach(panel => panel.classList.add('hidden'));
+      const target = document.getElementById('section-panel-' + sectionKey);
+      if (target) target.classList.remove('hidden');
+      const selector = document.getElementById('section-selector');
+      if (selector && selector.value !== sectionKey) selector.value = sectionKey;
+    }
+
+    async function loadSectionEditorData() {
+      let settings = {};
+      try {
+        const res = await window.api.getSettings();
+        if (res.success && res.data) settings = res.data;
+      } catch (e) {
+        try {
+          settings = JSON.parse(localStorage.getItem('uniwear_company_settings') || '{}');
+        } catch (_) {}
+      }
+
+      // 1. Hero Section
+      const hero = settings.homepageHero || {};
+      if (document.getElementById('hero-title')) {
+        document.getElementById('hero-title').value = hero.title || 'Engineered Workwear & Uniform Solutions';
+        document.getElementById('hero-subtitle').value = hero.subtitle || 'Direct-from-manufacturer precision uniforms, technical textiles, and corporate apparel built for durability, compliance, and comfort across India.';
+        document.getElementById('hero-cta-text').value = hero.primaryCtaText || 'Request a Quote';
+        document.getElementById('hero-cta-link').value = hero.primaryCtaLink || 'contact.html';
+        document.getElementById('hero-sec-cta-text').value = hero.secondaryCtaText || 'Explore Our Solutions';
+        document.getElementById('hero-sec-cta-link').value = hero.secondaryCtaLink || 'uniforms.html';
+        document.getElementById('hero-banner-url').value = hero.bannerUrl || 'assets/images/hero/hero-corporate.png';
+      }
+
+      // 2. Why Choose Us (3 Pillars)
+      const why = Array.isArray(settings.whyChooseUs) && settings.whyChooseUs.length >= 3 ? settings.whyChooseUs : [
+        { title: 'On-Time Delivery', subtitle: 'Optimized production scheduling ensuring deadlines are met consistently across bulk shipments.', icon: 'ri-time-line' },
+        { title: 'Best-in-Class Quality', subtitle: 'Rigorous 14-point fabric and stitch testing standards for structural longevity and comfort.', icon: 'ri-award-line' },
+        { title: 'Enhanced Customer Experience', subtitle: 'Dedicated account management, custom fitting sampling, and real-time order tracking.', icon: 'ri-user-heart-line' }
+      ];
+      for (let i = 0; i < 3; i++) {
+        const item = why[i] || {};
+        if (document.getElementById(`why-title-${i}`)) document.getElementById(`why-title-${i}`).value = item.title || '';
+        if (document.getElementById(`why-icon-${i}`)) document.getElementById(`why-icon-${i}`).value = item.icon || '';
+        if (document.getElementById(`why-sub-${i}`)) document.getElementById(`why-sub-${i}`).value = item.subtitle || '';
+      }
+
+      // 3. Homepage Stats (4 Metrics)
+      const defaultStats = [
+        { key: 'founding', label: 'Since 1998', value: '1998', numberValue: 1998 },
+        { key: 'clients', label: '3,000+ Clients Served', value: '3,000+', numberValue: 3000 },
+        { key: 'pincodes', label: 'Pan-India Coverage', value: 'Pan-India', numberValue: 100 },
+        { key: 'delivery', label: 'Pan-India Delivery', value: 'Pan-India', numberValue: 100 }
+      ];
+      const stats = Array.isArray(settings.homepageStats) && settings.homepageStats.length >= 4 ? settings.homepageStats : defaultStats;
+      const statsContainer = document.getElementById('stats-inputs-container');
+      if (statsContainer) {
+        statsContainer.innerHTML = stats.slice(0, 4).map((s, idx) => `
+          <div class="p-4 bg-lightCard rounded-xl border border-lightBorder space-y-3 font-body">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-charcoal uppercase">Metric ${idx + 1}</span>
+              <input type="hidden" id="stat-key-${idx}" value="${s.key || 'stat_' + idx}">
+            </div>
+            <div>
+              <label class="block text-[10px] uppercase font-bold text-mutedText mb-1">Display Label</label>
+              <input type="text" id="stat-label-${idx}" value="${s.label || ''}" required class="w-full bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] uppercase font-bold text-mutedText mb-1">Display Value</label>
+                <input type="text" id="stat-val-${idx}" value="${s.value || ''}" required class="w-full bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal">
+              </div>
+              <div>
+                <label class="block text-[10px] uppercase font-bold text-mutedText mb-1">Numeric Counter</label>
+                <input type="number" id="stat-num-${idx}" value="${s.numberValue !== undefined ? s.numberValue : 0}" class="w-full bg-white border border-lightBorder rounded-lg py-2 px-3 text-xs text-charcoal font-mono">
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function handleSectionSave(event, sectionKey) {
+      if (event) event.preventDefault();
+      let sectionData;
+      let statusEl = document.getElementById(
+        sectionKey === 'homepageHero' ? 'hero-save-status' :
+        sectionKey === 'whyChooseUs' ? 'why-save-status' : 'stats-save-status'
+      );
+      let saveBtn = document.getElementById(
+        sectionKey === 'homepageHero' ? 'hero-save-btn' :
+        sectionKey === 'whyChooseUs' ? 'why-save-btn' : 'stats-save-btn'
+      );
+
+      if (sectionKey === 'homepageHero') {
+        sectionData = {
+          title: document.getElementById('hero-title').value.trim(),
+          subtitle: document.getElementById('hero-subtitle').value.trim(),
+          primaryCtaText: document.getElementById('hero-cta-text').value.trim(),
+          primaryCtaLink: document.getElementById('hero-cta-link').value.trim(),
+          secondaryCtaText: document.getElementById('hero-sec-cta-text').value.trim(),
+          secondaryCtaLink: document.getElementById('hero-sec-cta-link').value.trim(),
+          bannerUrl: document.getElementById('hero-banner-url').value.trim()
+        };
+      } else if (sectionKey === 'whyChooseUs') {
+        sectionData = [
+          {
+            title: document.getElementById('why-title-0').value.trim(),
+            icon: document.getElementById('why-icon-0').value.trim() || 'ri-time-line',
+            subtitle: document.getElementById('why-sub-0').value.trim()
+          },
+          {
+            title: document.getElementById('why-title-1').value.trim(),
+            icon: document.getElementById('why-icon-1').value.trim() || 'ri-award-line',
+            subtitle: document.getElementById('why-sub-1').value.trim()
+          },
+          {
+            title: document.getElementById('why-title-2').value.trim(),
+            icon: document.getElementById('why-icon-2').value.trim() || 'ri-user-heart-line',
+            subtitle: document.getElementById('why-sub-2').value.trim()
+          }
+        ];
+      } else if (sectionKey === 'homepageStats') {
+        sectionData = [];
+        for (let i = 0; i < 4; i++) {
+          const keyEl = document.getElementById(`stat-key-${i}`);
+          const labelEl = document.getElementById(`stat-label-${i}`);
+          const valEl = document.getElementById(`stat-val-${i}`);
+          const numEl = document.getElementById(`stat-num-${i}`);
+          if (keyEl && labelEl && valEl) {
+            sectionData.push({
+              key: keyEl.value.trim() || `stat_${i}`,
+              label: labelEl.value.trim(),
+              value: valEl.value.trim(),
+              numberValue: parseFloat(numEl ? numEl.value : 0) || 0
+            });
+          }
+        }
+      }
+
+      // Check for valid non-empty data before sending to backend
+      if (!sectionData || (Array.isArray(sectionData) && sectionData.length === 0)) {
+        alert('Please provide valid section data before saving.');
+        return;
+      }
+
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Saving...';
+      }
+
+      try {
+        const res = await window.api.updateSection(sectionKey, sectionData);
+        if (res.success) {
+          if (statusEl) {
+            statusEl.textContent = 'Saved to database!';
+            statusEl.classList.remove('hidden', 'text-red-500');
+            statusEl.classList.add('text-green-600');
+            setTimeout(() => statusEl.classList.add('hidden'), 4000);
+          }
+          alert(`Section "${sectionKey}" successfully saved to MongoDB!`);
+          const curSettings = JSON.parse(localStorage.getItem('uniwear_company_settings') || '{}');
+          curSettings[sectionKey] = res.data ? res.data[sectionKey] : sectionData;
+          localStorage.setItem('uniwear_company_settings', JSON.stringify(curSettings));
+        } else {
+          throw new Error(res.message || 'Failed to update section.');
+        }
+      } catch (err) {
+        console.error('handleSectionSave error:', err);
+        if (statusEl) {
+          statusEl.textContent = err.message || 'Save failed';
+          statusEl.classList.remove('hidden', 'text-green-600');
+          statusEl.classList.add('text-red-500');
+        }
+        alert(err.message || 'Failed to save section.');
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = '<i class="ri-save-line"></i> Save ' + (sectionKey === 'homepageHero' ? 'Hero Section' : sectionKey === 'whyChooseUs' ? 'Why Choose Us' : 'Stats Section');
+        }
+      }
+    }
+
+    // ─── VIDEO REVIEWS CMS HANDLERS ─────────────────────────────────────────────
+    let globalVideoReviews = [];
+    let globalVideoDisplayLimit = 3;
+
+    async function renderVideoReviewsAdmin() {
+      const tbody = document.getElementById('admin-video-reviews-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-mutedText text-xs font-body">Loading video reviews...</td></tr>';
+
+      try {
+        const res = await window.api.getVideoReviews();
+        if (res.success && res.data) {
+          globalVideoReviews = res.data.videoReviews || [];
+          globalVideoDisplayLimit = res.data.videoDisplayLimit || 3;
+        }
+      } catch (err) {
+        console.warn('getVideoReviews warning:', err);
+      }
+
+      // Update limit card
+      const limitInput = document.getElementById('video-display-limit-input');
+      if (limitInput) limitInput.value = globalVideoDisplayLimit;
+      const limitLabel = document.getElementById('current-display-limit-label');
+      if (limitLabel) limitLabel.textContent = globalVideoDisplayLimit;
+      const countLabel = document.getElementById('video-reviews-count');
+      if (countLabel) countLabel.textContent = globalVideoReviews.length;
+
+      if (globalVideoReviews.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-mutedText text-xs font-body">No video reviews registered yet. Click "+ Add Video Review" to create one.</td></tr>';
+        return;
+      }
+
+      // Sort by display order
+      globalVideoReviews.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      tbody.innerHTML = globalVideoReviews.map((v, idx) => {
+        const isFirst = idx === 0;
+        const isLast = idx === globalVideoReviews.length - 1;
+        const vId = v._id || v.id || idx;
+        const isVisible = v.visible !== false;
+
+        return `
+          <tr class="border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body">
+            <td class="p-4 font-mono font-bold text-charcoal">
+              <div class="flex items-center gap-1.5">
+                <span class="w-6 text-center font-bold">${v.order || (idx + 1)}</span>
+                <div class="flex flex-col">
+                  <button onclick="moveVideoReviewOrder('${vId}', -1)" ${isFirst ? 'disabled class="text-gray-300 cursor-not-allowed"' : 'class="text-gray-600 hover:text-primary"'} title="Move Up"><i class="ri-arrow-up-s-line text-sm leading-none"></i></button>
+                  <button onclick="moveVideoReviewOrder('${vId}', 1)" ${isLast ? 'disabled class="text-gray-300 cursor-not-allowed"' : 'class="text-gray-600 hover:text-primary"'} title="Move Down"><i class="ri-arrow-down-s-line text-sm leading-none"></i></button>
+                </div>
+              </div>
+            </td>
+            <td class="p-4">
+              <div class="w-16 h-10 rounded-lg overflow-hidden border border-lightBorder bg-slate-100 relative group flex items-center justify-center">
+                <img src="${v.thumbnailUrl || 'assets/images/industries/corporate-uniforms.png'}" onerror="this.src='assets/images/industries/corporate-uniforms.png'" class="w-full h-full object-cover">
+                <a href="${v.youtubeUrl}" target="_blank" class="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  <i class="ri-play-fill text-sm"></i>
+                </a>
+              </div>
+            </td>
+            <td class="p-4">
+              <div class="font-bold text-charcoal">${v.customerName || 'Anonymous'}</div>
+              <div class="text-[11px] text-mutedText">${v.projectLocation || '—'}</div>
+            </td>
+            <td class="p-4 font-mono text-[11px]">
+              <a href="${v.youtubeUrl}" target="_blank" class="text-primary hover:underline flex items-center gap-1 max-w-[200px] truncate" title="${v.youtubeUrl}">
+                <i class="ri-youtube-line text-red-600 shrink-0"></i>
+                <span class="truncate">${v.youtubeUrl}</span>
+              </a>
+            </td>
+            <td class="p-4 text-mutedText text-xs max-w-xs truncate" title="${v.testimonialSummary || ''}">
+              ${v.testimonialSummary || '—'}
+            </td>
+            <td class="p-4">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" onchange="toggleVideoReviewVisibility('${vId}', this.checked)" ${isVisible ? 'checked' : ''} class="sr-only peer">
+                <div class="w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-green-600"></div>
+              </label>
+            </td>
+            <td class="p-4 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="openVideoReviewModal('edit', '${vId}')" class="p-1.5 text-mutedText hover:text-charcoal rounded-lg hover:bg-gray-100 transition-colors" title="Edit">
+                  <i class="ri-pencil-line text-sm"></i>
+                </button>
+                <button onclick="deleteVideoReviewConfirm('${vId}')" class="p-1.5 text-red-500 hover:text-red-700 rounded-lg hover:bg-red-50 transition-colors" title="Delete">
+                  <i class="ri-delete-bin-line text-sm"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function saveVideoDisplayLimit() {
+      const input = document.getElementById('video-display-limit-input');
+      const limit = parseInt(input ? input.value : 3, 10);
+      if (isNaN(limit) || limit < 1) {
+        alert('Please enter a valid display limit (at least 1).');
+        return;
+      }
+      try {
+        const res = await window.api.updateVideoDisplayLimit(limit);
+        if (res.success) {
+          globalVideoDisplayLimit = limit;
+          const label = document.getElementById('current-display-limit-label');
+          if (label) label.textContent = limit;
+          alert(`Public display limit updated to ${limit}.`);
+        }
+      } catch (err) {
+        alert(err.message || 'Failed to update video display limit.');
+      }
+    }
+
+    function openVideoReviewModal(action = 'add', videoId = null) {
+      const modal = document.getElementById('admin-video-modal');
+      if (!modal) return;
+
+      document.getElementById('video-modal-action').value = action;
+      document.getElementById('video-modal-id').value = videoId || '';
+      document.getElementById('video-modal-title').textContent = action === 'add' ? 'Add Video Review' : 'Edit Video Review';
+
+      if (action === 'edit' && videoId) {
+        const video = globalVideoReviews.find(v => (v._id || v.id) === videoId);
+        if (video) {
+          document.getElementById('video-customer-name').value = video.customerName || '';
+          document.getElementById('video-project-location').value = video.projectLocation || '';
+          document.getElementById('video-youtube-url').value = video.youtubeUrl || '';
+          document.getElementById('video-thumbnail-url').value = video.thumbnailUrl || '';
+          document.getElementById('video-summary').value = video.testimonialSummary || '';
+          document.getElementById('video-order').value = video.order || 1;
+          document.getElementById('video-visible').checked = video.visible !== false;
+        }
+      } else {
+        document.getElementById('video-customer-name').value = '';
+        document.getElementById('video-project-location').value = '';
+        document.getElementById('video-youtube-url').value = '';
+        document.getElementById('video-thumbnail-url').value = '';
+        document.getElementById('video-summary').value = '';
+        document.getElementById('video-order').value = globalVideoReviews.length + 1;
+        document.getElementById('video-visible').checked = true;
+      }
+
+      toggleModal('admin-video-modal', true);
+    }
+
+    async function submitVideoReview(event) {
+      event.preventDefault();
+      const action = document.getElementById('video-modal-action').value;
+      const videoId = document.getElementById('video-modal-id').value;
+
+      const payload = {
+        customerName: document.getElementById('video-customer-name').value.trim(),
+        projectLocation: document.getElementById('video-project-location').value.trim(),
+        youtubeUrl: document.getElementById('video-youtube-url').value.trim(),
+        thumbnailUrl: document.getElementById('video-thumbnail-url').value.trim(),
+        testimonialSummary: document.getElementById('video-summary').value.trim(),
+        order: parseInt(document.getElementById('video-order').value, 10) || 1,
+        visible: document.getElementById('video-visible').checked
+      };
+
+      const btn = document.getElementById('video-submit-btn');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+      }
+
+      try {
+        if (action === 'add') {
+          const res = await window.api.addVideoReview(payload);
+          if (res.success) {
+            alert('Video review added successfully!');
+            toggleModal('admin-video-modal', false);
+            await renderVideoReviewsAdmin();
+          }
+        } else {
+          const res = await window.api.updateVideoReview(videoId, payload);
+          if (res.success) {
+            alert('Video review updated successfully!');
+            toggleModal('admin-video-modal', false);
+            await renderVideoReviewsAdmin();
+          }
+        }
+      } catch (err) {
+        alert(err.message || 'Failed to save video review.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Save Video Review';
+        }
+      }
+    }
+
+    async function deleteVideoReviewConfirm(id) {
+      if (!confirm('Are you sure you want to delete this video review?')) return;
+      try {
+        const res = await window.api.deleteVideoReview(id);
+        if (res.success) {
+          alert('Video review deleted.');
+          await renderVideoReviewsAdmin();
+        }
+      } catch (err) {
+        alert(err.message || 'Failed to delete video review.');
+      }
+    }
+
+    async function toggleVideoReviewVisibility(id, visible) {
+      try {
+        await window.api.updateVideoReview(id, { visible });
+        const target = globalVideoReviews.find(v => (v._id || v.id) === id);
+        if (target) target.visible = visible;
+      } catch (err) {
+        alert(err.message || 'Failed to update visibility.');
+        await renderVideoReviewsAdmin();
+      }
+    }
+
+    async function moveVideoReviewOrder(id, direction) {
+      const index = globalVideoReviews.findIndex(v => (v._id || v.id) === id);
+      if (index === -1) return;
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= globalVideoReviews.length) return;
+
+      const reordered = [...globalVideoReviews];
+      const [moved] = reordered.splice(index, 1);
+      reordered.splice(newIndex, 0, moved);
+
+      // Re-assign 1-based order numbers
+      reordered.forEach((v, idx) => { v.order = idx + 1; });
+
+      const orderedIds = reordered.map(v => v._id || v.id);
+      try {
+        const res = await window.api.reorderVideoReviews(orderedIds);
+        if (res.success) {
+          await renderVideoReviewsAdmin();
+        }
+      } catch (err) {
+        alert(err.message || 'Failed to reorder video reviews.');
+      }
+    }
+
+    function triggerVideoThumbUpload() {
+      const input = document.getElementById('video-thumb-file');
+      if (input) input.click();
+    }
+
+    async function handleVideoThumbUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file (PNG, JPG, WEBP).');
+        return;
+      }
+      try {
+        const res = await window.api.uploadImage(file, 'reviews');
+        const url = res.url || res.path;
+        if (url) {
+          document.getElementById('video-thumbnail-url').value = url;
+        }
+      } catch (err) {
+        alert('Failed to upload thumbnail: ' + (err.message || ''));
+      }
+    }
+
     async function submitAdminChangePassword(event) {
       event.preventDefault();
       const currentPassword = document.getElementById('admin-pass-current').value;
@@ -2110,11 +2880,19 @@
       }
     }
 
-    // ─── LOGOUT ────────────────────────────────────────────────────────────────
     function handleLogout() {
-      localStorage.removeItem('uniwear_auth_role');
-      localStorage.removeItem('uniwear_auth_role_details');
-      localStorage.removeItem('uniwear_auth_email');
+      if (window.api && typeof window.api.logout === 'function') {
+        window.api.logout();
+      } else {
+        localStorage.removeItem('uniwear_jwt_token');
+        localStorage.removeItem('uniwear_admin_token');
+        localStorage.removeItem('uniwear_auth_token');
+        localStorage.removeItem('uniwear_auth_role');
+        localStorage.removeItem('uniwear_auth_role_details');
+        localStorage.removeItem('uniwear_auth_email');
+        localStorage.removeItem('uniwear_auth_id');
+        localStorage.removeItem('uniwear_profile');
+      }
       window.location.href = 'login.html';
     }
 
@@ -2224,11 +3002,16 @@
       } catch (err) { console.error(err); }
     }
 
-    function exportModule(moduleName) {
-      if (window.api && typeof window.api.getExportUrl === 'function') {
-        window.open(window.api.getExportUrl(moduleName), '_blank');
-      } else {
-        window.open('/api/export/' + moduleName, '_blank');
+    async function exportModule(moduleName) {
+      try {
+        if (window.api && typeof window.api.downloadExport === 'function') {
+          await window.api.downloadExport(moduleName);
+        } else {
+          window.open('/api/export/' + moduleName, '_blank');
+        }
+      } catch (err) {
+        console.error('Export error:', err);
+        alert('Export failed: ' + (err.message || 'Unknown error'));
       }
     }
     window.exportModule = exportModule;
@@ -2587,6 +3370,7 @@
         volume: lead.volume || 0,
         date: new Date().toISOString().split('T')[0],
         value: '₹' + ((lead.volume || 0) * 850).toLocaleString(),
+        amount: (lead.volume || 0) * 850,
         status: 'Approved',
         specs: lead.details || 'Converted from sales consultation lead.'
       };
@@ -2656,8 +3440,9 @@
       event.preventDefault();
       const qId = document.getElementById('revise-quote-id').value;
       const cat = document.getElementById('revise-quote-cat').value;
-      const vol = parseInt(document.getElementById('revise-quote-volume').value);
+      const vol = parseInt(document.getElementById('revise-quote-volume').value) || 0;
       const val = document.getElementById('revise-quote-value').value;
+      const numericAmount = parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
 
       const q = globalQuotations.find(item => item.id === qId);
       if (!q) return;
@@ -2667,6 +3452,7 @@
           productClass: cat,
           volume: vol,
           value: val,
+          amount: numericAmount,
           status: 'Revised'
         });
         await syncAdminData();
@@ -2690,11 +3476,11 @@
       event.preventDefault();
       const email = document.getElementById('create-quote-email').value.trim().toLowerCase();
       const prodLine = document.getElementById('create-quote-cat').value;
-      const volume = parseInt(document.getElementById('create-quote-volume').value);
-      let valueVal = document.getElementById('create-quote-value').value.trim();
+      const volume = parseInt(document.getElementById('create-quote-volume').value) || 0;
+      const rawVal = document.getElementById('create-quote-value').value.trim();
+      const numericAmount = parseFloat(rawVal.replace(/[^0-9.]/g, '')) || 0;
+      let valueVal = rawVal ? (rawVal.startsWith('₹') ? rawVal : '₹' + rawVal) : '₹' + numericAmount.toLocaleString();
       const specs = document.getElementById('create-quote-specs').value.trim();
-
-      if (!valueVal.startsWith('₹')) valueVal = '₹' + valueVal;
 
       const qId = 'UW-Quote-' + Math.floor(100 + Math.random() * 900);
 
@@ -2705,6 +3491,7 @@
         volume: volume,
         date: new Date().toISOString().split('T')[0],
         value: valueVal,
+        amount: numericAmount,
         status: 'Awaiting Admin Review',
         specs: specs
       };
@@ -3621,13 +4408,13 @@
                 <span class="block text-[10px] text-mutedText font-normal">${o.volume || '1,000 Pcs'}</span>
               </td>
               <td class="p-4">
-                <select onchange="updateOrderStage('${o._id || o.id}', this.value)" class="bg-white border border-lightBorder rounded-lg p-1.5 text-xs text-charcoal font-semibold focus:outline-none focus:border-primary">
+                <select id="order-stage-select-${o._id || o.id}" onchange="updateOrderStage('${o._id || o.id}', this.value)" class="bg-white border border-lightBorder rounded-lg p-1.5 text-xs text-charcoal font-semibold focus:outline-none focus:border-primary">
                   ${stageOptionsHtml}
                 </select>
               </td>
               <td class="p-4">${statusBadge}</td>
               <td class="p-4 text-right">
-                <button onclick="alert('Updating stage tracker for ${o.orderNo || 'Order'}')" class="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-colors">
+                <button onclick="handleUpdateTrackerClick('${o._id || o.id}')" class="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-colors">
                   Update Tracker
                 </button>
               </td>
@@ -3642,14 +4429,30 @@
 
     async function updateOrderStage(orderId, newStageIndex) {
       try {
-        await window.api.updateOrder(orderId, { currentStageIndex: Number(newStageIndex) });
-        alert(`Order stage updated to Stage ${newStageIndex}!`);
+        const stageNum = Number(newStageIndex);
+        await window.api.updateOrder(orderId, { currentStageIndex: stageNum });
+        alert(`Order stage updated to Stage ${stageNum}!`);
+        await syncAdminData();
         renderOrdersTable();
       } catch (err) {
         alert(err.message || "Failed to update order stage.");
       }
     }
     window.updateOrderStage = updateOrderStage;
+
+    async function handleUpdateTrackerClick(orderId) {
+      const selectEl = document.getElementById(`order-stage-select-${orderId}`);
+      const stageIdx = selectEl ? Number(selectEl.value) : 1;
+      try {
+        await window.api.updateOrder(orderId, { currentStageIndex: stageIdx });
+        alert(`Order production tracker successfully updated to Stage ${stageIdx}!`);
+        await syncAdminData();
+        renderOrdersTable();
+      } catch (err) {
+        alert(err.message || "Failed to update order tracker.");
+      }
+    }
+    window.handleUpdateTrackerClick = handleUpdateTrackerClick;
 
 
   </script>

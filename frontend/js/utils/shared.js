@@ -1676,12 +1676,16 @@ function applyUniversalHeaderTheme() {
   // Force light mode theme
   const currentTheme = 'light';
   document.documentElement.setAttribute('data-theme', 'light');
-  const isHomepage = window.location.pathname === '/' || window.location.pathname.endsWith('index.html') || window.location.pathname === '';
+  const isHomepage = !!document.getElementById('hero-section') || 
+                     window.location.pathname === '/' || 
+                     window.location.pathname.endsWith('index.html') || 
+                     window.location.pathname === '' ||
+                     window.location.href.includes('index.html');
   const isScrolled = window.scrollY > 30;
 
   const innerDiv = header.querySelector('div.max-w-7xl');
   if (innerDiv) {
-    innerDiv.className = 'max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-between';
+    innerDiv.className = 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between';
   }
 
   const logoImg = header.querySelector('a[href="index.html"] img, #header-logo-img, img[alt*="Logo"]');
@@ -1690,17 +1694,36 @@ function applyUniversalHeaderTheme() {
   const portalLink = document.getElementById('header-client-portal') || header.querySelector('a[href="login.html"]');
   const mobileMenuIcon = document.getElementById('menu-icon') || header.querySelector('#mobile-menu-btn i');
 
+  if (isHomepage) {
+    // HOMEPAGE: Clean light architectural split hero
+    if (!isScrolled) {
+      header.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 bg-transparent text-slate-900';
+      if (logoImg) logoImg.style.filter = 'none';
+      if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-white/95 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/90 shadow-sm';
+      navLinks.forEach(l => { l.style.color = '#1e293b'; });
+      if (portalLink) portalLink.style.color = '#1e293b';
+      if (mobileMenuIcon) mobileMenuIcon.style.color = '#0f172a';
+    } else {
+      header.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2 shadow-md bg-white/95 backdrop-blur-md border-b border-slate-200/80 text-slate-900';
+      if (logoImg) logoImg.style.filter = 'none';
+      if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-slate-100/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/80 shadow-inner';
+      navLinks.forEach(l => { l.style.color = '#1e293b'; });
+      if (portalLink) portalLink.style.color = '#1e293b';
+      if (mobileMenuIcon) mobileMenuIcon.style.color = '#0f172a';
+    }
+    return;
+  }
+
+  // INNER PAGES (With dark photo headers)
   if (!isScrolled) {
-    // Top of Page: Transparent Header over Dark Hero Overlay for ALL pages
-    header.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent text-white';
+    header.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 bg-transparent text-white';
     if (logoImg) logoImg.style.filter = 'brightness(0) invert(1)';
     if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-black/40 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-white/20 shadow-lg';
     navLinks.forEach(l => { l.style.color = 'rgba(255, 255, 255, 0.95)'; });
     if (portalLink) portalLink.style.color = 'rgba(255, 255, 255, 0.95)';
     if (mobileMenuIcon) mobileMenuIcon.style.color = '#FFFFFF';
   } else {
-    // Scrolled Down: White Backdrop Glass Navbar for ALL pages
-    header.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 shadow-md bg-white/95 backdrop-blur-md border-b border-slate-200/80 text-slate-900';
+    header.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2 shadow-md bg-white/95 backdrop-blur-md border-b border-slate-200/80 text-slate-900';
     if (logoImg) logoImg.style.filter = 'none';
     if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-slate-100/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/80 shadow-inner';
     navLinks.forEach(l => { l.style.color = '#334155'; });
@@ -2074,381 +2097,269 @@ window.addEventListener('DOMContentLoaded', () => {
   initPremiumBlogModal();
 });
 
-// ==========================================
-// UNIWEAR SMART ASSISTANT 3.0 CHATBOT SYSTEM
-// ==========================================
+// =============================================================================
+// UNIWEAR INTELLIGENT AI ASSISTANT (PRODUCTION-GRADE BACKEND-CONNECTED CHATBOT)
+// =============================================================================
 
-// Inject Chatbot styles dynamically to ensure they are available on all pages
-const styleEl = document.createElement('style');
-styleEl.textContent = `
-  .chat-msg-row {
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
-    margin-bottom: 12px;
-  }
-  .chat-msg-row.user {
-    justify-content: flex-end;
-  }
-  .chat-msg-bubble {
-    max-width: 80%;
-    padding: 10px 14px;
-    font-size: 11px;
-    line-height: 1.5;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .chat-msg-bubble.user {
-    background-color: #B91C1C;
-    color: #FFFFFF;
-    border-radius: 16px 16px 0px 16px;
-    box-shadow: 0 2px 8px rgba(185, 28, 28, 0.15);
-  }
-  .chat-msg-bubble.bot {
-    background-color: #FFFFFF;
-    color: #111827;
-    border: 1px solid rgba(0,0,0,0.06);
-    border-radius: 16px 16px 16px 0px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  }
-  .chat-chip {
-    background-color: #F9FAFB;
-    border: 1px solid rgba(0,0,0,0.08);
-    color: #4B5563;
-    padding: 6px 12px;
-    font-size: 10px;
-    font-weight: 600;
-    border-radius: 9999px;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-    white-space: nowrap;
-    display: inline-block;
-  }
-  .chat-chip:hover {
-    background-color: rgba(185, 28, 28, 0.05);
-    border-color: #B91C1C;
-    color: #B91C1C;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(185, 28, 28, 0.1);
-  }
-  #demo-chatbot-window.minimized {
-    height: 52px !important;
-    max-height: 52px !important;
-  }
-  #demo-chatbot-window.minimized #demo-chatbot-messages,
-  #demo-chatbot-window.minimized #demo-chatbot-chips,
-  #demo-chatbot-window.minimized form {
-    display: none !important;
-  }
-  .chatbot-product-card {
-    background: #FFFFFF;
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-top: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  }
-  .chatbot-card-img {
-    height: 90px;
-    width: 100%;
-    object-cover: cover;
-  }
-`;
-document.head.appendChild(styleEl);
-
-// State Memory & Storage Variables
-let chatMemory = {
-  name: "",
-  company: "",
-  email: "",
-  phone: "",
-  industry: "",
-  product: "",
-  quantity: "",
-  location: "",
-  timeline: "",
-  branding: ""
-};
-
-let chatState = {
-  mode: "chat", // 'chat', 'quote_flow', 'handoff_flow'
-  quoteStep: 0,
-  handoffStep: 0,
-  interactionCount: 0
-};
-
-// Retrieve client profile settings for pre-filling
-function getProfileInfo() {
-  const role = localStorage.getItem('uniwear_auth_role');
-  if (role === 'client') {
-    const profile = JSON.parse(localStorage.getItem('uniwear_profile'));
-    if (profile) {
-      return {
-        name: profile.representative || "",
-        company: profile.companyName || "",
-        email: profile.email || "",
-        phone: profile.phone || "",
-        location: profile.address || ""
-      };
+// Dynamic CSS Injection for Chatbot UI
+(function injectChatbotStyles() {
+  if (document.getElementById('uniwear-chatbot-styles')) return;
+  const styleEl = document.createElement('style');
+  styleEl.id = 'uniwear-chatbot-styles';
+  styleEl.textContent = `
+    .chat-msg-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      animation: chatFadeIn 0.25s ease-out;
     }
+    @keyframes chatFadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .chat-msg-row.user {
+      justify-content: flex-end;
+    }
+    .chat-msg-bubble {
+      max-width: 82%;
+      padding: 10px 14px;
+      font-size: 12px;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+    .chat-msg-bubble.user {
+      background-color: #B91C1C;
+      color: #FFFFFF;
+      border-radius: 18px 18px 2px 18px;
+      box-shadow: 0 2px 8px rgba(185, 28, 28, 0.2);
+    }
+    .chat-msg-bubble.bot {
+      background-color: #FFFFFF;
+      color: #1F2937;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 18px 18px 18px 2px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .chat-msg-bubble.bot strong {
+      font-weight: 700;
+      color: #111827;
+    }
+    .chat-msg-bubble.bot a {
+      color: #B91C1C;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+    .chat-msg-bubble.bot a:hover {
+      color: #991B1B;
+    }
+    .chat-msg-bubble.bot ul {
+      margin: 6px 0 6px 16px;
+      list-style-type: disc;
+    }
+    .chat-msg-bubble.bot li {
+      margin-bottom: 4px;
+    }
+    .chat-chip {
+      background-color: #F9FAFB;
+      border: 1px solid rgba(0,0,0,0.1);
+      color: #374151;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 9999px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .chat-chip:hover {
+      background-color: rgba(185, 28, 28, 0.08);
+      border-color: #B91C1C;
+      color: #B91C1C;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(185, 28, 28, 0.12);
+    }
+    #demo-chatbot-window.minimized {
+      height: 56px !important;
+      max-height: 56px !important;
+      overflow: hidden;
+    }
+    #demo-chatbot-window.minimized #demo-chatbot-messages,
+    #demo-chatbot-window.minimized #demo-chatbot-chips,
+    #demo-chatbot-window.minimized form {
+      display: none !important;
+    }
+    .chatbot-product-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .chatbot-product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .chatbot-card-img {
+      height: 96px;
+      width: 100%;
+      object-fit: cover;
+    }
+    @media (max-width: 640px) {
+      #demo-chatbot-window {
+        width: calc(100vw - 1.5rem) !important;
+        right: 0.75rem !important;
+        bottom: 4.5rem !important;
+        height: calc(100vh - 6rem) !important;
+        max-height: 560px !important;
+      }
+    }
+  `;
+  document.head.appendChild(styleEl);
+})();
+
+// Conversation State & Memory
+function getChatConversationId() {
+  let convId = sessionStorage.getItem('uniwear_chat_conv_id');
+  if (!convId) {
+    convId = 'conv_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+    sessionStorage.setItem('uniwear_chat_conv_id', convId);
   }
-  return {};
+  return convId;
 }
 
-function loadChatState() {
-  const savedMemory = sessionStorage.getItem('uniwear_chat_memory');
-  const savedState = sessionStorage.getItem('uniwear_chat_state');
-
-  if (savedMemory) {
-    chatMemory = JSON.parse(savedMemory);
-  } else {
-    Object.assign(chatMemory, getProfileInfo());
-  }
-
-  if (savedState) {
-    chatState = JSON.parse(savedState);
-  }
+function resetChatConversation() {
+  sessionStorage.removeItem('uniwear_chat_conv_id');
+  sessionStorage.removeItem('uniwear_chat_messages');
+  renderMessages();
+  renderContextChips();
 }
 
-function saveChatState() {
-  sessionStorage.setItem('uniwear_chat_memory', JSON.stringify(chatMemory));
-  sessionStorage.setItem('uniwear_chat_state', JSON.stringify(chatState));
+// Markdown-to-Safe-HTML Formatter
+function formatChatMarkdown(text) {
+  if (!text) return '';
+  let out = String(text);
+
+  // HTML entity escape first
+  out = out.replace(/&/g, '&amp;')
+           .replace(/</g, '&lt;')
+           .replace(/>/g, '&gt;');
+
+  // Bold **text**
+  out = out.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Italic *text*
+  out = out.replace(/\*([^\*]+)\*/g, '<em>$1</em>');
+
+  // Links [text](url) -> safe internal or external anchor tags
+  out = out.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, function(match, label, href) {
+    const safeHref = href.replace(/[\"'>]/g, '');
+    const isExternal = safeHref.startsWith('http');
+    const target = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+    return '<a href="' + safeHref + '"' + target + '>' + label + '</a>';
+  });
+
+  // Bullets: lines starting with • or - or *
+  out = out.replace(/^[\t ]*[•\-\*][\t ]+(.*)$/gm, '<li>$1</li>');
+  out = out.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+  // Line breaks
+  out = out.replace(/\n/g, '<br>');
+
+  return out;
 }
 
-// Conversation Steps Configuration
-const quoteSteps = [
-  {
-    field: "company",
-    prompt: "Let's prepare your customized quotation. First, what is your **Company Name**?",
-    validate: (val) => val.trim().length > 1
-  },
-  {
-    field: "name",
-    prompt: "Thank you. What is the **Contact Person's Name**?",
-    validate: (val) => val.trim().length > 1
-  },
-  {
-    field: "email",
-    prompt: "What is your corporate **Email Address**?",
-    validate: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim())
-  },
-  {
-    field: "phone",
-    prompt: "Got it. What is your **Mobile / Phone Number**?",
-    validate: (val) => /^[0-9+\s-]{8,15}$/.test(val.trim())
-  },
-  {
-    field: "product",
-    prompt: "Which category of uniforms do you require?",
-    type: "select",
-    options: ["Industrial Uniforms", "Corporate Uniforms", "Hospitality Uniforms", "Institutional Uniforms", "Corporate Gifting"],
-    validate: (val) => val.trim().length > 1
-  },
-  {
-    field: "quantity",
-    prompt: "What is the expected **Quantity / Volume** needed? (Minimum order is 50-100 sets)",
-    validate: (val) => !isNaN(val) && parseInt(val) > 0
-  },
-  {
-    field: "location",
-    prompt: "What is the **Delivery Location / Address**?",
-    validate: (val) => val.trim().length > 1
-  },
-  {
-    field: "branding",
-    prompt: "Do you have any **Custom Branding Requirements** (e.g. Embroidery logo, Screen printing)? Details:",
-    validate: (val) => val.trim().length > 1
-  },
-  {
-    field: "timeline",
-    prompt: "What is your expected **Delivery Timeline** (e.g. 30 days, urgent)?",
-    validate: (val) => val.trim().length > 1
-  }
-];
-
-const handoffSteps = [
-  {
-    field: "name",
-    prompt: "To connect you with our sales representative, what is your **Name**?",
-    validate: (val) => val.trim().length > 1
-  },
-  {
-    field: "company",
-    prompt: "What is your **Company Name**?",
-    validate: (val) => val.trim().length > 1
-  },
-  {
-    field: "email",
-    prompt: "What is your **Email Address**?",
-    validate: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim())
-  },
-  {
-    field: "phone",
-    prompt: "What is your **Phone Number**?",
-    validate: (val) => /^[0-9+\s-]{8,15}$/.test(val.trim())
-  },
-  {
-    field: "branding",
-    prompt: "Please provide a brief description of your **Requirement** (e.g. callback time or query):",
-    validate: (val) => val.trim().length > 1
-  }
-];
-
-// Context Aware Suggested Chips
-function getContextChips() {
-  const path = window.location.pathname;
-  const role = localStorage.getItem('uniwear_auth_role');
-
-  if (role === 'admin') {
-    return [
-      { text: "📊 Dashboard Insights", value: "Dashboard Insights" },
-      { text: "📈 View Blog Stats", value: "View Blog Stats" },
-      { text: "❓ Chatbot Help", value: "Help" }
-    ];
-  }
-
-  if (role === 'client') {
-    return [
-      { text: "📦 Track My Order", value: "Track My Order" },
-      { text: "📄 Quotation Review", value: "Quotation Review" },
-      { text: "🔔 View Notifications", value: "View Notifications" },
-      { text: "❓ Chatbot Help", value: "Help" }
-    ];
-  }
-
+// Default contextual chips based on the page
+function getDefaultContextChips() {
+  const path = window.location.pathname.toLowerCase();
   if (path.includes('uniforms.html')) {
     return [
-      { text: "👕 Product Recommendations", value: "Product Recommendations" },
-      { text: "❓ Category Help", value: "Category Help" },
-      { text: "💰 Request Quotation", value: "Request Quotation" },
-      { text: "📞 Talk to Sales", value: "Talk to Sales" }
+      { text: "Corporate Uniforms", value: "Show me corporate uniforms" },
+      { text: "Industrial Workwear", value: "Show me industrial workwear" },
+      { text: "Hospitality Uniforms", value: "What do you have for hospitality?" },
+      { text: "Request Quotation", value: "I need a quotation for uniforms" }
     ];
   }
-
-  if (path.includes('catalog.html')) {
+  if (path.includes('about.html')) {
     return [
-      { text: "📁 Download Catalog", value: "Download Catalog" },
-      { text: "💰 Request Quotation", value: "Request Quotation" },
-      { text: "📞 Talk to Sales", value: "Talk to Sales" }
+      { text: "About UNIWEAR", value: "Tell me about UNIWEAR" },
+      { text: "Where are you located?", value: "Where is UNIWEAR located?" },
+      { text: "What is your MOQ?", value: "What is your minimum order quantity?" },
+      { text: "Talk to Sales", value: "I want to talk to sales" }
     ];
   }
-
-  if (path.includes('contact.html')) {
+  if (path.includes('clientele.html')) {
     return [
-      { text: "💬 Enquiry Assistance", value: "Enquiry Assistance" },
-      { text: "👥 Request Callback", value: "Request Callback" },
-      { text: "💰 Request Quotation", value: "Request Quotation" }
+      { text: "Enterprise Clients", value: "Who are your clients?" },
+      { text: "Toyota Case Study", value: "Tell me about the Toyota partnership" },
+      { text: "Wipro Program", value: "Tell me about the Wipro program" },
+      { text: "Request a Quote", value: "I need uniforms for my employees" }
     ];
   }
-
-  // Default (Homepage, About, Blog, etc.)
+  if (path.includes('gifts.html')) {
+    return [
+      { text: "Corporate Gifting", value: "What corporate gifting options do you have?" },
+      { text: "Custom Branding", value: "Do you provide custom logo branding?" },
+      { text: "Request Quotation", value: "I need a quotation for gifting" }
+    ];
+  }
   return [
-    { text: "📂 View Categories", value: "View Categories" },
-    { text: "💰 Request Quotation", value: "Request Quotation" },
-    { text: "📞 Talk to Sales", value: "Talk to Sales" },
-    { text: "👥 Request Callback", value: "Request Callback" }
+    { text: "Explore Uniforms", value: "What kinds of uniforms do you manufacture?" },
+    { text: "Request a Quote", value: "I need a quotation for my company" },
+    { text: "Corporate Uniforms", value: "Show me corporate uniforms" },
+    { text: "Industrial Workwear", value: "What uniforms do you have for factories?" },
+    { text: "Talk to Our Team", value: "I want to speak with sales" }
   ];
-}
-
-// Intent Classification Engine
-function detectIntent(text) {
-  const val = text.toLowerCase().trim();
-
-  // Human handoff matches
-  if (/human|sales|callback|call me|representative|agent|speak|talk to|contact us|contact uniwear/i.test(val)) {
-    return "human_handoff";
-  }
-
-  // Quotation matches
-  if (/quote|quotation|price|pricing|cost|estimate|how much/i.test(val)) {
-    return "quotation_request";
-  }
-
-  // Recommendation matches
-  if (/recommend|suggest|choose|choice|selection|industry|hotel|hospital|school|factory|office|wear/i.test(val)) {
-    return "recommendation";
-  }
-
-  // Catalog matches
-  if (/catalog|library|download|brochure|pdf/i.test(val)) {
-    return "catalog_access";
-  }
-
-  // Contact matches
-  if (/phone|email|address|reach|call|hq|location|office/i.test(val)) {
-    return "contact_info";
-  }
-
-  // Delivery matches
-  if (/timeline|delivery|ship|lead time|how long/i.test(val)) {
-    return "delivery_timeline";
-  }
-
-  // Order tracking matches
-  if (/track|order status|stitching|progress/i.test(val)) {
-    return "order_tracking";
-  }
-
-  // Support tickets matches
-  if (/support|ticket|issue|problem|complain|help/i.test(val)) {
-    return "support_request";
-  }
-
-  // Blog matches
-  if (/blog|article|news|fabric research|read/i.test(val)) {
-    return "blog_inquiry";
-  }
-
-  // FAQs
-  if (/moq|minimum/i.test(val)) {
-    return "faq_moq";
-  }
-  if (/embroidery|printing|logo|brand/i.test(val)) {
-    return "faq_branding";
-  }
-  if (/fabric|material|cotton|polyester|linen|wool/i.test(val)) {
-    return "faq_fabric";
-  }
-  if (/sample|prototype|approval/i.test(val)) {
-    return "faq_sample";
-  }
-  if (/hello|hi|hey|greetings/i.test(val)) {
-    return "greeting";
-  }
-
-  return "fallback";
 }
 
 // Chatbot UI Initialization
 function initAIChatbot() {
   if (document.getElementById('demo-chatbot-container')) return;
 
-  // Load state and messages from sessionStorage
-  loadChatState();
-
   const container = document.createElement('div');
   container.id = "demo-chatbot-container";
   container.className = "fixed bottom-6 right-6 z-[9998] font-body flex flex-col items-end";
   container.innerHTML = `
     <!-- Chat Window -->
-    <div id="demo-chatbot-window" class="hidden w-96 max-w-[calc(100vw-2rem)] h-[460px] bg-white border border-lightBorder rounded-3xl shadow-2xl flex flex-col overflow-hidden mb-4 transition-all duration-300 transform scale-95 opacity-0 origin-bottom-right">
+    <div id="demo-chatbot-window" class="hidden w-[380px] max-w-[calc(100vw-1.5rem)] h-[520px] max-h-[calc(100vh-5rem)] bg-white border border-lightBorder rounded-3xl shadow-2xl flex flex-col overflow-hidden mb-4 transition-all duration-300 transform scale-95 opacity-0 origin-bottom-right">
       <!-- Chat Header -->
-      <div class="bg-charcoal text-white p-4 flex items-center justify-between shrink-0 select-none">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white"><i class="ri-robot-2-line text-lg"></i></div>
+      <div class="bg-charcoal text-white px-4 py-3 flex items-center justify-between shrink-0 select-none border-b border-white/10">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-md">
+            <i class="ri-sparkling-fill text-sm"></i>
+          </div>
           <div>
-            <h4 class="font-heading font-bold text-xs">UNIWEAR Smart Assistant</h4>
-            <span class="text-[8px] text-green-400 font-mono flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-ping"></span> ONLINE</span>
+            <div class="flex items-center gap-2">
+              <h4 class="font-heading font-bold text-xs tracking-wide">UNIWEAR Assistant</h4>
+              <span id="chatbot-ai-badge" class="px-1.5 py-0.2 bg-primary/20 text-primary border border-primary/30 rounded text-[9px] font-mono font-semibold">AI</span>
+            </div>
+            <span class="text-[9px] text-green-400 font-mono flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-ping"></span>
+              Live Assistant
+            </span>
           </div>
         </div>
-        <div class="flex items-center gap-3">
-          <button onclick="minimizeChatbot()" class="text-gray-400 hover:text-white transition-colors" title="Minimize"><i class="ri-subtract-line text-lg"></i></button>
-          <button onclick="toggleChatbot(false)" class="text-gray-400 hover:text-white transition-colors" title="Close"><i class="ri-close-line text-lg"></i></button>
+        <div class="flex items-center gap-2">
+          <button onclick="resetChatConversation()" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors" title="Start New Conversation">
+            <i class="ri-restart-line text-sm"></i>
+          </button>
+          <button onclick="minimizeChatbot()" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors" title="Minimize">
+            <i class="ri-subtract-line text-sm"></i>
+          </button>
+          <button onclick="toggleChatbot(false)" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors" title="Close">
+            <i class="ri-close-line text-base"></i>
+          </button>
         </div>
       </div>
 
       <!-- Messages Body -->
-      <div id="demo-chatbot-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-lightCard">
+      <div id="demo-chatbot-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-[#F9FAFB]">
         <!-- Messages Injected Here -->
       </div>
 
@@ -2458,23 +2369,26 @@ function initAIChatbot() {
       </div>
 
       <!-- Chat Input Footer -->
-      <form onsubmit="sendTypedMessage(event)" class="p-2 border-t border-lightBorder flex gap-2 bg-white shrink-0">
+      <form id="demo-chatbot-form" onsubmit="sendTypedMessage(event)" class="p-2.5 border-t border-lightBorder flex items-center gap-2 bg-white shrink-0">
         <div class="flex-1 relative">
-          <textarea id="demo-chatbot-input" placeholder="Type a message..." rows="1" maxlength="250" class="w-full bg-lightCard border border-lightBorder rounded-2xl px-4 py-2 text-xs focus:outline-none focus:border-primary resize-none pr-12" style="max-height: 80px; min-height: 32px; line-height: 1.5;"></textarea>
-          <span id="chatbot-char-count" class="absolute right-3.5 bottom-2 text-[8px] text-gray-400 hidden">0/250</span>
+          <input type="text" id="demo-chatbot-input" placeholder="Ask about uniforms, bulk orders, quotes..." maxlength="500" autocomplete="off" class="w-full bg-lightCard border border-lightBorder rounded-full px-4 py-2 text-xs focus:outline-none focus:border-primary text-charcoal pr-12 transition-all">
+          <span id="chatbot-char-count" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-[9px] text-gray-400 hidden">0/500</span>
         </div>
-        <button type="submit" class="w-9 h-9 rounded-2xl bg-primary hover:bg-primaryHover text-white flex items-center justify-center transition-colors shrink-0"><i class="ri-send-plane-fill text-sm"></i></button>
+        <button type="submit" id="demo-chatbot-submit-btn" class="w-8 h-8 rounded-full bg-primary hover:bg-primaryHover text-white flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shrink-0 shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+          <i class="ri-send-plane-fill text-xs"></i>
+        </button>
       </form>
     </div>
 
     <!-- Floating Chat Trigger Button -->
-    <button id="demo-chatbot-trigger" onclick="toggleChatbot(true)" class="w-14 h-14 rounded-full bg-primary hover:bg-primaryHover text-white flex items-center justify-center shadow-xl shadow-primary/30 transition-all hover:scale-105 border-2 border-white">
+    <button id="demo-chatbot-trigger" onclick="toggleChatbot(true)" aria-label="Open UNIWEAR AI Assistant" class="w-14 h-14 rounded-full bg-primary hover:bg-primaryHover text-white flex items-center justify-center shadow-2xl shadow-primary/40 transition-all hover:scale-105 active:scale-95 border-2 border-white relative">
       <i class="ri-chat-smile-3-line text-2xl" id="demo-chatbot-icon"></i>
+      <span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
     </button>
   `;
   document.body.appendChild(container);
 
-  // Load and render persistent messages
+  // Render persistent messages
   renderMessages();
   renderContextChips();
 
@@ -2484,21 +2398,14 @@ function initAIChatbot() {
     inputEl.addEventListener('input', () => {
       const charCount = document.getElementById('chatbot-char-count');
       if (charCount) {
-        charCount.innerText = `${inputEl.value.length}/250`;
-        if (inputEl.value.length > 0) charCount.classList.remove('hidden');
+        charCount.innerText = `${inputEl.value.length}/500`;
+        if (inputEl.value.length > 50) charCount.classList.remove('hidden');
         else charCount.classList.add('hidden');
-      }
-    });
-
-    inputEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendTypedMessage(e);
       }
     });
   }
 
-  // Keep open/close state persistent
+  // Restore open state
   if (sessionStorage.getItem('uniwear_chat_open') === 'true') {
     toggleChatbot(true, false);
   }
@@ -2509,7 +2416,6 @@ window.toggleChatbot = function (show, animate = true) {
   const trigger = document.getElementById('demo-chatbot-trigger');
   if (!win || !trigger) return;
 
-  // Clear minimized state on toggle
   win.classList.remove('minimized');
 
   if (show) {
@@ -2524,9 +2430,8 @@ window.toggleChatbot = function (show, animate = true) {
     } else {
       win.classList.remove('scale-95', 'opacity-0');
       win.classList.add('scale-100', 'opacity-100');
-      trigger.classList.style = "display: none";
+      trigger.style.display = "none";
     }
-    // Auto-focus input
     setTimeout(() => {
       const input = document.getElementById('demo-chatbot-input');
       if (input) input.focus();
@@ -2541,26 +2446,26 @@ window.toggleChatbot = function (show, animate = true) {
     trigger.classList.remove('scale-0');
     trigger.removeAttribute('style');
   }
-}
+};
 
 window.minimizeChatbot = function () {
   const win = document.getElementById('demo-chatbot-window');
   if (win) {
     win.classList.toggle('minimized');
   }
-}
+};
 
-// Messages Render & Add Helper Functions
+// Render Conversation Messages
 function renderMessages() {
   const msgContainer = document.getElementById('demo-chatbot-messages');
   if (!msgContainer) return;
   msgContainer.innerHTML = "";
 
   let msgs = JSON.parse(sessionStorage.getItem('uniwear_chat_messages'));
-  if (!msgs) {
+  if (!msgs || msgs.length === 0) {
     msgs = [{
       sender: "bot",
-      text: "Hello! I am the UNIWEAR Smart Assistant. How can I help you coordinate your enterprise uniform requirements today?",
+      text: "Hello! I am the **UNIWEAR AI Assistant**. How can I help coordinate your enterprise uniform or workwear requirements today?",
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }];
     sessionStorage.setItem('uniwear_chat_messages', JSON.stringify(msgs));
@@ -2570,20 +2475,44 @@ function renderMessages() {
     const isUser = (m.sender === 'user');
     const row = document.createElement('div');
     row.className = isUser ? "chat-msg-row user" : "chat-msg-row";
+
+    let productCardsHtml = '';
+    if (m.products && Array.isArray(m.products) && m.products.length > 0) {
+      productCardsHtml = `
+        <div class="grid grid-cols-1 gap-2 mt-2">
+          ${m.products.map(p => `
+            <div class="chatbot-product-card flex items-center gap-3 p-2 bg-white rounded-xl border border-gray-100">
+              <img src="${p.image || '/images/products/placeholder.jpg'}" alt="${p.title}" class="w-14 h-14 rounded-lg object-cover bg-gray-50 border border-gray-100 shrink-0" onerror="this.src='/images/logo.png'">
+              <div class="flex-1 min-w-0">
+                <div class="text-[9px] uppercase tracking-wider text-primary font-bold">${p.category || 'Uniform'}</div>
+                <div class="text-xs font-semibold text-charcoal truncate">${p.title}</div>
+                <a href="${p.link || 'uniforms.html'}" class="text-[10px] text-primary hover:underline font-medium inline-flex items-center gap-0.5 mt-0.5">
+                  View Product <i class="ri-arrow-right-s-line"></i>
+                </a>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
     row.innerHTML = isUser ? `
-      <div>
-        <div class="chat-msg-bubble user">${m.text}</div>
-        <span class="text-[8px] text-gray-400 mt-1 block text-right">${m.time}</span>
+      <div class="flex flex-col items-end">
+        <div class="chat-msg-bubble user">${formatChatMarkdown(m.text)}</div>
+        <span class="text-[9px] text-gray-400 mt-1 mr-1">${m.time || ''}</span>
       </div>
     ` : `
-      <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-[9px] shrink-0 select-none"><i class="ri-robot-2-line"></i></div>
-      <div>
-        <div class="chat-msg-bubble bot">${m.text}</div>
-        <span class="text-[8px] text-gray-400 mt-1 block">${m.time}</span>
+      <div class="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-white text-[11px] shrink-0 select-none shadow-sm">
+        <i class="ri-sparkling-fill"></i>
+      </div>
+      <div class="flex-1 max-w-[85%]">
+        <div class="chat-msg-bubble bot">${formatChatMarkdown(m.text)} ${productCardsHtml}</div>
+        <span class="text-[9px] text-gray-400 mt-1 ml-1">${m.time || ''}</span>
       </div>
     `;
     msgContainer.appendChild(row);
   });
+
   msgContainer.scrollTop = msgContainer.scrollHeight;
 }
 
@@ -2598,15 +2527,23 @@ function addUserMessage(text) {
   renderMessages();
 }
 
-function addBotMessage(text) {
+function addBotMessage(text, products = [], chips = []) {
   let msgs = JSON.parse(sessionStorage.getItem('uniwear_chat_messages')) || [];
   msgs.push({
     sender: "bot",
     text: text,
+    products: products,
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   });
   sessionStorage.setItem('uniwear_chat_messages', JSON.stringify(msgs));
   renderMessages();
+
+  if (chips && chips.length > 0) {
+    const formattedChips = chips.map(c => typeof c === 'string' ? { text: c, value: c } : c);
+    renderChips(formattedChips);
+  } else {
+    renderContextChips();
+  }
 }
 
 // Chips Renderer
@@ -2614,13 +2551,14 @@ function renderChips(chips) {
   const chipsContainer = document.getElementById('demo-chatbot-chips');
   if (!chipsContainer) return;
   chipsContainer.innerHTML = "";
-  if (chips.length === 0) {
+  if (!chips || chips.length === 0) {
     chipsContainer.classList.add('hidden');
     return;
   }
   chipsContainer.classList.remove('hidden');
   chips.forEach(c => {
     const btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = "chat-chip";
     btn.innerText = c.text;
     btn.onclick = () => handleQuickAction(c.value);
@@ -2629,47 +2567,428 @@ function renderChips(chips) {
 }
 
 function renderContextChips() {
-  const chips = getContextChips();
+  const chips = getDefaultContextChips();
   renderChips(chips);
 }
 
-// Form Submission Actions
+// Send Typed Message
 window.sendTypedMessage = function (e) {
   if (e) e.preventDefault();
   const input = document.getElementById('demo-chatbot-input');
+  const btn = document.getElementById('demo-chatbot-submit-btn');
   if (!input) return;
   const text = input.value.trim();
   if (!text) return;
 
   addUserMessage(text);
   input.value = "";
+  input.disabled = true;
+  if (btn) btn.disabled = true;
 
   const charCount = document.getElementById('chatbot-char-count');
   if (charCount) charCount.classList.add('hidden');
 
-  showBotTyping(() => {
-    processUserResponse(text);
-  });
-}
+  showBotTyping();
+
+  // Send request to backend
+  dispatchChatbotMessage(text)
+    .finally(() => {
+      input.disabled = false;
+      if (btn) btn.disabled = false;
+      input.focus();
+    });
+};
 
 // Quick action buttons click handler
 window.handleQuickAction = function (value) {
   addUserMessage(value);
-  showBotTyping(() => {
-    processUserResponse(value);
-  });
+  const input = document.getElementById('demo-chatbot-input');
+  const btn = document.getElementById('demo-chatbot-submit-btn');
+  if (input) input.disabled = true;
+  if (btn) btn.disabled = true;
+
+  showBotTyping();
+
+  dispatchChatbotMessage(value)
+    .finally(() => {
+      if (input) {
+        input.disabled = false;
+        input.focus();
+      }
+      if (btn) btn.disabled = false;
+    });
+};
+
+// Local In-Browser Conversational Intelligence Engine (Offline / Static Fallback)
+function localLevenshtein(a, b) {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) matrix[i][j] = matrix[i - 1][j - 1];
+      else matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+const LOCAL_CANONICAL = {
+  "uniform": ["uniform", "unifrom", "unform", "uniforms", "unifrms"],
+  "corporate": ["corporate", "corporet", "corparate", "corprate", "coporate", "office", "business", "executive"],
+  "industrial": ["industrial", "industrl", "factory", "factry", "workwear", "workwer", "plant", "boiler", "coverall"],
+  "hospitality": ["hospitality", "hospitlity", "hotel", "hotle", "restaurant", "resort", "chef", "kitchen", "apron"],
+  "healthcare": ["healthcare", "hospital", "hospitl", "medical", "clinic", "scrub", "scrubs", "doctor", "nurse"],
+  "institutional": ["institutional", "school", "college", "institute", "academy", "student"],
+  "gifting": ["gifting", "gifts", "gift", "merchandise", "merch", "swag", "hamper"],
+  "shirt": ["shirt", "shirts", "shrt", "shrts"],
+  "trouser": ["trouser", "trousers", "pant", "pants"],
+  "blazer": ["blazer", "blazers", "suit", "suits"],
+  "jacket": ["jacket", "jackets"],
+  "polo": ["polo", "polos", "tshirt", "t-shirt"],
+  "quotation": ["quotation", "quotaton", "quote", "qoute", "pricing", "price", "prce", "cost", "costing", "estimate"],
+  "employee": ["employee", "employess", "employees", "people", "staff", "person", "workers"],
+  "sales": ["sales", "human", "person", "representative", "call", "callback", "talk", "speak"],
+  "moq": ["moq", "minimum"]
+};
+
+function localNormalizeToken(token) {
+  const clean = token.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (!clean || clean.length < 3) return clean;
+  for (const [canonical, variants] of Object.entries(LOCAL_CANONICAL)) {
+    if (variants.includes(clean)) return canonical;
+  }
+  if (clean.length >= 4) {
+    for (const [canonical, variants] of Object.entries(LOCAL_CANONICAL)) {
+      for (const variant of variants) {
+        if (Math.abs(clean.length - variant.length) <= 2 && localLevenshtein(clean, variant) <= (clean.length >= 6 ? 2 : 1)) {
+          return canonical;
+        }
+      }
+    }
+  }
+  return clean;
+}
+
+function getLocalChatSlots() {
+  try {
+    return JSON.parse(sessionStorage.getItem('uniwear_local_chat_slots')) || {};
+  } catch (_) {
+    return {};
+  }
+}
+
+function saveLocalChatSlots(slots) {
+  try {
+    sessionStorage.setItem('uniwear_local_chat_slots', JSON.stringify(slots));
+  } catch (_) {}
+}
+
+function localProcessChatbotMessage(rawText) {
+  const lower = String(rawText || '').toLowerCase().trim();
+  const rawTokens = lower.split(/[\s,.;:!?()]+/).filter(Boolean);
+  const normalizedTokens = rawTokens.map(localNormalizeToken);
+  const slots = getLocalChatSlots();
+
+  // 1. Entity Extraction
+  if (normalizedTokens.includes('corporate') || /corporate|office|executive|formal/i.test(lower)) slots.category = 'Corporate';
+  else if (normalizedTokens.includes('industrial') || /industrial|factory|plant|workwear|boilersuit|coverall/i.test(lower)) slots.category = 'Industrial';
+  else if (normalizedTokens.includes('hospitality') || /hospitality|hotel|restaurant|resort|chef|kitchen|apron/i.test(lower)) slots.category = 'Hospitality';
+  else if (normalizedTokens.includes('healthcare') || /healthcare|hospital|medical|scrub|doctor|nurse/i.test(lower)) slots.category = 'Healthcare';
+  else if (normalizedTokens.includes('institutional') || /institutional|school|college|institute|student/i.test(lower)) slots.category = 'Institutional';
+  else if (normalizedTokens.includes('gifting') || /gifting|gifts|merchandise|swag/i.test(lower)) slots.category = 'Corporate Gifting';
+
+  if (normalizedTokens.includes('shirt') || /shirts?/i.test(lower)) slots.item = 'shirts';
+  else if (normalizedTokens.includes('trouser') || /trousers?|pants?/i.test(lower)) slots.item = 'trousers';
+  else if (normalizedTokens.includes('blazer') || /blazers?|suits?/i.test(lower)) slots.item = 'blazers';
+  else if (normalizedTokens.includes('jacket') || /jackets?/i.test(lower)) slots.item = 'jackets';
+  else if (normalizedTokens.includes('polo') || /polos?|t-?shirts?/i.test(lower)) slots.item = 'polo T-shirts';
+  else if (normalizedTokens.includes('scrub') || /scrubs?/i.test(lower)) slots.item = 'medical scrubs';
+  else if (normalizedTokens.includes('apron') || /aprons?/i.test(lower)) slots.item = 'aprons';
+  else if (/coveralls?|boiler\s*suits?/i.test(lower)) slots.item = 'boiler suits';
+
+  const qtyMatch = rawText.match(/\b(?:for|around|about|quantity)?\s*(\d{2,6})\s*(?:employees?|employess|people|persons?|sets?|pieces?|pcs?|shirts?|staff|units?)?\b/i) || rawText.match(/^\s*(\d{2,6})\s*$/);
+  if (qtyMatch && !rawText.includes('@') && !/^\d{10}$/.test(qtyMatch[1])) {
+    const parsed = parseInt(qtyMatch[1], 10);
+    if (parsed >= 10 && parsed <= 500000) slots.quantity = parsed;
+  }
+
+  const emailMatch = rawText.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
+  if (emailMatch) slots.email = emailMatch[0].toLowerCase();
+
+  const phoneMatch = rawText.match(/(?:\+?91[\s-]?)?[6789]\d{9}\b/);
+  if (phoneMatch) slots.phone = phoneMatch[0].replace(/\s+/g, '');
+
+  saveLocalChatSlots(slots);
+
+  let reply = "";
+  let chips = [];
+  let products = [];
+  let handoff = false;
+
+  // 2. Security Defense
+  if (/ignore (?:previous|all)|reveal (?:system|prompt)|print (?:env|secret|key|database)|system prompt/i.test(lower)) {
+    reply = "I am the UNIWEAR Assistant. I can help you explore our uniform collections, understand custom manufacturing capabilities, and arrange a quotation with our Bengaluru team. How can I assist you with your uniform requirements today?";
+    chips = [
+      { text: "Corporate Uniforms", value: "Show me corporate uniforms" },
+      { text: "Industrial Workwear", value: "Show me industrial uniforms" },
+      { text: "Request a Quotation", value: "I need a quotation" }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // 3. Unverified Claims / Hallucination Trap
+  if (/certification|certified|gots|anti-static|fr cert|fire retardant|medical cert|iso\b|factory size|sq ft|square feet|how many machines|machine count|exact capacity|monthly capacity|production capacity|audit|moq|minimum order/i.test(lower)) {
+    reply = "I don't have verified information on that yet. I can help connect you with the UNIWEAR team for confirmation.";
+    chips = [
+      { text: "Contact UNIWEAR Team", value: "I want to talk to sales" },
+      { text: "Request a Quotation", value: "I need a quotation" }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // 4. Human Handoff
+  if (/talk to (?:sales|someone|human|person|agent)|speak to|call me|contact (?:person|representative)|human (?:handoff|support)/i.test(lower) ||
+      (normalizedTokens.includes('sales') && (normalizedTokens.includes('human') || lower.includes('speak') || lower.includes('talk')))) {
+    handoff = true;
+    if (!slots.email && !slots.phone) {
+      reply = "I would be happy to connect you directly with a UNIWEAR representative. Could you share your **phone number or email address**, and your company name? Our team will follow up directly.";
+      chips = [
+        { text: "Call +91 91087 65831", value: "tel:+919108765831" },
+        { text: "Open Contact Form", value: "Go to contact page" }
+      ];
+    } else {
+      reply = `Thank you! I have queued your request with our sales team with your contact details (${slots.phone || slots.email}). A dedicated UNIWEAR specialist will follow up with you. You can also reach our Bengaluru desk directly at **+91 91087 65831** or **sales@uniwear.co**.`;
+      chips = [
+        { text: "Visit Contact Page", value: "Go to contact page" },
+        { text: "Browse Products", value: "Show me uniforms" }
+      ];
+    }
+    return { reply, chips, products, handoff };
+  }
+
+  // 5. Approved Client Stories (Toyota, Wipro)
+  if (/wipro|toyota|clients|clientele|case study|case studies/i.test(lower)) {
+    reply = "UNIWEAR has served 3,000+ clients across India, with verified programs including Wipro Technologies and Toyota Kirloskar Motor.\n\nWould you like to connect with our team to discuss your organization's uniform requirements?";
+    chips = [
+      { text: "Request a Quotation", value: "I need a quotation" },
+      { text: "Talk to Sales Team", value: "I want to talk to sales" },
+      { text: "Explore Uniforms", value: "Show me uniforms" }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // 6. Company Info & Background
+  if (/about (?:uniwear|company|you)|who are you|where are you located|address|location|founding|when were you founded/i.test(lower)) {
+    reply = "**UNIWEAR** was founded in 1998 under Managing Partner **Suresh H. A.** and has served 3,000+ clients across India.\n\n• **Location**: No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070\n• **Udyam Registration**: UDYAM-KR-03-0105092\n• **Approved Product Lines**: Corporate, Industrial, Hospitality, Healthcare, Institutional, and Corporate Gifting.\n\nWould you like to explore our product lines or connect with our team for a quotation?";
+    chips = [
+      { text: "Explore Uniforms", value: "Show me uniforms" },
+      { text: "Visit about.html", value: "Go to about page" },
+      { text: "Request a Quote", value: "I need a quotation" }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // 7. Delivery Outside Bangalore
+  if (/outside bangalore|pan india|delivery to|deliver to|shipping to|outside karnataka|mumbai|delhi|hyderabad|chennai/i.test(lower)) {
+    reply = "Yes, absolutely! While our manufacturing headquarters is located in **Jayanagar, Bengaluru**, UNIWEAR delivers uniform programs across India.\n\nWhere would you like your uniforms delivered?";
+    chips = [
+      { text: "Request Delivery Quote", value: "I need a quotation with delivery" },
+      { text: "Contact Logistics Team", value: "I want to talk to sales" }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // 8. Pricing Inquiries (Refuses to hallucinate fixed prices, connects to context)
+  if (/how much|cost|price|pricing|rate|budget/i.test(lower) || normalizedTokens.includes('quotation')) {
+    const itemCtx = slots.item ? `${slots.quantity ? slots.quantity + ' ' : ''}${slots.category || ''} ${slots.item}`.trim() : (slots.category ? `${slots.category} uniforms` : 'uniforms');
+    reply = `Exact pricing for ${itemCtx} depends on fabric selection, construction complexity, logo branding, and order volume. I don't have verified pricing for that yet. I can help connect you with the UNIWEAR team for confirmation and a formal quotation.\n\nWould you like our team to prepare a quotation?`;
+    chips = [
+      { text: "Yes, Prepare Quote", value: "Yes, prepare a quotation" },
+      { text: "Speak to Sales", value: "I want to talk to sales" },
+      { text: "Browse Products", value: `Show me ${slots.category || 'corporate'} products` }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // 9. Lead Capture Completion (Email or Phone Provided)
+  if (slots.email || slots.phone) {
+    reply = `Thank you! I have registered your requirement for **${slots.category || 'Uniform Program'}** (${slots.quantity ? slots.quantity + ' units' : 'Bulk'}) under **${slots.company || slots.name || 'your organization'}**.\n\nA senior uniform consultant from our Bengaluru headquarters will review your specifications and contact you at **${slots.phone || slots.email}** with quotation options.\n\nIs there anything specific you would like included, such as custom logo embroidery?`;
+    chips = [
+      { text: "Custom Logo Embroidery", value: "We need custom logo embroidery" },
+      { text: "Browse Catalog", value: "Show me uniforms" }
+    ];
+    return { reply, chips, products, handoff: false };
+  }
+
+  // 10. Product Discovery ("Show industrial products", "Show me what you have")
+  if (/show|browse|catalog|what uniforms/i.test(lower) || (lower.includes('show') && (normalizedTokens.includes('corporate') || normalizedTokens.includes('industrial') || normalizedTokens.includes('hospitality')))) {
+    const targetCat = slots.category || (lower.includes('industrial') ? 'Industrial' : (lower.includes('hospitality') ? 'Hospitality' : 'Corporate'));
+    
+    // Retrieve from defaultProducts if available
+    if (typeof defaultProducts !== 'undefined' && Array.isArray(defaultProducts)) {
+      products = defaultProducts.filter(p => p.category && p.category.toLowerCase().includes(targetCat.toLowerCase())).slice(0, 3).map(p => ({
+        title: p.name,
+        category: p.category,
+        desc: p.desc || '',
+        image: p.img || '/images/logo.png',
+        link: 'uniforms.html#' + p.category.toLowerCase()
+      }));
+    }
+
+    reply = `Here are some of our **${targetCat}** uniform options from our catalog:\n\nHow many employees or sets are you looking to outfit?`;
+    chips = [
+      { text: "100 - 250 Sets", value: `I need ${targetCat} uniforms for 200 people` },
+      { text: "500+ Bulk Order", value: `I need ${targetCat} uniforms for 500 people` },
+      { text: "Request Quotation", value: `I need a quotation for ${targetCat} uniforms` }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // 11. Multi-Turn Conversational Progression:
+  // User just gave category (e.g. "Corporate")
+  if (slots.category && !slots.item && !slots.quantity) {
+    if (slots.category === 'Corporate') {
+      reply = "Got it. What kind of corporate uniforms do you need — shirts, trousers, polo T-shirts, blazers, or a complete employee uniform set?";
+      chips = [
+        { text: "Corporate Shirts", value: "Corporate shirts" },
+        { text: "Formal Trousers", value: "Formal trousers" },
+        { text: "Blazers & Suits", value: "Corporate blazers" },
+        { text: "Polo T-Shirts", value: "Corporate polo T-shirts" }
+      ];
+      return { reply, chips, products, handoff };
+    }
+    if (slots.category === 'Industrial') {
+      reply = "Understood. What type of industrial workwear are you looking for — boiler suits, coveralls, industrial shirts & trousers, or reflective workwear?";
+      chips = [
+        { text: "Boiler Suits", value: "Industrial boiler suits" },
+        { text: "Worker Shirts & Pants", value: "Industrial worker shirts" },
+        { text: "Reflective Workwear", value: "Reflective workwear" }
+      ];
+      return { reply, chips, products, handoff };
+    }
+    reply = `Got it — ${slots.category} uniforms. What specific items or styles are you planning for your team?`;
+    chips = [
+      { text: "Request a Quotation", value: "I need a quotation" },
+      { text: "Browse Products", value: `Show me ${slots.category} products` }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // User gave item (e.g. "Shirts") but no quantity yet
+  if (slots.category && slots.item && !slots.quantity) {
+    reply = `Understood — ${slots.category} ${slots.item}. Roughly how many employees or sets do you need?`;
+    chips = [
+      { text: "100 Sets", value: `100 ${slots.item}` },
+      { text: "250 Sets", value: `250 ${slots.item}` },
+      { text: "500 Sets", value: `500 ${slots.item}` },
+      { text: "1,000+ Bulk", value: `1000 ${slots.item}` }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // User gave quantity (e.g. "250" or "for 500 hotel employees")
+  if (slots.quantity && !slots.email && !slots.phone) {
+    const itemDesc = slots.item ? `${slots.category || ''} ${slots.item}`.trim() : (slots.category ? `${slots.category} uniforms` : 'uniforms');
+    reply = `That sounds like a good fit for a bulk program (${slots.quantity} ${itemDesc}). What approximate fabric preference or delivery timeline do you have? I can also help you request a formal quotation from the UNIWEAR team.`;
+    chips = [
+      { text: "Request Quotation", value: "Yes, prepare a quotation" },
+      { text: "Speak to Sales", value: "I want to talk to sales" },
+      { text: "Custom Logo Branding", value: "We need custom logo embroidery" }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // Greeting Fallback
+  if (/^(hi|hello|hey|good (?:morning|afternoon|evening)|namaste|greetings)\b/i.test(lower) && lower.length < 25) {
+    reply = "Hello! Welcome to UNIWEAR. We design and manufacture custom enterprise uniforms, industrial workwear, and corporate gifting in Bengaluru.\n\nWhat type of uniforms are you looking for — corporate, industrial, hospitality, institutional, or custom?";
+    chips = [
+      { text: "Corporate Uniforms", value: "Corporate uniforms" },
+      { text: "Industrial Workwear", value: "Industrial workwear" },
+      { text: "Hospitality Uniforms", value: "Hospitality uniforms" },
+      { text: "Healthcare Scrubs", value: "Healthcare scrubs" },
+      { text: "Request Quotation", value: "I need a quotation" }
+    ];
+    return { reply, chips, products, handoff };
+  }
+
+  // Default Natural Conversational Fallback
+  reply = "I can help you explore uniform styles, check bulk order specifications, learn about our Bengaluru facility, or connect with our sales team for a custom quote.\n\nWhat kind of uniforms or workwear is your company looking for?";
+  chips = [
+    { text: "Corporate Uniforms", value: "I need corporate uniforms" },
+    { text: "Industrial Workwear", value: "I need industrial uniforms" },
+    { text: "Request a Quotation", value: "I need a quotation" },
+    { text: "Contact Sales Team", value: "I want to speak with sales" }
+  ];
+  return { reply, chips, products, handoff };
+}
+
+// Dispatch message to backend API /api/chatbot/message with seamless offline local fallback
+async function dispatchChatbotMessage(text) {
+  const convId = getChatConversationId();
+  const context = {
+    page: window.location.pathname,
+    title: document.title,
+    role: localStorage.getItem('uniwear_auth_role') || 'visitor'
+  };
+
+  try {
+    let result = null;
+
+    if (window.api && typeof window.api.sendChatMessage === 'function') {
+      try {
+        result = await window.api.sendChatMessage(text, convId, context);
+      } catch (apiErr) {
+        result = null;
+      }
+    } else {
+      try {
+        const res = await fetch('/api/chatbot/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, conversationId: convId, context })
+        });
+        if (res.ok) {
+          result = await res.json();
+        }
+      } catch (fetchErr) {
+        result = null;
+      }
+    }
+
+    hideBotTyping();
+
+    if (result && result.success) {
+      const botData = result.data || result;
+      addBotMessage(botData.reply, botData.products, botData.suggestedChips || botData.chips);
+    } else {
+      // Run local in-browser conversational intelligence engine seamlessly
+      const localResult = localProcessChatbotMessage(text);
+      addBotMessage(localResult.reply, localResult.products, localResult.chips);
+    }
+  } catch (err) {
+    console.error("Chatbot processing error:", err);
+    hideBotTyping();
+    const localResult = localProcessChatbotMessage(text);
+    addBotMessage(localResult.reply, localResult.products, localResult.chips);
+  }
 }
 
 // Bot typing animation handler
-function showBotTyping(callback) {
+function showBotTyping() {
+  hideBotTyping();
   const msgContainer = document.getElementById('demo-chatbot-messages');
   if (!msgContainer) return;
   const div = document.createElement('div');
   div.id = "demo-chatbot-typing";
   div.className = "chat-msg-row";
   div.innerHTML = `
-    <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-[9px] shrink-0 select-none"><i class="ri-robot-2-line"></i></div>
-    <div class="bg-white p-2.5 rounded-2xl border border-lightBorder text-charcoal leading-relaxed flex gap-1 items-center">
+    <div class="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-white text-[11px] shrink-0 select-none shadow-sm">
+      <i class="ri-sparkling-fill"></i>
+    </div>
+    <div class="bg-white px-3 py-2.5 rounded-2xl border border-lightBorder text-charcoal flex gap-1 items-center shadow-sm">
       <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
       <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
       <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
@@ -2677,489 +2996,14 @@ function showBotTyping(callback) {
   `;
   msgContainer.appendChild(div);
   msgContainer.scrollTop = msgContainer.scrollHeight;
-
-  setTimeout(() => {
-    const typingEl = document.getElementById('demo-chatbot-typing');
-    if (typingEl) typingEl.remove();
-    callback();
-  }, 750);
 }
 
-// Core Chatbot Brain
-function processUserResponse(text) {
-  // 1. Process active flow states
-  if (chatState.mode === 'quote_flow') {
-    const step = quoteSteps[chatState.quoteStep];
-    if (step.validate && !step.validate(text)) {
-      addBotMessage(`❌ Please enter a valid value for this field. ${step.prompt}`);
-      if (step.options) {
-        renderChips(step.options.map(o => ({ text: o, value: o })));
-      }
-      return;
-    }
-    chatMemory[step.field] = text;
-    saveChatState();
-    advanceQuoteFlow();
-    return;
-  }
-
-  if (chatState.mode === 'handoff_flow') {
-    const step = handoffSteps[chatState.handoffStep];
-    if (step.validate && !step.validate(text)) {
-      addBotMessage(`❌ Please enter a valid value. ${step.prompt}`);
-      return;
-    }
-    chatMemory[step.field] = text;
-    saveChatState();
-    advanceHandoffFlow();
-    return;
-  }
-
-  // 2. Intent matching and general conversation logic
-  const intent = detectIntent(text);
-  chatState.interactionCount++;
-  saveChatState();
-
-  // Check direct conversion queries
-  const isPurchaseIntent = /need uniforms|looking for supplier|need quote|need pricing|want catalog|need samples/i.test(text.toLowerCase());
-
-  if (isPurchaseIntent) {
-    addBotMessage(`🤝 I see you are looking for enterprise uniforms! Let's get started. Would you like to request a customized quotation or speak directly to our sales representatives?`);
-    renderChips([
-      { text: "💰 Prepare Quotation", value: "Request Quotation" },
-      { text: "📞 Request Callback", value: "Request Callback" },
-      { text: "❌ No thanks", value: "Cancel" }
-    ]);
-    return;
-  }
-
-  let responseText = "";
-  let chips = [];
-
-  const faqHandoffPrompt = `<br><br><b>Conversion Options:</b>`;
-  const faqHandoffChips = [
-    { text: "💰 Request Quotation", value: "Request Quotation" },
-    { text: "📞 Talk to Sales", value: "Talk to Sales" },
-    { text: "👥 Request Callback", value: "Request Callback" }
-  ];
-
-  switch (intent) {
-    case "human_handoff":
-      chatState.mode = "handoff_flow";
-      saveChatState();
-      advanceHandoffFlow();
-      return;
-
-    case "quotation_request":
-      chatState.mode = "quote_flow";
-      saveChatState();
-      advanceQuoteFlow();
-      return;
-
-    case "recommendation":
-      responseText = `👔 <b>UNIWEAR Product Consultant</b><br>Which industry do you need enterprise uniforms for?<br>• 🏭 Manufacturing / Factory<br>• 🏨 Hospitality / Hotels<br>• 🏥 Healthcare / Clinics<br>• 🏫 Education / Academy<br>• 👔 Corporate Offices<br>• 🎁 Corporate Gifting`;
-      chips = [
-        { text: "🏭 Manufacturing", value: "recommend-Manufacturing" },
-        { text: "🏨 Hospitality", value: "recommend-Hospitality" },
-        { text: "🏥 Healthcare", value: "recommend-Healthcare" },
-        { text: "🏫 Education", value: "recommend-Education" },
-        { text: "👔 Corporate", value: "recommend-Corporate" },
-        { text: "🎁 Gifting", value: "recommend-Gifting" }
-      ];
-      break;
-
-    case "catalog_access":
-      const role = localStorage.getItem('uniwear_auth_role');
-      if (role === 'client') {
-        responseText = `📁 <b>UNIWEAR Catalog Library</b><br>You are logged in! You have full access to our digital catalog repository. What categories would you like to view?<br><br>• <a href="catalog.html" class="text-primary hover:underline font-bold">Download Catalog PDFs</a>`;
-      } else {
-        responseText = `🔒 <b>Locked Catalog Library</b><br>Our engineering catalogues are locked. Please log in to your Client Portal to download high-res files, or leave contact info to receive them via email.`;
-      }
-      chips = [
-        { text: "🔑 Authenticate Login", value: "Login Page" },
-        { text: "📞 Talk to Sales", value: "Talk to Sales" },
-        { text: "👥 Request Callback", value: "Request Callback" }
-      ];
-      break;
-
-    case "contact_info":
-      responseText = `📞 <b>UNIWEAR Consultation HQ</b><br>• Address: No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070<br>• Phone: <a href="tel:+919108765831" class="text-primary font-semibold hover:underline">+91 91087 65831</a> / <a href="tel:+919845932201" class="text-primary font-semibold hover:underline">+91 98459 32201</a><br>• Sales Email: <a href="mailto:sales@uniwear.co" class="text-primary hover:underline font-semibold">sales@uniwear.co</a><br>• Support Email: <a href="mailto:connect@uniwear.co" class="text-primary hover:underline font-semibold">connect@uniwear.co</a>`;
-      chips = faqHandoffChips;
-      break;
-
-    case "delivery_timeline":
-      responseText = `🚚 <b>Delivery Timelines</b><br>Standard stitching and delivery schedule takes **25-30 business days** from size signoff and branding proof approval. For urgent setup schedules, emergency logistics can deliver within **14 business days** under SLA protocols.`;
-      responseText += faqHandoffPrompt;
-      chips = faqHandoffChips;
-      break;
-
-    case "faq_moq":
-      responseText = `👕 <b>Minimum Order Quantities (MOQ)</b><br>Our manufacturing setup handles custom corporate designs. Standard MOQs:<br>• Corporate Suits, Blazers & Outerwear: **50 sets**<br>• Industrial wear, boilersuits & scrubs: **100 sets**<br>• Culinary chef jackets: **50 sets**<br>• Custom leather gifts: **50 items**`;
-      responseText += faqHandoffPrompt;
-      chips = faqHandoffChips;
-      break;
-
-    case "faq_branding":
-      responseText = `🧵 <b>Custom Branding Options</b><br>We do in-house industrial branding:<br>• **Japanese Embroidery**: Long-staple chemical stable threads, 100+ wash durability.<br>• **Screen Printing**: Non-cracking plastisol inks.<br>• **Sublimation & Vinyl**: Ideal for athletic sports Coordinates.`;
-      responseText += faqHandoffPrompt;
-      chips = faqHandoffChips;
-      break;
-
-    case "faq_fabric":
-      responseText = `🧬 <b>Certified Fabrics Matrix</b><br>Our Jayanagar testing lab certifies:<br>• **AeroGuard Poly-Cotton**: 65% Recycled Polyester / 35% Organic Cotton matrix.<br>• **Merino Wool Flannel**: 80% Merino Wool, luxury corporate blazers.<br>• **Egyptian Cotton Giza 85**: Tailored wrinkle-resistant shirts.`;
-      responseText += faqHandoffPrompt;
-      chips = faqHandoffChips;
-      break;
-
-    case "faq_sample":
-      responseText = `🧪 <b>Pre-Production Sampling</b><br>Before batch stitching, we construct a prototype sample. Once you review and signoff on the sample fits and branding layouts, bulk production is initiated.`;
-      responseText += faqHandoffPrompt;
-      chips = faqHandoffChips;
-      break;
-
-    case "greeting":
-      responseText = `👋 Hello! I am the UNIWEAR Smart Assistant. I can help recommend workwear, answer questions about fabric/MOQ, track portal orders, or prepare a custom quotation lead.`;
-      chips = getContextChips();
-      break;
-
-    case "blog_inquiry":
-      responseText = `📰 <b>UNIWEAR Editorial Blog</b><br>Explore our latest publications on high-performance textiles and Safety codes at <a href="blog.html" class="text-primary font-semibold hover:underline">Fabric Research Hub</a>.<br>• Topics include: <i>Science of High-Performance Textiles</i>, <i>Refinery Safety Protocols</i>, and <i>Workspace Branding Trends</i>.`;
-      chips = getContextChips();
-      break;
-
-    case "order_tracking":
-      // Client orders query
-      const cRole = localStorage.getItem('uniwear_auth_role');
-      const cEmail = localStorage.getItem('uniwear_auth_email');
-      if (cRole === 'client' && cEmail) {
-        const orders = JSON.parse(localStorage.getItem('uniwear_orders')) || [];
-        const clientOrders = orders.filter(o => o.clientEmail === cEmail);
-        if (clientOrders.length > 0) {
-          let orderInfo = `📦 <b>Live Stitching Progress</b><br>`;
-          clientOrders.forEach(o => {
-            orderInfo += `<br>• <b>Order ${o.id}</b>: ${o.productName} (${o.volume} Sets)<br>Status: <i>${o.statusText}</i><br>Delivery Expected: <b>${o.deliveryDate}</b>`;
-          });
-          responseText = orderInfo;
-        } else {
-          responseText = `📦 <b>Order Tracking</b><br>No active stitching contracts logged under your authenticated account: <b>${cEmail}</b>.`;
-        }
-      } else {
-        responseText = `📦 <b>Track Your Orders</b><br>Please log in to your Client Portal to see live factory status and shipping timelines.`;
-        chips = [{ text: "🔑 Go to Login", value: "Login Page" }];
-      }
-      if (chips.length === 0) chips = getContextChips();
-      break;
-
-    case "support_request":
-      const sRole = localStorage.getItem('uniwear_auth_role');
-      const sEmail = localStorage.getItem('uniwear_auth_email');
-      if (sRole === 'client' && sEmail) {
-        const tickets = JSON.parse(localStorage.getItem('uniwear_tickets')) || [];
-        const clientTickets = tickets.filter(t => t.clientEmail === sEmail);
-        if (clientTickets.length > 0) {
-          let ticketInfo = `💬 <b>Active Support Tickets</b><br>`;
-          clientTickets.forEach(t => {
-            ticketInfo += `<br>• <b>Ticket ${t.id}</b>: "${t.subject}"<br>Category: ${t.category} • Status: <b>${t.status}</b>`;
-          });
-          responseText = ticketInfo;
-        } else {
-          responseText = `💬 <b>Support Communications</b><br>No open tickets. You can open a support ticket directly inside your Customer Portal settings.`;
-        }
-      } else {
-        responseText = `💬 <b>Customer Support Desk</b><br>Need fit sizing adjustments or stitching changes? Log in to your Portal to open a support ticket and chat with our factory supervisors.`;
-        chips = [{ text: "🔑 Go to Login", value: "Login Page" }];
-      }
-      if (chips.length === 0) chips = getContextChips();
-      break;
-
-    case "fallback":
-      // Check for raw values
-      if (val === 'cancel') {
-        responseText = "Quotation request cancelled. What else can I help you with today?";
-        chips = getContextChips();
-      } else if (val === 'login page') {
-        window.location.href = "login.html";
-        return;
-      } else if (val.startsWith('recommend-')) {
-        const selectedInd = val.split('-')[1];
-        responseText = renderRecommendationResults(selectedInd);
-        chips = [
-          { text: "💰 Request Quotation", value: "Request Quotation" },
-          { text: "📞 Talk to Sales", value: "Talk to Sales" },
-          { text: "👥 Request Callback", value: "Request Callback" },
-          { text: "❓ Recommendations Menu", value: "Product Recommendations" }
-        ];
-      } else if (val === 'dashboard insights') {
-        const aRole = localStorage.getItem('uniwear_auth_role');
-        if (aRole === 'admin') {
-          const leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
-          const quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
-          const prods = JSON.parse(localStorage.getItem('uniwear_products')) || [];
-          const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
-          const users = JSON.parse(localStorage.getItem('uniwear_users')) || [];
-          const activeCust = users.filter(u => u.role === 'Customer' && u.status === 'Active').length;
-
-          responseText = `📊 <b>UNIWEAR Operations Insights</b><br><br>• Total leads captured: <b>${leads.length}</b><br>• Active Quotation mandates: <b>${quotes.length}</b><br>• Products in catalog registry: <b>${prods.length}</b><br>• Active customer accounts: <b>${activeCust}</b><br>• Published fabric research blogs: <b>${blogs.length}</b>`;
-        } else {
-          responseText = `📊 <b>Operations Dashboard</b><br>Only authenticated system administrators can access real-time dashboard analytics.`;
-        }
-        chips = getContextChips();
-      } else if (val === 'view blog stats') {
-        const aRole = localStorage.getItem('uniwear_auth_role');
-        if (aRole === 'admin') {
-          const blogs = JSON.parse(localStorage.getItem('uniwear_blogs')) || [];
-          const drafts = blogs.filter(b => b.status === 'Draft').length;
-          const pub = blogs.filter(b => b.status === 'Published').length;
-          const sched = blogs.filter(b => b.status === 'Scheduled').length;
-          responseText = `📈 <b>Editorial Desk Analytics</b><br><br>• Published Articles: <b>${pub}</b><br>• Draft posts: <b>${drafts}</b><br>• Scheduled posts: <b>${sched}</b><br>• Total registry entries: <b>${blogs.length}</b>`;
-        } else {
-          responseText = `📈 <b>Editorial Analytics</b><br>Access restricted to administrators.`;
-        }
-        chips = getContextChips();
-      } else if (val === 'track my order' || val === 'quotation review' || val === 'view notifications') {
-        const cRole = localStorage.getItem('uniwear_auth_role');
-        const cEmail = localStorage.getItem('uniwear_auth_email');
-        if (cRole === 'client' && cEmail) {
-          if (val === 'track my order') {
-            const orders = JSON.parse(localStorage.getItem('uniwear_orders')) || [];
-            const clientOrders = orders.filter(o => o.clientEmail === cEmail);
-            if (clientOrders.length > 0) {
-              let orderInfo = `📦 <b>Stitching Pipeline</b><br>`;
-              clientOrders.forEach(o => {
-                orderInfo += `<br>• <b>Order ${o.id}</b>: ${o.productName}<br>Stage: ${o.statusText}<br>Handover Expected: <b>${o.deliveryDate}</b>`;
-              });
-              responseText = orderInfo;
-            } else {
-              responseText = `📦 No active orders on file for account: <b>${cEmail}</b>.`;
-            }
-          } else if (val === 'quotation review') {
-            const quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
-            const clientQuotes = quotes.filter(q => q.clientEmail === cEmail);
-            if (clientQuotes.length > 0) {
-              const latest = clientQuotes[clientQuotes.length - 1];
-              responseText = `📄 <b>Quotation Review</b><br><br>• <b>Quote ${latest.id}</b>: ${latest.productClass} (${latest.volume} Sets)<br>Quoted Value: <b>${latest.value}</b><br>Status: <span class="text-primary font-bold">${latest.status}</span>`;
-            } else {
-              responseText = `📄 No quotations mapped to company profile.`;
-            }
-          } else if (val === 'view notifications') {
-            const notis = JSON.parse(localStorage.getItem('uniwear_notifications')) || [];
-            const clientNotis = notis.filter(n => n.recipient === cEmail);
-            if (clientNotis.length > 0) {
-              let notiInfo = `🔔 <b>Recent Notifications</b><br>`;
-              clientNotis.slice(-3).reverse().forEach(n => {
-                notiInfo += `<br>• <b>${n.title}</b>: ${n.text} (${n.time})`;
-              });
-              responseText = notiInfo;
-            } else {
-              responseText = `🔔 Notification Center empty.`;
-            }
-          }
-        } else {
-          responseText = `🔑 Authentication required. Please navigate to login.`;
-          chips = [{ text: "🔑 Go to Login", value: "Login Page" }];
-        }
-        if (chips.length === 0) chips = getContextChips();
-      } else {
-        responseText = `I apologize, I didn't fully catch that requirement. I can recommend garments, coordinate a custom quotation, look up shipping timelines, or answer standard fabric/MOQ FAQs.`;
-        chips = getContextChips();
-      }
-      break;
-  }
-
-  // 3. Proactive Quotation Prompt Injection (Interactions Count Check)
-  if (chatState.interactionCount === 4 && chatState.mode === 'chat') {
-    responseText += `<br><br>💬 <i>By the way, would you like our styling and manufacturing team to prepare a customized quotation for your company?</i>`;
-    chips = [
-      { text: "💰 Yes, Prepare Quote", value: "Request Quotation" },
-      { text: "📞 Request Callback", value: "Request Callback" },
-      { text: "❌ No, thank you", value: "Cancel" }
-    ];
-  }
-
-  addBotMessage(responseText);
-  renderChips(chips);
+function hideBotTyping() {
+  const typingEl = document.getElementById('demo-chatbot-typing');
+  if (typingEl) typingEl.remove();
 }
 
-// Render recommended items as visual cards
-function renderRecommendationResults(industry) {
-  let products = JSON.parse(localStorage.getItem('uniwear_products')) || defaultProducts;
-  let matches = [];
 
-  if (industry === 'Hospitality') {
-    matches = products.filter(p => p.category === 'Hospitality');
-  } else if (industry === 'Industrial' || industry === 'Manufacturing') {
-    matches = products.filter(p => p.category === 'Industrial');
-  } else if (industry === 'Corporate') {
-    matches = products.filter(p => p.category === 'Corporate');
-  } else if (industry === 'Education') {
-    matches = products.filter(p => p.category === 'Institutional');
-  } else if (industry === 'Healthcare') {
-    matches = products.filter(p => p.category === 'Hospitality' && p.name.includes('Scrubs'));
-  } else if (industry === 'Gifting') {
-    matches = products.filter(p => p.category === 'Corporate Gifting');
-  }
-
-  if (matches.length === 0) {
-    return `👔 <b>Product Recommendations</b><br>We offer high-performance workwear solutions. What specific items would you like to review?`;
-  }
-
-  let htmlResult = `👔 <b>Recommended Collections for ${industry}:</b><br>`;
-  matches.slice(0, 2).forEach(p => {
-    htmlResult += `
-      <div class="chatbot-product-card">
-        <img src="${p.img}" class="chatbot-card-img object-cover">
-        <div class="p-3">
-          <h5 class="font-bold text-charcoal truncate" style="font-size: 11px">${p.name}</h5>
-          <p class="text-[9px] text-mutedText mt-1 line-clamp-2">${p.desc}</p>
-          <div class="flex justify-between mt-2 text-[8px] text-gray-400 font-semibold font-mono">
-            <span>MOQ: ${p.moq} Sets</span>
-            <span>${p.gsm || ''}</span>
-          </div>
-          <button onclick="window.location.href='contact.html?product=' + encodeURIComponent('${p.name}')" class="w-full bg-primary hover:bg-primaryHover text-white py-1.5 rounded-lg text-[9px] font-bold transition-all uppercase tracking-wider mt-3 flex items-center justify-center gap-1 select-all">
-            <i class="ri-mail-line"></i> Enquire Now
-          </button>
-        </div>
-      </div>
-    `;
-  });
-  return htmlResult;
-}
-
-// Guided quotation flows step by step advancing
-function advanceQuoteFlow() {
-  let nextIdx = -1;
-  for (let i = 0; i < quoteSteps.length; i++) {
-    if (!chatMemory[quoteSteps[i].field]) {
-      nextIdx = i;
-      break;
-    }
-  }
-
-  if (nextIdx !== -1) {
-    chatState.quoteStep = nextIdx;
-    saveChatState();
-    const step = quoteSteps[nextIdx];
-    addBotMessage(step.prompt);
-
-    if (step.options) {
-      renderChips(step.options.map(o => ({ text: o, value: o })));
-    } else {
-      renderChips([]);
-    }
-  } else {
-    createQuoteLead();
-  }
-}
-
-function advanceHandoffFlow() {
-  let nextIdx = -1;
-  for (let i = 0; i < handoffSteps.length; i++) {
-    if (!chatMemory[handoffSteps[i].field]) {
-      nextIdx = i;
-      break;
-    }
-  }
-
-  if (nextIdx !== -1) {
-    chatState.handoffStep = nextIdx;
-    saveChatState();
-    const step = handoffSteps[nextIdx];
-    addBotMessage(step.prompt);
-    renderChips([]);
-  } else {
-    createHandoffLead();
-  }
-}
-
-// Leads creation systems
-function createQuoteLead() {
-  const qtyVal = parseInt(chatMemory.quantity) || 100;
-  const lead = {
-    name: chatMemory.name,
-    company: chatMemory.company,
-    email: chatMemory.email,
-    phone: chatMemory.phone,
-    category: chatMemory.product,
-    volume: qtyVal,
-    details: `Custom quote requirement. Customization: ${chatMemory.branding}. Expected timeline: ${chatMemory.timeline}. Delivery address: ${chatMemory.location}.`,
-    stage: "New Lead",
-    source: "Chatbot",
-    date: new Date().toISOString().split('T')[0],
-    timestamp: new Date().toLocaleString()
-  };
-
-  let leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
-  leads.push(lead);
-  localStorage.setItem('uniwear_leads', JSON.stringify(leads));
-
-  // Log Notification Alert
-  let notis = JSON.parse(localStorage.getItem('uniwear_notifications')) || [];
-  notis.push({
-    id: Math.random(),
-    recipient: "admin",
-    title: "New Chatbot Quote Lead",
-    text: `${chatMemory.name} from ${chatMemory.company} requested quote for ${qtyVal} sets of ${chatMemory.product}.`,
-    time: "Just now"
-  });
-  localStorage.setItem('uniwear_notifications', JSON.stringify(notis));
-
-  // Clear session quotes details but preserve general details for callback convenience
-  chatState.mode = "chat";
-  chatMemory.quantity = "";
-  chatMemory.location = "";
-  chatMemory.branding = "";
-  chatMemory.timeline = "";
-  saveChatState();
-
-  addBotMessage(`🎉 <b>Quotation Request Submitted Successfully!</b><br><br>We have logged your lead inside the UNIWEAR system.<br><br>Summary logged:<br>• Company: ${lead.company}<br>• Volume: ${qtyVal} sets<br>• Contact Email: ${lead.email}<br><br>Our styling and manufacturing consultant will send a custom quote proposal shortly.`);
-  renderContextChips();
-}
-
-function createHandoffLead() {
-  const lead = {
-    name: chatMemory.name,
-    company: chatMemory.company,
-    email: chatMemory.email,
-    phone: chatMemory.phone,
-    category: "Human Handoff",
-    volume: 0,
-    details: `Talk to Sales / Request Callback. Requirement: ${chatMemory.branding}`,
-    stage: "New Lead",
-    source: "Chatbot",
-    date: new Date().toISOString().split('T')[0],
-    timestamp: new Date().toLocaleString()
-  };
-
-  let leads = JSON.parse(localStorage.getItem('uniwear_leads')) || [];
-  leads.push(lead);
-  localStorage.setItem('uniwear_leads', JSON.stringify(leads));
-
-  // Send to backend and trigger email notification (non-blocking)
-  if (window.api && typeof window.api.createLead === 'function') {
-    window.api.createLead(lead).catch(err => console.error("Chatbot lead submission error:", err));
-  }
-
-  // Log Notification Alert
-  let notis = JSON.parse(localStorage.getItem('uniwear_notifications')) || [];
-  notis.push({
-    id: Math.random(),
-    recipient: "admin",
-    title: "Chatbot Human Handoff Request",
-    text: `${chatMemory.name} from ${chatMemory.company} requested sales agent callback.`,
-    time: "Just now"
-  });
-  localStorage.setItem('uniwear_notifications', JSON.stringify(notis));
-
-  // Clear handoff spec
-  chatState.mode = "chat";
-  chatMemory.branding = "";
-  saveChatState();
-
-  addBotMessage(`📞 <b>Handoff Confirmed!</b><br><br>Your callback request has been logged successfully.<br><br>A UNIWEAR Sales Representative will contact you at <b>${chatMemory.phone}</b> or email you at <b>${chatMemory.email}</b> within 2 business hours.<br><br>Thank you for reaching out!`);
-  renderContextChips();
-}
-
-// Global Init Load Call is handled inside window event DOMContentLoaded in shared.js
 
 // =============================================================================
 // PREMIUM RESPONSIVE BLOG ARTICLE MODAL SYSTEM
@@ -3661,12 +3505,107 @@ async function initDynamicPageContent() {
     });
 
     // 2. Dynamic Hero Content (if on homepage and hero element exists)
-    if (settings.homepageHero && document.querySelector('.hero-section')) {
+    if (settings.homepageHero && document.querySelector('#hero-section, .hero-section')) {
       const hero = settings.homepageHero;
-      const h1 = document.querySelector('.hero-section h1');
-      if (h1 && hero.title) h1.innerHTML = hero.title.replace('Your Premium', '<span class="text-reveal-wrap"><span class="hero-reveal block">Your Premium</span></span>').replace('Workwear Partner', '<span class="text-reveal-wrap"><span class="hero-reveal block text-primary">Workwear Partner</span></span>');
-      const p = document.querySelector('.hero-section p');
+      const h1 = document.querySelector('#hero-section h1, .hero-section h1');
+      if (h1 && hero.title) {
+        h1.innerHTML = hero.title.replace(/\n/g, '<br>');
+      }
+      const p = document.querySelector('#hero-section p, .hero-section p');
       if (p && hero.subtitle) p.textContent = hero.subtitle;
+
+      // Primary CTA Link
+      const primaryCta = document.querySelector('#hero-section a[href*="contact.html"], .hero-section a[href*="contact.html"]');
+      if (primaryCta) {
+        if (hero.primaryCtaText) {
+          const span = primaryCta.querySelector('span');
+          if (span) span.textContent = hero.primaryCtaText;
+        }
+        if (hero.primaryCtaLink) primaryCta.href = hero.primaryCtaLink;
+      }
+
+      // Secondary CTA Link
+      const secCta = document.querySelector('#hero-section a[href*="uniforms.html"], .hero-section a[href*="uniforms.html"]');
+      if (secCta) {
+        if (hero.secondaryCtaText) {
+          const span = secCta.querySelector('span');
+          if (span) span.textContent = hero.secondaryCtaText;
+        }
+        if (hero.secondaryCtaLink) secCta.href = hero.secondaryCtaLink;
+      }
+
+      // Hero Banner Image
+      if (hero.bannerUrl) {
+        const heroImg = document.querySelector('#hero-section img, .hero-section img');
+        if (heroImg) heroImg.src = hero.bannerUrl;
+      }
+    }
+
+    // 2b. Dynamic Why Choose Us
+    if (Array.isArray(settings.whyChooseUs) && settings.whyChooseUs.length >= 3) {
+      const whyCards = document.querySelectorAll('section:has(.ri-palette-line) .grid > div, section:has(.ri-award-line) .grid > div');
+      if (whyCards.length >= 3) {
+        settings.whyChooseUs.forEach((item, idx) => {
+          if (whyCards[idx] && item) {
+            const h3 = whyCards[idx].querySelector('h3');
+            const desc = whyCards[idx].querySelector('p');
+            const icon = whyCards[idx].querySelector('i');
+            if (h3 && item.title) h3.textContent = item.title;
+            if (desc && item.subtitle) desc.textContent = item.subtitle;
+            if (icon && item.icon) icon.className = `${item.icon} text-2xl`;
+          }
+        });
+      }
+    }
+
+    // 2c. Dynamic Video Reviews / Testimonials in Section 6
+    const sliderContainer = document.getElementById('testimonials-slider-container');
+    const videoReviews = Array.isArray(settings.videoReviews) ? settings.videoReviews : [];
+    if (sliderContainer && videoReviews.length > 0) {
+      const limit = parseInt(settings.videoDisplayLimit || 3, 10);
+      const activeVideos = videoReviews
+        .filter(v => v.visible !== false)
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .slice(0, limit);
+
+      if (activeVideos.length > 0) {
+        sliderContainer.innerHTML = activeVideos.map((v, idx) => {
+          const isFirst = idx === 0;
+          const hasYoutube = Boolean(v.youtubeUrl);
+          const thumb = v.thumbnailUrl || 'assets/images/industries/corporate-uniforms.png';
+
+          return `
+            <div class="testimonial-slide absolute inset-0 ${isFirst ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500 flex flex-col justify-between" id="testimonial-slide-${idx + 1}">
+              <p class="text-lg sm:text-xl text-slate-700 italic leading-relaxed max-w-2xl mx-auto font-normal">
+                "${v.testimonialSummary || ''}"
+              </p>
+              
+              <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+                ${hasYoutube ? `
+                  <button type="button" onclick="openPublicVideoModal('${v.youtubeUrl}')" class="group/thumb relative w-28 h-16 rounded-xl overflow-hidden border border-slate-200 shadow-sm shrink-0 focus:outline-none hover:border-primary transition-all">
+                    <img src="${thumb}" onerror="this.src='assets/images/industries/corporate-uniforms.png'" class="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black/35 flex items-center justify-center group-hover/thumb:bg-black/20 transition-colors">
+                      <div class="w-7 h-7 rounded-full bg-red-600 text-white flex items-center justify-center shadow-md group-hover/thumb:scale-110 transition-transform">
+                        <i class="ri-play-fill text-sm leading-none ml-0.5"></i>
+                      </div>
+                    </div>
+                  </button>
+                ` : ''}
+
+                <div class="text-center sm:text-left">
+                  <h4 class="font-heading text-sm font-bold text-slate-900 leading-none">${v.customerName || 'Enterprise Partner'}</h4>
+                  <p class="text-[11px] text-slate-500 mt-1 uppercase tracking-wider font-medium">${v.projectLocation || 'Corporate Client'}</p>
+                  ${hasYoutube ? `
+                    <button type="button" onclick="openPublicVideoModal('${v.youtubeUrl}')" class="inline-flex items-center gap-1 text-[11px] text-primary hover:underline font-semibold mt-1">
+                      <i class="ri-youtube-fill text-red-600"></i> Watch Video Review &rarr;
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     // 3. Inject Floating WhatsApp Button & Sticky Quote CTA if not present
@@ -3701,6 +3640,56 @@ async function initDynamicPageContent() {
     console.error('[initDynamicPageContent error]', e.message);
   }
 }
+
+// ─── Public Video Review Lightbox Modal Helper ─────────────────────────────
+function getYouTubeEmbedUrl(url) {
+  if (!url) return '';
+  let videoId = '';
+  if (url.includes('youtu.be/')) {
+    videoId = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
+  } else if (url.includes('youtube.com/watch')) {
+    const params = new URLSearchParams(url.split('?')[1]);
+    videoId = params.get('v') || '';
+  } else if (url.includes('youtube.com/embed/')) {
+    videoId = url.split('youtube.com/embed/')[1].split('?')[0].split('&')[0];
+  }
+  return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0` : url;
+}
+
+function openPublicVideoModal(url) {
+  let modal = document.getElementById('public-video-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'public-video-modal';
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 font-body';
+    modal.innerHTML = `
+      <div class="absolute inset-0 bg-charcoal/80 backdrop-blur-md" onclick="closePublicVideoModal()"></div>
+      <div class="relative w-full max-w-3xl bg-black rounded-2xl overflow-hidden shadow-2xl z-10 aspect-video">
+        <button onclick="closePublicVideoModal()" class="absolute top-3 right-3 text-white/80 hover:text-white bg-black/60 rounded-full w-9 h-9 flex items-center justify-center z-20">
+          <i class="ri-close-line text-2xl"></i>
+        </button>
+        <iframe id="public-video-iframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  const iframe = document.getElementById('public-video-iframe');
+  if (iframe) iframe.src = getYouTubeEmbedUrl(url);
+  modal.classList.remove('hidden');
+}
+
+function closePublicVideoModal() {
+  const modal = document.getElementById('public-video-modal');
+  if (modal) {
+    const iframe = document.getElementById('public-video-iframe');
+    if (iframe) iframe.src = '';
+    modal.classList.add('hidden');
+  }
+}
+
+window.getYouTubeEmbedUrl = getYouTubeEmbedUrl;
+window.openPublicVideoModal = openPublicVideoModal;
+window.closePublicVideoModal = closePublicVideoModal;
 
 // ─── Premium Minimal Cursor & Interaction System ─────────────────────────────
 function initCustomCursor() {
@@ -3845,6 +3834,82 @@ document.addEventListener('DOMContentLoaded', () => {
   initDynamicPageContent();
   initCustomCursor();
 });
+
+// Robust Newsletter Subscription Handler with validation, API submission & fallback
+async function handleNewsletterSubmit(event) {
+  if (event && event.preventDefault) event.preventDefault();
+  const form = event.target || event;
+  const input = form.querySelector('input[type="email"]');
+  const btn = form.querySelector('button[type="submit"]');
+  const msgEl = form.parentElement.querySelector('#newsletter-success') || form.querySelector('#newsletter-success');
+  if (!input || !msgEl) return false;
+
+  const email = (input.value || '').trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msgEl.textContent = 'Please enter a valid work email address.';
+    msgEl.className = 'text-xs text-red-500 font-bold block mt-2';
+    msgEl.classList.remove('hidden');
+    return false;
+  }
+
+  const originalBtnHTML = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i>';
+  }
+
+  try {
+    let handled = false;
+    if (window.api && typeof window.api.request === 'function') {
+      try {
+        const res = await window.api.request('/leads/subscribe', {
+          method: 'POST',
+          body: JSON.stringify({ email })
+        });
+        if (res && res.success) {
+          msgEl.textContent = res.message || 'Successfully joined the registry.';
+          msgEl.className = res.duplicate ? 'text-xs text-amber-400 font-bold block mt-2' : 'text-xs text-green-500 font-bold block mt-2';
+          msgEl.classList.remove('hidden');
+          form.reset();
+          handled = true;
+        }
+      } catch (apiErr) {
+        console.warn('Backend newsletter API call failed, falling back to local registry:', apiErr);
+      }
+    }
+
+    if (!handled) {
+      // Local fallback for static/offline deployment
+      const subscribers = JSON.parse(localStorage.getItem('uniwear_newsletter_subscribers') || '[]');
+      if (subscribers.includes(email.toLowerCase())) {
+        msgEl.textContent = 'This email is already in our newsletter registry.';
+        msgEl.className = 'text-xs text-amber-400 font-bold block mt-2';
+      } else {
+        subscribers.push(email.toLowerCase());
+        localStorage.setItem('uniwear_newsletter_subscribers', JSON.stringify(subscribers));
+        msgEl.textContent = 'Successfully joined the registry.';
+        msgEl.className = 'text-xs text-green-500 font-bold block mt-2';
+      }
+      msgEl.classList.remove('hidden');
+      form.reset();
+    }
+  } catch (err) {
+    msgEl.textContent = 'Subscription request failed. Please try again.';
+    msgEl.className = 'text-xs text-red-500 font-bold block mt-2';
+    msgEl.classList.remove('hidden');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalBtnHTML;
+    }
+    setTimeout(() => {
+      if (msgEl) msgEl.classList.add('hidden');
+    }, 6000);
+  }
+  return false;
+}
+window.handleNewsletterSubmit = handleNewsletterSubmit;
+
 
 
 

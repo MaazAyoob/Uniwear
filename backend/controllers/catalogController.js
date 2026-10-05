@@ -1,4 +1,7 @@
+const mongoose = require('mongoose');
 const Catalog = require('../models/Catalog');
+
+const getCatalogQuery = (id) => (mongoose.isValidObjectId(id) ? { $or: [{ _id: id }, { slug: id }] } : { slug: id });
 
 // GET /api/catalog
 const getCatalogs = async (req, res, next) => {
@@ -42,7 +45,7 @@ const getCatalogs = async (req, res, next) => {
 const getCatalogById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const catalog = await Catalog.findOne({ $or: [{ _id: id }, { slug: id }] })
+    const catalog = await Catalog.findOne(getCatalogQuery(id))
       .populate('products')
       .lean();
 
@@ -100,7 +103,7 @@ const createCatalog = async (req, res, next) => {
 const updateCatalog = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const catalog = await Catalog.findOne({ $or: [{ _id: id }, { slug: id }] });
+    const catalog = await Catalog.findOne(getCatalogQuery(id));
 
     if (!catalog) {
       return res.status(404).json({ success: false, message: 'Catalog not found.' });
@@ -137,7 +140,7 @@ const updateCatalog = async (req, res, next) => {
 const deleteCatalog = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const catalog = await Catalog.findOneAndDelete({ $or: [{ _id: id }, { slug: id }] });
+    const catalog = await Catalog.findOneAndDelete(getCatalogQuery(id));
 
     if (!catalog) {
       return res.status(404).json({ success: false, message: 'Catalog not found.' });

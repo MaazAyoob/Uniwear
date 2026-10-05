@@ -1,4 +1,10 @@
+const mongoose = require('mongoose');
 const Blog = require('../models/Blog');
+
+const getBlogQuery = (id) => {
+  if (/^\d+$/.test(id)) return { id: parseInt(id) };
+  return mongoose.isValidObjectId(id) ? { $or: [{ _id: id }, { slug: id }] } : { slug: id };
+};
 
 // GET /api/blogs
 const getBlogs = async (req, res, next) => {
@@ -33,13 +39,7 @@ const getBlogs = async (req, res, next) => {
 const getBlogById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    let blog;
-
-    if (/^\d+$/.test(id)) {
-      blog = await Blog.findOne({ id: parseInt(id) }).lean();
-    } else {
-      blog = await Blog.findOne({ $or: [{ _id: id }, { slug: id }] }).lean();
-    }
+    const blog = await Blog.findOne(getBlogQuery(id)).lean();
 
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Blog article not found.' });
@@ -102,13 +102,7 @@ const createBlog = async (req, res, next) => {
 const updateBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
-    let blog;
-
-    if (/^\d+$/.test(id)) {
-      blog = await Blog.findOne({ id: parseInt(id) });
-    } else {
-      blog = await Blog.findOne({ $or: [{ _id: id }, { slug: id }] });
-    }
+    const blog = await Blog.findOne(getBlogQuery(id));
 
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Blog article not found.' });
@@ -160,13 +154,7 @@ const updateBlog = async (req, res, next) => {
 const deleteBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
-    let blog;
-
-    if (/^\d+$/.test(id)) {
-      blog = await Blog.findOneAndDelete({ id: parseInt(id) });
-    } else {
-      blog = await Blog.findOneAndDelete({ $or: [{ _id: id }, { slug: id }] });
-    }
+    const blog = await Blog.findOneAndDelete(getBlogQuery(id));
 
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Blog article not found.' });
