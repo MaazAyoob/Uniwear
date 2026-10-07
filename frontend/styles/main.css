@@ -482,32 +482,27 @@ button, a, input, select, textarea, .btn {
   display: none !important;
 }
 
-/* UNIVERSAL DARK MODE HEADER & LOGO CONTRAST SYSTEM */
-html[data-theme="dark"] #global-header,
-html[data-theme="dark"] header {
-  background-color: rgba(9, 9, 11, 0.96) !important;
-  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
-  color: #FFFFFF !important;
+/* UNIVERSAL HEADER CONTRAST SYSTEM */
+/* Light Floating Navbar Pill (Homepage & Scrolled Headers) — WCAG AAA Contrast */
+#global-header nav .nav-link,
+#global-header #header-client-portal {
+  color: #1E293B !important;
 }
 
-html[data-theme="dark"] #global-header img,
-html[data-theme="dark"] header img {
-  filter: brightness(0) invert(1) !important;
+#global-header nav .nav-link:hover,
+#global-header #header-client-portal:hover {
+  color: #B91C1C !important;
 }
 
-html[data-theme="dark"] #global-header nav,
-html[data-theme="dark"] header nav {
-  background-color: rgba(24, 24, 27, 0.92) !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
+#global-header nav .nav-link[href="index.html"],
+#global-header nav .nav-link.active {
+  color: #0F172A !important;
 }
 
-html[data-theme="dark"] #global-header a:not(.bg-primary),
-html[data-theme="dark"] header a:not(.bg-primary),
-html[data-theme="dark"] #global-header .nav-link,
-html[data-theme="dark"] header .nav-link,
-html[data-theme="dark"] #global-header i,
-html[data-theme="dark"] header i {
-  color: #FFFFFF !important;
+/* Dark photo header variant for inner pages (e.g., About Us, Uniforms) */
+header nav.bg-black\/40 .nav-link,
+#global-header nav.bg-black\/40 .nav-link {
+  color: rgba(255, 255, 255, 0.95) !important;
 }
 
 /* ===================================================

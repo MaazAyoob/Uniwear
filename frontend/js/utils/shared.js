@@ -1400,9 +1400,9 @@ if (stateCompanySettings.notificationEmail === undefined) {
 // 1.5. COMPLETE THEME SWITCHING SYSTEM
 // ==========================================
 
-// Initialize theme instantly to prevent visual flashes
-const savedTheme = localStorage.getItem('uniwear_theme') || 'light';
-document.documentElement.setAttribute('data-theme', savedTheme);
+// Initialize theme instantly (forced light theme across platform)
+const savedTheme = 'light';
+document.documentElement.setAttribute('data-theme', 'light');
 
 const themeStyleEl = document.createElement('style');
 themeStyleEl.textContent = `
@@ -1446,13 +1446,17 @@ themeStyleEl.textContent = `
     border-color: rgba(255, 255, 255, 0.15) !important;
   }
 
-  html[data-theme="dark"] #global-header a:not(.bg-primary),
-  html[data-theme="dark"] header a:not(.bg-primary),
-  html[data-theme="dark"] #global-header .nav-link,
-  html[data-theme="dark"] header .nav-link,
-  html[data-theme="dark"] #global-header i,
-  html[data-theme="dark"] header i {
-    color: #FFFFFF !important;
+  /* For dark photo headers on inner pages */
+  html[data-theme="dark"] header nav.bg-black\/40 .nav-link,
+  header nav.bg-black\/40 .nav-link {
+    color: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  /* For light navbar pills (homepage & scrolled headers), text MUST BE DARK SLATE */
+  #global-header nav:not(.bg-black\/40) .nav-link,
+  #global-header nav:not(.bg-black\/40) a,
+  #global-header #header-client-portal {
+    color: #1E293B !important;
   }
   
   /* KEEP IMAGES 100% BRIGHT & VISIBLE IN DARK MODE */
@@ -1700,16 +1704,21 @@ function applyUniversalHeaderTheme() {
       header.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2.5 bg-transparent text-slate-900';
       if (logoImg) logoImg.style.filter = 'none';
       if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-white/95 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/90 shadow-sm';
-      navLinks.forEach(l => { l.style.color = '#1e293b'; });
-      if (portalLink) portalLink.style.color = '#1e293b';
-      if (mobileMenuIcon) mobileMenuIcon.style.color = '#0f172a';
+      navLinks.forEach(l => { 
+        const isHome = l.getAttribute('href') === 'index.html';
+        l.style.setProperty('color', isHome ? '#0f172a' : '#1e293b', 'important'); 
+      });
+      if (portalLink) portalLink.style.setProperty('color', '#1e293b', 'important');
+      if (mobileMenuIcon) mobileMenuIcon.style.setProperty('color', '#0f172a', 'important');
     } else {
       header.className = 'fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2 shadow-md bg-white/95 backdrop-blur-md border-b border-slate-200/80 text-slate-900';
       if (logoImg) logoImg.style.filter = 'none';
       if (navPill) navPill.className = 'hidden lg:flex items-center lg:gap-3 xl:gap-6 bg-slate-100/90 backdrop-blur-md py-2 lg:px-4 xl:px-6 rounded-full border border-slate-200/80 shadow-inner';
-      navLinks.forEach(l => { l.style.color = '#1e293b'; });
-      if (portalLink) portalLink.style.color = '#1e293b';
-      if (mobileMenuIcon) mobileMenuIcon.style.color = '#0f172a';
+      navLinks.forEach(l => { 
+        l.style.setProperty('color', '#1e293b', 'important'); 
+      });
+      if (portalLink) portalLink.style.setProperty('color', '#1e293b', 'important');
+      if (mobileMenuIcon) mobileMenuIcon.style.setProperty('color', '#0f172a', 'important');
     }
     return;
   }
