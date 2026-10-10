@@ -1286,8 +1286,10 @@
 
             <!-- When image is uploaded -->
             <div id="upload-zone-preview" class="hidden flex-col items-center space-y-2">
-              <img id="upload-preview-thumb" src=""
-                class="w-20 h-20 object-cover rounded-lg border border-lightBorder shadow-sm">
+              <div class="w-24 h-24 rounded-lg border border-lightBorder bg-white flex items-center justify-center p-1 overflow-hidden shadow-sm">
+                <img id="upload-preview-thumb" src=""
+                  class="w-full h-full object-contain object-center">
+              </div>
               <button type="button" onclick="removeModalImage(event)"
                 class="text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1"><i
                   class="ri-delete-bin-line"></i> Remove Image</button>
@@ -3234,8 +3236,8 @@
             const imgPath = p.img || 'assets/images/products/corporate-blazer-detail.png';
             tr.innerHTML = `
               <td class="p-4">
-                <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-lightCard group/img cursor-pointer" onclick="triggerTableImageUpload('${p._id}')">
-                  <img src="${imgPath}" class="w-full h-full object-cover">
+                <div class="relative w-12 h-12 rounded-lg border border-lightBorder overflow-hidden bg-white p-1 flex items-center justify-center group/img cursor-pointer" onclick="triggerTableImageUpload('${p._id}')">
+                  <img src="${imgPath}" class="w-full h-full object-contain object-center">
                   <div class="absolute inset-0 bg-charcoal/50 flex items-center justify-center text-white opacity-0 group-hover/img:opacity-100 transition-opacity">
                     <i class="ri-upload-2-line text-xs"></i>
                   </div>
@@ -4139,7 +4141,9 @@
         tbody.innerHTML = currentAssignedProducts.map(p => `
           <tr class="border-b border-lightBorder hover:bg-lightCard text-xs transition-colors" id="assignment-row-${p.assignmentId}">
             <td class="p-4 font-semibold text-charcoal flex items-center gap-3">
-              <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-10 h-10 object-cover rounded-lg border border-lightBorder shrink-0">
+              <div class="w-10 h-10 rounded-lg border border-lightBorder overflow-hidden bg-white p-0.5 shrink-0 flex items-center justify-center">
+                <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-full h-full object-contain object-center">
+              </div>
               <div>
                 <p class="font-bold text-charcoal">${p.name}</p>
                 <span class="text-[9px] uppercase text-primary font-bold">${p.category}</span>
@@ -4211,7 +4215,9 @@
             <label class="flex items-center justify-between p-2 bg-white rounded-lg border border-lightBorder cursor-pointer hover:border-primary/40">
               <div class="flex items-center gap-3">
                 <input type="checkbox" name="assign_prod_checkbox" value="${p._id || p.id}" class="rounded text-primary">
-                <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-8 h-8 object-cover rounded">
+                <div class="w-8 h-8 rounded border border-lightBorder overflow-hidden bg-white p-0.5 shrink-0 flex items-center justify-center">
+                  <img src="${p.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-full h-full object-contain object-center">
+                </div>
                 <div>
                   <span class="text-xs font-bold text-charcoal block">${p.name}</span>
                   <span class="text-[9px] uppercase text-primary font-semibold">${p.category}</span>

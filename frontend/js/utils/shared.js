@@ -2491,7 +2491,9 @@ function renderMessages() {
         <div class="grid grid-cols-1 gap-2 mt-2">
           ${m.products.map(p => `
             <div class="chatbot-product-card flex items-center gap-3 p-2 bg-white rounded-xl border border-gray-100">
-              <img src="${p.image || '/images/products/placeholder.jpg'}" alt="${p.title}" class="w-14 h-14 rounded-lg object-cover bg-gray-50 border border-gray-100 shrink-0" onerror="this.src='/images/logo.png'">
+              <div class="w-14 h-14 rounded-lg bg-white border border-gray-100 shrink-0 flex items-center justify-center p-1 overflow-hidden">
+                <img src="${p.image || 'assets/images/products/corporate-blazer-detail.png'}" alt="${p.title}" class="w-full h-full object-contain object-center" onerror="this.src='assets/images/logos/uniwear-logo.png'">
+              </div>
               <div class="flex-1 min-w-0">
                 <div class="text-[9px] uppercase tracking-wider text-primary font-bold">${p.category || 'Uniform'}</div>
                 <div class="text-xs font-semibold text-charcoal truncate">${p.title}</div>
