@@ -142,7 +142,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(morgan('dev'));
-app.use(express.json({ limit: '20mb' }));
+app.use(express.json({
+  limit: '20mb',
+  verify: (req, res, buf) => {
+    req.rawBody = buf ? buf.toString('utf8') : '';
+  }
+}));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 app.use(express.static(path.join(__dirname, '..', 'frontend')));

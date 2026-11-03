@@ -222,10 +222,52 @@ exports.verifyPayment = async (req, res) => {
 
     // Verify status with Cashfree
     const cfTargetId = order.payment.cfOrderId || order.id;
-    const cfOrder = await cashfreeService.getOrder(cfTargetId);
-    const payments = await cashfreeService.getOrderPayments(cfTargetId);
+    const cfOrder = await cashfreeService.getOrder(cfTargetId, order.grandTotal);
+    const payments = await cashfreeService.getOrderPayments(cfTargetId, order.grandTotal);
+
+    // Simulator safety check: Fail closed if simulated result in unauthorized environment
+    if (cfOrder && cfOrder.isSimulation) {
+      if (!cashfreeService.isSimulatorAllowed()) {
+        return res.status(403).json({
+          success: false,
+          verified: false,
+          message: 'Simulated payment verification is strictly forbidden in this environment.'
+        });
+      }
+    }
+
+    // Strict amount and currency validation against gateway
+    if (cfOrder && cfOrder.order_amount !== undefined && !cfOrder.isSimulation) {
+      if (Math.round(Number(cfOrder.order_amount)) !== Math.round(Number(order.grandTotal))) {
+        console.error(`[verifyPayment] Amount mismatch: Gateway has ₹${cfOrder.order_amount}, expected ₹${order.grandTotal}`);
+        return res.status(400).json({
+          success: false,
+          verified: false,
+          message: 'Order amount mismatch between gateway and portal record.'
+        });
+      }
+    }
+    if (cfOrder && cfOrder.order_currency && cfOrder.order_currency !== 'INR') {
+      return res.status(400).json({
+        success: false,
+        verified: false,
+        message: 'Invalid currency detected. Only INR transactions are accepted.'
+      });
+    }
 
     const successfulPayment = payments.find(p => p.payment_status === 'SUCCESS') || (cfOrder.order_status === 'PAID' ? payments[0] : null);
+
+    // If successful payment found on gateway, verify its individual amount matches as well
+    if (successfulPayment && successfulPayment.payment_amount !== undefined && !successfulPayment.isSimulation) {
+      if (Math.round(Number(successfulPayment.payment_amount)) !== Math.round(Number(order.grandTotal))) {
+        console.error(`[verifyPayment] Payment amount mismatch: Gateway payment has ₹${successfulPayment.payment_amount}, expected ₹${order.grandTotal}`);
+        return res.status(400).json({
+          success: false,
+          verified: false,
+          message: 'Individual payment amount mismatch.'
+        });
+      }
+    }
 
     const isPaid = cfOrder.order_status === 'PAID' || Boolean(successfulPayment);
 
@@ -292,7 +334,7 @@ exports.handleWebhook = async (req, res) => {
   try {
     const signature = req.headers['x-webhook-signature'];
     const timestamp = req.headers['x-webhook-timestamp'];
-    const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+    const rawBody = req.rawBody || (typeof req.body === 'string' ? req.body : JSON.stringify(req.body));
 
     const isValid = cashfreeService.verifyWebhookSignature(rawBody, signature, timestamp);
     if (!isValid) {
@@ -300,34 +342,54 @@ exports.handleWebhook = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid signature' });
     }
 
-    const payload = req.body;
-    const orderId = payload.data && payload.data.order && payload.data.order.order_id;
+    const payload = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const orderId = (payload.data && payload.data.order && payload.data.order.order_id) || payload.order_id;
     const paymentStatus = payload.data && payload.data.payment && payload.data.payment.payment_status;
+    const webhookAmount = payload.data && payload.data.payment && payload.data.payment.payment_amount;
+    const webhookCurrency = (payload.data && payload.data.payment && payload.data.payment.payment_currency) || 'INR';
 
     if (!orderId) {
-      return res.status(200).json({ success: true, message: 'Ignored, no order_id' });
+      return res.status(400).json({ success: false, message: 'Ignored, missing order_id' });
     }
 
     const order = await Order.findOne({ id: orderId });
     if (!order) {
-      return res.status(200).json({ success: true, message: 'Order not found, ignored.' });
+      return res.status(404).json({ success: false, message: 'Order record not found.' });
     }
 
-    if (order.payment.paymentStatus === 'PAID') {
-      return res.status(200).json({ success: true, message: 'Already marked as paid.' });
+    // Idempotency: Duplicate callbacks must be accepted cleanly without re-executing state changes
+    if (order.payment && order.payment.paymentStatus === 'PAID') {
+      return res.status(200).json({ success: true, message: 'Already marked as paid (idempotent).' });
     }
 
     if (paymentStatus === 'SUCCESS') {
+      // Validate payment amount against order grand total
+      if (webhookAmount !== undefined && Math.round(Number(webhookAmount)) !== Math.round(Number(order.grandTotal))) {
+        console.error(`[Webhook] Amount mismatch for ${orderId}: received ₹${webhookAmount}, expected ₹${order.grandTotal}`);
+        return res.status(400).json({ success: false, message: 'Payment amount mismatch' });
+      }
+
+      // Validate currency
+      if (webhookCurrency && webhookCurrency !== 'INR') {
+        console.error(`[Webhook] Currency mismatch for ${orderId}: received ${webhookCurrency}`);
+        return res.status(400).json({ success: false, message: 'Payment currency mismatch' });
+      }
+
       order.payment.paymentStatus = 'PAID';
-      order.payment.cfPaymentId = payload.data.payment.cf_payment_id || '';
-      order.payment.paymentMethod = payload.data.payment.payment_group || 'Online';
+      order.payment.cfPaymentId = String((payload.data && payload.data.payment && payload.data.payment.cf_payment_id) || '');
+      order.payment.paymentMethod = String((payload.data && payload.data.payment && payload.data.payment.payment_group) || 'Online');
       order.payment.paymentTime = new Date();
+      order.statusStep = 1;
+      order.statusText = '01. Quotation & Contract Finalized';
+      order.currentStageIndex = 1;
+      order.currentStageName = '01. Quotation & Contract Finalized';
+
       order.payment.attempts.push({
         attemptId: `wh_${Date.now()}`,
         cfPaymentId: order.payment.cfPaymentId,
         status: 'SUCCESS',
         paymentMethod: order.payment.paymentMethod,
-        amount: payload.data.payment.payment_amount || order.grandTotal,
+        amount: order.grandTotal,
         time: new Date(),
         rawResponse: payload
       });
@@ -335,6 +397,14 @@ exports.handleWebhook = async (req, res) => {
 
       // Clear customer cart
       await Cart.findOneAndUpdate({ clientEmail: order.clientEmail }, { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 });
+
+      // Admin Notification
+      await Notification.create({
+        recipient: 'admin',
+        title: 'Webhook: Order Confirmed',
+        text: `Order ${order.id} (₹${order.grandTotal.toLocaleString('en-IN')}) confirmed via signed Cashfree webhook for ${order.clientCompany || order.clientEmail}.`,
+        time: 'Just now'
+      });
     }
 
     res.status(200).json({ success: true, received: true });
