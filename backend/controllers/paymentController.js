@@ -221,7 +221,7 @@ exports.verifyPayment = async (req, res) => {
     }
 
     // Verify status with Cashfree
-    const cfTargetId = order.payment.cfOrderId || order.id;
+    const cfTargetId = order.id || orderId;
     const cfOrder = await cashfreeService.getOrder(cfTargetId, order.grandTotal);
     const payments = await cashfreeService.getOrderPayments(cfTargetId, order.grandTotal);
 
@@ -270,13 +270,17 @@ exports.verifyPayment = async (req, res) => {
     }
 
     const isPaid = cfOrder.order_status === 'PAID' || Boolean(successfulPayment);
+    const resolvedMethod = (successfulPayment && (
+      successfulPayment.payment_group ||
+      (typeof successfulPayment.payment_method === 'string' ? successfulPayment.payment_method : Object.keys(successfulPayment.payment_method || {})[0])
+    )) || 'Online';
 
     // Record this payment attempt
     const attemptRecord = {
       attemptId: `att_${Date.now()}`,
       cfPaymentId: cfPaymentId || (successfulPayment ? successfulPayment.cf_payment_id : `PAY-${Date.now()}`),
       status: isPaid ? 'SUCCESS' : 'FAILED',
-      paymentMethod: (successfulPayment && successfulPayment.payment_method) || 'Online',
+      paymentMethod: String(resolvedMethod),
       amount: (successfulPayment && successfulPayment.payment_amount) || order.grandTotal,
       time: new Date(),
       rawResponse: { cfOrder, payments }
