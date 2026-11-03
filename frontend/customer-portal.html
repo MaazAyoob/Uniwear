@@ -1042,8 +1042,8 @@
             <i class="ri-error-warning-line text-amber-600" id="ps-icon"></i>
           </div>
 
-          <h3 class="font-heading text-xl font-bold text-charcoal" id="ps-title">Your payment didn't go through.</h3>
-          <p class="text-xs text-mutedText leading-relaxed" id="ps-desc">Your cart and size breakdowns are saved. You can safely retry your payment.</p>
+          <h3 class="font-heading text-xl font-bold text-charcoal" id="ps-title">Checking Payment Status</h3>
+          <p class="text-xs text-mutedText leading-relaxed" id="ps-desc">Verifying payment status securely with Cashfree Payment Gateway...</p>
 
           <div class="p-4 bg-lightCard rounded-2xl border border-lightBorder space-y-2 text-xs text-left" id="ps-summary-box">
             <div class="flex justify-between">
@@ -1056,12 +1056,17 @@
             </div>
           </div>
 
+          <div id="ps-failure-box" class="hidden p-3 bg-red-50 text-red-700 rounded-xl border border-red-200 text-xs text-left space-y-1">
+            <span class="font-bold flex items-center gap-1.5"><i class="ri-error-warning-line"></i> Gateway Notice:</span>
+            <p id="ps-failure-reason" class="text-[11px] leading-tight text-red-600 font-mono"></p>
+          </div>
+
           <div class="space-y-2 pt-2">
-            <button type="button" onclick="setPortalTab('cust-checkout')" id="ps-primary-btn" class="w-full py-3.5 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-primary/20">
-              Return to payment →
+            <button type="button" onclick="handleCurrentStateAction()" id="ps-primary-btn" class="w-full py-3.5 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-primary/20">
+              Return to checkout →
             </button>
-            <button type="button" onclick="setPortalTab('cust-cart')" class="w-full py-2.5 px-5 text-xs font-bold text-mutedText hover:text-charcoal transition-colors">
-              Review cart
+            <button type="button" onclick="setPortalTab('cust-cart')" id="ps-secondary-btn" class="w-full py-2.5 px-5 text-xs font-bold text-mutedText hover:text-charcoal transition-colors">
+              Review cart & allocations
             </button>
           </div>
         </div>
@@ -1447,22 +1452,8 @@
       const redirectOrderId = urlParams.get('order_id') || urlParams.get('orderId');
       if (redirectOrderId) {
         window.history.replaceState({}, document.title, window.location.pathname);
-        try {
-          const verifyRes = await window.api.verifyPortalPayment({ orderId: redirectOrderId });
-          if (verifyRes.success && verifyRes.verified) {
-            portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
-            updateCartBadges();
-            await syncCustomerData();
-            showOrderConfirmed(verifyRes.order);
-            return;
-          } else {
-            showPaymentFailed(verifyRes.message || 'Payment verification incomplete or status pending.', redirectOrderId);
-            return;
-          }
-        } catch (err) {
-          showPaymentFailed(err.message || 'Error verifying returned payment status.', redirectOrderId);
-          return;
-        }
+        await reconcilePaymentStatus(redirectOrderId);
+        return;
       }
 
       updateCustomerPortal();
@@ -2687,19 +2678,7 @@
         lastFailedOrderId = orderId;
 
         if (chkRes.isSimulation) {
-          const verifyRes = await window.api.verifyPortalPayment({
-            orderId,
-            cfPaymentId: `PAY-SIM-${Date.now()}`
-          });
-
-          if (verifyRes.success && verifyRes.verified) {
-            portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
-            updateCartBadges();
-            await syncCustomerData();
-            showOrderConfirmed(verifyRes.order);
-          } else {
-            showPaymentFailed(verifyRes.message || 'Payment simulation failed.', orderId);
-          }
+          await reconcilePaymentStatus(orderId);
           return;
         }
 
@@ -2709,27 +2688,12 @@
             paymentSessionId: chkRes.paymentSessionId,
             redirectTarget: '_modal'
           }).then(async (result) => {
-            if (result.error) {
-              showPaymentFailed(result.error.message || 'Payment was cancelled or failed.', orderId);
-            } else {
-              const verifyRes = await window.api.verifyPortalPayment({ orderId });
-              if (verifyRes.success && verifyRes.verified) {
-                portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
-                updateCartBadges();
-                await syncCustomerData();
-                showOrderConfirmed(verifyRes.order);
-              } else {
-                showPaymentFailed(verifyRes.message || 'Payment verification incomplete.', orderId);
-              }
-            }
+            // CRITICAL: A generic browser callback, modal close, or error must NEVER determine the final financial state.
+            // ALWAYS reconcile the authoritative state with the Cashfree gateway via the backend.
+            await reconcilePaymentStatus(orderId, result);
           });
         } else {
-          const verifyRes = await window.api.verifyPortalPayment({ orderId });
-          if (verifyRes.success && verifyRes.verified) {
-            showOrderConfirmed(verifyRes.order);
-          } else {
-            showPaymentFailed('Payment Gateway could not be opened.', orderId);
-          }
+          await reconcilePaymentStatus(orderId);
         }
       } catch (err) {
         alert(err.message || 'Error processing checkout.');
@@ -2739,6 +2703,246 @@
           payBtn.innerHTML = `<i class="ri-lock-2-line"></i> <span id="chk-pay-btn-label">Pay ₹${portalCart.grandTotal.toLocaleString('en-IN')} securely</span>`;
         }
       }
+    }
+
+    let currentPaymentState = 'CHECKING';
+    let lastActiveOrderId = null;
+    let pendingPollTimer = null;
+
+    async function reconcilePaymentStatus(orderId, sdkResult = null) {
+      if (!orderId) return;
+      lastActiveOrderId = orderId;
+      lastFailedOrderId = orderId;
+
+      renderPaymentStateUI('CHECKING', {
+        orderId,
+        title: 'Checking payment status securely...',
+        desc: 'Verifying transaction status with Cashfree Payment Gateway. Please do not close this window.'
+      });
+      setPortalTab('cust-payment-status');
+
+      try {
+        const res = await window.api.verifyPortalPayment({ orderId });
+
+        // 1. SUCCESS: Gateway independently confirms payment
+        if (res.verified || (res.order && res.order.payment && res.order.payment.paymentStatus === 'PAID')) {
+          if (pendingPollTimer) clearInterval(pendingPollTimer);
+          portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
+          updateCartBadges();
+          await syncCustomerData();
+          showOrderConfirmed(res.order);
+          return;
+        }
+
+        // 2. PENDING: Transaction in-progress or awaiting bank confirmation
+        if (res.paymentState === 'PENDING') {
+          renderPaymentStateUI('PENDING', {
+            orderId,
+            title: 'Payment Pending Confirmation',
+            desc: 'We are waiting for payment confirmation from your bank or payment provider. Please do not make another payment yet. Check the status shortly.'
+          });
+          startPendingPoll(orderId);
+          return;
+        }
+
+        // 3. CANCELLED / USER_DROPPED: Customer closed checkout modal before completing
+        if (res.paymentState === 'CANCELLED') {
+          if (pendingPollTimer) clearInterval(pendingPollTimer);
+          renderPaymentStateUI('CANCELLED', {
+            orderId,
+            title: 'Checkout Cancelled',
+            desc: 'Checkout was cancelled. No amount was deducted, and no confirmed order has been placed. Your cart and size selections are preserved.'
+          });
+          return;
+        }
+
+        // 4. FAILED: Definitive gateway decline or failure
+        if (res.paymentState === 'FAILED' || !res.success) {
+          if (pendingPollTimer) clearInterval(pendingPollTimer);
+          const reasonMsg = res.failureReason || (sdkResult && sdkResult.error && sdkResult.error.message) || 'Payment could not be completed.';
+          renderPaymentStateUI('FAILED', {
+            orderId,
+            title: "Your payment couldn't be completed",
+            desc: 'Your cart is saved. You can retry after reviewing the payment status.',
+            failureReason: reasonMsg,
+            errorCode: res.errorCode
+          });
+          return;
+        }
+
+        // 5. API_ERROR / UNKNOWN: Gateway status cannot be verified currently
+        renderPaymentStateUI('API_ERROR', {
+          orderId,
+          title: 'Checking payment status',
+          desc: 'Checking the payment status securely with Cashfree. Please wait a moment and check status again.'
+        });
+      } catch (err) {
+        renderPaymentStateUI('API_ERROR', {
+          orderId,
+          title: 'Checking payment status',
+          desc: 'Checking the payment status securely with Cashfree. Please wait a moment and check status again.'
+        });
+      }
+    }
+
+    function renderPaymentStateUI(state, data = {}) {
+      currentPaymentState = state;
+      const iconWrapper = document.getElementById('ps-icon-wrapper');
+      const icon = document.getElementById('ps-icon');
+      const title = document.getElementById('ps-title');
+      const desc = document.getElementById('ps-desc');
+      const orderIdEl = document.getElementById('ps-order-id');
+      const grandTotalEl = document.getElementById('ps-grand-total');
+      const failBox = document.getElementById('ps-failure-box');
+      const failReason = document.getElementById('ps-failure-reason');
+      const primaryBtn = document.getElementById('ps-primary-btn');
+      const secondaryBtn = document.getElementById('ps-secondary-btn');
+
+      if (orderIdEl) orderIdEl.innerText = data.orderId || lastActiveOrderId || 'UW-ORD-PENDING';
+      if (grandTotalEl) grandTotalEl.innerText = `₹${(portalCart.grandTotal || 0).toLocaleString('en-IN')}`;
+
+      // Reset failure notice box
+      if (failBox) failBox.classList.add('hidden');
+
+      if (state === 'CHECKING') {
+        if (iconWrapper) iconWrapper.className = 'w-12 h-12 rounded-full flex items-center justify-center mx-auto text-2xl bg-blue-50';
+        if (icon) icon.className = 'ri-loader-4-line animate-spin text-primary';
+        if (title) title.innerText = data.title || 'Checking payment status';
+        if (desc) desc.innerText = data.desc || 'Checking the payment status securely with Cashfree.';
+        if (primaryBtn) {
+          primaryBtn.disabled = true;
+          primaryBtn.innerText = 'Checking Gateway...';
+          primaryBtn.className = 'w-full py-3.5 px-5 rounded-2xl bg-slate-300 text-white text-xs font-bold uppercase tracking-wider cursor-not-allowed';
+        }
+      } else if (state === 'PENDING') {
+        if (iconWrapper) iconWrapper.className = 'w-12 h-12 rounded-full flex items-center justify-center mx-auto text-2xl bg-amber-50';
+        if (icon) icon.className = 'ri-time-line text-amber-600';
+        if (title) title.innerText = data.title || 'Payment Pending Confirmation';
+        if (desc) desc.innerText = data.desc || 'We are waiting for payment confirmation. Please do not make another payment yet. Check the status shortly.';
+        if (primaryBtn) {
+          primaryBtn.disabled = false;
+          primaryBtn.innerText = 'Check payment status ⟳';
+          primaryBtn.className = 'w-full py-3.5 px-5 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md';
+        }
+      } else if (state === 'CANCELLED') {
+        if (iconWrapper) iconWrapper.className = 'w-12 h-12 rounded-full flex items-center justify-center mx-auto text-2xl bg-slate-100';
+        if (icon) icon.className = 'ri-information-line text-slate-600';
+        if (title) title.innerText = data.title || 'Checkout Cancelled';
+        if (desc) desc.innerText = data.desc || 'Checkout was cancelled. Your cart and size selections are preserved.';
+        if (primaryBtn) {
+          primaryBtn.disabled = false;
+          primaryBtn.innerText = 'Resume Checkout →';
+          primaryBtn.className = 'w-full py-3.5 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md';
+        }
+      } else if (state === 'FAILED') {
+        if (iconWrapper) iconWrapper.className = 'w-12 h-12 rounded-full flex items-center justify-center mx-auto text-2xl bg-red-50';
+        if (icon) icon.className = 'ri-close-circle-line text-red-600';
+        if (title) title.innerText = data.title || "Your payment couldn't be completed";
+        if (desc) desc.innerText = data.desc || 'Your payment could not be completed. No confirmed order has been created. Your cart is saved. You can retry after reviewing the payment status.';
+        if (failBox && data.failureReason) {
+          failBox.classList.remove('hidden');
+          if (failReason) failReason.innerText = data.errorCode ? `[${data.errorCode}] ${data.failureReason}` : data.failureReason;
+        }
+        if (primaryBtn) {
+          primaryBtn.disabled = false;
+          primaryBtn.innerText = 'Retry Payment Securely ↻';
+          primaryBtn.className = 'w-full py-3.5 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md';
+        }
+      } else if (state === 'API_ERROR') {
+        if (iconWrapper) iconWrapper.className = 'w-12 h-12 rounded-full flex items-center justify-center mx-auto text-2xl bg-amber-50';
+        if (icon) icon.className = 'ri-wifi-off-line text-amber-600';
+        if (title) title.innerText = data.title || 'Checking payment status';
+        if (desc) desc.innerText = data.desc || 'Checking the payment status securely with Cashfree. Please wait a moment and check status again.';
+        if (primaryBtn) {
+          primaryBtn.disabled = false;
+          primaryBtn.innerText = 'Re-check Status with Gateway ⟳';
+          primaryBtn.className = 'w-full py-3.5 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md';
+        }
+      }
+    }
+
+    function handleCurrentStateAction() {
+      if (currentPaymentState === 'FAILED' || currentPaymentState === 'CANCELLED') {
+        handleRetryPayment(lastActiveOrderId);
+      } else if (currentPaymentState === 'PENDING' || currentPaymentState === 'API_ERROR') {
+        reconcilePaymentStatus(lastActiveOrderId);
+      }
+    }
+
+    async function handleRetryPayment(orderId) {
+      if (!orderId) {
+        setPortalTab('cust-checkout');
+        return;
+      }
+
+      const primaryBtn = document.getElementById('ps-primary-btn');
+      if (primaryBtn) {
+        primaryBtn.disabled = true;
+        primaryBtn.innerHTML = `<i class="ri-loader-4-line animate-spin"></i> Preparing retry...`;
+      }
+
+      try {
+        const res = await window.api.retryPortalPayment({ orderId });
+
+        if (res.isPaid) {
+          // Late payment confirmed! Reconcile immediately and display confirmation
+          portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
+          updateCartBadges();
+          await syncCustomerData();
+          showOrderConfirmed(res.order);
+          return;
+        }
+
+        if (res.isPending) {
+          alert(res.message || 'Payment is currently pending confirmation from bank. Please do not make another payment yet.');
+          await reconcilePaymentStatus(orderId);
+          return;
+        }
+
+        if (res.canRetry && res.paymentSessionId) {
+          // Reuse existing active session to prevent duplicate orders
+          if (typeof Cashfree !== 'undefined') {
+            const cashfree = Cashfree({ mode: 'sandbox' });
+            cashfree.checkout({
+              paymentSessionId: res.paymentSessionId,
+              redirectTarget: '_modal'
+            }).then(async (result) => {
+              await reconcilePaymentStatus(orderId, result);
+            });
+          }
+          return;
+        }
+
+        if (res.expired) {
+          setPortalTab('cust-checkout');
+        }
+      } catch (err) {
+        alert(err.message || 'Unable to retry payment. Returning to checkout.');
+        setPortalTab('cust-checkout');
+      } finally {
+        if (primaryBtn) {
+          primaryBtn.disabled = false;
+        }
+      }
+    }
+
+    function startPendingPoll(orderId) {
+      if (pendingPollTimer) clearInterval(pendingPollTimer);
+      let pollCount = 0;
+      pendingPollTimer = setInterval(async () => {
+        pollCount++;
+        if (pollCount > 5) {
+          clearInterval(pendingPollTimer);
+          return;
+        }
+        try {
+          const statusRes = await window.api.getPortalPaymentStatus(orderId);
+          if (statusRes.paymentStatus === 'PAID') {
+            clearInterval(pendingPollTimer);
+            await reconcilePaymentStatus(orderId);
+          }
+        } catch (e) {}
+      }, 4000);
     }
 
     function showOrderConfirmed(order) {
@@ -2784,15 +2988,17 @@
 
     function showPaymentFailed(reason, orderId) {
       lastFailedOrderId = orderId;
-      document.getElementById('ps-title').innerText = "Your payment didn't go through.";
-      document.getElementById('ps-desc').innerText = reason || "Your cart and size breakdowns are saved. You can safely retry your payment.";
-      document.getElementById('ps-order-id').innerText = orderId || 'UW-ORD-PENDING';
-      document.getElementById('ps-grand-total').innerText = `₹${portalCart.grandTotal.toLocaleString('en-IN')}`;
+      renderPaymentStateUI('FAILED', {
+        orderId,
+        title: "Your payment couldn't be completed",
+        desc: reason || "Your cart and size breakdowns are saved. You can safely retry your payment.",
+        failureReason: reason
+      });
       setPortalTab('cust-payment-status');
     }
 
     function retryPayment() {
-      setPortalTab('cust-checkout');
+      handleRetryPayment(lastFailedOrderId);
     }
 
     function requestQuoteForAssignedProduct(prodName) {

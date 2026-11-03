@@ -105,6 +105,33 @@ exports.createCheckoutOrder = async (req, res) => {
     const deliveryCharge = (freeThreshold > 0 && subtotal >= freeThreshold) ? 0 : stdDelivery;
     const grandTotal = subtotal + taxAmount + deliveryCharge;
 
+    // Check for recent active pending order with identical grandTotal to prevent duplicate order generation
+    const existingPendingOrder = await Order.findOne({
+      clientEmail,
+      'payment.paymentStatus': 'PENDING',
+      grandTotal,
+      createdAt: { $gte: new Date(Date.now() - 15 * 60 * 1000) }
+    }).sort({ createdAt: -1 });
+
+    if (existingPendingOrder && existingPendingOrder.payment && existingPendingOrder.payment.paymentSessionId) {
+      try {
+        const cfExisting = await cashfreeService.getOrder(existingPendingOrder.id, grandTotal);
+        if (cfExisting.order_status === 'ACTIVE') {
+          return res.status(200).json({
+            success: true,
+            orderId: existingPendingOrder.id,
+            paymentSessionId: cfExisting.payment_session_id || existingPendingOrder.payment.paymentSessionId,
+            orderAmount: grandTotal,
+            currency: 'INR',
+            isSimulation: Boolean(cfExisting.isSimulation),
+            isExistingSession: true
+          });
+        }
+      } catch (checkErr) {
+        // If lookup fails, proceed with fresh order creation below
+      }
+    }
+
     const uniqueNum = Math.floor(1000 + Math.random() * 9000);
     const internalOrderId = `UW-ORD-${uniqueNum}`;
 
@@ -210,20 +237,34 @@ exports.verifyPayment = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Order record not found.' });
     }
 
-    // Idempotency: If already confirmed as PAID, return success immediately
+    // Idempotency: If already confirmed as PAID in database
     if (order.payment && order.payment.paymentStatus === 'PAID') {
       return res.json({
         success: true,
         verified: true,
+        paymentState: 'SUCCESS',
         message: 'Order already confirmed and paid.',
         order
       });
     }
 
-    // Verify status with Cashfree
+    // Verify status with Cashfree Gateway
     const cfTargetId = order.id || orderId;
-    const cfOrder = await cashfreeService.getOrder(cfTargetId, order.grandTotal);
-    const payments = await cashfreeService.getOrderPayments(cfTargetId, order.grandTotal);
+    let cfOrder, payments = [];
+    try {
+      cfOrder = await cashfreeService.getOrder(cfTargetId, order.grandTotal);
+      payments = await cashfreeService.getOrderPayments(cfTargetId, order.grandTotal);
+    } catch (cfFetchErr) {
+      console.error(`[verifyPayment] Cashfree fetch error for ${cfTargetId}:`, cfFetchErr.message);
+      return res.json({
+        success: false,
+        verified: false,
+        paymentState: 'API_ERROR',
+        message: 'Checking the payment status securely with Cashfree. Please wait a moment and check status again.',
+        order,
+        canRetry: false
+      });
+    }
 
     // Simulator safety check: Fail closed if simulated result in unauthorized environment
     if (cfOrder && cfOrder.isSimulation) {
@@ -231,6 +272,7 @@ exports.verifyPayment = async (req, res) => {
         return res.status(403).json({
           success: false,
           verified: false,
+          paymentState: 'FAILED',
           message: 'Simulated payment verification is strictly forbidden in this environment.'
         });
       }
@@ -243,6 +285,7 @@ exports.verifyPayment = async (req, res) => {
         return res.status(400).json({
           success: false,
           verified: false,
+          paymentState: 'FAILED',
           message: 'Order amount mismatch between gateway and portal record.'
         });
       }
@@ -251,47 +294,51 @@ exports.verifyPayment = async (req, res) => {
       return res.status(400).json({
         success: false,
         verified: false,
+        paymentState: 'FAILED',
         message: 'Invalid currency detected. Only INR transactions are accepted.'
       });
     }
 
-    const successfulPayment = payments.find(p => p.payment_status === 'SUCCESS') || (cfOrder.order_status === 'PAID' ? payments[0] : null);
+    // Search payments for outcome
+    const successfulPayment = (payments || []).find(p => p.payment_status === 'SUCCESS') || (cfOrder.order_status === 'PAID' ? (payments && payments[0]) : null);
+    const pendingPayment = (payments || []).find(p => p.payment_status === 'PENDING');
+    const droppedPayment = (payments || []).find(p => p.payment_status === 'USER_DROPPED');
+    const failedPayment = (payments || []).find(p => p.payment_status === 'FAILED');
 
-    // If successful payment found on gateway, verify its individual amount matches as well
-    if (successfulPayment && successfulPayment.payment_amount !== undefined && !successfulPayment.isSimulation) {
-      if (Math.round(Number(successfulPayment.payment_amount)) !== Math.round(Number(order.grandTotal))) {
-        console.error(`[verifyPayment] Payment amount mismatch: Gateway payment has ₹${successfulPayment.payment_amount}, expected ₹${order.grandTotal}`);
-        return res.status(400).json({
-          success: false,
-          verified: false,
-          message: 'Individual payment amount mismatch.'
-        });
+    // 1. STATE: SUCCESS
+    if (cfOrder.order_status === 'PAID' || Boolean(successfulPayment)) {
+      if (successfulPayment && successfulPayment.payment_amount !== undefined && !successfulPayment.isSimulation) {
+        if (Math.round(Number(successfulPayment.payment_amount)) !== Math.round(Number(order.grandTotal))) {
+          console.error(`[verifyPayment] Payment amount mismatch: Gateway payment has ₹${successfulPayment.payment_amount}, expected ₹${order.grandTotal}`);
+          return res.status(400).json({
+            success: false,
+            verified: false,
+            paymentState: 'FAILED',
+            message: 'Individual payment amount mismatch.'
+          });
+        }
       }
-    }
 
-    const isPaid = cfOrder.order_status === 'PAID' || Boolean(successfulPayment);
-    const resolvedMethod = (successfulPayment && (
-      successfulPayment.payment_group ||
-      (typeof successfulPayment.payment_method === 'string' ? successfulPayment.payment_method : Object.keys(successfulPayment.payment_method || {})[0])
-    )) || 'Online';
+      const resolvedMethod = (successfulPayment && (
+        successfulPayment.payment_group ||
+        (typeof successfulPayment.payment_method === 'string' ? successfulPayment.payment_method : Object.keys(successfulPayment.payment_method || {})[0])
+      )) || 'Online';
 
-    // Record this payment attempt
-    const attemptRecord = {
-      attemptId: `att_${Date.now()}`,
-      cfPaymentId: cfPaymentId || (successfulPayment ? successfulPayment.cf_payment_id : `PAY-${Date.now()}`),
-      status: isPaid ? 'SUCCESS' : 'FAILED',
-      paymentMethod: String(resolvedMethod),
-      amount: (successfulPayment && successfulPayment.payment_amount) || order.grandTotal,
-      time: new Date(),
-      rawResponse: { cfOrder, payments }
-    };
-    order.payment.attempts.push(attemptRecord);
-
-    if (isPaid) {
+      const attemptRecord = {
+        attemptId: `att_${Date.now()}`,
+        cfPaymentId: (successfulPayment && successfulPayment.cf_payment_id) || cfPaymentId || `PAY-${Date.now()}`,
+        status: 'SUCCESS',
+        paymentMethod: String(resolvedMethod),
+        amount: (successfulPayment && successfulPayment.payment_amount) || order.grandTotal,
+        time: new Date(),
+        rawResponse: { cfOrder, payments }
+      };
+      order.payment.attempts.push(attemptRecord);
       order.payment.paymentStatus = 'PAID';
       order.payment.cfPaymentId = attemptRecord.cfPaymentId;
       order.payment.paymentMethod = attemptRecord.paymentMethod;
       order.payment.paymentTime = new Date();
+      order.payment.failureReason = '';
       order.statusStep = 1;
       order.statusText = '01. Quotation & Contract Finalized';
       order.currentStageIndex = 1;
@@ -312,24 +359,191 @@ exports.verifyPayment = async (req, res) => {
       return res.json({
         success: true,
         verified: true,
-        message: 'Payment verified successfully. Order confirmed.',
-        order
-      });
-    } else {
-      order.payment.paymentStatus = 'FAILED';
-      order.payment.failureReason = 'Payment was not completed or rejected by gateway.';
-      await order.save();
-
-      return res.status(400).json({
-        success: false,
-        verified: false,
-        message: 'Payment has not been completed. Your cart remains intact to retry safely.',
+        paymentState: 'SUCCESS',
+        message: 'Payment confirmed. Your order has been successfully placed.',
         order
       });
     }
+
+    // 2. STATE: PENDING
+    // If Cashfree order is ACTIVE and any payment is PENDING, or no payment attempts yet (e.g. window opened)
+    if (cfOrder.order_status === 'ACTIVE' && (Boolean(pendingPayment) || (payments || []).length === 0)) {
+      order.payment.paymentStatus = 'PENDING';
+      await order.save();
+
+      return res.json({
+        success: true,
+        verified: false,
+        paymentState: 'PENDING',
+        message: 'We are waiting for payment confirmation. Please do not make another payment yet. Check the status shortly.',
+        order,
+        canRetry: false
+      });
+    }
+
+    // 3. STATE: CANCELLED / USER_DROPPED
+    if (Boolean(droppedPayment) && cfOrder.order_status === 'ACTIVE') {
+      order.payment.paymentStatus = 'CANCELLED';
+      order.payment.failureReason = 'Customer exited or cancelled the checkout.';
+      order.payment.attempts.push({
+        attemptId: `att_${Date.now()}`,
+        cfPaymentId: (droppedPayment && droppedPayment.cf_payment_id) || `DROP-${Date.now()}`,
+        status: 'CANCELLED',
+        paymentMethod: 'Online',
+        amount: order.grandTotal,
+        time: new Date(),
+        rawResponse: { cfOrder, droppedPayment }
+      });
+      await order.save();
+
+      return res.json({
+        success: true,
+        verified: false,
+        paymentState: 'CANCELLED',
+        message: 'Checkout was cancelled. Your cart and size selections are preserved.',
+        order,
+        canRetry: true
+      });
+    }
+
+    // 4. STATE: FAILED
+    const latestFailed = failedPayment || (payments && payments[0]);
+    const errCode = (latestFailed && latestFailed.error_details && latestFailed.error_details.error_code) || 'PAYMENT_FAILED';
+    const errDesc = (latestFailed && latestFailed.error_details && latestFailed.error_details.error_description) ||
+                    (latestFailed && latestFailed.payment_message) ||
+                    'Payment was not completed or rejected by gateway.';
+
+    order.payment.paymentStatus = 'FAILED';
+    order.payment.failureReason = errDesc;
+    order.payment.attempts.push({
+      attemptId: `att_${Date.now()}`,
+      cfPaymentId: (latestFailed && latestFailed.cf_payment_id) || `FAIL-${Date.now()}`,
+      status: 'FAILED',
+      paymentMethod: (latestFailed && latestFailed.payment_group) || 'Online',
+      amount: (latestFailed && latestFailed.payment_amount) || order.grandTotal,
+      time: new Date(),
+      rawResponse: { cfOrder, latestFailed }
+    });
+    await order.save();
+
+    return res.status(200).json({
+      success: false,
+      verified: false,
+      paymentState: 'FAILED',
+      errorCode: errCode,
+      failureReason: errDesc,
+      message: 'Your payment could not be completed. No confirmed order has been created. Your cart is saved. You can retry after reviewing the payment status.',
+      order,
+      canRetry: true
+    });
   } catch (err) {
     console.error('[verifyPayment Error]', err);
-    res.status(500).json({ success: false, message: err.message || 'Error verifying payment.' });
+    res.status(500).json({
+      success: false,
+      verified: false,
+      paymentState: 'API_ERROR',
+      message: 'Checking the payment status securely with Cashfree. Please wait a moment and check status again.'
+    });
+  }
+};
+
+// POST /api/portal/payment/retry
+exports.retryPayment = async (req, res) => {
+  try {
+    const { orderId } = req.body;
+    if (!orderId) {
+      return res.status(400).json({ success: false, message: 'Order reference is required.' });
+    }
+
+    const clientEmail = (req.user.email || '').toLowerCase().trim();
+    const order = await Order.findOne({ id: orderId, clientEmail });
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order record not found.' });
+    }
+
+    // 1. If already paid in DB
+    if (order.payment && order.payment.paymentStatus === 'PAID') {
+      return res.json({
+        success: true,
+        isPaid: true,
+        paymentState: 'SUCCESS',
+        message: 'Order is already paid and confirmed.',
+        order
+      });
+    }
+
+    // 2. Query Cashfree gateway to inspect real status before allowing retry
+    let cfOrder, payments = [];
+    try {
+      cfOrder = await cashfreeService.getOrder(order.id, order.grandTotal);
+      payments = await cashfreeService.getOrderPayments(order.id, order.grandTotal);
+    } catch (cfErr) {
+      return res.status(500).json({
+        success: false,
+        message: 'Unable to check gateway status before retry. Please wait a moment and try again.'
+      });
+    }
+
+    // 3. Late success reconciliation: If payment succeeded earlier, confirm immediately!
+    const successfulPayment = (payments || []).find(p => p.payment_status === 'SUCCESS') || (cfOrder.order_status === 'PAID' ? (payments && payments[0]) : null);
+    if (cfOrder.order_status === 'PAID' || successfulPayment) {
+      order.payment.paymentStatus = 'PAID';
+      order.payment.cfPaymentId = (successfulPayment && successfulPayment.cf_payment_id) || order.payment.cfPaymentId || `CF-PAY-${Date.now()}`;
+      order.payment.paymentTime = new Date();
+      order.statusStep = 1;
+      order.statusText = '01. Quotation & Contract Finalized';
+      order.currentStageIndex = 1;
+      order.currentStageName = '01. Quotation & Contract Finalized';
+      await order.save();
+      await Cart.findOneAndUpdate({ clientEmail }, { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 });
+
+      return res.json({
+        success: true,
+        isPaid: true,
+        paymentState: 'SUCCESS',
+        message: 'Payment confirmed. Your order has been placed.',
+        order
+      });
+    }
+
+    // 4. If any payment attempt is PENDING, block retry to prevent double charge
+    const pendingPayment = (payments || []).find(p => p.payment_status === 'PENDING');
+    if (pendingPayment) {
+      return res.status(409).json({
+        success: false,
+        isPending: true,
+        paymentState: 'PENDING',
+        message: 'A payment attempt is currently pending confirmation from your bank. Please do not make another payment yet.',
+        order
+      });
+    }
+
+    // 5. If order on Cashfree is ACTIVE, reuse existing payment_session_id
+    if (cfOrder.order_status === 'ACTIVE') {
+      const sessionId = cfOrder.payment_session_id || order.payment.paymentSessionId;
+      return res.json({
+        success: true,
+        canRetry: true,
+        orderId: order.id,
+        paymentSessionId: sessionId,
+        orderAmount: order.grandTotal,
+        currency: 'INR',
+        isSimulation: Boolean(cfOrder.isSimulation)
+      });
+    }
+
+    // 6. If order is EXPIRED or TERMINATED
+    order.payment.paymentStatus = cfOrder.order_status;
+    await order.save();
+    return res.status(410).json({
+      success: false,
+      canRetry: false,
+      expired: true,
+      message: 'The previous payment session has expired. Your cart is preserved so you can initiate a fresh checkout.'
+    });
+  } catch (err) {
+    console.error('[retryPayment Error]', err);
+    res.status(500).json({ success: false, message: err.message || 'Error processing retry.' });
   }
 };
 
@@ -340,8 +554,8 @@ exports.handleWebhook = async (req, res) => {
     const timestamp = req.headers['x-webhook-timestamp'];
     const rawBody = req.rawBody || (typeof req.body === 'string' ? req.body : JSON.stringify(req.body));
 
-    const isValid = cashfreeService.verifyWebhookSignature(rawBody, signature, timestamp);
-    if (!isValid) {
+    const sigDetails = cashfreeService.verifyWebhookSignatureDetails(rawBody, signature, timestamp);
+    if (!sigDetails.isValid) {
       console.warn('[Webhook] Invalid Cashfree signature.');
       return res.status(400).json({ success: false, message: 'Invalid signature' });
     }
@@ -366,6 +580,27 @@ exports.handleWebhook = async (req, res) => {
       return res.status(200).json({ success: true, message: 'Already marked as paid (idempotent).' });
     }
 
+    // If webhook signature was valid but timestamp expired (> 15 min):
+    // Use authoritative provider API reconciliation to safely reconcile without blindly trusting delayed payloads
+    if (!sigDetails.isFresh) {
+      console.warn(`[Webhook] Delayed webhook received for order ${orderId}. Reconciling authoritatively with Cashfree PG.`);
+      try {
+        const authoritativeOrder = await cashfreeService.getOrder(order.id, order.grandTotal);
+        if (authoritativeOrder.order_status === 'PAID') {
+          order.payment.paymentStatus = 'PAID';
+          order.payment.paymentTime = new Date();
+          order.statusStep = 1;
+          order.statusText = '01. Quotation & Contract Finalized';
+          await order.save();
+          await Cart.findOneAndUpdate({ clientEmail: order.clientEmail }, { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 });
+          return res.status(200).json({ success: true, reconciled: true });
+        }
+      } catch (authErr) {
+        console.error('[Webhook Delayed Reconciliation Error]', authErr);
+      }
+      return res.status(400).json({ success: false, message: 'Expired webhook timestamp' });
+    }
+
     if (paymentStatus === 'SUCCESS') {
       // Validate payment amount against order grand total
       if (webhookAmount !== undefined && Math.round(Number(webhookAmount)) !== Math.round(Number(order.grandTotal))) {
@@ -383,6 +618,7 @@ exports.handleWebhook = async (req, res) => {
       order.payment.cfPaymentId = String((payload.data && payload.data.payment && payload.data.payment.cf_payment_id) || '');
       order.payment.paymentMethod = String((payload.data && payload.data.payment && payload.data.payment.payment_group) || 'Online');
       order.payment.paymentTime = new Date();
+      order.payment.failureReason = '';
       order.statusStep = 1;
       order.statusText = '01. Quotation & Contract Finalized';
       order.currentStageIndex = 1;
@@ -409,6 +645,22 @@ exports.handleWebhook = async (req, res) => {
         text: `Order ${order.id} (₹${order.grandTotal.toLocaleString('en-IN')}) confirmed via signed Cashfree webhook for ${order.clientCompany || order.clientEmail}.`,
         time: 'Just now'
       });
+    } else if (paymentStatus === 'FAILED' || paymentStatus === 'USER_DROPPED') {
+      // Record failed/dropped attempt if order is not already PAID
+      if (order.payment.paymentStatus !== 'PAID') {
+        order.payment.paymentStatus = paymentStatus === 'USER_DROPPED' ? 'CANCELLED' : 'FAILED';
+        order.payment.failureReason = (payload.data && payload.data.payment && payload.data.payment.payment_message) || 'Gateway reported non-success status.';
+        order.payment.attempts.push({
+          attemptId: `wh_${Date.now()}`,
+          cfPaymentId: String((payload.data && payload.data.payment && payload.data.payment.cf_payment_id) || ''),
+          status: order.payment.paymentStatus,
+          paymentMethod: String((payload.data && payload.data.payment && payload.data.payment.payment_group) || 'Online'),
+          amount: order.grandTotal,
+          time: new Date(),
+          rawResponse: payload
+        });
+        await order.save();
+      }
     }
 
     res.status(200).json({ success: true, received: true });
@@ -424,9 +676,32 @@ exports.getPaymentStatus = async (req, res) => {
     const { orderId } = req.params;
     const clientEmail = (req.user.email || '').toLowerCase().trim();
 
-    const order = await Order.findOne({ id: orderId, clientEmail }).lean();
+    const order = await Order.findOne({ id: orderId, clientEmail });
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found.' });
+    }
+
+    // Active reconciliation: if order is still PENDING in DB, check Cashfree gateway
+    if (order.payment && order.payment.paymentStatus === 'PENDING') {
+      try {
+        const cfOrder = await cashfreeService.getOrder(order.id, order.grandTotal);
+        const payments = await cashfreeService.getOrderPayments(order.id, order.grandTotal);
+        const successfulPayment = (payments || []).find(p => p.payment_status === 'SUCCESS') || (cfOrder.order_status === 'PAID' ? payments[0] : null);
+
+        if (cfOrder.order_status === 'PAID' || successfulPayment) {
+          order.payment.paymentStatus = 'PAID';
+          order.payment.cfPaymentId = (successfulPayment && successfulPayment.cf_payment_id) || order.payment.cfPaymentId || `CF-PAY-${Date.now()}`;
+          order.payment.paymentTime = new Date();
+          order.statusStep = 1;
+          order.statusText = '01. Quotation & Contract Finalized';
+          order.currentStageIndex = 1;
+          order.currentStageName = '01. Quotation & Contract Finalized';
+          await order.save();
+          await Cart.findOneAndUpdate({ clientEmail }, { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 });
+        }
+      } catch (checkErr) {
+        // Proceed with current DB state if gateway is temporarily unreachable
+      }
     }
 
     res.json({

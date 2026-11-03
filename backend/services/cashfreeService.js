@@ -194,35 +194,23 @@ async function getOrderPayments(orderId, expectedAmount) {
 }
 
 /**
- * Verify Webhook Signature using HMAC-SHA256
+ * Verify Webhook Signature Details using HMAC-SHA256
+ * Returns { isValid, isFresh } to distinguish forged vs delayed signatures
  * @param {string} rawBody Byte-for-byte exact request payload
  * @param {string} signature Header x-webhook-signature
  * @param {string} timestamp Header x-webhook-timestamp
  */
-function verifyWebhookSignature(rawBody, signature, timestamp) {
+function verifyWebhookSignatureDetails(rawBody, signature, timestamp) {
   // If not configured with real credentials:
   if (!isConfigured()) {
-    // Only permit the explicit simulated test signature in local test mode
     if (isSimulatorAllowed() && signature === 'SIMULATED_TEST_SIGNATURE') {
-      return true;
+      return { isValid: true, isFresh: true };
     }
-    // Fail closed in all other cases
-    return false;
+    return { isValid: false, isFresh: false };
   }
 
   if (!signature || !timestamp || !rawBody) {
-    return false;
-  }
-
-  // Anti-replay protection: verify timestamp freshness within 15 minutes
-  const tsNum = Number(timestamp);
-  if (!isNaN(tsNum)) {
-    const tsMs = tsNum > 1e11 ? tsNum : tsNum * 1000;
-    const ageMs = Math.abs(Date.now() - tsMs);
-    if (ageMs > 15 * 60 * 1000) {
-      console.warn(`[Cashfree Webhook] Expired timestamp: age is ${Math.round(ageMs / 1000)}s`);
-      return false;
-    }
+    return { isValid: false, isFresh: false };
   }
 
   const secretKey = getSecretKey();
@@ -232,16 +220,40 @@ function verifyWebhookSignature(rawBody, signature, timestamp) {
     .update(dataToSign)
     .digest('base64');
 
+  let isValid = false;
   try {
     const expectedBuf = Buffer.from(expectedSignature, 'utf8');
     const signatureBuf = Buffer.from(signature, 'utf8');
-    if (expectedBuf.length !== signatureBuf.length) {
-      return false;
+    if (expectedBuf.length === signatureBuf.length) {
+      isValid = crypto.timingSafeEqual(expectedBuf, signatureBuf);
     }
-    return crypto.timingSafeEqual(expectedBuf, signatureBuf);
   } catch (err) {
-    return false;
+    isValid = false;
   }
+
+  let isFresh = true;
+  const tsNum = Number(timestamp);
+  if (!isNaN(tsNum)) {
+    const tsMs = tsNum > 1e11 ? tsNum : tsNum * 1000;
+    const ageMs = Math.abs(Date.now() - tsMs);
+    if (ageMs > 15 * 60 * 1000) {
+      isFresh = false;
+    }
+  }
+
+  return { isValid, isFresh };
+}
+
+/**
+ * Verify Webhook Signature using HMAC-SHA256 (convenience boolean)
+ * Enforces valid signature AND fresh timestamp (< 15 min)
+ * @param {string} rawBody Byte-for-byte exact request payload
+ * @param {string} signature Header x-webhook-signature
+ * @param {string} timestamp Header x-webhook-timestamp
+ */
+function verifyWebhookSignature(rawBody, signature, timestamp) {
+  const details = verifyWebhookSignatureDetails(rawBody, signature, timestamp);
+  return details.isValid && details.isFresh;
 }
 
 module.exports = {
@@ -251,6 +263,7 @@ module.exports = {
   getOrder,
   getOrderPayments,
   verifyWebhookSignature,
+  verifyWebhookSignatureDetails,
   getAppId,
   getSecretKey,
   getEnv,

@@ -603,6 +603,7 @@ const api = {
   // Portal Checkout & Payment
   checkoutPortalOrder: (data) => apiPost('/portal/payment/checkout', data),
   verifyPortalPayment: (data) => apiPost('/portal/payment/verify', data),
+  retryPortalPayment: (data) => apiPost('/portal/payment/retry', data),
   getPortalPaymentStatus: (orderId) => apiGet(`/portal/payment/status/${orderId}`),
 
   // Raw helpers for custom calls
