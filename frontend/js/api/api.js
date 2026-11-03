@@ -588,6 +588,23 @@ const api = {
     return await apiDelete(`/customer-products/${id}`);
   },
 
+  // Portal Cart & Ordering
+  getPortalCart: () => apiGet('/portal/cart'),
+  addPortalCartItem: (data) => apiPost('/portal/cart/items', data),
+  updatePortalCartItem: (productId, data) => apiPut(`/portal/cart/items/${productId}`, data),
+  removePortalCartItem: (productId) => apiDelete(`/portal/cart/items/${productId}`),
+  clearPortalCart: () => apiDelete('/portal/cart'),
+  transferQuoteToCart: (quotationId) => apiPost('/portal/cart/transfer-quote', { quotationId }),
+
+  // Portal Quotations
+  previewPortalQuote: (items) => apiPost('/portal/quotations/preview', { items }),
+  savePortalQuote: (data) => apiPost('/portal/quotations/save', data),
+
+  // Portal Checkout & Payment
+  checkoutPortalOrder: (data) => apiPost('/portal/payment/checkout', data),
+  verifyPortalPayment: (data) => apiPost('/portal/payment/verify', data),
+  getPortalPaymentStatus: (orderId) => apiGet(`/portal/payment/status/${orderId}`),
+
   // Raw helpers for custom calls
   get: apiGet,
   post: apiPost,

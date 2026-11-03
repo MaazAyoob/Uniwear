@@ -20,6 +20,12 @@ const companySettingsSchema = new mongoose.Schema({
   productCatalogPdfUrl: { type: String, default: 'downloads/UNIWEAR_Product_Catalog.pdf' },
   moqText: { type: String, default: 'Depends on product, fabric, customization and quantity.' },
   deliveryText: { type: String, default: 'Depends on quantity, fabric availability, customization and sample approval.' },
+  defaultGstRate: { type: Number, default: 5 },
+  defaultLeadTimeDays: { type: String, default: '10–15 working days' },
+  defaultQuoteValidityDays: { type: Number, default: 7 },
+  freeDeliveryThreshold: { type: Number, default: 0 },
+  standardDeliveryCharge: { type: Number, default: 0 },
+  enablePortalOrdering: { type: Boolean, default: true },
   socialLinks: {
     linkedin: { type: String, default: 'https://linkedin.com/company/uniwear-india' },
     instagram: { type: String, default: 'https://instagram.com/uniwear.co' },

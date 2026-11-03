@@ -81,6 +81,9 @@ const getOrders = async (req, res, next) => {
 const createOrder = async (req, res, next) => {
   try {
     const payload = { ...req.body };
+    if (!payload.id) {
+      payload.id = 'UW-ORD-' + Math.floor(1000 + Math.random() * 9000);
+    }
     if (payload.volume !== undefined) {
       payload.volume = parseInt(String(payload.volume).replace(/[^0-9]/g, '')) || 0;
     }

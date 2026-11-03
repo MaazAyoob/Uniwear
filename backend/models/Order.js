@@ -50,7 +50,74 @@ const orderSchema = new mongoose.Schema({
   onSchedule: { type: Boolean, default: true },
   awaitingApproval: { type: Boolean, default: false },
   readyForDispatch: { type: Boolean, default: false },
-  isCompleted: { type: Boolean, default: false }
+  isCompleted: { type: Boolean, default: false },
+  orderType: {
+    type: String,
+    enum: ['FactoryOrder', 'PortalDirectOrder', 'QuotationOrder'],
+    default: 'FactoryOrder'
+  },
+  items: [{
+    productId: { type: mongoose.Schema.Types.Mixed },
+    productName: { type: String, default: '' },
+    sku: { type: String, default: '' },
+    fabric: { type: String, default: '' },
+    gsm: { type: String, default: '' },
+    unitPrice: { type: Number, default: 0 },
+    volume: { type: Number, default: 0 },
+    sizeBreakdown: { type: mongoose.Schema.Types.Mixed, default: {} },
+    lineTotal: { type: Number, default: 0 }
+  }],
+  quotationId: { type: String, default: '' },
+  subtotal: { type: Number, default: 0 },
+  taxAmount: { type: Number, default: 0 },
+  taxRate: { type: Number, default: 5 },
+  deliveryCharge: { type: Number, default: 0 },
+  grandTotal: { type: Number, default: 0 },
+  billingAddress: {
+    name: { type: String, default: '' },
+    email: { type: String, default: '' },
+    phone: { type: String, default: '' },
+    company: { type: String, default: '' },
+    gstin: { type: String, default: '' },
+    address: { type: String, default: '' },
+    city: { type: String, default: '' },
+    state: { type: String, default: '' },
+    pincode: { type: String, default: '' },
+    poReference: { type: String, default: '' }
+  },
+  shippingAddress: {
+    name: { type: String, default: '' },
+    email: { type: String, default: '' },
+    phone: { type: String, default: '' },
+    company: { type: String, default: '' },
+    address: { type: String, default: '' },
+    city: { type: String, default: '' },
+    state: { type: String, default: '' },
+    pincode: { type: String, default: '' }
+  },
+  payment: {
+    gateway: { type: String, default: 'Cashfree' },
+    paymentStatus: {
+      type: String,
+      enum: ['PENDING', 'PAID', 'FAILED', 'CANCELLED'],
+      default: 'PENDING'
+    },
+    cfOrderId: { type: String, default: '' },
+    paymentSessionId: { type: String, default: '' },
+    cfPaymentId: { type: String, default: '' },
+    paymentMethod: { type: String, default: '' },
+    paymentTime: { type: Date },
+    failureReason: { type: String, default: '' },
+    attempts: [{
+      attemptId: { type: String },
+      cfPaymentId: { type: String },
+      status: { type: String },
+      paymentMethod: { type: String },
+      amount: { type: Number },
+      time: { type: Date, default: Date.now },
+      rawResponse: { type: mongoose.Schema.Types.Mixed }
+    }]
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);

@@ -9,6 +9,7 @@ const {
   defaultNotifications,
   defaultCompanySettings,
   defaultProducts,
+  defaultCustomerProducts,
   defaultBlogs,
   defaultCatalogs
 } = require('./seeds');
@@ -123,6 +124,13 @@ const seedDatabase = async () => {
     });
     await Catalog.insertMany(catalogsToInsert);
     console.log(`[Seed] Inserted ${catalogsToInsert.length} catalogs`);
+  }
+
+  // Seed Customer Products
+  const CustomerProduct = require('../models/CustomerProduct');
+  if ((await CustomerProduct.countDocuments()) === 0 && defaultCustomerProducts && defaultCustomerProducts.length > 0) {
+    await CustomerProduct.insertMany(defaultCustomerProducts);
+    console.log(`[Seed] Inserted ${defaultCustomerProducts.length} customer product assignments`);
   }
 };
 

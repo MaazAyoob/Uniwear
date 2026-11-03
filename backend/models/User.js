@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
   representative: { type: String, default: '' },
   phone: { type: String, default: '' },
   address: { type: String, default: '' },
+  city: { type: String, default: '' },
+  state: { type: String, default: '' },
+  pincode: { type: String, default: '' },
+  gstin: { type: String, default: '' },
   status: {
     type: String,
     enum: ['Active', 'Pending', 'Disabled', 'Info Requested', 'Rejected'],

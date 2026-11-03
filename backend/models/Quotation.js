@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 
 const quotationItemSchema = new mongoose.Schema({
   product: { type: String, required: true },
+  productId: { type: mongoose.Schema.Types.Mixed },
+  sku: { type: String, default: '' },
+  fabric: { type: String, default: '' },
+  gsm: { type: String, default: '' },
+  details: { type: String, default: '' },
+  sizeBreakdown: { type: mongoose.Schema.Types.Mixed, default: {} },
   quantity: { type: Number, required: true, default: 1 },
   unitPrice: { type: Number, required: true, default: 0 },
   total: { type: Number, required: true, default: 0 }
@@ -30,6 +36,13 @@ const quotationSchema = new mongoose.Schema({
   items: [quotationItemSchema],
   taxes: { type: Number, default: 0 },
   grandTotal: { type: Number, default: 0 },
+  version: { type: Number, default: 1 },
+  isPortalQuote: { type: Boolean, default: false },
+  subtotal: { type: Number, default: 0 },
+  deliveryCharge: { type: Number, default: 0 },
+  taxRate: { type: Number, default: 5 },
+  validUntil: { type: String, default: '' },
+  pdfUrl: { type: String, default: '' },
   paymentTerms: { type: String, default: '50% advance upon PO, 50% against dispatch.' },
   deliveryTerms: { type: String, default: 'Ex-factory Bengaluru. Transport charges as applicable.' },
   validity: { type: String, default: '30 Days from Date of Quotation' },

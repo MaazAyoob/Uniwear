@@ -31,8 +31,19 @@ exports.getCustomerProducts = async (req, res) => {
       }
     }
 
+    // Resolve possible customer identity representations: email, id, _id
+    const customerRecord = (mongoose.isValidObjectId(customerId) ? await User.findById(customerId).catch(() => null) : null)
+      || await User.findOne({ $or: [{ email: String(customerId).toLowerCase() }, { id: Number(customerId) || -1 }] }).catch(() => null);
+
+    const matchIds = [customerId, String(customerId)];
+    if (customerRecord) {
+      if (customerRecord.email) matchIds.push(customerRecord.email, customerRecord.email.toLowerCase());
+      if (customerRecord.id !== undefined && customerRecord.id !== null) matchIds.push(customerRecord.id, String(customerRecord.id));
+      if (customerRecord._id) matchIds.push(String(customerRecord._id));
+    }
+
     let assignments = await CustomerProduct.find({
-      $or: [{ customerId: customerId }, { customerId: String(customerId) }]
+      customerId: { $in: matchIds }
     }).sort({ featured: -1, createdAt: -1 }).lean();
 
     if (!isAdmin) {
@@ -64,6 +75,12 @@ exports.getCustomerProducts = async (req, res) => {
         customMOQ: a.customMOQ !== undefined && a.customMOQ !== null ? a.customMOQ : (p.moq || 100),
         effectivePrice: a.customPrice !== undefined && a.customPrice !== null ? a.customPrice : (p.price || null),
         effectiveMOQ: a.customMOQ !== undefined && a.customMOQ !== null ? a.customMOQ : (p.moq || 100),
+        availableSizes: a.availableSizes && a.availableSizes.length > 0 ? a.availableSizes : (p.sizes && p.sizes.length > 0 ? p.sizes : ['S', 'M', 'L', 'XL', '2XL']),
+        taxPercent: a.taxPercent !== undefined && a.taxPercent !== null ? a.taxPercent : 5,
+        hsnCode: a.hsnCode || '6109',
+        deliveryLeadDays: a.deliveryLeadDays || '10–15 working days',
+        sku: p.sku || `UW-SKU-${a.productId}`,
+        status: a.status || p.status || 'Active',
         visible: a.visible !== false,
         featuredInCatalog: Boolean(a.featured),
         customerNotes: a.notes || ''

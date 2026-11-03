@@ -46,6 +46,8 @@
 
   <!-- Core Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Cashfree JS SDK v3 -->
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
   
   <style>
     /* Premium Typography & Hierarchy System */
@@ -154,8 +156,13 @@
         <button onclick="setPortalTab('cust-assigned-products')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-assigned-products">
           <i class="ri-shirt-line"></i> My Approved Products
         </button>
-        <button onclick="setPortalTab('cust-quotes')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-quotes">
-          <i class="ri-file-list-3-line"></i> Quotations
+        <button onclick="setPortalTab('cust-quotes')" class="cust-tab-btn w-full flex items-center justify-between py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-quotes">
+          <span class="flex items-center gap-3"><i class="ri-file-list-3-line"></i> Quotations</span>
+          <span class="text-[10px] bg-gray-100 text-charcoal px-2 py-0.5 rounded-full font-bold" id="sidebar-quotes-badge">0</span>
+        </button>
+        <button onclick="setPortalTab('cust-cart')" class="cust-tab-btn w-full flex items-center justify-between py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-cart">
+          <span class="flex items-center gap-3"><i class="ri-shopping-cart-2-line"></i> My Cart</span>
+          <span class="text-[10px] bg-primary text-white px-2 py-0.5 rounded-full font-bold" id="sidebar-cart-badge">0</span>
         </button>
         <button onclick="setPortalTab('cust-orders')" class="cust-tab-btn w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold transition-colors text-mutedText hover:bg-lightCard hover:text-charcoal" id="cust-tab-cust-orders">
           <i class="ri-truck-line"></i> Orders & Samples
@@ -185,24 +192,36 @@
 
   <!-- MAIN WORKSPACE -->
   <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
-    <header class="bg-white border-b border-lightBorder py-4 px-8 flex items-center justify-between shrink-0">
+    <header class="bg-white border-b border-lightBorder py-3.5 px-6 md:px-8 flex items-center justify-between shrink-0">
       <div class="flex items-center gap-3">
         <button onclick="toggleSidebar(true)" class="md:hidden text-charcoal focus:outline-none hover:text-primary transition-colors">
           <i class="ri-menu-2-line text-2xl"></i>
         </button>
-        <h2 class="font-heading text-lg md:text-xl font-extrabold text-charcoal" id="portal-title">Client Dashboard</h2>
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-widest text-mutedText block">Welcome to your account</span>
+          <h2 class="font-heading text-base md:text-lg font-extrabold text-charcoal flex items-center gap-2" id="portal-title-wrapper">
+            <span id="portal-title-company">Toyota Kirloskar Motor</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 hidden sm:inline" id="portal-pricing-active-badge">Client pricing active</span>
+          </h2>
+        </div>
       </div>
-      <div class="flex items-center gap-4">
-        <!-- Theme Switcher -->
-        <button class="theme-toggle-btn w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-mutedText hover:text-charcoal focus:outline-none" title="Toggle Theme">
-          <i class="ri-moon-line text-lg"></i>
+      <div class="flex items-center gap-3">
+        <!-- Live Portal Cart Pill -->
+        <button onclick="setPortalTab('cust-cart')" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-lightBorder bg-white hover:bg-lightCard text-xs font-bold text-charcoal shadow-sm transition-all hover:border-primary/40" id="header-cart-btn" title="View Portal Cart">
+          <i class="ri-shopping-cart-2-line text-primary text-sm"></i>
+          <span class="hidden sm:inline">Cart</span>
+          <span id="header-cart-count" class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-extrabold">0</span>
         </button>
+        <!-- Client Avatar Initials -->
+        <div class="w-9 h-9 rounded-full bg-charcoal text-white text-xs font-bold flex items-center justify-center font-mono shadow-sm" id="header-avatar-badge" title="Active Client">
+          TK
+        </div>
         <!-- Notification bell trigger -->
-        <button onclick="togglePortalNotifications()" class="relative w-10 h-10 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-mutedText hover:text-charcoal focus:outline-none">
+        <button onclick="togglePortalNotifications()" class="relative w-9 h-9 rounded-full bg-lightCard border border-lightBorder flex items-center justify-center text-mutedText hover:text-charcoal focus:outline-none">
           <i class="ri-notification-3-line"></i>
-          <span class="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-primary rounded-full hidden" id="cust-noti-dot"></span>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full hidden" id="cust-noti-dot"></span>
         </button>
-        <button onclick="handleLogout()" class="md:hidden text-red-500 text-sm font-semibold px-3 py-1.5 rounded hover:bg-red-50">Sign Out</button>
+        <button onclick="handleLogout()" class="md:hidden text-red-500 text-xs font-semibold px-2 py-1 rounded hover:bg-red-50">Sign Out</button>
       </div>
     </header>
 
@@ -373,20 +392,678 @@
       </div>
 
       <!-- TAB: MY APPROVED PRODUCTS (Customer-Specific Catalog) -->
-      <div id="cust-assigned-products" class="cust-portal-view hidden space-y-8">
-        <div class="flex justify-between items-center flex-wrap gap-4">
+      <div id="cust-assigned-products" class="cust-portal-view hidden space-y-6">
+        <div class="flex justify-between items-start flex-wrap gap-4">
           <div>
-            <h3 class="font-heading text-2xl font-bold text-charcoal">My Approved Product Catalog</h3>
-            <p class="text-xs text-mutedText mt-1">Exclusive products, custom pricing tiers, and approved specifications assigned to your enterprise account.</p>
+            <div class="flex items-center gap-2 text-xs text-mutedText mb-1">
+              <span>Customer portal</span> <i class="ri-arrow-right-s-line"></i> <span class="text-charcoal font-semibold">My approved products</span>
+            </div>
+            <h3 class="font-heading text-2xl md:text-3xl font-extrabold text-charcoal">Your approved collection</h3>
+            <p class="text-xs text-mutedText mt-1">Choose a product. Configure the sizes. Quote or order in a few steps.</p>
           </div>
-          <button onclick="setPortalTab('cust-quotes')" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">
-            Request Custom Quote
+          <button onclick="setPortalTab('cust-quotes'); toggleModal('cust-quote-modal', true);" class="text-xs font-bold text-primary hover:text-primaryHover transition-colors flex items-center gap-1.5 py-2">
+            Request a custom quote <i class="ri-arrow-right-line"></i>
           </button>
+        </div>
+
+        <!-- Banner Info Callout -->
+        <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-center justify-between flex-wrap gap-3">
+          <div class="flex items-center gap-2.5 text-xs text-emerald-900 font-medium">
+            <i class="ri-lock-2-line text-emerald-700 text-base"></i>
+            <span><strong>Your agreed prices, ready to order.</strong> Assigned to your account. Enter quantities and sizes to preview a quote or buy online.</span>
+          </div>
+          <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">Client pricing active</span>
         </div>
 
         <!-- Products Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cust-assigned-products-grid">
           <!-- Injected dynamically based on customer's CustomerProduct mapping -->
+        </div>
+
+        <p class="text-[11px] text-mutedText text-center pt-4 border-t border-lightBorder">
+          Approved specifications and branding are included in the assigned unit price. Sample configuration for design review.
+        </p>
+      </div>
+
+      <!-- VIEW: PRODUCT CONFIGURATION (Sizes & Quantity) -->
+      <div id="cust-product-config" class="cust-portal-view hidden space-y-6">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-xs text-mutedText mb-1">
+              <span>Customer portal</span> <i class="ri-arrow-right-s-line"></i>
+              <span class="hover:underline cursor-pointer" onclick="setPortalTab('cust-assigned-products')">My approved products</span> <i class="ri-arrow-right-s-line"></i>
+              <span class="text-charcoal font-semibold">Sizes & quantity</span>
+            </div>
+            <h3 class="font-heading text-2xl md:text-3xl font-extrabold text-charcoal">Make it your order</h3>
+            <p class="text-xs text-mutedText mt-1">Enter your total requirement and allocate the quantity by size.</p>
+          </div>
+          <button onclick="setPortalTab('cust-assigned-products')" class="text-xs font-bold text-charcoal hover:text-primary transition-colors flex items-center gap-1.5 py-2">
+            <i class="ri-arrow-left-line"></i> Back to products
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Column: Product Visuals & Specifications -->
+          <div class="lg:col-span-5 bg-white rounded-3xl border border-lightBorder p-6 shadow-sm space-y-6">
+            <div class="relative rounded-2xl overflow-hidden bg-lightCard border border-lightBorder p-6 flex items-center justify-center min-h-[260px]">
+              <span class="absolute top-3 left-3 bg-charcoal text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Approved for your account</span>
+              <img id="cfg-img" src="assets/images/products/corporate-blazer-detail.png" alt="Product" class="max-h-60 w-auto object-contain">
+            </div>
+
+            <div class="space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
+                <div>
+                  <span class="text-xs font-bold text-charcoal block" id="cfg-variant-title">Black / Approved print</span>
+                  <span class="text-[11px] text-mutedText">Approved corporate production spec</span>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Branding included</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="p-3 bg-lightCard rounded-xl border border-lightBorder">
+                  <span class="text-[10px] text-gray-400 font-semibold block uppercase">Fabric</span>
+                  <span class="font-bold text-charcoal mt-0.5 block" id="cfg-fabric">100% cotton, bio washed</span>
+                </div>
+                <div class="p-3 bg-lightCard rounded-xl border border-lightBorder">
+                  <span class="text-[10px] text-gray-400 font-semibold block uppercase">Weight</span>
+                  <span class="font-bold text-charcoal mt-0.5 block" id="cfg-gsm">220 GSM</span>
+                </div>
+                <div class="p-3 bg-lightCard rounded-xl border border-lightBorder">
+                  <span class="text-[10px] text-gray-400 font-semibold block uppercase">Available Sizes</span>
+                  <span class="font-bold text-charcoal mt-0.5 block" id="cfg-sizes-list">S, M, L, XL, 2XL</span>
+                </div>
+                <div class="p-3 bg-lightCard rounded-xl border border-lightBorder">
+                  <span class="text-[10px] text-gray-400 font-semibold block uppercase">Minimum Order</span>
+                  <span class="font-bold text-charcoal mt-0.5 block" id="cfg-moq-badge">100 pcs per design</span>
+                </div>
+              </div>
+
+              <div class="p-4 bg-gray-50 rounded-2xl border border-lightBorder text-xs text-mutedText">
+                <span class="font-bold text-charcoal block mb-0.5">Need something different?</span>
+                <span>Our team can help with custom products. <a href="javascript:void(0)" onclick="setPortalTab('cust-quotes'); toggleModal('cust-quote-modal', true);" class="text-primary font-semibold hover:underline">Request a custom quote →</a></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Size Configuration Form & Pricing -->
+          <div class="lg:col-span-7 bg-white rounded-3xl border border-lightBorder p-6 sm:p-8 shadow-sm space-y-6">
+            <div class="flex justify-between items-start pb-4 border-b border-lightBorder">
+              <div>
+                <span class="text-[10px] font-mono font-bold text-primary uppercase tracking-wider block" id="cfg-sku">DT26-TS-01</span>
+                <h4 class="font-heading text-xl sm:text-2xl font-bold text-charcoal mt-0.5" id="cfg-title">Drum Tao T-shirt 1</h4>
+                <p class="text-xs text-mutedText mt-0.5" id="cfg-subtitle">Black · Approved design</p>
+              </div>
+              <div class="text-right">
+                <span class="font-heading text-2xl font-extrabold text-charcoal block" id="cfg-rate">₹330</span>
+                <span class="text-[10px] text-mutedText font-medium">per pc + GST</span>
+              </div>
+            </div>
+
+            <!-- Step 1: Total Quantity -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <label class="text-xs font-bold uppercase tracking-wider text-charcoal">1. Total quantity</label>
+                <span class="text-[11px] text-mutedText font-medium" id="cfg-moq-hint">Minimum 100 pcs</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="flex items-center border border-lightBorder rounded-xl overflow-hidden bg-lightCard">
+                  <button type="button" onclick="adjustTotalQty(-10)" class="w-10 h-10 flex items-center justify-center hover:bg-gray-200 text-charcoal font-bold transition-colors">−</button>
+                  <input type="number" id="cfg-total-qty" value="100" min="1" step="1" oninput="handleTotalQtyChange()" class="w-20 text-center font-bold text-sm bg-transparent focus:outline-none text-charcoal font-mono">
+                  <button type="button" onclick="adjustTotalQty(10)" class="w-10 h-10 flex items-center justify-center hover:bg-gray-200 text-charcoal font-bold transition-colors">+</button>
+                </div>
+                <span class="text-xs text-mutedText">pieces in this design</span>
+              </div>
+            </div>
+
+            <!-- Step 2: Allocate Sizes -->
+            <div class="space-y-3 pt-2">
+              <div class="flex justify-between items-center">
+                <div>
+                  <label class="text-xs font-bold uppercase tracking-wider text-charcoal block">2. Allocate sizes</label>
+                  <span class="text-[11px] text-mutedText">Pieces per size</span>
+                </div>
+                <button type="button" onclick="splitSizesEvenly()" class="text-xs font-bold text-primary hover:text-primaryHover border border-primary/20 hover:border-primary/40 px-3 py-1 rounded-full transition-colors bg-red-50/50">
+                  Split evenly
+                </button>
+              </div>
+
+              <!-- Dynamic size boxes grid -->
+              <div class="grid grid-cols-3 sm:grid-cols-5 gap-2.5" id="cfg-size-inputs-grid">
+                <!-- Injected size inputs -->
+              </div>
+
+              <!-- Allocation status progress bar -->
+              <div class="p-3 rounded-xl border flex items-center justify-between text-xs" id="cfg-allocation-status-bar">
+                <span class="font-semibold flex items-center gap-1.5" id="cfg-allocation-text">
+                  <i class="ri-checkbox-circle-fill text-emerald-600"></i> 100 of 100 pieces allocated
+                </span>
+                <span class="text-[10px] text-mutedText" id="cfg-allocation-diff"></span>
+              </div>
+            </div>
+
+            <!-- Subtotal & Actions -->
+            <div class="pt-4 border-t border-lightBorder space-y-4">
+              <div class="flex justify-between items-baseline">
+                <div>
+                  <span class="text-xs text-mutedText block">Item subtotal</span>
+                  <span class="text-[11px] text-mutedText" id="cfg-calc-text">100 pcs × ₹330</span>
+                </div>
+                <div class="text-right">
+                  <span class="font-heading text-2xl font-extrabold text-primary block" id="cfg-subtotal">₹33,000</span>
+                  <span class="text-[10px] text-mutedText">GST calculated in your quotation or cart</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="previewQuotationFromConfig()" id="cfg-preview-btn" class="w-full py-3.5 px-5 rounded-2xl border-2 border-primary text-primary hover:bg-red-50 text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                  <i class="ri-file-text-line"></i> Preview quotation
+                </button>
+                <button type="button" onclick="addToCartFromConfig()" id="cfg-add-btn" class="w-full py-3.5 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2">
+                  <i class="ri-shopping-cart-line"></i> Add to cart
+                </button>
+              </div>
+
+              <p class="text-[10px] text-mutedText text-center">
+                VAT and account pricing applied automatically.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: INSTANT QUOTATION PREVIEW -->
+      <div id="cust-quote-preview" class="cust-portal-view hidden space-y-6">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-xs text-mutedText mb-1">
+              <span>Customer portal</span> <i class="ri-arrow-right-s-line"></i>
+              <span class="hover:underline cursor-pointer" onclick="setPortalTab('cust-quotes')">Quotations</span> <i class="ri-arrow-right-s-line"></i>
+              <span class="text-charcoal font-semibold">Preview</span>
+            </div>
+            <h3 class="font-heading text-2xl md:text-3xl font-extrabold text-charcoal">Your quotation, ready to review</h3>
+            <p class="text-xs text-mutedText mt-1">Review all selected products with your account-specific prices.</p>
+          </div>
+          <button onclick="setPortalTab('cust-assigned-products')" class="text-xs font-bold text-charcoal hover:text-primary transition-colors flex items-center gap-1.5 py-2">
+            <i class="ri-add-line"></i> Add another product
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Quotation Document Sheet (Left) -->
+          <div class="lg:col-span-8 bg-white rounded-3xl border border-lightBorder p-6 sm:p-8 shadow-sm space-y-6 font-body text-charcoal" id="printable-quotation-sheet">
+            <div class="flex justify-between items-start pb-6 border-b border-lightBorder">
+              <div>
+                <img src="assets/logos/logo-full.png" alt="UNIWEAR" class="h-8 w-auto object-contain mb-2">
+                <p class="text-[10px] text-mutedText">Redefining Workwear Standards · Since 1998</p>
+              </div>
+              <div class="text-right">
+                <span class="font-heading text-lg font-extrabold uppercase tracking-widest text-primary block">QUOTATION</span>
+                <span class="text-xs font-mono font-bold text-charcoal block" id="qp-number">UW-QT-0000</span>
+                <span class="text-[10px] text-emerald-700 font-semibold block">✓ Saved in your account</span>
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4 text-xs pb-4 border-b border-lightBorder">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider mb-0.5">Prepared For:</span>
+                <p class="font-bold text-charcoal text-sm" id="qp-client-company">Toyota Kirloskar Motor</p>
+                <p class="text-mutedText" id="qp-client-rep">Procurement Team</p>
+                <p class="text-mutedText" id="qp-client-email">procurement@example.com</p>
+              </div>
+              <div class="sm:text-right">
+                <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider mb-0.5">Quotation Details:</span>
+                <p class="text-mutedText">Date: <strong class="text-charcoal" id="qp-date">30 October 2026</strong></p>
+                <p class="text-mutedText">Validity: <strong class="text-charcoal" id="qp-validity">7 Days</strong></p>
+                <p class="text-mutedText">Currency: <strong class="text-charcoal">INR (₹)</strong></p>
+              </div>
+            </div>
+
+            <!-- Table of items -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-lightBorder text-[10px] uppercase font-bold text-mutedText tracking-wider">
+                    <th class="py-2.5">Product & Size Breakdown</th>
+                    <th class="py-2.5 text-center">Qty</th>
+                    <th class="py-2.5 text-right">Unit Rate</th>
+                    <th class="py-2.5 text-right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody id="qp-items-tbody" class="divide-y divide-lightBorder/60">
+                  <!-- Injected quote lines -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Summary math lines -->
+            <div class="pt-4 border-t border-lightBorder flex justify-end">
+              <div class="w-64 space-y-1.5 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-mutedText" id="qp-subtotal-label">Subtotal (200 pcs)</span>
+                  <span class="font-semibold text-charcoal" id="qp-subtotal">₹66,000</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-mutedText" id="qp-tax-label">GST (5%)</span>
+                  <span class="font-semibold text-charcoal" id="qp-taxes">₹3,300</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-mutedText">Delivery</span>
+                  <span class="font-semibold text-emerald-700">Included</span>
+                </div>
+                <div class="flex justify-between pt-2 border-t border-lightBorder font-heading text-base font-extrabold text-charcoal">
+                  <span>Grand total</span>
+                  <span class="text-primary" id="qp-grand-total">₹69,300</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Terms -->
+            <div class="p-4 bg-lightCard rounded-2xl border border-lightBorder text-[10px] text-mutedText leading-relaxed space-y-1">
+              <span class="font-bold text-charcoal block uppercase tracking-wider">Terms & Commercial Notes:</span>
+              <p>• Full payment before production. Delivery: Ex-factory dispatch direct to Client address.</p>
+              <p>• GST: 5% HSN applicable. Dispatch within 10–15 working days from approval.</p>
+              <p>• Custom branded uniforms cannot be returned once sample configuration is signed off.</p>
+            </div>
+          </div>
+
+          <!-- Summary & Actions Panel (Right) -->
+          <div class="lg:col-span-4 bg-white rounded-3xl border border-lightBorder p-6 shadow-sm space-y-6">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-700 block mb-1">Saved & firm quote</span>
+              <h4 class="font-heading text-xl font-bold text-charcoal">Quote now. Order when ready.</h4>
+              <p class="text-xs text-mutedText mt-1" id="qp-summary-pieces">2 products · 200 pieces</p>
+            </div>
+
+            <div class="p-4 bg-lightCard rounded-2xl border border-lightBorder space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-mutedText">Subtotal</span>
+                <span class="font-semibold text-charcoal" id="qp-card-subtotal">₹66,000</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-mutedText">GST (5%)</span>
+                <span class="font-semibold text-charcoal" id="qp-card-taxes">₹3,300</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-mutedText">Delivery</span>
+                <span class="font-semibold text-emerald-700">Included</span>
+              </div>
+              <div class="flex justify-between pt-2 border-t border-lightBorder font-heading text-base font-extrabold text-charcoal">
+                <span>Grand total</span>
+                <span class="text-primary" id="qp-card-grand-total">₹69,300</span>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <button type="button" onclick="transferQuoteToCartAndOpen()" class="w-full py-3.5 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2">
+                <i class="ri-shopping-cart-2-line"></i> Add quoted items to cart
+              </button>
+
+              <button type="button" onclick="printOrDownloadCurrentQuote()" class="w-full py-3 px-5 rounded-2xl border border-lightBorder hover:bg-lightCard text-xs font-bold text-charcoal transition-all flex items-center justify-center gap-2">
+                <i class="ri-printer-line"></i> Download / print quotation
+              </button>
+            </div>
+
+            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-800 flex items-center gap-2">
+              <i class="ri-checkbox-circle-line text-emerald-600 text-sm"></i>
+              <span id="qp-saved-notice">Quote is saved in your Quotations tab.</span>
+            </div>
+
+            <p class="text-[10px] text-mutedText text-center leading-relaxed">
+              No payment required to preview. You can review or save your quotation before deciding to place the order.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: MY CART -->
+      <div id="cust-cart" class="cust-portal-view hidden space-y-6">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-xs text-mutedText mb-1">
+              <span>Customer portal</span> <i class="ri-arrow-right-s-line"></i>
+              <span class="text-charcoal font-semibold">My cart</span>
+            </div>
+            <h3 class="font-heading text-2xl md:text-3xl font-extrabold text-charcoal">Your cart</h3>
+            <p class="text-xs text-mutedText mt-1">Review the products, quantities and sizes before checkout.</p>
+          </div>
+          <button onclick="setPortalTab('cust-assigned-products')" class="text-xs font-bold text-charcoal hover:text-primary transition-colors flex items-center gap-1.5 py-2">
+            <i class="ri-arrow-left-line"></i> Continue shopping
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Cart Items List (Left) -->
+          <div class="lg:col-span-8 space-y-4">
+            <div class="flex justify-between items-center px-1">
+              <span class="text-xs font-bold text-charcoal" id="cart-products-count-label">0 products in your cart</span>
+              <span class="text-[10px] text-emerald-700 font-bold px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200">Client pricing applied</span>
+            </div>
+
+            <!-- List of cart items container -->
+            <div class="space-y-3" id="cart-items-container">
+              <!-- Dynamically injected cart items -->
+            </div>
+
+            <!-- Empty cart state -->
+            <div id="cart-empty-state" class="bg-white rounded-3xl border border-lightBorder p-12 text-center space-y-3 hidden">
+              <i class="ri-shopping-cart-2-line text-4xl text-gray-300 block"></i>
+              <h4 class="font-heading text-lg font-bold text-charcoal">Your portal cart is empty</h4>
+              <p class="text-xs text-mutedText max-w-sm mx-auto">Explore your approved collection to configure sizes and add items to your cart.</p>
+              <button onclick="setPortalTab('cust-assigned-products')" class="mt-2 bg-primary text-white text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded-full">
+                View Approved Products
+              </button>
+            </div>
+
+            <!-- Delivery Info Callout -->
+            <div class="p-4 bg-white rounded-2xl border border-lightBorder flex items-center justify-between text-xs flex-wrap gap-2" id="cart-delivery-box">
+              <div class="flex items-center gap-2 text-mutedText">
+                <i class="ri-truck-line text-primary text-base"></i>
+                <span><strong>Delivery to Bengaluru:</strong> Included in this order. Confirm your delivery details at checkout.</span>
+              </div>
+              <span class="text-[11px] font-bold text-charcoal" id="cart-total-pieces-badge">0 pieces selected</span>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+              <button type="button" onclick="previewQuotationFromCart()" class="text-xs font-bold text-primary hover:text-primaryHover flex items-center gap-1.5">
+                <i class="ri-file-text-line"></i> Preview quotation for this cart
+              </button>
+              <button type="button" onclick="clearCartAction()" class="text-xs text-mutedText hover:text-red-500 transition-colors">
+                Clear cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Order Summary Panel (Right) -->
+          <div class="lg:col-span-4 bg-white rounded-3xl border border-lightBorder p-6 shadow-sm space-y-6">
+            <h4 class="font-heading text-lg font-bold text-charcoal pb-3 border-b border-lightBorder">Order summary</h4>
+
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between">
+                <span class="text-mutedText" id="cart-sum-pieces-label">Subtotal</span>
+                <span class="font-semibold text-charcoal" id="cart-sum-subtotal">₹0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-mutedText">GST (demo 5%)</span>
+                <span class="font-semibold text-charcoal" id="cart-sum-tax">₹0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-mutedText">Delivery</span>
+                <span class="font-semibold text-emerald-700">Included</span>
+              </div>
+              <div class="flex justify-between pt-3 border-t border-lightBorder font-heading text-lg font-extrabold text-charcoal">
+                <span>Grand total</span>
+                <span class="text-primary" id="cart-sum-grand-total">₹0</span>
+              </div>
+            </div>
+
+            <button type="button" onclick="openCheckoutFromCart()" id="cart-checkout-btn" class="w-full py-4 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2">
+              Proceed to checkout <i class="ri-arrow-right-line"></i>
+            </button>
+
+            <div class="space-y-1 text-center">
+              <span class="text-[11px] font-semibold text-mutedText flex items-center justify-center gap-1">
+                <i class="ri-shield-check-line text-emerald-600"></i> Secure payment on the next step
+              </span>
+              <span class="text-[10px] text-gray-400 block">The same product details and size allocation will appear in your final order.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: CHECKOUT -->
+      <div id="cust-checkout" class="cust-portal-view hidden space-y-6">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-xs text-mutedText mb-1">
+              <span>Customer portal</span> <i class="ri-arrow-right-s-line"></i>
+              <span class="hover:underline cursor-pointer" onclick="setPortalTab('cust-cart')">My cart</span> <i class="ri-arrow-right-s-line"></i>
+              <span class="text-charcoal font-semibold">Checkout</span>
+            </div>
+            <h3 class="font-heading text-2xl md:text-3xl font-extrabold text-charcoal">A few details. Then you're all set.</h3>
+            <p class="text-xs text-mutedText mt-1">Confirm your billing and delivery information before payment.</p>
+          </div>
+          <button onclick="setPortalTab('cust-cart')" class="text-xs font-bold text-charcoal hover:text-primary transition-colors flex items-center gap-1.5 py-2">
+            <i class="ri-arrow-left-line"></i> Back to cart
+          </button>
+        </div>
+
+        <!-- Stepper Indicator -->
+        <div class="flex items-center gap-3 text-xs font-bold pb-2">
+          <span class="text-mutedText flex items-center gap-1"><i class="ri-checkbox-circle-fill text-emerald-600"></i> Cart</span>
+          <i class="ri-arrow-right-s-line text-gray-400"></i>
+          <span class="text-primary flex items-center gap-1"><i class="ri-record-circle-fill"></i> 2. Details & payment</span>
+          <i class="ri-arrow-right-s-line text-gray-400"></i>
+          <span class="text-gray-400">3. Confirmation</span>
+        </div>
+
+        <form onsubmit="handleCheckoutSubmit(event)">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left Form: Contact & Delivery -->
+            <div class="lg:col-span-8 space-y-6">
+              <div class="bg-white rounded-3xl border border-lightBorder p-6 sm:p-8 shadow-sm space-y-6">
+                <div class="flex justify-between items-center pb-3 border-b border-lightBorder">
+                  <h4 class="font-heading text-base font-bold text-charcoal">Contact & delivery details</h4>
+                  <span class="text-[10px] text-mutedText font-semibold">Saved account</span>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">Contact name *</label>
+                    <input type="text" id="chk-name" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+                  </div>
+                  <div>
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">Email address *</label>
+                    <input type="email" id="chk-email" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+                  </div>
+                  <div>
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">Mobile number *</label>
+                    <input type="tel" id="chk-phone" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+                  </div>
+                  <div>
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">GSTIN (if applicable)</label>
+                    <input type="text" id="chk-gstin" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary font-mono uppercase">
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">Delivery address *</label>
+                    <textarea id="chk-address" rows="2" required class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary"></textarea>
+                  </div>
+                  <div>
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">City *</label>
+                    <input type="text" id="chk-city" required value="Bengaluru" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+                  </div>
+                  <div>
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">PIN code *</label>
+                    <input type="text" id="chk-pincode" required value="560001" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary font-mono">
+                  </div>
+                  <div>
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">State *</label>
+                    <input type="text" id="chk-state" required value="Karnataka" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+                  </div>
+                  <div>
+                    <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">PO / reference (optional)</label>
+                    <input type="text" id="chk-po-ref" placeholder="Your internal PO number" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary font-mono">
+                  </div>
+                </div>
+
+                <div class="pt-2">
+                  <label class="flex items-center gap-2 text-xs text-charcoal font-medium cursor-pointer">
+                    <input type="checkbox" id="chk-same-billing" checked class="rounded text-primary focus:ring-0">
+                    <span>Billing address is the same as delivery address</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Payment Section -->
+              <div class="bg-white rounded-3xl border border-lightBorder p-6 sm:p-8 shadow-sm space-y-4">
+                <h4 class="font-heading text-base font-bold text-charcoal">Payment</h4>
+                
+                <div class="p-4 rounded-2xl border-2 border-primary/30 bg-red-50/20 flex items-center justify-between flex-wrap gap-3">
+                  <div>
+                    <span class="text-xs font-bold text-charcoal block">Pay online securely</span>
+                    <span class="text-[11px] text-mutedText">Choose a method on the secure payment page</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-[10px] font-bold text-mutedText">
+                    <span class="px-2 py-1 bg-white rounded border border-lightBorder">UPI</span>
+                    <span class="px-2 py-1 bg-white rounded border border-lightBorder">Cards</span>
+                    <span class="px-2 py-1 bg-white rounded border border-lightBorder">Netbanking</span>
+                  </div>
+                </div>
+
+                <div class="pt-2">
+                  <label class="flex items-start gap-2.5 text-xs text-mutedText cursor-pointer">
+                    <input type="checkbox" id="chk-agree-terms" required class="mt-0.5 rounded text-primary focus:ring-0">
+                    <span class="leading-relaxed">I confirm the sizes, quantities and approved specifications, and agree to the order terms.</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Summary -->
+            <div class="lg:col-span-4 bg-white rounded-3xl border border-lightBorder p-6 shadow-sm space-y-6">
+              <h4 class="font-heading text-lg font-bold text-charcoal pb-3 border-b border-lightBorder">Final order summary</h4>
+
+              <!-- Products Mini List -->
+              <div class="space-y-3 max-h-56 overflow-y-auto" id="chk-mini-items">
+                <!-- Injected mini items -->
+              </div>
+
+              <div class="space-y-2.5 text-xs pt-3 border-t border-lightBorder">
+                <div class="flex justify-between">
+                  <span class="text-mutedText" id="chk-subtotal-label">Subtotal</span>
+                  <span class="font-semibold text-charcoal" id="chk-subtotal">₹0</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-mutedText">GST (demo 5%)</span>
+                  <span class="font-semibold text-charcoal" id="chk-taxes">₹0</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-mutedText">Delivery</span>
+                  <span class="font-semibold text-emerald-700">Included</span>
+                </div>
+                <div class="flex justify-between pt-3 border-t border-lightBorder font-heading text-lg font-extrabold text-charcoal">
+                  <span>Grand total</span>
+                  <span class="text-primary" id="chk-grand-total">₹0</span>
+                </div>
+              </div>
+
+              <button type="submit" id="chk-pay-btn" class="w-full py-4 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2">
+                <i class="ri-lock-2-line"></i> <span id="chk-pay-btn-label">Pay securely</span>
+              </button>
+
+              <div class="p-3 bg-lightCard rounded-xl border border-lightBorder text-[10px] text-mutedText space-y-1">
+                <span class="font-bold text-charcoal block uppercase">Delivery schedule</span>
+                <p>Estimated dispatch: 10–15 working days from order confirmation. Sample lead time.</p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- VIEW: ORDER CONFIRMATION -->
+      <div id="cust-order-confirmed" class="cust-portal-view hidden space-y-8">
+        <div class="text-center max-w-xl mx-auto space-y-2">
+          <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto text-2xl mb-3">
+            <i class="ri-check-line font-bold"></i>
+          </div>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-700 block">Payment successful · Verified</span>
+          <h3 class="font-heading text-2xl md:text-3xl font-extrabold text-charcoal">Thank you. Your order is confirmed.</h3>
+          <p class="text-xs text-mutedText">Your product quantities, sizes and approved specifications are now recorded.</p>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-lightBorder p-6 sm:p-8 shadow-sm max-w-3xl mx-auto space-y-6 text-xs font-body">
+          <div class="grid sm:grid-cols-2 gap-4 pb-6 border-b border-lightBorder">
+            <div class="space-y-3">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider">Order reference</span>
+                <span class="font-mono text-base font-bold text-charcoal" id="oc-order-id">UW-ORD-0000</span>
+              </div>
+              <div>
+                <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider">Payment status</span>
+                <span class="font-semibold text-emerald-700" id="oc-payment-status">Paid · Online transaction</span>
+              </div>
+            </div>
+            <div class="space-y-3 sm:text-right">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider">Order date</span>
+                <span class="font-bold text-charcoal" id="oc-order-date">30 October 2026</span>
+              </div>
+              <div>
+                <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider">Payment reference</span>
+                <span class="font-mono text-charcoal font-semibold" id="oc-payment-ref">PAY-DEMO-1026</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Items list with sizes -->
+          <div class="space-y-2">
+            <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider">Your ordered items & sizes:</span>
+            <div class="space-y-2" id="oc-items-list">
+              <!-- Injected items -->
+            </div>
+          </div>
+
+          <!-- Summary math -->
+          <div class="grid sm:grid-cols-2 gap-4 pt-4 border-t border-lightBorder">
+            <div>
+              <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider mb-1">Delivery to:</span>
+              <p class="font-bold text-charcoal" id="oc-delivery-name">Toyota Kirloskar Motor</p>
+              <p class="text-mutedText" id="oc-delivery-address">Bengaluru, Karnataka</p>
+              <p class="text-mutedText mt-1">Estimated dispatch: <strong class="text-charcoal">10–15 working days</strong></p>
+            </div>
+            <div class="sm:text-right space-y-1">
+              <span class="text-[10px] uppercase font-bold text-mutedText block tracking-wider mb-1">Payment summary:</span>
+              <p class="text-mutedText">Subtotal: <strong class="text-charcoal" id="oc-subtotal">₹0</strong></p>
+              <p class="text-mutedText">GST (5%): <strong class="text-charcoal" id="oc-taxes">₹0</strong></p>
+              <p class="text-mutedText">Delivery: <strong class="text-emerald-700">Included</strong></p>
+              <p class="text-sm font-bold text-charcoal pt-1 border-t border-lightBorder">Grand total: <strong class="text-primary" id="oc-grand-total">₹0</strong></p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-6 border-t border-lightBorder">
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="setPortalTab('cust-orders')" class="px-5 py-2.5 rounded-full bg-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-primaryHover transition-all shadow-sm">
+                View order details
+              </button>
+              <button type="button" onclick="window.print()" class="px-4 py-2.5 rounded-full border border-lightBorder hover:bg-lightCard text-xs font-bold text-charcoal transition-all">
+                View payment receipt
+              </button>
+            </div>
+            <button type="button" onclick="setPortalTab('cust-assigned-products')" class="text-xs font-bold text-charcoal hover:text-primary transition-colors">
+              Continue shopping →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: PAYMENT STATUS / RECOVERY -->
+      <div id="cust-payment-status" class="cust-portal-view hidden space-y-6">
+        <div class="max-w-md mx-auto bg-white rounded-3xl border border-lightBorder p-8 shadow-sm text-center space-y-4">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto text-2xl bg-amber-50" id="ps-icon-wrapper">
+            <i class="ri-error-warning-line text-amber-600" id="ps-icon"></i>
+          </div>
+
+          <h3 class="font-heading text-xl font-bold text-charcoal" id="ps-title">Your payment didn't go through.</h3>
+          <p class="text-xs text-mutedText leading-relaxed" id="ps-desc">Your cart and size breakdowns are saved. You can safely retry your payment.</p>
+
+          <div class="p-4 bg-lightCard rounded-2xl border border-lightBorder space-y-2 text-xs text-left" id="ps-summary-box">
+            <div class="flex justify-between">
+              <span class="text-mutedText">Order reference</span>
+              <span class="font-mono font-bold text-charcoal" id="ps-order-id">UW-ORD-0000</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-mutedText">Grand total</span>
+              <span class="font-bold text-primary" id="ps-grand-total">₹0</span>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-2">
+            <button type="button" onclick="setPortalTab('cust-checkout')" id="ps-primary-btn" class="w-full py-3.5 px-5 rounded-2xl bg-primary hover:bg-primaryHover text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-primary/20">
+              Return to payment →
+            </button>
+            <button type="button" onclick="setPortalTab('cust-cart')" class="w-full py-2.5 px-5 text-xs font-bold text-mutedText hover:text-charcoal transition-colors">
+              Review cart
+            </button>
+          </div>
         </div>
       </div>
 
@@ -705,10 +1382,11 @@
             window.api.getNotifications(email),
             window.api.getSettings(),
             window.api.getProducts(),
-            userId ? window.api.getCustomerProducts(userId) : Promise.resolve({ success: false })
+            (userId || email) ? window.api.getCustomerProducts(userId || email) : Promise.resolve({ success: false }),
+            window.api.getPortalCart ? window.api.getPortalCart() : Promise.resolve({ success: false })
           ]);
 
-          const [quotesR, ordersR, ticketsR, notisR, settingsR, productsR, assignedR] = results;
+          const [quotesR, ordersR, ticketsR, notisR, settingsR, productsR, assignedR, cartR] = results;
 
           if (quotesR.status === 'fulfilled' && quotesR.value && quotesR.value.success) {
             localStorage.setItem('uniwear_quotations', JSON.stringify(quotesR.value.data));
@@ -730,6 +1408,10 @@
           }
           if (assignedR.status === 'fulfilled' && assignedR.value && assignedR.value.success) {
             customerAssignedProducts = assignedR.value.data;
+          }
+          if (cartR && cartR.status === 'fulfilled' && cartR.value && cartR.value.success && cartR.value.cart) {
+            portalCart = cartR.value.cart;
+            updateCartBadges();
           }
         } finally {
           _syncCustomerDataPromise = null;
@@ -760,12 +1442,36 @@
       document.getElementById('prof-phone').value = profile.phone || '';
       document.getElementById('prof-address').value = profile.address || '';
 
+      // Check return URL from Cashfree PG
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectOrderId = urlParams.get('order_id') || urlParams.get('orderId');
+      if (redirectOrderId) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+        try {
+          const verifyRes = await window.api.verifyPortalPayment({ orderId: redirectOrderId });
+          if (verifyRes.success && verifyRes.verified) {
+            portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
+            updateCartBadges();
+            await syncCustomerData();
+            showOrderConfirmed(verifyRes.order);
+            return;
+          } else {
+            showPaymentFailed(verifyRes.message || 'Payment verification incomplete or status pending.', redirectOrderId);
+            return;
+          }
+        } catch (err) {
+          showPaymentFailed(err.message || 'Error verifying returned payment status.', redirectOrderId);
+          return;
+        }
+      }
+
       updateCustomerPortal();
     });
 
     function setPortalTab(tabId) {
       document.querySelectorAll('.cust-portal-view').forEach(view => view.classList.add('hidden'));
-      document.getElementById(tabId).classList.remove('hidden');
+      const targetView = document.getElementById(tabId);
+      if (targetView) targetView.classList.remove('hidden');
 
       document.querySelectorAll('.cust-tab-btn').forEach(btn => {
         btn.classList.remove('bg-primary', 'text-white');
@@ -773,23 +1479,39 @@
       });
 
       const activeBtn = document.getElementById(`cust-tab-${tabId}`);
-      activeBtn.classList.remove('text-mutedText', 'hover:bg-lightCard', 'hover:text-charcoal');
-      activeBtn.classList.add('bg-primary', 'text-white');
+      if (activeBtn) {
+        activeBtn.classList.remove('text-mutedText', 'hover:bg-lightCard', 'hover:text-charcoal');
+        activeBtn.classList.add('bg-primary', 'text-white');
+      }
 
       const titles = {
         'cust-dash': 'Client Dashboard',
+        'cust-assigned-products': 'My Approved Products',
+        'cust-cart': 'My Cart',
         'cust-quotes': 'Quotations Program',
         'cust-orders': 'Orders & Samples Tracker',
         'cust-support': 'Communications Support Desk',
-        'cust-profile': 'Profile Settings'
+        'cust-profile': 'Profile Settings',
+        'cust-product-config': 'Make It Your Order',
+        'cust-quote-preview': 'Quotation Preview',
+        'cust-checkout': 'Checkout & Payment',
+        'cust-order-confirmed': 'Order Confirmation',
+        'cust-payment-status': 'Payment Status'
       };
-      document.getElementById('portal-title').innerText = titles[tabId];
+      if (document.getElementById('portal-title')) {
+        document.getElementById('portal-title').innerText = titles[tabId] || 'Client Dashboard';
+      }
+      if (tabId === 'cust-cart') {
+        renderPortalCartView();
+      }
+
       updateCustomerPortal();
       
       // Auto-collapse sidebar on mobile tab navigation selection
       if (window.innerWidth < 768) {
         toggleSidebar(false);
       }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function handleLogout() {
@@ -841,10 +1563,29 @@
       const notis = JSON.parse(localStorage.getItem('uniwear_notifications')) || [];
 
       // Update sidebar headers
-      document.getElementById('sidebar-rep-name').innerText = profile.representative;
-      document.getElementById('sidebar-company-name').innerText = profile.companyName;
-      document.getElementById('sidebar-avatar-char').innerText = profile.representative.charAt(0);
-      document.getElementById('dash-welcome-text').innerText = `Welcome, ${profile.companyName}`;
+      document.getElementById('sidebar-rep-name').innerText = profile.representative || 'Client Rep';
+      document.getElementById('sidebar-company-name').innerText = profile.companyName || 'Corporate Client';
+      document.getElementById('sidebar-avatar-char').innerText = (profile.representative || 'C').charAt(0);
+      if (document.getElementById('dash-welcome-text')) {
+        document.getElementById('dash-welcome-text').innerText = `Welcome, ${profile.companyName || 'Corporate Client'}`;
+      }
+      if (document.getElementById('portal-title-company')) {
+        document.getElementById('portal-title-company').innerText = profile.companyName || 'Toyota Kirloskar Motor';
+      }
+      if (document.getElementById('header-avatar-badge')) {
+        const initials = (profile.companyName || profile.representative || 'TK')
+          .split(' ')
+          .filter(Boolean)
+          .map(w => w[0])
+          .slice(0, 2)
+          .join('')
+          .toUpperCase();
+        document.getElementById('header-avatar-badge').innerText = initials || 'TK';
+      }
+      if (document.getElementById('sidebar-quotes-badge')) {
+        document.getElementById('sidebar-quotes-badge').innerText = (quotes.filter(q => q.clientEmail === profile.email) || []).length;
+      }
+      loadPortalCart();
 
       // Update dashboard widget counters
       const clientQuotes = quotes.filter(q => q.clientEmail === profile.email);
@@ -1078,15 +1819,22 @@
           else statusStyle = "bg-yellow-50 text-yellow-700 border border-yellow-200";
 
           let actionButtons = "";
+          const isPortalQuote = q.isPortalQuote || (q.items && q.items.length > 0);
           if (q.status === 'Approved' || q.status === 'Revised') {
             actionButtons = `
-              <div class="flex justify-end gap-2">
+              <div class="flex justify-end gap-2 items-center">
+                <button onclick="openSavedPortalQuote('${q.id || q._id}')" class="bg-lightCard hover:bg-primary hover:text-white text-charcoal border border-lightBorder font-bold px-2.5 py-1.5 rounded-lg text-[10px] transition-colors uppercase tracking-wider">Preview / PDF</button>
                 <button onclick="acceptQuotation('${q.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-1.5 rounded-lg text-[10px] transition-colors uppercase tracking-wider">Accept & Order</button>
                 <button onclick="declineQuotation('${q.id}')" class="bg-charcoal hover:bg-black text-white font-bold px-3 py-1.5 rounded-lg text-[10px] transition-colors uppercase tracking-wider">Decline</button>
               </div>
             `;
           } else {
-            actionButtons = `<span class="text-gray-400 italic">No Action Needed</span>`;
+            actionButtons = `
+              <div class="flex justify-end gap-2 items-center">
+                <button onclick="openSavedPortalQuote('${q.id || q._id}')" class="bg-lightCard hover:bg-primary hover:text-white text-charcoal border border-lightBorder font-bold px-2.5 py-1.5 rounded-lg text-[10px] transition-colors uppercase tracking-wider">Preview / PDF</button>
+                ${isPortalQuote ? `<button onclick="transferSavedQuoteToCart('${q.id || q._id}')" class="bg-primary hover:bg-primaryHover text-white font-bold px-2.5 py-1.5 rounded-lg text-[10px] transition-colors uppercase tracking-wider"><i class="ri-shopping-cart-line mr-1"></i>Cart</button>` : ''}
+              </div>
+            `;
           }
 
           tr.innerHTML = `
@@ -1113,7 +1861,7 @@
         const stateProducts = globalProducts;
         clientOrders.forEach(o => {
           const matchedProduct = stateProducts.find(p => p.name === o.productName) || {};
-          const imgUrl = matchedProduct.img || 'assets/images/products/corporate-blazer-detail.png';
+          const imgUrl = matchedProduct.img || (o.items && o.items[0] && o.items[0].image) || 'assets/images/products/corporate-blazer-detail.png';
           
           const statusMap = {
             1: { text: "Ordered", classes: "bg-yellow-100 text-yellow-800 border border-yellow-200" },
@@ -1122,7 +1870,20 @@
             4: { text: "Quality QA", classes: "bg-purple-100 text-purple-800 border border-purple-200" },
             5: { text: "Delivered", classes: "bg-green-100 text-green-800 border border-green-200" }
           };
-          const statusObj = statusMap[o.statusStep] || { text: "Processing", classes: "bg-gray-100 text-gray-800 border border-gray-200" };
+          const statusObj = statusMap[o.statusStep] || { text: o.statusText || "Processing", classes: "bg-gray-100 text-gray-800 border border-gray-200" };
+
+          let itemsHtml = "";
+          if (o.items && o.items.length > 0) {
+            const sizeChips = o.items.map(it => {
+              const breakdown = Object.entries(it.sizeBreakdown || {}).map(([s, q]) => `${s}:${q}`).join(' ');
+              return `<span class="bg-lightCard border border-lightBorder px-2 py-0.5 rounded text-[10px] font-mono font-medium">${it.productName || it.product} (${breakdown})</span>`;
+            }).join(' ');
+            itemsHtml = `<div class="mt-2.5 flex flex-wrap gap-1 items-center">${sizeChips}</div>`;
+          }
+
+          const paymentBadge = (o.payment && o.payment.status === 'SUCCESS')
+            ? `<span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-200 ml-2">Paid Online</span>`
+            : '';
 
           const card = document.createElement('div');
           card.className = "bg-white p-5 rounded-3xl border border-lightBorder shadow-sm flex flex-col sm:flex-row gap-5 font-body";
@@ -1135,10 +1896,11 @@
                 <div class="flex justify-between items-start gap-2 flex-wrap">
                   <div>
                     <span class="text-[9px] uppercase tracking-wider text-mutedText font-semibold font-mono">${o.id}</span>
-                    <h4 class="font-heading text-base font-bold text-charcoal leading-snug">${o.productName}</h4>
+                    <h4 class="font-heading text-base font-bold text-charcoal leading-snug flex items-center flex-wrap">${o.productName} ${paymentBadge}</h4>
                   </div>
                   <span class="px-2.5 py-0.5 rounded text-[8px] font-bold uppercase ${statusObj.classes}">${statusObj.text}</span>
                 </div>
+                ${itemsHtml}
               </div>
               
               <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-lightBorder text-xs">
@@ -1294,16 +2056,743 @@
           </div>
           <div class="p-6 pt-0 border-t border-lightBorder/50 flex items-center justify-between gap-4 mt-2">
             <div>
-              <span class="text-[9px] uppercase font-bold text-gray-400 block">Unit Price</span>
-              <span class="font-heading text-lg font-extrabold text-primary">${priceText}</span>
+              <span class="text-[9px] uppercase font-bold text-gray-400 block">Your unit price</span>
+              <div class="flex items-center gap-1.5">
+                <span class="font-heading text-lg font-extrabold text-primary">${priceText}</span>
+                <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">Client price</span>
+              </div>
             </div>
-            <button onclick="requestQuoteForAssignedProduct('${p.name}')" class="bg-charcoal hover:bg-primary text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5">
-              <i class="ri-file-list-3-line"></i> Order / Quote
+            <button onclick="openProductConfig('${p.id || p._id}')" class="bg-primary hover:bg-primaryHover text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm hover:scale-[1.02]">
+              Select sizes & quantity <i class="ri-arrow-right-line"></i>
             </button>
           </div>
         `;
         grid.appendChild(card);
       });
+    }
+
+    // ==========================================
+    // CLIENT PORTAL ORDERING, CART & CHECKOUT LOGIC
+    // ==========================================
+    let portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
+    let currentConfigProduct = null;
+    let currentConfigAllocations = {};
+    let currentQuotationPreview = null;
+    let currentOrderConfirmed = null;
+    let lastFailedOrderId = null;
+
+    // Load customer portal cart from server
+    async function loadPortalCart() {
+      try {
+        if (!window.api || typeof window.api.getPortalCart !== 'function') return;
+        const res = await window.api.getPortalCart();
+        if (res && res.success && res.cart) {
+          portalCart = res.cart;
+          updateCartBadges();
+          renderPortalCartView();
+        }
+      } catch (err) {
+        console.warn('[loadPortalCart Error]', err);
+      }
+    }
+
+    function updateCartBadges() {
+      const itemsCount = (portalCart.items || []).length;
+      const headerCountEl = document.getElementById('header-cart-count');
+      if (headerCountEl) headerCountEl.innerText = itemsCount;
+
+      const sideBadgeEl = document.getElementById('sidebar-cart-badge');
+      if (sideBadgeEl) sideBadgeEl.innerText = itemsCount;
+
+      const headerBtn = document.getElementById('header-cart-btn');
+      if (headerBtn) {
+        if (itemsCount > 0) {
+          headerBtn.classList.add('border-primary/50', 'bg-red-50/30');
+        } else {
+          headerBtn.classList.remove('border-primary/50', 'bg-red-50/30');
+        }
+      }
+    }
+
+    function openProductConfig(productId) {
+      const prod = (customerAssignedProducts || []).find(p => String(p.id) === String(productId) || String(p._id) === String(productId))
+        || (globalProducts || []).find(p => String(p.id) === String(productId) || String(p._id) === String(productId));
+
+      if (!prod) {
+        alert('Product details could not be found.');
+        return;
+      }
+
+      currentConfigProduct = prod;
+
+      document.getElementById('cfg-sku').innerText = prod.sku || `UW-SKU-${prod.id || prod._id}`;
+      document.getElementById('cfg-title').innerText = prod.name;
+      document.getElementById('cfg-subtitle').innerText = `${prod.fabric || '100% Cotton'} · Approved design`;
+      document.getElementById('cfg-variant-title').innerText = `${prod.name} · Approved print`;
+      document.getElementById('cfg-fabric').innerText = prod.fabric || '100% Cotton, Bio-Washed';
+      document.getElementById('cfg-gsm').innerText = prod.gsm || '220 GSM';
+      document.getElementById('cfg-img').src = prod.img || prod.image || 'assets/images/products/corporate-blazer-detail.png';
+
+      const unitRate = prod.effectivePrice !== undefined && prod.effectivePrice !== null ? prod.effectivePrice : (prod.price || 0);
+      document.getElementById('cfg-rate').innerText = `₹${unitRate.toLocaleString('en-IN')}`;
+
+      const moq = prod.effectiveMOQ || prod.customMOQ || prod.moq || 100;
+      document.getElementById('cfg-moq-badge').innerText = `${moq} pcs per design`;
+      document.getElementById('cfg-moq-hint').innerText = `Minimum ${moq} pcs`;
+
+      const sizes = prod.availableSizes && prod.availableSizes.length > 0
+        ? prod.availableSizes
+        : ['S', 'M', 'L', 'XL', '2XL'];
+      document.getElementById('cfg-sizes-list').innerText = sizes.join(', ');
+
+      let totalQty = moq;
+      const existingInCart = (portalCart.items || []).find(i => String(i.productId) === String(productId));
+      if (existingInCart) {
+        totalQty = existingInCart.totalQuantity;
+        currentConfigAllocations = { ...(existingInCart.sizeBreakdown || {}) };
+      } else {
+        currentConfigAllocations = {};
+        const perSize = Math.floor(totalQty / sizes.length);
+        let rem = totalQty - (perSize * sizes.length);
+        sizes.forEach((s, idx) => {
+          currentConfigAllocations[s] = perSize + (idx === Math.floor(sizes.length / 2) ? rem : 0);
+        });
+      }
+
+      document.getElementById('cfg-total-qty').value = totalQty;
+      renderSizeInputs(sizes);
+      updateConfigCalculations();
+
+      setPortalTab('cust-product-config');
+    }
+
+    function renderSizeInputs(sizes) {
+      const container = document.getElementById('cfg-size-inputs-grid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      sizes.forEach(sz => {
+        const val = currentConfigAllocations[sz] !== undefined ? currentConfigAllocations[sz] : 0;
+        const box = document.createElement('div');
+        box.className = 'bg-lightCard border border-lightBorder rounded-xl p-2.5 text-center focus-within:border-primary transition-all';
+        box.innerHTML = `
+          <label class="block text-[11px] font-bold text-mutedText uppercase mb-1">${sz}</label>
+          <input type="number" min="0" step="1" inputmode="numeric" value="${val}"
+            oninput="handleSizeInputChange('${sz}', this.value)"
+            class="w-full text-center font-bold text-sm bg-white border border-lightBorder rounded-lg py-1.5 px-1 text-charcoal focus:outline-none focus:border-primary font-mono" id="size-input-${sz}">
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    function handleSizeInputChange(size, val) {
+      const num = parseInt(val, 10) || 0;
+      currentConfigAllocations[size] = Math.max(0, num);
+      updateConfigCalculations();
+    }
+
+    function adjustTotalQty(delta) {
+      const input = document.getElementById('cfg-total-qty');
+      let val = (parseInt(input.value, 10) || 100) + delta;
+      const moq = currentConfigProduct ? (currentConfigProduct.effectiveMOQ || currentConfigProduct.customMOQ || currentConfigProduct.moq || 100) : 100;
+      if (val < moq) val = moq;
+      input.value = val;
+      splitSizesEvenly();
+    }
+
+    function handleTotalQtyChange() {
+      splitSizesEvenly();
+    }
+
+    function splitSizesEvenly() {
+      if (!currentConfigProduct) return;
+      const totalInput = document.getElementById('cfg-total-qty');
+      let totalQty = parseInt(totalInput.value, 10) || 0;
+
+      const sizes = currentConfigProduct.availableSizes && currentConfigProduct.availableSizes.length > 0
+        ? currentConfigProduct.availableSizes
+        : ['S', 'M', 'L', 'XL', '2XL'];
+
+      currentConfigAllocations = {};
+      const perSize = Math.floor(totalQty / sizes.length);
+      let rem = totalQty - (perSize * sizes.length);
+
+      sizes.forEach((s, idx) => {
+        currentConfigAllocations[s] = perSize + (idx === Math.floor(sizes.length / 2) ? rem : 0);
+        const input = document.getElementById(`size-input-${s}`);
+        if (input) input.value = currentConfigAllocations[s];
+      });
+
+      updateConfigCalculations();
+    }
+
+    function updateConfigCalculations() {
+      if (!currentConfigProduct) return;
+      const totalInput = document.getElementById('cfg-total-qty');
+      const totalQty = parseInt(totalInput.value, 10) || 0;
+      const moq = currentConfigProduct.effectiveMOQ || currentConfigProduct.customMOQ || currentConfigProduct.moq || 100;
+      const unitRate = currentConfigProduct.effectivePrice !== undefined && currentConfigProduct.effectivePrice !== null
+        ? currentConfigProduct.effectivePrice
+        : (currentConfigProduct.price || 0);
+
+      let allocatedSum = 0;
+      Object.values(currentConfigAllocations).forEach(qty => {
+        allocatedSum += (parseInt(qty, 10) || 0);
+      });
+
+      const statusBar = document.getElementById('cfg-allocation-status-bar');
+      const statusText = document.getElementById('cfg-allocation-text');
+      const statusDiff = document.getElementById('cfg-allocation-diff');
+      const previewBtn = document.getElementById('cfg-preview-btn');
+      const addBtn = document.getElementById('cfg-add-btn');
+
+      if (totalQty < moq) {
+        statusBar.className = 'p-3 rounded-xl border border-red-200 bg-red-50 text-red-700 flex items-center justify-between text-xs';
+        statusText.innerHTML = `<i class="ri-error-warning-line text-base"></i> Below Minimum Order Quantity (${moq} pcs required)`;
+        statusDiff.innerText = `Add ${moq - totalQty} pcs`;
+        if (previewBtn) previewBtn.disabled = true;
+        if (addBtn) addBtn.disabled = true;
+      } else if (allocatedSum === totalQty) {
+        statusBar.className = 'p-3 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 flex items-center justify-between text-xs';
+        statusText.innerHTML = `<i class="ri-checkbox-circle-fill text-emerald-600 text-base"></i> ${allocatedSum} of ${totalQty} pieces allocated`;
+        statusDiff.innerText = 'Exact match';
+        if (previewBtn) previewBtn.disabled = false;
+        if (addBtn) addBtn.disabled = false;
+      } else {
+        const diff = totalQty - allocatedSum;
+        statusBar.className = 'p-3 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 flex items-center justify-between text-xs';
+        statusText.innerHTML = `<i class="ri-error-warning-fill text-amber-600 text-base"></i> ${allocatedSum} of ${totalQty} pieces allocated`;
+        statusDiff.innerText = diff > 0 ? `${diff} remaining to allocate` : `${Math.abs(diff)} excess pieces`;
+        if (previewBtn) previewBtn.disabled = true;
+        if (addBtn) addBtn.disabled = true;
+      }
+
+      const subtotal = totalQty * unitRate;
+      document.getElementById('cfg-calc-text').innerText = `${totalQty} pcs × ₹${unitRate.toLocaleString('en-IN')}`;
+      document.getElementById('cfg-subtotal').innerText = `₹${subtotal.toLocaleString('en-IN')}`;
+    }
+
+    async function addToCartFromConfig() {
+      if (!currentConfigProduct) return;
+      const totalQty = parseInt(document.getElementById('cfg-total-qty').value, 10) || 0;
+      const pId = currentConfigProduct.id || currentConfigProduct._id;
+
+      try {
+        const btn = document.getElementById('cfg-add-btn');
+        btn.disabled = true;
+        btn.innerHTML = `<i class="ri-loader-4-line animate-spin"></i> Saving...`;
+
+        const res = await window.api.addPortalCartItem({
+          productId: pId,
+          quantity: totalQty,
+          sizeBreakdown: currentConfigAllocations
+        });
+
+        if (res.success && res.cart) {
+          portalCart = res.cart;
+          updateCartBadges();
+          renderPortalCartView();
+          setPortalTab('cust-cart');
+        } else {
+          alert(res.message || 'Error adding item to cart.');
+        }
+      } catch (err) {
+        alert(err.message || 'Error adding item to cart.');
+      } finally {
+        const btn = document.getElementById('cfg-add-btn');
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="ri-shopping-cart-line"></i> Add to cart`;
+        }
+      }
+    }
+
+    async function previewQuotationFromConfig() {
+      if (!currentConfigProduct) return;
+      const totalQty = parseInt(document.getElementById('cfg-total-qty').value, 10) || 0;
+      const pId = currentConfigProduct.id || currentConfigProduct._id;
+
+      try {
+        const btn = document.getElementById('cfg-preview-btn');
+        btn.disabled = true;
+        btn.innerHTML = `<i class="ri-loader-4-line animate-spin"></i> Loading quote...`;
+
+        const items = [{
+          productId: pId,
+          quantity: totalQty,
+          sizeBreakdown: currentConfigAllocations
+        }];
+
+        const res = await window.api.previewPortalQuote(items);
+        if (res.success && res.preview) {
+          await window.api.savePortalQuote({
+            quotationNumber: res.preview.quotationNumber,
+            items: res.preview.items
+          });
+          await syncCustomerData();
+          renderQuotationPreviewView(res.preview);
+          setPortalTab('cust-quote-preview');
+        } else {
+          alert(res.message || 'Failed to generate quotation preview.');
+        }
+      } catch (err) {
+        alert(err.message || 'Error creating quotation preview.');
+      } finally {
+        const btn = document.getElementById('cfg-preview-btn');
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="ri-file-text-line"></i> Preview quotation`;
+        }
+      }
+    }
+
+    async function previewQuotationFromCart() {
+      if (!portalCart.items || portalCart.items.length === 0) {
+        alert('Cart is empty.');
+        return;
+      }
+      try {
+        const items = portalCart.items.map(i => ({
+          productId: i.productId,
+          quantity: i.totalQuantity,
+          sizeBreakdown: i.sizeBreakdown
+        }));
+
+        const res = await window.api.previewPortalQuote(items);
+        if (res.success && res.preview) {
+          await window.api.savePortalQuote({
+            quotationNumber: res.preview.quotationNumber,
+            items: res.preview.items
+          });
+          await syncCustomerData();
+          renderQuotationPreviewView(res.preview);
+          setPortalTab('cust-quote-preview');
+        } else {
+          alert(res.message || 'Error generating quote from cart.');
+        }
+      } catch (err) {
+        alert(err.message || 'Error generating quote from cart.');
+      }
+    }
+
+    function renderQuotationPreviewView(preview) {
+      currentQuotationPreview = preview;
+
+      document.getElementById('qp-number').innerText = preview.quotationNumber;
+      document.getElementById('qp-date').innerText = preview.date;
+      document.getElementById('qp-validity').innerText = preview.validity || '7 Days';
+      document.getElementById('qp-client-company').innerText = preview.clientCompany || 'Corporate Client';
+      document.getElementById('qp-client-rep').innerText = preview.contactPerson || 'Procurement Team';
+      document.getElementById('qp-client-email').innerText = preview.clientEmail || '';
+
+      const tbody = document.getElementById('qp-items-tbody');
+      tbody.innerHTML = '';
+
+      preview.items.forEach(item => {
+        const sizeChips = Object.entries(item.sizeBreakdown || {})
+          .map(([sz, qty]) => `<span class="bg-lightCard border border-lightBorder px-1.5 py-0.5 rounded font-mono text-[10px] font-bold">${sz}: ${qty}</span>`)
+          .join(' ');
+
+        const tr = document.createElement('tr');
+        tr.className = 'py-3';
+        tr.innerHTML = `
+          <td class="py-3 pr-4">
+            <span class="font-mono text-[10px] text-mutedText block">${item.sku || ''}</span>
+            <span class="font-bold text-charcoal block">${item.product}</span>
+            <span class="text-[10px] text-mutedText block mb-1.5">${item.details || ''}</span>
+            <div class="flex flex-wrap gap-1 items-center">${sizeChips}</div>
+          </td>
+          <td class="py-3 px-2 text-center font-bold text-charcoal font-mono">${item.quantity}</td>
+          <td class="py-3 px-2 text-right text-mutedText font-mono">₹${item.unitPrice.toLocaleString('en-IN')}</td>
+          <td class="py-3 pl-2 text-right font-bold text-charcoal font-mono">₹${item.total.toLocaleString('en-IN')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const totalQty = preview.items.reduce((acc, i) => acc + i.quantity, 0);
+      document.getElementById('qp-subtotal-label').innerText = `Subtotal (${totalQty} pcs)`;
+      document.getElementById('qp-subtotal').innerText = `₹${preview.subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('qp-tax-label').innerText = `GST (${preview.taxRate || 5}%)`;
+      document.getElementById('qp-taxes').innerText = `₹${preview.taxes.toLocaleString('en-IN')}`;
+      document.getElementById('qp-grand-total').innerText = `₹${preview.grandTotal.toLocaleString('en-IN')}`;
+
+      document.getElementById('qp-summary-pieces').innerText = `${preview.items.length} products · ${totalQty} pieces`;
+      document.getElementById('qp-card-subtotal').innerText = `₹${preview.subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('qp-card-taxes').innerText = `₹${preview.taxes.toLocaleString('en-IN')}`;
+      document.getElementById('qp-card-grand-total').innerText = `₹${preview.grandTotal.toLocaleString('en-IN')}`;
+      document.getElementById('qp-saved-notice').innerText = `${preview.quotationNumber} is saved in Quotations tab.`;
+    }
+
+    async function transferSavedQuoteToCart(quoteNumber) {
+      try {
+        const res = await window.api.transferQuoteToCart(quoteNumber);
+        if (res.success && res.cart) {
+          portalCart = res.cart;
+          updateCartBadges();
+          renderPortalCartView();
+          setPortalTab('cust-cart');
+        } else {
+          alert(res.message || 'Error transferring quotation items to cart.');
+        }
+      } catch (err) {
+        alert(err.message || 'Error transferring quotation items to cart.');
+      }
+    }
+
+    function openSavedPortalQuote(quoteId) {
+      let quotes = JSON.parse(localStorage.getItem('uniwear_quotations')) || [];
+      const q = quotes.find(item => String(item.id) === String(quoteId) || String(item._id) === String(quoteId));
+      if (!q) return;
+
+      const profile = JSON.parse(localStorage.getItem('uniwear_profile')) || defaultProfile;
+      const previewData = {
+        quotationNumber: q.id || `UW-QT-${q._id}`,
+        date: q.date || new Date().toISOString().split('T')[0],
+        validity: q.validUntil ? '7 Days' : '7 Days',
+        clientCompany: q.clientCompany || profile.companyName || 'Corporate Client',
+        contactPerson: q.contactPerson || profile.representative || 'Procurement Lead',
+        clientEmail: q.clientEmail || profile.email,
+        items: (q.items && q.items.length > 0) ? q.items.map(it => ({
+          productId: it.productId,
+          sku: it.sku || `UW-SKU-${it.productId}`,
+          product: it.product || it.productName || q.productClass || 'Corporate Apparel',
+          fabric: it.fabric || 'Certified Cotton Blend',
+          gsm: it.gsm || '220 GSM',
+          details: it.details || '',
+          quantity: it.quantity || it.totalQuantity || q.volume || 100,
+          unitPrice: it.unitPrice || it.unitRate || 330,
+          total: it.total || it.lineTotal || ((it.quantity || q.volume || 100) * (it.unitPrice || 330)),
+          sizeBreakdown: it.sizeBreakdown || {}
+        })) : [{
+          productId: q.productId || 101,
+          sku: q.sku || 'UW-SKU-101',
+          product: q.productClass || 'Corporate Uniform',
+          fabric: 'Premium Blend',
+          gsm: '220 GSM',
+          details: q.specs || '',
+          quantity: q.volume || 100,
+          unitPrice: 330,
+          total: (q.volume || 100) * 330,
+          sizeBreakdown: { 'M': Math.floor((q.volume || 100)/2), 'L': Math.ceil((q.volume || 100)/2) }
+        }],
+        subtotal: q.subtotal || ((q.volume || 100) * 330),
+        taxRate: q.taxRate || 5,
+        taxes: q.taxAmount || Math.round((q.subtotal || ((q.volume || 100) * 330)) * 0.05),
+        deliveryCharge: q.deliveryCharge || 0,
+        grandTotal: q.grandTotal || (q.subtotal ? q.subtotal + (q.taxAmount || 0) : Math.round((q.volume || 100) * 330 * 1.05))
+      };
+
+      renderQuotationPreviewView(previewData);
+      setPortalTab('cust-quote-preview');
+    }
+
+    async function transferQuoteToCartAndOpen() {
+      if (!currentQuotationPreview) return;
+      try {
+        const res = await window.api.transferQuoteToCart(currentQuotationPreview.quotationNumber);
+        if (res.success && res.cart) {
+          portalCart = res.cart;
+          updateCartBadges();
+          renderPortalCartView();
+          setPortalTab('cust-cart');
+        } else {
+          alert(res.message || 'Error transferring items to cart.');
+        }
+      } catch (err) {
+        alert(err.message || 'Error transferring items to cart.');
+      }
+    }
+
+    function printOrDownloadCurrentQuote() {
+      window.print();
+    }
+
+    function renderPortalCartView() {
+      const container = document.getElementById('cart-items-container');
+      const emptyState = document.getElementById('cart-empty-state');
+      const deliveryBox = document.getElementById('cart-delivery-box');
+      const checkoutBtn = document.getElementById('cart-checkout-btn');
+      if (!container) return;
+
+      container.innerHTML = '';
+      const items = portalCart.items || [];
+
+      if (items.length === 0) {
+        emptyState.classList.remove('hidden');
+        deliveryBox.classList.add('hidden');
+        if (checkoutBtn) checkoutBtn.disabled = true;
+        document.getElementById('cart-products-count-label').innerText = '0 products in your cart';
+        document.getElementById('cart-sum-pieces-label').innerText = 'Subtotal';
+        document.getElementById('cart-sum-subtotal').innerText = '₹0';
+        document.getElementById('cart-sum-tax').innerText = '₹0';
+        document.getElementById('cart-sum-grand-total').innerText = '₹0';
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      deliveryBox.classList.remove('hidden');
+      if (checkoutBtn) checkoutBtn.disabled = false;
+
+      const totalPieces = items.reduce((acc, i) => acc + (i.totalQuantity || 0), 0);
+      document.getElementById('cart-products-count-label').innerText = `${items.length} product${items.length > 1 ? 's' : ''} in your cart`;
+      document.getElementById('cart-total-pieces-badge').innerText = `${totalPieces} pieces selected`;
+
+      items.forEach(item => {
+        const sizeChips = Object.entries(item.sizeBreakdown || {})
+          .map(([sz, qty]) => `<span class="bg-lightCard border border-lightBorder px-2 py-0.5 rounded font-mono text-[10px] font-bold">${sz}: ${qty}</span>`)
+          .join(' ');
+
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-3xl border border-lightBorder p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+        card.innerHTML = `
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-lightCard border border-lightBorder p-2 flex items-center justify-center shrink-0">
+              <img src="${item.image || 'assets/images/products/corporate-blazer-detail.png'}" alt="${item.name}" class="max-h-full max-w-full object-contain">
+            </div>
+            <div>
+              <span class="text-[10px] font-mono font-bold text-mutedText block">${item.sku || ''}</span>
+              <h4 class="font-heading text-sm font-bold text-charcoal">${item.name}</h4>
+              <p class="text-[11px] text-mutedText mb-2">${item.fabric || ''} · ${item.gsm || ''}</p>
+              <div class="flex flex-wrap gap-1.5 items-center">${sizeChips}</div>
+            </div>
+          </div>
+
+          <div class="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-0 border-lightBorder">
+            <div class="text-left sm:text-right">
+              <span class="font-heading text-lg font-extrabold text-charcoal block">₹${item.lineTotal.toLocaleString('en-IN')}</span>
+              <span class="text-[10px] text-mutedText">${item.totalQuantity} × ₹${item.unitRate}</span>
+            </div>
+            <div class="flex items-center gap-3 mt-2">
+              <button onclick="openProductConfig('${item.productId}')" class="text-xs font-semibold text-charcoal hover:text-primary transition-colors">
+                Edit sizes & quantity
+              </button>
+              <button onclick="removeCartItem('${item.productId}')" class="text-xs text-red-500 hover:text-red-700 font-semibold" title="Remove item">
+                Remove
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById('cart-sum-pieces-label').innerText = `Subtotal (${totalPieces} pcs)`;
+      document.getElementById('cart-sum-subtotal').innerText = `₹${portalCart.subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('cart-sum-tax').innerText = `₹${portalCart.taxAmount.toLocaleString('en-IN')}`;
+      document.getElementById('cart-sum-grand-total').innerText = `₹${portalCart.grandTotal.toLocaleString('en-IN')}`;
+    }
+
+    async function removeCartItem(productId) {
+      if (!confirm('Remove this product from your cart?')) return;
+      try {
+        const res = await window.api.removePortalCartItem(productId);
+        if (res.success && res.cart) {
+          portalCart = res.cart;
+          updateCartBadges();
+          renderPortalCartView();
+        }
+      } catch (err) {
+        alert(err.message || 'Error removing item.');
+      }
+    }
+
+    async function clearCartAction() {
+      if (!confirm('Clear all items from your cart?')) return;
+      try {
+        const res = await window.api.clearPortalCart();
+        if (res.success) {
+          portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
+          updateCartBadges();
+          renderPortalCartView();
+        }
+      } catch (err) {
+        alert(err.message || 'Error clearing cart.');
+      }
+    }
+
+    function openCheckoutFromCart() {
+      if (!portalCart.items || portalCart.items.length === 0) {
+        alert('Your cart is empty.');
+        return;
+      }
+
+      const profile = JSON.parse(localStorage.getItem('uniwear_profile')) || defaultProfile;
+      document.getElementById('chk-name').value = profile.representative || '';
+      document.getElementById('chk-email').value = profile.email || '';
+      document.getElementById('chk-phone').value = profile.phone || '';
+      document.getElementById('chk-address').value = profile.address || '';
+      document.getElementById('chk-gstin').value = profile.gstin || '';
+      document.getElementById('chk-city').value = profile.city || 'Bengaluru';
+      document.getElementById('chk-state').value = profile.state || 'Karnataka';
+      document.getElementById('chk-pincode').value = profile.pincode || '560001';
+
+      const miniList = document.getElementById('chk-mini-items');
+      miniList.innerHTML = '';
+      const totalPieces = portalCart.items.reduce((acc, i) => acc + i.totalQuantity, 0);
+
+      portalCart.items.forEach(i => {
+        const row = document.createElement('div');
+        row.className = 'flex justify-between items-center text-xs py-1.5 border-b border-lightBorder/50';
+        row.innerHTML = `
+          <div>
+            <span class="font-bold text-charcoal block">${i.name}</span>
+            <span class="text-[10px] text-mutedText">${i.totalQuantity} pcs × ₹${i.unitRate}</span>
+          </div>
+          <span class="font-bold text-charcoal">₹${i.lineTotal.toLocaleString('en-IN')}</span>
+        `;
+        miniList.appendChild(row);
+      });
+
+      document.getElementById('chk-subtotal-label').innerText = `Subtotal (${totalPieces} pcs)`;
+      document.getElementById('chk-subtotal').innerText = `₹${portalCart.subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('chk-taxes').innerText = `₹${portalCart.taxAmount.toLocaleString('en-IN')}`;
+      document.getElementById('chk-grand-total').innerText = `₹${portalCart.grandTotal.toLocaleString('en-IN')}`;
+      document.getElementById('chk-pay-btn-label').innerText = `Pay ₹${portalCart.grandTotal.toLocaleString('en-IN')} securely`;
+
+      setPortalTab('cust-checkout');
+    }
+
+    async function handleCheckoutSubmit(event) {
+      event.preventDefault();
+
+      const deliveryAddress = {
+        name: document.getElementById('chk-name').value.trim(),
+        email: document.getElementById('chk-email').value.trim(),
+        phone: document.getElementById('chk-phone').value.trim(),
+        gstin: document.getElementById('chk-gstin').value.trim(),
+        address: document.getElementById('chk-address').value.trim(),
+        city: document.getElementById('chk-city').value.trim(),
+        state: document.getElementById('chk-state').value.trim(),
+        pincode: document.getElementById('chk-pincode').value.trim()
+      };
+
+      const poReference = document.getElementById('chk-po-ref').value.trim();
+      const agreeTerms = document.getElementById('chk-agree-terms').checked;
+
+      const payBtn = document.getElementById('chk-pay-btn');
+      payBtn.disabled = true;
+      payBtn.innerHTML = `<i class="ri-loader-4-line animate-spin"></i> Initializing Gateway...`;
+
+      try {
+        const chkRes = await window.api.checkoutPortalOrder({
+          deliveryAddress,
+          poReference,
+          agreeTerms
+        });
+
+        if (!chkRes.success || !chkRes.orderId) {
+          throw new Error(chkRes.message || 'Could not initiate checkout.');
+        }
+
+        const orderId = chkRes.orderId;
+        lastFailedOrderId = orderId;
+
+        if (chkRes.isSimulation) {
+          const verifyRes = await window.api.verifyPortalPayment({
+            orderId,
+            cfPaymentId: `PAY-SIM-${Date.now()}`
+          });
+
+          if (verifyRes.success && verifyRes.verified) {
+            portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
+            updateCartBadges();
+            await syncCustomerData();
+            showOrderConfirmed(verifyRes.order);
+          } else {
+            showPaymentFailed(verifyRes.message || 'Payment simulation failed.', orderId);
+          }
+          return;
+        }
+
+        if (typeof Cashfree !== 'undefined') {
+          const cashfree = Cashfree({ mode: 'sandbox' });
+          cashfree.checkout({
+            paymentSessionId: chkRes.paymentSessionId,
+            redirectTarget: '_modal'
+          }).then(async (result) => {
+            if (result.error) {
+              showPaymentFailed(result.error.message || 'Payment was cancelled or failed.', orderId);
+            } else {
+              const verifyRes = await window.api.verifyPortalPayment({ orderId });
+              if (verifyRes.success && verifyRes.verified) {
+                portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
+                updateCartBadges();
+                await syncCustomerData();
+                showOrderConfirmed(verifyRes.order);
+              } else {
+                showPaymentFailed(verifyRes.message || 'Payment verification incomplete.', orderId);
+              }
+            }
+          });
+        } else {
+          const verifyRes = await window.api.verifyPortalPayment({ orderId });
+          if (verifyRes.success && verifyRes.verified) {
+            showOrderConfirmed(verifyRes.order);
+          } else {
+            showPaymentFailed('Payment Gateway could not be opened.', orderId);
+          }
+        }
+      } catch (err) {
+        alert(err.message || 'Error processing checkout.');
+      } finally {
+        if (payBtn) {
+          payBtn.disabled = false;
+          payBtn.innerHTML = `<i class="ri-lock-2-line"></i> <span id="chk-pay-btn-label">Pay ₹${portalCart.grandTotal.toLocaleString('en-IN')} securely</span>`;
+        }
+      }
+    }
+
+    function showOrderConfirmed(order) {
+      currentOrderConfirmed = order;
+
+      document.getElementById('oc-order-id').innerText = order.id;
+      document.getElementById('oc-order-date').innerText = new Date(order.createdAt || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('oc-payment-ref').innerText = (order.payment && order.payment.cfPaymentId) || 'PAY-ONLINE';
+      document.getElementById('oc-payment-status').innerText = 'Paid · Online transaction';
+
+      const itemsContainer = document.getElementById('oc-items-list');
+      itemsContainer.innerHTML = '';
+
+      (order.items || []).forEach(item => {
+        const sizeChips = Object.entries(item.sizeBreakdown || {})
+          .map(([sz, qty]) => `<span class="bg-lightCard border border-lightBorder px-2 py-0.5 rounded font-mono text-[10px] font-bold">${sz}: ${qty}</span>`)
+          .join(' ');
+
+        const div = document.createElement('div');
+        div.className = 'p-3 rounded-2xl bg-lightCard border border-lightBorder flex justify-between items-center';
+        div.innerHTML = `
+          <div>
+            <span class="font-bold text-charcoal block">${item.productName}</span>
+            <div class="flex flex-wrap gap-1 mt-1">${sizeChips}</div>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-charcoal">₹${item.lineTotal.toLocaleString('en-IN')}</span>
+            <span class="text-[10px] text-mutedText block">${item.volume} pcs</span>
+          </div>
+        `;
+        itemsContainer.appendChild(div);
+      });
+
+      document.getElementById('oc-delivery-name').innerText = order.shippingAddress ? order.shippingAddress.name : order.clientCompany;
+      document.getElementById('oc-delivery-address').innerText = order.shippingAddress ? `${order.shippingAddress.address}, ${order.shippingAddress.city}` : 'Bengaluru, Karnataka';
+
+      document.getElementById('oc-subtotal').innerText = `₹${(order.subtotal || 0).toLocaleString('en-IN')}`;
+      document.getElementById('oc-taxes').innerText = `₹${(order.taxAmount || 0).toLocaleString('en-IN')}`;
+      document.getElementById('oc-grand-total').innerText = `₹${(order.grandTotal || 0).toLocaleString('en-IN')}`;
+
+      setPortalTab('cust-order-confirmed');
+    }
+
+    function showPaymentFailed(reason, orderId) {
+      lastFailedOrderId = orderId;
+      document.getElementById('ps-title').innerText = "Your payment didn't go through.";
+      document.getElementById('ps-desc').innerText = reason || "Your cart and size breakdowns are saved. You can safely retry your payment.";
+      document.getElementById('ps-order-id').innerText = orderId || 'UW-ORD-PENDING';
+      document.getElementById('ps-grand-total').innerText = `₹${portalCart.grandTotal.toLocaleString('en-IN')}`;
+      setPortalTab('cust-payment-status');
+    }
+
+    function retryPayment() {
+      setPortalTab('cust-checkout');
     }
 
     function requestQuoteForAssignedProduct(prodName) {

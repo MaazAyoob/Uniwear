@@ -32,6 +32,43 @@ const customerProductSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  availableSizes: {
+    type: [String],
+    default: ['S', 'M', 'L', 'XL', '2XL']
+  },
+  approvedVariants: {
+    type: [String],
+    default: []
+  },
+  status: {
+    type: String,
+    enum: ['Active', 'Draft', 'Archived', 'Inactive'],
+    default: 'Active'
+  },
+  taxPercent: {
+    type: Number,
+    default: 5
+  },
+  hsnCode: {
+    type: String,
+    default: '6109'
+  },
+  deliveryLeadDays: {
+    type: String,
+    default: '10–15 working days'
+  },
+  paymentTerms: {
+    type: String,
+    default: 'Full payment online'
+  },
+  effectiveDateStart: {
+    type: Date,
+    default: null
+  },
+  effectiveDateEnd: {
+    type: Date,
+    default: null
+  },
   notes: {
     type: String,
     trim: true,

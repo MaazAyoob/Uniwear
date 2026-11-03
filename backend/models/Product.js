@@ -22,6 +22,7 @@ const productSchema = new mongoose.Schema({
   images: [{ type: String }],
   galleryImages: [{ type: String }],
   specifications: { type: String, default: '' },
+  sizes: { type: [String], default: ['S', 'M', 'L', 'XL', '2XL'] },
   tags: [{ type: String }],
   displayOrder: { type: Number, default: 0 }
 }, { timestamps: true });

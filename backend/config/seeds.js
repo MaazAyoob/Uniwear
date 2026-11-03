@@ -1,5 +1,21 @@
 const defaultUsers = [
   {
+    id: 101,
+    email: "toyota@uniwear.co",
+    password: "client123",
+    role: "Customer",
+    companyName: "Toyota Kirloskar Motor",
+    representative: "Toyota Procurement Team",
+    phone: "+91 80 2658 1000",
+    address: "Plot 1, Bidadi Industrial Area, Ramanagara, Bengaluru - 562109",
+    city: "Bengaluru",
+    state: "Karnataka",
+    pincode: "562109",
+    gstin: "29AABCT1234F1Z5",
+    status: "Active",
+    regDate: "2026-10-30"
+  },
+  {
     id: 1,
     email: "client@uniwear.co",
     password: "client123",
@@ -381,6 +397,51 @@ const defaultCompanySettings = {
 };
 
 const defaultProducts = [
+  {
+    id: 101,
+    sku: "DT26-TS-01",
+    name: "Drum Tao T-shirt 1",
+    category: "Corporate Workwear",
+    fabric: "100% Cotton, Bio-Washed",
+    gsm: "220 GSM",
+    moq: 100,
+    price: 330,
+    desc: "Black · 100% cotton · Bio-washed. Approved custom branded t-shirt for corporate operations.",
+    img: "assets/images/products/corporate-blazer-detail.png",
+    status: "Active",
+    featured: true,
+    sizes: ["S", "M", "L", "XL", "2XL"]
+  },
+  {
+    id: 102,
+    sku: "DT26-TS-02",
+    name: "Drum Tao T-shirt 2",
+    category: "Corporate Workwear",
+    fabric: "100% Cotton, Bio-Washed",
+    gsm: "220 GSM",
+    moq: 100,
+    price: 330,
+    desc: "Black · 100% cotton · Bio-washed. Approved crew-neck uniform apparel.",
+    img: "assets/images/products/corporate-blazer-detail.png",
+    status: "Active",
+    featured: true,
+    sizes: ["S", "M", "L", "XL", "2XL"]
+  },
+  {
+    id: 103,
+    sku: "DT26-TS-03",
+    name: "Drum Tao T-shirt 3",
+    category: "Corporate Workwear",
+    fabric: "100% Cotton, Bio-Washed",
+    gsm: "220 GSM",
+    moq: 100,
+    price: 330,
+    desc: "Black · 100% cotton · Bio-washed. Approved operations workwear t-shirt.",
+    img: "assets/images/products/corporate-blazer-detail.png",
+    status: "Active",
+    featured: false,
+    sizes: ["S", "M", "L", "XL", "2XL"]
+  },
   {
     id: 1,
     name: "AeroGuard Boiler Suit",
@@ -787,6 +848,59 @@ const defaultCaseStudies = [
   }
 ];
 
+const defaultCustomerProducts = [
+  {
+    customerId: "toyota@uniwear.co",
+    productId: 101,
+    customPrice: 330,
+    customMOQ: 100,
+    availableSizes: ['S', 'M', 'L', 'XL', '2XL'],
+    featured: true,
+    visible: true,
+    notes: 'Approved design Drum Tao 2026. Rate fixed under Annual Supply Contract.'
+  },
+  {
+    customerId: "toyota@uniwear.co",
+    productId: 102,
+    customPrice: 330,
+    customMOQ: 100,
+    availableSizes: ['S', 'M', 'L', 'XL', '2XL'],
+    featured: true,
+    visible: true,
+    notes: 'Approved design Drum Tao 2026. Rate fixed under Annual Supply Contract.'
+  },
+  {
+    customerId: "toyota@uniwear.co",
+    productId: 103,
+    customPrice: 330,
+    customMOQ: 100,
+    availableSizes: ['S', 'M', 'L', 'XL', '2XL'],
+    featured: false,
+    visible: true,
+    notes: 'Approved design Drum Tao 2026. Rate fixed under Annual Supply Contract.'
+  },
+  {
+    customerId: "client@uniwear.co",
+    productId: 101,
+    customPrice: 330,
+    customMOQ: 100,
+    availableSizes: ['S', 'M', 'L', 'XL', '2XL'],
+    featured: true,
+    visible: true,
+    notes: 'Approved workwear uniform for Taj Resorts & Hotels Group staff.'
+  },
+  {
+    customerId: "client@uniwear.co",
+    productId: 102,
+    customPrice: 330,
+    customMOQ: 100,
+    availableSizes: ['S', 'M', 'L', 'XL', '2XL'],
+    featured: true,
+    visible: true,
+    notes: 'Approved workwear uniform for Taj Resorts & Hotels Group staff.'
+  }
+];
+
 module.exports = {
   defaultUsers,
   defaultLeads,
@@ -796,6 +910,7 @@ module.exports = {
   defaultNotifications,
   defaultCompanySettings,
   defaultProducts,
+  defaultCustomerProducts,
   defaultBlogs,
   defaultCatalogs,
   defaultClientLogos,
