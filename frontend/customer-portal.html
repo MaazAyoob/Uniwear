@@ -2642,6 +2642,23 @@
       setPortalTab('cust-checkout');
     }
 
+    /**
+     * Initializes the Cashfree Web SDK using a trusted gateway mode supplied by the backend.
+     * Enforces fail-closed validation: only 'sandbox' or 'production' are accepted.
+     * Never allows arbitrary or unverified environment overrides from client-side state.
+     */
+    function initializeCashfreeSDK(trustedMode) {
+      if (typeof Cashfree === 'undefined') {
+        throw new Error('Cashfree Web SDK script failed to load. Please check your internet connection.');
+      }
+      const validModes = ['sandbox', 'production'];
+      const mode = (trustedMode || '').toLowerCase().trim();
+      if (!validModes.includes(mode)) {
+        throw new Error(`Invalid gateway configuration: Unknown Cashfree mode "${trustedMode}". Checkout aborted for security.`);
+      }
+      return Cashfree({ mode });
+    }
+
     async function handleCheckoutSubmit(event) {
       event.preventDefault();
 
@@ -2683,7 +2700,7 @@
         }
 
         if (typeof Cashfree !== 'undefined') {
-          const cashfree = Cashfree({ mode: 'sandbox' });
+          const cashfree = initializeCashfreeSDK(chkRes.cashfreeMode);
           cashfree.checkout({
             paymentSessionId: chkRes.paymentSessionId,
             redirectTarget: '_modal'
@@ -2902,7 +2919,7 @@
         if (res.canRetry && res.paymentSessionId) {
           // Reuse existing active session to prevent duplicate orders
           if (typeof Cashfree !== 'undefined') {
-            const cashfree = Cashfree({ mode: 'sandbox' });
+            const cashfree = initializeCashfreeSDK(res.cashfreeMode);
             cashfree.checkout({
               paymentSessionId: res.paymentSessionId,
               redirectTarget: '_modal'

@@ -6,8 +6,12 @@ const {
   verifyPayment,
   retryPayment,
   handleWebhook,
-  getPaymentStatus
+  getPaymentStatus,
+  getPaymentConfig
 } = require('../controllers/paymentController');
+
+// Gateway runtime configuration route (exposes only trusted SDK mode & currency, zero secrets)
+router.get('/config', getPaymentConfig);
 
 // Authenticated client checkout & payment routes
 router.post('/checkout', protect, createCheckoutOrder);

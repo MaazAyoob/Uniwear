@@ -35,7 +35,7 @@ const logActivity = async (action, details, user = 'Admin') => {
 // GET /api/orders
 const getOrders = async (req, res, next) => {
   try {
-    const { search, stage, onSchedule, delayed } = req.query;
+    const { search, stage, onSchedule, delayed, paymentStatus } = req.query;
     const filter = {};
 
     // SECURITY: Customers can only view their own orders.
@@ -45,6 +45,19 @@ const getOrders = async (req, res, next) => {
     } else if (req.query.clientEmail) {
       filter.clientEmail = req.query.clientEmail.toLowerCase();
     }
+
+    // Payment Status Filter (PAID, UNPAID, or ALL)
+    if (paymentStatus && paymentStatus !== 'ALL') {
+      if (paymentStatus === 'PAID') {
+        filter['payment.paymentStatus'] = 'PAID';
+      } else if (paymentStatus === 'UNPAID') {
+        filter['$or'] = [
+          { 'payment.paymentStatus': { $ne: 'PAID' } },
+          { payment: { $exists: false } }
+        ];
+      }
+    }
+
     if (search) {
       filter.$or = [
         { id: { $regex: search, $options: 'i' } },
@@ -116,6 +129,22 @@ const updateOrder = async (req, res, next) => {
     }
     if (updates.currentStageIndex) {
       const idx = Number(updates.currentStageIndex);
+
+      // Unpaid Order Fulfilment Protection:
+      // Prevent unpaid/pending Portal Direct Orders from advancing into manufacturing (Stage 2+)
+      // without explicit admin authorization (allowUnpaidAdvance: true).
+      // Offline factory orders and quotation orders remain unrestricted.
+      if (oldOrder.orderType === 'PortalDirectOrder' && idx > 1) {
+        const isPaid = oldOrder.payment && oldOrder.payment.paymentStatus === 'PAID';
+        if (!isPaid && !req.body.allowUnpaidAdvance) {
+          return res.status(400).json({
+            success: false,
+            unpaidBlocked: true,
+            message: `Unpaid Order Protection: Order ${oldOrder.id} is a Portal Direct Order with payment status '${(oldOrder.payment && oldOrder.payment.paymentStatus) || 'PENDING'}'. Cannot advance into manufacturing (Stage ${idx}) without confirmed payment or explicit admin override.`
+          });
+        }
+      }
+
       updates.statusStep = idx;
       updates.currentStageName = FACTORY_STAGE_NAMES[idx - 1] || `Stage ${idx}`;
       updates.statusText = updates.currentStageName;

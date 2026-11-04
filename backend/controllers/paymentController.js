@@ -123,6 +123,7 @@ exports.createCheckoutOrder = async (req, res) => {
             paymentSessionId: cfExisting.payment_session_id || existingPendingOrder.payment.paymentSessionId,
             orderAmount: grandTotal,
             currency: 'INR',
+            cashfreeMode: cashfreeService.getClientSdkMode(),
             isSimulation: Boolean(cfExisting.isSimulation),
             isExistingSession: true
           });
@@ -215,6 +216,7 @@ exports.createCheckoutOrder = async (req, res) => {
       paymentSessionId: cfOrder.payment_session_id,
       orderAmount: grandTotal,
       currency: 'INR',
+      cashfreeMode: cashfreeService.getClientSdkMode(),
       isSimulation: Boolean(cfOrder.isSimulation)
     });
   } catch (err) {
@@ -528,6 +530,7 @@ exports.retryPayment = async (req, res) => {
         paymentSessionId: sessionId,
         orderAmount: order.grandTotal,
         currency: 'INR',
+        cashfreeMode: cashfreeService.getClientSdkMode(),
         isSimulation: Boolean(cfOrder.isSimulation)
       });
     }
@@ -713,5 +716,22 @@ exports.getPaymentStatus = async (req, res) => {
   } catch (err) {
     console.error('[getPaymentStatus Error]', err);
     res.status(500).json({ success: false, message: 'Error checking payment status.' });
+  }
+};
+
+// GET /api/portal/payment/config
+// Provides trusted runtime gateway environment (sandbox vs production) without exposing any API keys or secrets
+exports.getPaymentConfig = async (req, res) => {
+  try {
+    const cashfreeMode = cashfreeService.getClientSdkMode();
+    res.json({
+      success: true,
+      cashfreeMode,
+      currency: 'INR',
+      apiVersion: cashfreeService.getApiVersion()
+    });
+  } catch (err) {
+    console.error('[getPaymentConfig Error]', err);
+    res.status(500).json({ success: false, message: 'Error fetching payment configuration.' });
   }
 };

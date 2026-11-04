@@ -768,19 +768,36 @@
           </div>
         </div>
 
+        <!-- Filter & Search Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 p-4 bg-white rounded-2xl border border-lightBorder shadow-sm">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-mutedText">Payment Status:</span>
+            <div class="flex items-center gap-1 bg-lightCard p-1 rounded-xl border border-lightBorder text-xs font-bold">
+              <button id="order-filter-all" onclick="setOrderPaymentFilter('ALL')" class="px-3 py-1.5 rounded-lg bg-white shadow-xs text-primary transition-all">All Orders</button>
+              <button id="order-filter-paid" onclick="setOrderPaymentFilter('PAID')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">Paid Orders</button>
+              <button id="order-filter-unpaid" onclick="setOrderPaymentFilter('UNPAID')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">Unpaid / Pending</button>
+            </div>
+          </div>
+          <div class="relative w-72">
+            <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-mutedText text-sm"></i>
+            <input type="text" id="admin-orders-search" oninput="filterAdminOrdersTable()" placeholder="Search Order #, Client, SKU..." class="w-full pl-9 pr-4 py-2 bg-lightCard border border-lightBorder rounded-xl text-xs font-body text-charcoal focus:outline-none focus:border-primary">
+          </div>
+        </div>
+
         <div class="bg-white rounded-2xl border border-lightBorder overflow-x-auto shadow-sm">
           <div class="overflow-x-auto w-full border-t border-lightBorder">
-  <table class="w-full text-left text-sm border-collapse font-body min-w-[1000px]">
-            <thead>
-              <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
-                <th class="p-4 font-heading font-semibold text-charcoal">Order #</th>
-                <th class="p-4 font-heading font-semibold text-charcoal">Client / Company</th>
-                <th class="p-4 font-heading font-semibold text-charcoal">Product / Volume</th>
-                <th class="p-4 font-heading font-semibold text-charcoal">Current Stage (1-14)</th>
-                <th class="p-4 font-heading font-semibold text-charcoal">Schedule Status</th>
-                <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
-              </tr>
-            </thead>
+            <table class="w-full text-left text-sm border-collapse font-body min-w-[1100px]">
+              <thead>
+                <tr class="bg-lightCard border-b border-lightBorder text-xs text-mutedText font-bold uppercase tracking-wider">
+                  <th class="p-4 font-heading font-semibold text-charcoal">Order #</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Client / Company</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Product / Volume</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Payment & Financials</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Current Stage (1-14)</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal">Schedule Status</th>
+                  <th class="p-4 font-heading font-semibold text-charcoal text-right">Actions</th>
+                </tr>
+              </thead>
             <tbody id="admin-orders-table-body">
               <!-- Dynamically listed -->
             </tbody>
@@ -4305,6 +4322,30 @@
 
 
     // ─── ORDERS & 14-STAGE TRACKER TAB HANDLERS ─────────────────────────────
+    window.allAdminOrders = [];
+    window.currentPaymentFilter = 'ALL';
+
+    function setOrderPaymentFilter(filter) {
+      window.currentPaymentFilter = filter;
+      ['all', 'paid', 'unpaid'].forEach(f => {
+        const btn = document.getElementById(`order-filter-${f}`);
+        if (btn) {
+          if (f.toUpperCase() === filter) {
+            btn.className = 'px-3 py-1.5 rounded-lg bg-white shadow-xs text-primary transition-all';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all';
+          }
+        }
+      });
+      renderOrdersTable();
+    }
+    window.setOrderPaymentFilter = setOrderPaymentFilter;
+
+    function filterAdminOrdersTable() {
+      renderOrdersTable();
+    }
+    window.filterAdminOrdersTable = filterAdminOrdersTable;
+
     async function renderOrdersTable() {
       const body = document.getElementById('admin-orders-table-body');
       if (!body) return;
@@ -4313,41 +4354,9 @@
         const res = await window.api.getOrders();
         const orders = (res.success && Array.isArray(res.data) && res.data.length > 0)
           ? res.data
-          : (JSON.parse(localStorage.getItem('uniwear_orders')) || (typeof defaultOrders !== 'undefined' ? defaultOrders : [
-            {
-              _id: 'ord_1',
-              orderNo: 'UW-ORD-2026-101',
-              clientCompany: 'Taj Resorts & Hotels Group',
-              clientEmail: 'client@uniwear.co',
-              productName: 'Executive Wool Blazer Set',
-              volume: '1,200 Sets',
-              currentStageIndex: 8,
-              stageName: '08. Sewing & Stitch Assembly',
-              status: 'On Schedule'
-            },
-            {
-              _id: 'ord_2',
-              orderNo: 'UW-ORD-2026-102',
-              clientCompany: 'Infosys Tech Park Division',
-              clientEmail: 'infosys@uniwear.co',
-              productName: 'Corporate Polo Shirts',
-              volume: '5,000 Pcs',
-              currentStageIndex: 12,
-              stageName: '12. Quality Audit & Metal Detect',
-              status: 'Ready for Dispatch'
-            },
-            {
-              _id: 'ord_3',
-              orderNo: 'UW-ORD-2026-103',
-              clientCompany: 'Toyota Kirloskar Motors',
-              clientEmail: 'toyota@uniwear.co',
-              productName: 'Industrial Anti-Static Coveralls',
-              volume: '3,500 Sets',
-              currentStageIndex: 5,
-              stageName: '05. Precision CNC Fabric Cutting',
-              status: 'Delayed'
-            }
-          ]));
+          : (JSON.parse(localStorage.getItem('uniwear_orders')) || (typeof defaultOrders !== 'undefined' ? defaultOrders : []));
+
+        window.allAdminOrders = orders;
 
         // Calculate stage metric counters
         let onSchedule = 0, delayed = 0, approval = 0, dispatch = 0, completed = 0;
@@ -4367,8 +4376,30 @@
         if (document.getElementById('dash-orders-dispatch')) document.getElementById('dash-orders-dispatch').innerText = dispatch;
         if (document.getElementById('dash-orders-completed')) document.getElementById('dash-orders-completed').innerText = completed;
 
-        if (orders.length === 0) {
-          body.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-mutedText text-xs font-body">No production orders found.</td></tr>`;
+        // Apply Payment Status and Search Filter
+        const searchInput = (document.getElementById('admin-orders-search')?.value || '').toLowerCase().trim();
+        let filteredOrders = orders.filter(o => {
+          // Payment Filter
+          if (window.currentPaymentFilter === 'PAID') {
+            if (!o.payment || o.payment.paymentStatus !== 'PAID') return false;
+          } else if (window.currentPaymentFilter === 'UNPAID') {
+            if (o.payment && o.payment.paymentStatus === 'PAID') return false;
+          }
+
+          // Search Filter
+          if (searchInput) {
+            const idStr = String(o.id || o.orderNo || o._id || '').toLowerCase();
+            const clientStr = String(o.clientCompany || o.clientEmail || '').toLowerCase();
+            const prodStr = String(o.productName || '').toLowerCase();
+            if (!idStr.includes(searchInput) && !clientStr.includes(searchInput) && !prodStr.includes(searchInput)) {
+              return false;
+            }
+          }
+          return true;
+        });
+
+        if (filteredOrders.length === 0) {
+          body.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-mutedText text-xs font-body">No orders matching current filter criteria.</td></tr>`;
           return;
         }
 
@@ -4389,7 +4420,7 @@
           "14. Dispatch & Logistics Tracking"
         ];
 
-        body.innerHTML = orders.map(o => {
+        body.innerHTML = filteredOrders.map(o => {
           const statusBadge = o.status === 'Delayed'
             ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-red-100 text-red-700">Delayed</span>`
             : o.status === 'Ready for Dispatch'
@@ -4402,9 +4433,59 @@
             <option value="${idx + 1}" ${Number(o.currentStageIndex || 1) === (idx + 1) ? 'selected' : ''}>${st}</option>
           `).join('');
 
+          // Payment Status & Financials Cell
+          let paymentHtml = '';
+          const grandTotalVal = o.grandTotal || (o.value ? parseInt(String(o.value).replace(/[^0-9]/g, '')) : 0);
+          const formattedAmount = grandTotalVal ? `₹${grandTotalVal.toLocaleString('en-IN')}` : '₹0';
+
+          if (o.orderType === 'PortalDirectOrder') {
+            const pStatus = (o.payment && o.payment.paymentStatus) || 'PENDING';
+            let pBadge = '';
+            if (pStatus === 'PAID') {
+              pBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800"><i class="ri-checkbox-circle-fill text-xs text-emerald-600"></i> PAID</span>`;
+            } else if (pStatus === 'PENDING') {
+              pBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-100 text-amber-800"><i class="ri-time-fill text-xs text-amber-600"></i> PENDING</span>`;
+            } else if (pStatus === 'CANCELLED') {
+              pBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-700">CANCELLED</span>`;
+            } else {
+              pBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-100 text-rose-800"><i class="ri-close-circle-fill text-xs text-rose-600"></i> FAILED</span>`;
+            }
+
+            const methodStr = (o.payment && o.payment.paymentMethod) ? String(o.payment.paymentMethod).toUpperCase() : 'ONLINE GATEWAY';
+            const refStr = (o.payment && (o.payment.cfPaymentId || o.payment.cfOrderId)) ? `Ref: ${o.payment.cfPaymentId || o.payment.cfOrderId}` : 'Ref: Awaiting Gateway';
+            const timeStr = (o.payment && o.payment.paymentTime)
+              ? new Date(o.payment.paymentTime).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+              : 'Awaiting Settlement';
+
+            paymentHtml = `
+              <div class="space-y-1">
+                <div class="flex items-center gap-1.5">${pBadge} <span class="font-bold text-charcoal">${formattedAmount}</span></div>
+                <div class="text-[10px] text-mutedText font-medium">${methodStr} • ${timeStr}</div>
+                <div class="text-[10px] font-mono text-mutedText truncate max-w-[180px]" title="${refStr}">${refStr}</div>
+              </div>
+            `;
+          } else {
+            // Offline / Factory Order / Quotation Order
+            paymentHtml = `
+              <div class="space-y-1">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-blue-50 text-blue-700">OFFLINE / INVOICE</span>
+                  <span class="font-bold text-charcoal">${formattedAmount}</span>
+                </div>
+                <div class="text-[10px] text-mutedText font-medium">B2B Contract Terms</div>
+              </div>
+            `;
+          }
+
+          const orderRef = o.id || o.orderNo || ('UW-ORD-' + (o._id || '101'));
+          const orderTypeSub = o.orderType === 'PortalDirectOrder' ? 'Portal Direct Order' : 'Factory Order';
+
           return `
             <tr class="border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body">
-              <td class="p-4 font-mono font-bold text-primary">${o.orderNo || 'UW-ORD-' + (o._id || '101')}</td>
+              <td class="p-4 font-mono font-bold text-primary">
+                ${orderRef}
+                <span class="block text-[10px] font-sans font-normal text-mutedText">${orderTypeSub}</span>
+              </td>
               <td class="p-4 font-bold text-charcoal">
                 ${o.clientCompany || o.clientEmail || 'Corporate Client'}
                 <span class="block text-[10px] text-mutedText font-normal">${o.clientEmail || ''}</span>
@@ -4413,6 +4494,7 @@
                 ${o.productName || 'Custom Workwear'}
                 <span class="block text-[10px] text-mutedText font-normal">${o.volume || '1,000 Pcs'}</span>
               </td>
+              <td class="p-4">${paymentHtml}</td>
               <td class="p-4">
                 <select id="order-stage-select-${o._id || o.id}" onchange="updateOrderStage('${o._id || o.id}', this.value)" class="bg-white border border-lightBorder rounded-lg p-1.5 text-xs text-charcoal font-semibold focus:outline-none focus:border-primary">
                   ${stageOptionsHtml}
@@ -4433,15 +4515,31 @@
     }
     window.renderOrdersTable = renderOrdersTable;
 
-    async function updateOrderStage(orderId, newStageIndex) {
+    async function updateOrderStage(orderId, newStageIndex, allowUnpaid = false) {
       try {
         const stageNum = Number(newStageIndex);
-        await window.api.updateOrder(orderId, { currentStageIndex: stageNum });
+        const order = (window.allAdminOrders || []).find(o => String(o._id || o.id) === String(orderId) || o.id === orderId);
+
+        // Unpaid Order Fulfilment Protection:
+        // If this is an unpaid online Portal Direct Order and admin tries to advance past Stage 1 into manufacturing
+        if (order && order.orderType === 'PortalDirectOrder' && stageNum > 1 && (!order.payment || order.payment.paymentStatus !== 'PAID') && !allowUnpaid) {
+          const confirmOverride = confirm(
+            `UNPAID ORDER PROTECTION ALERT:\n\nOrder ${order.id || orderId} is a Portal Direct Order with payment status '${(order.payment && order.payment.paymentStatus) || 'PENDING'}'.\n\nAdvancing into manufacturing (Stage ${stageNum}) before payment is confirmed can risk unauthorized production expenses.\n\nDo you want to proceed with an explicit administrator override?`
+          );
+          if (!confirmOverride) {
+            renderOrdersTable(); // Revert dropdown
+            return;
+          }
+          allowUnpaid = true;
+        }
+
+        await window.api.updateOrder(orderId, { currentStageIndex: stageNum, allowUnpaidAdvance: allowUnpaid });
         alert(`Order stage updated to Stage ${stageNum}!`);
         await syncAdminData();
         renderOrdersTable();
       } catch (err) {
         alert(err.message || "Failed to update order stage.");
+        renderOrdersTable();
       }
     }
     window.updateOrderStage = updateOrderStage;
@@ -4449,14 +4547,7 @@
     async function handleUpdateTrackerClick(orderId) {
       const selectEl = document.getElementById(`order-stage-select-${orderId}`);
       const stageIdx = selectEl ? Number(selectEl.value) : 1;
-      try {
-        await window.api.updateOrder(orderId, { currentStageIndex: stageIdx });
-        alert(`Order production tracker successfully updated to Stage ${stageIdx}!`);
-        await syncAdminData();
-        renderOrdersTable();
-      } catch (err) {
-        alert(err.message || "Failed to update order tracker.");
-      }
+      await updateOrderStage(orderId, stageIdx);
     }
     window.handleUpdateTrackerClick = handleUpdateTrackerClick;
 

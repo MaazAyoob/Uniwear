@@ -256,6 +256,14 @@ function verifyWebhookSignature(rawBody, signature, timestamp) {
   return details.isValid && details.isFresh;
 }
 
+/**
+ * Returns the trusted client SDK mode ('production' or 'sandbox')
+ * Safe for frontend consumption (exposes no credentials)
+ */
+function getClientSdkMode() {
+  return getEnv() === 'production' ? 'production' : 'sandbox';
+}
+
 module.exports = {
   isConfigured,
   isSimulatorAllowed,
@@ -267,6 +275,7 @@ module.exports = {
   getAppId,
   getSecretKey,
   getEnv,
+  getClientSdkMode,
   getBaseUrl,
   getApiVersion
 };

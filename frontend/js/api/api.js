@@ -601,6 +601,7 @@ const api = {
   savePortalQuote: (data) => apiPost('/portal/quotations/save', data),
 
   // Portal Checkout & Payment
+  getPortalPaymentConfig: () => apiGet('/portal/payment/config'),
   checkoutPortalOrder: (data) => apiPost('/portal/payment/checkout', data),
   verifyPortalPayment: (data) => apiPost('/portal/payment/verify', data),
   retryPortalPayment: (data) => apiPost('/portal/payment/retry', data),
