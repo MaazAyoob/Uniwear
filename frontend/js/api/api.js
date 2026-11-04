@@ -607,6 +607,15 @@ const api = {
   retryPortalPayment: (data) => apiPost('/portal/payment/retry', data),
   getPortalPaymentStatus: (orderId) => apiGet(`/portal/payment/status/${orderId}`),
 
+  // Admin GST & Tax Configuration
+  getAdminTaxSettings: () => apiGet('/admin/tax/settings'),
+  updateAdminTaxSettings: (data) => apiPut('/admin/tax/settings', data),
+  getAdminProductTaxes: () => apiGet('/admin/tax/products'),
+  updateAdminProductTax: (id, data) => apiPut(`/admin/tax/products/${id}`, data),
+  getAdminCustomerProductTaxes: () => apiGet('/admin/tax/customer-products'),
+  updateAdminCustomerProductTax: (id, data) => apiPut(`/admin/tax/customer-products/${id}`, data),
+  getAdminTaxAuditLogs: (params) => apiGet('/admin/tax/audit-logs', params),
+
   // Raw helpers for custom calls
   get: apiGet,
   post: apiPost,

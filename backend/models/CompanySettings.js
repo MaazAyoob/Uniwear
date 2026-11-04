@@ -13,6 +13,25 @@ const companySettingsSchema = new mongoose.Schema({
   whatsappNumber: { type: String, default: '919108765831' },
   address: { type: String, default: 'No 121/A, 1st Floor, 27th Cross Road, 7th Block, Jayanagar, Bengaluru – 560070' },
   gst: { type: String, default: '29ABCDE1234F1ZH' },
+  supplierGstin: { type: String, default: '29ABCDE1234F1ZH' },
+  supplierState: { type: String, default: 'Karnataka' },
+  supplierStateCode: { type: String, default: '29' },
+  defaultHsnCode: { type: String, default: '6109' },
+  hsnStatus: {
+    type: String,
+    enum: ['Pending Accountant Verification', 'Verified by Accountant'],
+    default: 'Pending Accountant Verification'
+  },
+  hsnVerificationNote: {
+    type: String,
+    default: 'Default apparel HSN 6109 pending final tax audit sign-off by Chartered Accountant.'
+  },
+  hsnVerifiedBy: { type: String, default: '' },
+  hsnVerifiedAt: { type: Date, default: null },
+  taxCalculationType: { type: String, enum: ['exclusive', 'inclusive'], default: 'exclusive' },
+  taxConfigStatus: { type: String, enum: ['Active', 'Draft'], default: 'Active' },
+  lastTaxUpdated: { type: Date, default: Date.now },
+  lastTaxUpdatedBy: { type: String, default: 'admin@uniwear.co' },
   website: { type: String, default: 'https://uniwear.co' },
   logoUrl: { type: String, default: 'assets/logos/logo-full.png' },
   faviconUrl: { type: String, default: 'assets/favicons/favicon.png' },

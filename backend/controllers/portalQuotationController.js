@@ -3,6 +3,7 @@ const CustomerProduct = require('../models/CustomerProduct');
 const Product = require('../models/Product');
 const CompanySettings = require('../models/CompanySettings');
 const User = require('../models/User');
+const taxService = require('../services/taxService');
 
 // Helper to resolve client & product rates
 async function resolveProductAssignment(customerId, userEmail, productId) {
@@ -14,9 +15,14 @@ async function resolveProductAssignment(customerId, userEmail, productId) {
   }).lean();
 
   const isObjectId = typeof productId === 'string' && productId.length === 24 && /^[0-9a-fA-F]{24}$/.test(productId);
-  const productQuery = isObjectId
-    ? { $or: [{ _id: productId }, { id: productId }] }
-    : { id: isNaN(productId) ? productId : Number(productId) };
+  let productQuery;
+  if (isObjectId) {
+    productQuery = { _id: productId };
+  } else if (!isNaN(productId) && String(productId).trim() !== '') {
+    productQuery = { id: Number(productId) };
+  } else {
+    productQuery = { sku: productId };
+  }
 
   let product = await Product.findOne(productQuery).lean();
   if (!product && !isObjectId) {
@@ -104,10 +110,9 @@ exports.previewQuotation = async (req, res) => {
       });
     }
 
-    const taxRate = settings.defaultGstRate !== undefined ? settings.defaultGstRate : 5;
-    const taxes = Math.round((subtotal * taxRate) / 100);
-    const deliveryCharge = 0; // Included in corporate quotes
-    const grandTotal = subtotal + taxes + deliveryCharge;
+    const customerGstin = (req.body.gstin !== undefined ? req.body.gstin : (user.gstin || '')).trim();
+    const customerState = (req.body.state !== undefined ? req.body.state : (user.state || '')).trim();
+    const taxSnapshot = await taxService.generateQuotationTaxSnapshot(validatedItems, userEmail, customerGstin, customerState);
 
     const validityDays = settings.defaultQuoteValidityDays || 7;
     const validUntilDate = new Date(Date.now() + validityDays * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -121,13 +126,14 @@ exports.previewQuotation = async (req, res) => {
       clientEmail: userEmail,
       contactPerson: user.representative || 'Procurement Team',
       contactNumber: user.phone || '',
-      items: validatedItems,
+      items: taxSnapshot.items,
       volume: totalVolume,
-      subtotal,
-      taxRate,
-      taxes,
-      deliveryCharge,
-      grandTotal,
+      subtotal: taxSnapshot.subtotal,
+      taxRate: taxSnapshot.taxRate,
+      taxes: taxSnapshot.taxes,
+      taxBreakdown: taxSnapshot.taxBreakdown,
+      deliveryCharge: taxSnapshot.deliveryCharge,
+      grandTotal: taxSnapshot.grandTotal,
       currency: 'INR',
       paymentTerms: 'Full payment before production.',
       deliveryTerms: 'Ex-factory Bengaluru. Dispatch direct to Client address.',
@@ -189,9 +195,9 @@ exports.saveQuotation = async (req, res) => {
       });
     }
 
-    const taxRate = settings.defaultGstRate !== undefined ? settings.defaultGstRate : 5;
-    const taxes = Math.round((subtotal * taxRate) / 100);
-    const grandTotal = subtotal + taxes;
+    const customerGstin = (req.body.gstin !== undefined ? req.body.gstin : (user.gstin || '')).trim();
+    const customerState = (req.body.state !== undefined ? req.body.state : (user.state || '')).trim();
+    const taxSnapshot = await taxService.generateQuotationTaxSnapshot(validatedItems, userEmail, customerGstin, customerState);
 
     // Check if quote exists to update version/revision
     let quote = await Quotation.findOne({
@@ -201,13 +207,15 @@ exports.saveQuotation = async (req, res) => {
 
     if (quote) {
       quote.version = (quote.version || 1) + 1;
-      quote.items = validatedItems;
+      quote.items = taxSnapshot.items;
       quote.volume = totalVolume;
-      quote.subtotal = subtotal;
-      quote.taxes = taxes;
-      quote.grandTotal = grandTotal;
-      quote.amount = grandTotal;
-      quote.value = `₹${grandTotal.toLocaleString('en-IN')}`;
+      quote.subtotal = taxSnapshot.subtotal;
+      quote.taxRate = taxSnapshot.taxRate;
+      quote.taxes = taxSnapshot.taxes;
+      quote.taxBreakdown = taxSnapshot.taxBreakdown;
+      quote.grandTotal = taxSnapshot.grandTotal;
+      quote.amount = taxSnapshot.grandTotal;
+      quote.value = `₹${taxSnapshot.grandTotal.toLocaleString('en-IN')}`;
       quote.validUntil = validUntilDate;
       await quote.save();
     } else {
@@ -221,18 +229,19 @@ exports.saveQuotation = async (req, res) => {
         productClass: validatedItems.map(i => i.product).join(', '),
         volume: totalVolume,
         date: new Date().toISOString().split('T')[0],
-        value: `₹${grandTotal.toLocaleString('en-IN')}`,
-        amount: grandTotal,
-        subtotal,
-        taxRate,
-        taxes,
-        grandTotal,
+        value: `₹${taxSnapshot.grandTotal.toLocaleString('en-IN')}`,
+        amount: taxSnapshot.grandTotal,
+        subtotal: taxSnapshot.subtotal,
+        taxRate: taxSnapshot.taxRate,
+        taxes: taxSnapshot.taxes,
+        taxBreakdown: taxSnapshot.taxBreakdown,
+        grandTotal: taxSnapshot.grandTotal,
         status: 'Approved',
         isPortalQuote: true,
         version: 1,
         validUntil: validUntilDate,
         validity: `${validityDays} Days`,
-        items: validatedItems,
+        items: taxSnapshot.items,
         paymentTerms: 'Full payment online / PO advance.',
         deliveryTerms: 'Ex-factory Bengaluru. Dispatch direct to Client address.'
       });

@@ -12,6 +12,22 @@ const productSchema = new mongoose.Schema({
   shortDescription: { type: String, default: '' },
   sku: { type: String, unique: true, sparse: true },
   price: { type: Number, default: 0 },
+  hsnCode: { type: String, default: '6109' },
+  hsnStatus: {
+    type: String,
+    enum: ['Pending Accountant Verification', 'Verified by Accountant'],
+    default: 'Pending Accountant Verification'
+  },
+  hsnVerificationNote: {
+    type: String,
+    default: 'Format checked; pending final review by corporate Chartered Accountant / Tax Auditor.'
+  },
+  hsnVerifiedBy: { type: String, default: '' },
+  hsnVerifiedAt: { type: Date, default: null },
+  taxPercent: { type: Number, default: null }, // Null implies inheriting company default GST rate
+  taxConfigStatus: { type: String, enum: ['Configured', 'Default'], default: 'Default' },
+  lastTaxUpdated: { type: Date },
+  lastTaxUpdatedBy: { type: String, default: '' },
   featured: { type: Boolean, default: false },
   status: { type: String, enum: ['Active', 'Draft', 'Archived', 'Inactive'], default: 'Active' },
   isPublic: { type: Boolean, default: false }, // CMS Public Visibility Toggle

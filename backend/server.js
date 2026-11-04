@@ -34,6 +34,7 @@ const chatbotRoutes = require('./routes/chatbotRoutes');
 const portalCartRoutes = require('./routes/cartRoutes');
 const portalQuotationRoutes = require('./routes/portalQuotationRoutes');
 const portalPaymentRoutes = require('./routes/paymentRoutes');
+const taxRoutes = require('./routes/taxRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -184,6 +185,7 @@ app.use('/api', customerProductRoutes);
 app.use('/api/portal/cart', portalCartRoutes);
 app.use('/api/portal/quotations', portalQuotationRoutes);
 app.use('/api/portal/payment', portalPaymentRoutes);
+app.use('/api/admin/tax', taxRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'UNIWEAR Production API is running.', timestamp: new Date().toISOString() });

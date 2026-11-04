@@ -4,12 +4,15 @@ const quotationItemSchema = new mongoose.Schema({
   product: { type: String, required: true },
   productId: { type: mongoose.Schema.Types.Mixed },
   sku: { type: String, default: '' },
+  hsnCode: { type: String, default: '6109' },
   fabric: { type: String, default: '' },
   gsm: { type: String, default: '' },
   details: { type: String, default: '' },
   sizeBreakdown: { type: mongoose.Schema.Types.Mixed, default: {} },
   quantity: { type: Number, required: true, default: 1 },
   unitPrice: { type: Number, required: true, default: 0 },
+  taxRate: { type: Number, default: 5 },
+  taxAmount: { type: Number, default: 0 },
   total: { type: Number, required: true, default: 0 }
 }, { _id: false });
 
@@ -41,6 +44,21 @@ const quotationSchema = new mongoose.Schema({
   subtotal: { type: Number, default: 0 },
   deliveryCharge: { type: Number, default: 0 },
   taxRate: { type: Number, default: 5 },
+  taxBreakdown: {
+    taxType: { type: String, enum: ['intra_state', 'inter_state', 'undetermined'], default: 'intra_state' },
+    taxRate: { type: Number, default: 5 },
+    cgstRate: { type: Number, default: 2.5 },
+    cgstAmount: { type: Number, default: 0 },
+    sgstRate: { type: Number, default: 2.5 },
+    sgstAmount: { type: Number, default: 0 },
+    igstRate: { type: Number, default: 0 },
+    igstAmount: { type: Number, default: 0 },
+    totalTax: { type: Number, default: 0 },
+    supplierGstin: { type: String, default: '' },
+    customerGstin: { type: String, default: '' },
+    placeOfSupply: { type: String, default: '' },
+    isTaxInclusive: { type: Boolean, default: false }
+  },
   validUntil: { type: String, default: '' },
   pdfUrl: { type: String, default: '' },
   paymentTerms: { type: String, default: '50% advance upon PO, 50% against dispatch.' },

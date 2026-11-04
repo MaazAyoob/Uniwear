@@ -1,3 +1,4 @@
+const User = require('../models/User');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const CustomerProduct = require('../models/CustomerProduct');
@@ -5,6 +6,7 @@ const Product = require('../models/Product');
 const CompanySettings = require('../models/CompanySettings');
 const Notification = require('../models/Notification');
 const cashfreeService = require('../services/cashfreeService');
+const taxService = require('../services/taxService');
 
 // POST /api/portal/checkout/create-order
 exports.createCheckoutOrder = async (req, res) => {
@@ -43,13 +45,37 @@ exports.createCheckoutOrder = async (req, res) => {
     }
 
     const settings = await CompanySettings.findOne().lean() || {};
-    const taxRate = settings.defaultGstRate !== undefined ? settings.defaultGstRate : 5;
+    const defaultTaxRate = settings.defaultGstRate !== undefined ? settings.defaultGstRate : 5;
     const stdDelivery = settings.standardDeliveryCharge || 0;
     const freeThreshold = settings.freeDeliveryThreshold || 0;
+    const isTaxInclusive = settings.taxCalculationType === 'inclusive';
+
+    const customerGstin = (billingAddress && billingAddress.gstin) || (deliveryAddress && deliveryAddress.gstin) || '';
+    let customerState = (billingAddress && billingAddress.state) || (deliveryAddress && deliveryAddress.state) || '';
+
+    // If state is not explicitly given, check for recognized city in delivery address
+    if (!customerState.trim() && deliveryAddress && deliveryAddress.city) {
+      const cityLower = deliveryAddress.city.toLowerCase().trim();
+      if (['bengaluru', 'bangalore', 'mysuru', 'mysore', 'hubballi', 'mangalore', 'belagavi'].includes(cityLower)) {
+        customerState = 'Karnataka';
+      }
+    }
+
+    const supplyInfo = taxService.determineSupplyType(customerGstin, customerState, settings);
+
+    // CRITICAL GUARD: Never proceed with checkout if place of supply cannot be legally determined
+    if (!supplyInfo.placeOfSupplyDetermined) {
+      return res.status(400).json({
+        success: false,
+        message: 'Delivery or billing state (or valid GSTIN) is required to determine the place of supply for GST compliance before checkout.'
+      });
+    }
 
     // Server-side recalculation and validation of every item
     let subtotal = 0;
     let totalVolume = 0;
+    let totalTax = 0;
+    let dominantTaxRate = defaultTaxRate;
     const orderItems = [];
 
     for (const item of cart.items) {
@@ -59,9 +85,14 @@ exports.createCheckoutOrder = async (req, res) => {
       }).lean() || await CustomerProduct.findOne({ productId: String(item.productId) }).lean();
 
       const isObjectId = typeof item.productId === 'string' && item.productId.length === 24 && /^[0-9a-fA-F]{24}$/.test(item.productId);
-      const productQuery = isObjectId
-        ? { $or: [{ _id: item.productId }, { id: item.productId }] }
-        : { id: isNaN(item.productId) ? item.productId : Number(item.productId) };
+      let productQuery;
+      if (isObjectId) {
+        productQuery = { _id: item.productId };
+      } else if (!isNaN(item.productId) && String(item.productId).trim() !== '') {
+        productQuery = { id: Number(item.productId) };
+      } else {
+        productQuery = { sku: item.productId };
+      }
 
       let product = await Product.findOne(productQuery).lean();
       if (!product && !isObjectId) {
@@ -88,6 +119,11 @@ exports.createCheckoutOrder = async (req, res) => {
       subtotal += lineTotal;
       totalVolume += qty;
 
+      const taxInfo = await taxService.resolveEffectiveTax(item.productId, customerId, clientEmail, settings);
+      dominantTaxRate = taxInfo.taxRate;
+      const itemTax = taxService.calculateTaxBreakdown(lineTotal, taxInfo.taxRate, supplyInfo.isIntraState, isTaxInclusive);
+      totalTax += itemTax.totalTax;
+
       orderItems.push({
         productId: item.productId,
         productName: item.name,
@@ -97,13 +133,28 @@ exports.createCheckoutOrder = async (req, res) => {
         unitPrice: unitRate,
         volume: qty,
         sizeBreakdown: item.sizeBreakdown || {},
-        lineTotal
+        lineTotal,
+        hsnCode: taxInfo.hsnCode,
+        taxRate: taxInfo.taxRate,
+        taxAmount: itemTax.totalTax
       });
     }
 
-    const taxAmount = Math.round((subtotal * taxRate) / 100);
     const deliveryCharge = (freeThreshold > 0 && subtotal >= freeThreshold) ? 0 : stdDelivery;
-    const grandTotal = subtotal + taxAmount + deliveryCharge;
+    const taxAmount = totalTax;
+    const grandTotal = isTaxInclusive ? (subtotal + deliveryCharge) : (subtotal + taxAmount + deliveryCharge);
+
+    const orderTaxBreakdown = taxService.calculateTaxBreakdown(subtotal, dominantTaxRate, supplyInfo.isIntraState, isTaxInclusive);
+    orderTaxBreakdown.totalTax = totalTax;
+    if (supplyInfo.isIntraState) {
+      orderTaxBreakdown.cgstAmount = Math.round(totalTax / 2);
+      orderTaxBreakdown.sgstAmount = totalTax - orderTaxBreakdown.cgstAmount;
+    } else {
+      orderTaxBreakdown.igstAmount = totalTax;
+    }
+    orderTaxBreakdown.supplierGstin = settings.supplierGstin || settings.gst || '29ABCDE1234F1ZH';
+    orderTaxBreakdown.customerGstin = customerGstin;
+    orderTaxBreakdown.placeOfSupply = supplyInfo.placeOfSupply;
 
     // Check for recent active pending order with identical grandTotal to prevent duplicate order generation
     const existingPendingOrder = await Order.findOne({
@@ -159,8 +210,9 @@ exports.createCheckoutOrder = async (req, res) => {
       orderType: 'PortalDirectOrder',
       items: orderItems,
       subtotal,
-      taxRate,
+      taxRate: dominantTaxRate,
       taxAmount,
+      taxBreakdown: orderTaxBreakdown,
       deliveryCharge,
       grandTotal,
       billingAddress: {

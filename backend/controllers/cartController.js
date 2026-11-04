@@ -3,33 +3,27 @@ const CustomerProduct = require('../models/CustomerProduct');
 const Product = require('../models/Product');
 const Quotation = require('../models/Quotation');
 const CompanySettings = require('../models/CompanySettings');
+const User = require('../models/User');
+const taxService = require('../services/taxService');
+const mongoose = require('mongoose');
 
-// Helper: Calculate cart totals safely
-async function calculateCartTotals(cart) {
-  const settings = await CompanySettings.findOne().lean() || {};
-  const defaultTaxRate = settings.defaultGstRate !== undefined ? settings.defaultGstRate : 5;
-  const freeThreshold = settings.freeDeliveryThreshold || 0;
-  const stdDelivery = settings.standardDeliveryCharge || 0;
-
-  let subtotal = 0;
-  cart.items.forEach(item => {
-    item.lineTotal = Math.round(item.unitRate * item.totalQuantity);
-    subtotal += item.lineTotal;
-  });
-
-  const taxRate = defaultTaxRate;
-  const taxAmount = Math.round((subtotal * taxRate) / 100);
-  let deliveryCharge = 0;
-  if (subtotal > 0) {
-    deliveryCharge = (freeThreshold > 0 && subtotal >= freeThreshold) ? 0 : stdDelivery;
+// Helper: Calculate cart totals safely using centralized taxService
+async function calculateCartTotals(cart, customerGstin = '', customerState = '') {
+  if (!customerGstin || !customerState) {
+    if (cart.customerId || cart.clientEmail) {
+      try {
+        const isObjectId = typeof cart.customerId === 'string' && cart.customerId.match(/^[0-9a-fA-F]{24}$/);
+        const query = isObjectId ? { _id: cart.customerId } : (!isNaN(cart.customerId) && cart.customerId !== '' ? { id: Number(cart.customerId) } : { email: cart.clientEmail });
+        const u = await User.findOne(query).lean();
+        if (u) {
+          customerGstin = customerGstin || u.gstin || '';
+          customerState = customerState || u.state || '';
+        }
+      } catch (_) {}
+    }
   }
 
-  cart.subtotal = subtotal;
-  cart.taxRate = taxRate;
-  cart.taxAmount = taxAmount;
-  cart.deliveryCharge = deliveryCharge;
-  cart.grandTotal = subtotal + taxAmount + deliveryCharge;
-  return cart;
+  return await taxService.calculateCartTax(cart, customerGstin, customerState);
 }
 
 // Helper: Find or create cart for user
@@ -63,9 +57,14 @@ async function resolveProductAssignment(customerId, userEmail, productId) {
   }).lean();
 
   const isObjectId = typeof productId === 'string' && productId.length === 24 && /^[0-9a-fA-F]{24}$/.test(productId);
-  const productQuery = isObjectId
-    ? { $or: [{ _id: productId }, { id: productId }] }
-    : { id: isNaN(productId) ? productId : Number(productId) };
+  let productQuery;
+  if (isObjectId) {
+    productQuery = { _id: productId };
+  } else if (!isNaN(productId) && String(productId).trim() !== '') {
+    productQuery = { id: Number(productId) };
+  } else {
+    productQuery = { sku: productId };
+  }
 
   let product = await Product.findOne(productQuery).lean();
   if (!product && !isObjectId) {

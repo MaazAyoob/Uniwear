@@ -53,6 +53,24 @@ const customerProductSchema = new mongoose.Schema({
     type: String,
     default: '6109'
   },
+  hsnStatus: {
+    type: String,
+    enum: ['Pending Accountant Verification', 'Verified by Accountant'],
+    default: 'Pending Accountant Verification'
+  },
+  hsnVerificationNote: {
+    type: String,
+    default: 'Format checked; pending final review by corporate Chartered Accountant / Tax Auditor.'
+  },
+  hsnVerifiedBy: { type: String, default: '' },
+  hsnVerifiedAt: { type: Date, default: null },
+  lastTaxUpdated: {
+    type: Date
+  },
+  lastTaxUpdatedBy: {
+    type: String,
+    default: ''
+  },
   deliveryLeadDays: {
     type: String,
     default: '10–15 working days'

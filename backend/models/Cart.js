@@ -9,6 +9,10 @@ const cartItemSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  hsnCode: {
+    type: String,
+    default: '6109'
+  },
   name: {
     type: String,
     required: true
@@ -28,6 +32,14 @@ const cartItemSchema = new mongoose.Schema({
   unitRate: {
     type: Number,
     required: true
+  },
+  taxRate: {
+    type: Number,
+    default: 5
+  },
+  taxAmount: {
+    type: Number,
+    default: 0
   },
   totalQuantity: {
     type: Number,
@@ -80,6 +92,21 @@ const cartSchema = new mongoose.Schema({
   taxRate: {
     type: Number,
     default: 5
+  },
+  taxBreakdown: {
+    taxType: { type: String, enum: ['intra_state', 'inter_state', 'undetermined'], default: 'intra_state' },
+    taxRate: { type: Number, default: 5 },
+    cgstRate: { type: Number, default: 2.5 },
+    cgstAmount: { type: Number, default: 0 },
+    sgstRate: { type: Number, default: 2.5 },
+    sgstAmount: { type: Number, default: 0 },
+    igstRate: { type: Number, default: 0 },
+    igstAmount: { type: Number, default: 0 },
+    totalTax: { type: Number, default: 0 },
+    supplierGstin: { type: String, default: '' },
+    customerGstin: { type: String, default: '' },
+    placeOfSupply: { type: String, default: '' },
+    isTaxInclusive: { type: Boolean, default: false }
   },
   deliveryCharge: {
     type: Number,

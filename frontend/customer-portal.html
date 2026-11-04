@@ -646,6 +646,7 @@
                   <span class="text-mutedText" id="qp-tax-label">GST (5%)</span>
                   <span class="font-semibold text-charcoal" id="qp-taxes">₹3,300</span>
                 </div>
+                <div id="qp-tax-subdetails" class="text-[10px] text-mutedText pl-2 font-mono"></div>
                 <div class="flex justify-between">
                   <span class="text-mutedText">Delivery</span>
                   <span class="font-semibold text-emerald-700">Included</span>
@@ -680,9 +681,10 @@
                 <span class="font-semibold text-charcoal" id="qp-card-subtotal">₹66,000</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-mutedText">GST (5%)</span>
+                <span class="text-mutedText" id="qp-card-tax-label">GST (5%)</span>
                 <span class="font-semibold text-charcoal" id="qp-card-taxes">₹3,300</span>
               </div>
+              <div id="qp-card-tax-subdetails" class="text-[10px] text-mutedText pl-2 font-mono"></div>
               <div class="flex justify-between">
                 <span class="text-mutedText">Delivery</span>
                 <span class="font-semibold text-emerald-700">Included</span>
@@ -783,9 +785,10 @@
                 <span class="font-semibold text-charcoal" id="cart-sum-subtotal">₹0</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-mutedText">GST (demo 5%)</span>
+                <span class="text-mutedText" id="cart-sum-tax-label">GST</span>
                 <span class="font-semibold text-charcoal" id="cart-sum-tax">₹0</span>
               </div>
+              <div id="cart-tax-subdetails" class="text-[10px] text-mutedText pl-2 font-mono"></div>
               <div class="flex justify-between">
                 <span class="text-mutedText">Delivery</span>
                 <span class="font-semibold text-emerald-700">Included</span>
@@ -933,9 +936,10 @@
                   <span class="font-semibold text-charcoal" id="chk-subtotal">₹0</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="text-mutedText">GST (demo 5%)</span>
+                  <span class="text-mutedText" id="chk-tax-label">GST</span>
                   <span class="font-semibold text-charcoal" id="chk-taxes">₹0</span>
                 </div>
+                <div id="chk-tax-subdetails" class="text-[10px] text-mutedText pl-2 font-mono"></div>
                 <div class="flex justify-between">
                   <span class="text-mutedText">Delivery</span>
                   <span class="font-semibold text-emerald-700">Included</span>
@@ -1427,6 +1431,13 @@
 
     // Guard authentication check
     window.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('auth_token')) {
+        localStorage.setItem('uniwear_jwt_token', urlParams.get('auth_token'));
+        localStorage.setItem('uniwear_auth_role', 'client');
+        localStorage.setItem('uniwear_auth_email', urlParams.get('auth_email') || 'toyota@uniwear.co');
+      }
+
       const role = localStorage.getItem('uniwear_auth_role');
       if (role !== 'client') {
         window.location.href = 'login.html';
@@ -1437,6 +1448,10 @@
         await syncCustomerData();
       } catch (err) {
         console.error("Failed to sync customer data on load", err);
+      }
+
+      if (urlParams.get('tab')) {
+        setTimeout(() => setPortalTab(urlParams.get('tab')), 300);
       }
       
       // Initialize profile settings inputs from DB
@@ -2403,9 +2418,27 @@
       const totalQty = preview.items.reduce((acc, i) => acc + i.quantity, 0);
       document.getElementById('qp-subtotal-label').innerText = `Subtotal (${totalQty} pcs)`;
       document.getElementById('qp-subtotal').innerText = `₹${preview.subtotal.toLocaleString('en-IN')}`;
-      document.getElementById('qp-tax-label').innerText = `GST (${preview.taxRate || 5}%)`;
       document.getElementById('qp-taxes').innerText = `₹${preview.taxes.toLocaleString('en-IN')}`;
       document.getElementById('qp-grand-total').innerText = `₹${preview.grandTotal.toLocaleString('en-IN')}`;
+
+      const tb = preview.taxBreakdown;
+      if (tb) {
+        if (tb.isIntraState || tb.taxType === 'intra_state') {
+          document.getElementById('qp-tax-label').innerText = `GST (${preview.taxRate || 5}%) Intra-state`;
+          document.getElementById('qp-tax-subdetails').innerText = `CGST (${tb.cgstRate}%): ₹${tb.cgstAmount.toLocaleString('en-IN')} | SGST (${tb.sgstRate}%): ₹${tb.sgstAmount.toLocaleString('en-IN')}`;
+          if (document.getElementById('qp-card-tax-label')) document.getElementById('qp-card-tax-label').innerText = `GST (${preview.taxRate || 5}%) Intra-state`;
+          if (document.getElementById('qp-card-tax-subdetails')) document.getElementById('qp-card-tax-subdetails').innerText = `CGST: ₹${tb.cgstAmount.toLocaleString('en-IN')} + SGST: ₹${tb.sgstAmount.toLocaleString('en-IN')}`;
+        } else {
+          document.getElementById('qp-tax-label').innerText = `IGST (${tb.igstRate || preview.taxRate}%) Inter-state`;
+          document.getElementById('qp-tax-subdetails').innerText = `IGST: ₹${tb.igstAmount.toLocaleString('en-IN')} (Place of Supply: ${tb.placeOfSupply || 'Other State'})`;
+          if (document.getElementById('qp-card-tax-label')) document.getElementById('qp-card-tax-label').innerText = `IGST (${tb.igstRate || preview.taxRate}%) Inter-state`;
+          if (document.getElementById('qp-card-tax-subdetails')) document.getElementById('qp-card-tax-subdetails').innerText = `IGST: ₹${tb.igstAmount.toLocaleString('en-IN')}`;
+        }
+      } else {
+        document.getElementById('qp-tax-label').innerText = `GST (${preview.taxRate || 5}%)`;
+        document.getElementById('qp-tax-subdetails').innerText = '';
+        if (document.getElementById('qp-card-tax-subdetails')) document.getElementById('qp-card-tax-subdetails').innerText = '';
+      }
 
       document.getElementById('qp-summary-pieces').innerText = `${preview.items.length} products · ${totalQty} pieces`;
       document.getElementById('qp-card-subtotal').innerText = `₹${preview.subtotal.toLocaleString('en-IN')}`;
@@ -2570,6 +2603,22 @@
       document.getElementById('cart-sum-subtotal').innerText = `₹${portalCart.subtotal.toLocaleString('en-IN')}`;
       document.getElementById('cart-sum-tax').innerText = `₹${portalCart.taxAmount.toLocaleString('en-IN')}`;
       document.getElementById('cart-sum-grand-total').innerText = `₹${portalCart.grandTotal.toLocaleString('en-IN')}`;
+
+      const ctb = portalCart.taxBreakdown;
+      const cLabel = document.getElementById('cart-sum-tax-label');
+      const cSub = document.getElementById('cart-tax-subdetails');
+      if (ctb) {
+        if (ctb.isIntraState || ctb.taxType === 'intra_state') {
+          if (cLabel) cLabel.innerText = `GST (${portalCart.taxRate || 5}%) Intra-state`;
+          if (cSub) cSub.innerText = `CGST (${ctb.cgstRate}%): ₹${ctb.cgstAmount.toLocaleString('en-IN')} | SGST (${ctb.sgstRate}%): ₹${ctb.sgstAmount.toLocaleString('en-IN')}`;
+        } else {
+          if (cLabel) cLabel.innerText = `IGST (${ctb.igstRate || portalCart.taxRate}%) Inter-state`;
+          if (cSub) cSub.innerText = `IGST: ₹${ctb.igstAmount.toLocaleString('en-IN')} (${ctb.placeOfSupply || 'Inter-state'})`;
+        }
+      } else {
+        if (cLabel) cLabel.innerText = `GST (${portalCart.taxRate || 5}%)`;
+        if (cSub) cSub.innerText = '';
+      }
     }
 
     async function removeCartItem(productId) {
@@ -2638,6 +2687,22 @@
       document.getElementById('chk-taxes').innerText = `₹${portalCart.taxAmount.toLocaleString('en-IN')}`;
       document.getElementById('chk-grand-total').innerText = `₹${portalCart.grandTotal.toLocaleString('en-IN')}`;
       document.getElementById('chk-pay-btn-label').innerText = `Pay ₹${portalCart.grandTotal.toLocaleString('en-IN')} securely`;
+
+      const chkTb = portalCart.taxBreakdown;
+      const chkLabel = document.getElementById('chk-tax-label');
+      const chkSub = document.getElementById('chk-tax-subdetails');
+      if (chkTb) {
+        if (chkTb.isIntraState || chkTb.taxType === 'intra_state') {
+          if (chkLabel) chkLabel.innerText = `GST (${portalCart.taxRate || 5}%) Intra-state`;
+          if (chkSub) chkSub.innerText = `CGST (${chkTb.cgstRate}%): ₹${chkTb.cgstAmount.toLocaleString('en-IN')} | SGST (${chkTb.sgstRate}%): ₹${chkTb.sgstAmount.toLocaleString('en-IN')}`;
+        } else {
+          if (chkLabel) chkLabel.innerText = `IGST (${chkTb.igstRate || portalCart.taxRate}%) Inter-state`;
+          if (chkSub) chkSub.innerText = `IGST: ₹${chkTb.igstAmount.toLocaleString('en-IN')} (${chkTb.placeOfSupply || 'Inter-state'})`;
+        }
+      } else {
+        if (chkLabel) chkLabel.innerText = `GST (${portalCart.taxRate || 5}%)`;
+        if (chkSub) chkSub.innerText = '';
+      }
 
       setPortalTab('cust-checkout');
     }
