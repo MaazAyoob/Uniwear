@@ -238,6 +238,7 @@ function calculateTaxBreakdown(subtotal, taxRate, isIntraState, isTaxInclusive =
       isIntraState: false,
       taxType: 'undetermined',
       placeOfSupplyDetermined: false,
+      isProvisional: true,
       placeOfSupply: (supplyInfo && supplyInfo.placeOfSupply) || 'Undetermined (State or GSTIN required)',
       cgstRate: 0,
       cgstAmount: 0,
@@ -268,12 +269,14 @@ function calculateTaxBreakdown(subtotal, taxRate, isIntraState, isTaxInclusive =
     isIntraState,
     taxType: isIntraState ? 'intra_state' : 'inter_state',
     placeOfSupplyDetermined: true,
+    isProvisional: false,
     cgstRate,
     cgstAmount,
     sgstRate,
     sgstAmount,
     igstRate,
     igstAmount,
+    undeterminedTaxAmount: 0,
     isTaxInclusive
   };
 }
@@ -330,6 +333,7 @@ async function calculateCartTax(cart, customerGstin = '', customerState = '') {
   aggregateBreakdown.customerGstin = customerGstin || '';
   aggregateBreakdown.placeOfSupply = supplyInfo.placeOfSupply;
   aggregateBreakdown.placeOfSupplyDetermined = supplyInfo.placeOfSupplyDetermined;
+  aggregateBreakdown.isProvisional = !supplyInfo.placeOfSupplyDetermined;
   if (!supplyInfo.placeOfSupplyDetermined) {
     aggregateBreakdown.warning = supplyInfo.warning;
   }
@@ -404,6 +408,7 @@ async function generateQuotationTaxSnapshot(items, clientEmail, customerGstin = 
   breakdown.customerGstin = customerGstin || '';
   breakdown.placeOfSupply = supplyInfo.placeOfSupply;
   breakdown.placeOfSupplyDetermined = supplyInfo.placeOfSupplyDetermined;
+  breakdown.isProvisional = !supplyInfo.placeOfSupplyDetermined;
   if (!supplyInfo.placeOfSupplyDetermined) {
     breakdown.warning = supplyInfo.warning;
   }

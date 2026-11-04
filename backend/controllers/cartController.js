@@ -33,13 +33,21 @@ async function getOrCreateCart(req) {
 
   let cart = await Cart.findOne({ clientEmail });
   if (!cart) {
+    const settings = await CompanySettings.findOne().lean() || {};
+    const defaultRate = settings.defaultGstRate !== undefined ? settings.defaultGstRate : 5;
     cart = await Cart.create({
       customerId,
       clientEmail,
       items: [],
       subtotal: 0,
       taxAmount: 0,
-      taxRate: 5,
+      taxRate: defaultRate,
+      taxBreakdown: {
+        taxType: 'undetermined',
+        taxRate: defaultRate,
+        placeOfSupplyDetermined: false,
+        isProvisional: true
+      },
       deliveryCharge: 0,
       grandTotal: 0
     });

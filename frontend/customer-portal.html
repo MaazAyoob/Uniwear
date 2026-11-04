@@ -864,7 +864,7 @@
                   </div>
                   <div>
                     <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">GSTIN (if applicable)</label>
-                    <input type="text" id="chk-gstin" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary font-mono uppercase">
+                    <input type="text" id="chk-gstin" oninput="updateCheckoutTaxDisplay()" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary font-mono uppercase">
                   </div>
                   <div class="sm:col-span-2">
                     <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">Delivery address *</label>
@@ -880,7 +880,7 @@
                   </div>
                   <div>
                     <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">State *</label>
-                    <input type="text" id="chk-state" required value="Karnataka" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
+                    <input type="text" id="chk-state" required value="" placeholder="e.g. Karnataka, Maharashtra" oninput="updateCheckoutTaxDisplay()" class="w-full bg-lightCard border border-lightBorder rounded-xl py-2.5 px-3.5 text-xs text-charcoal focus:outline-none focus:border-primary">
                   </div>
                   <div>
                     <label class="block uppercase tracking-wider text-mutedText font-bold text-[10px] mb-1.5">PO / reference (optional)</label>
@@ -1436,6 +1436,9 @@
         localStorage.setItem('uniwear_jwt_token', urlParams.get('auth_token'));
         localStorage.setItem('uniwear_auth_role', 'client');
         localStorage.setItem('uniwear_auth_email', urlParams.get('auth_email') || 'toyota@uniwear.co');
+        if (urlParams.get('auth_id')) {
+          localStorage.setItem('uniwear_auth_id', urlParams.get('auth_id'));
+        }
       }
 
       const role = localStorage.getItem('uniwear_auth_role');
@@ -2428,7 +2431,13 @@
 
       const tb = preview.taxBreakdown;
       if (tb) {
-        if (tb.isIntraState || tb.taxType === 'intra_state') {
+        if (tb.taxType === 'undetermined' || tb.isProvisional || tb.placeOfSupplyDetermined === false) {
+          const rate = preview.taxRate || tb.taxRate || 5;
+          document.getElementById('qp-tax-label').innerText = `Estimated GST (${rate}%)`;
+          document.getElementById('qp-tax-subdetails').innerText = 'Estimated GST — final CGST/SGST or IGST classification will be confirmed using your billing and delivery location at checkout.';
+          if (document.getElementById('qp-card-tax-label')) document.getElementById('qp-card-tax-label').innerText = `Estimated GST (${rate}%)`;
+          if (document.getElementById('qp-card-tax-subdetails')) document.getElementById('qp-card-tax-subdetails').innerText = 'Classification pending delivery location';
+        } else if (tb.isIntraState || tb.taxType === 'intra_state') {
           document.getElementById('qp-tax-label').innerText = `GST (${preview.taxRate || 5}%) Intra-state`;
           document.getElementById('qp-tax-subdetails').innerText = `CGST (${tb.cgstRate}%): ₹${tb.cgstAmount.toLocaleString('en-IN')} | SGST (${tb.sgstRate}%): ₹${tb.sgstAmount.toLocaleString('en-IN')}`;
           if (document.getElementById('qp-card-tax-label')) document.getElementById('qp-card-tax-label').innerText = `GST (${preview.taxRate || 5}%) Intra-state`;
@@ -2506,9 +2515,9 @@
         }],
         subtotal: q.subtotal || ((q.volume || 100) * 330),
         taxRate: q.taxRate || 5,
-        taxes: q.taxAmount || Math.round((q.subtotal || ((q.volume || 100) * 330)) * 0.05),
+        taxes: q.taxAmount || (q.taxBreakdown && q.taxBreakdown.totalTax) || Math.round((q.subtotal || ((q.volume || 100) * 330)) * ((q.taxRate || 5) / 100)),
         deliveryCharge: q.deliveryCharge || 0,
-        grandTotal: q.grandTotal || (q.subtotal ? q.subtotal + (q.taxAmount || 0) : Math.round((q.volume || 100) * 330 * 1.05))
+        grandTotal: q.grandTotal || (q.subtotal ? q.subtotal + (q.taxAmount || 0) : Math.round((q.volume || 100) * 330 * (1 + (q.taxRate || 5) / 100)))
       };
 
       renderQuotationPreviewView(previewData);
@@ -2613,7 +2622,11 @@
       const cLabel = document.getElementById('cart-sum-tax-label');
       const cSub = document.getElementById('cart-tax-subdetails');
       if (ctb) {
-        if (ctb.isIntraState || ctb.taxType === 'intra_state') {
+        if (ctb.taxType === 'undetermined' || ctb.isProvisional || ctb.placeOfSupplyDetermined === false) {
+          const rate = portalCart.taxRate || ctb.taxRate || 5;
+          if (cLabel) cLabel.innerText = `Estimated GST (${rate}%)`;
+          if (cSub) cSub.innerText = 'Estimated GST — final CGST/SGST or IGST classification will be confirmed using your billing and delivery location at checkout.';
+        } else if (ctb.isIntraState || ctb.taxType === 'intra_state') {
           if (cLabel) cLabel.innerText = `GST (${portalCart.taxRate || 5}%) Intra-state`;
           if (cSub) cSub.innerText = `CGST (${ctb.cgstRate}%): ₹${ctb.cgstAmount.toLocaleString('en-IN')} | SGST (${ctb.sgstRate}%): ₹${ctb.sgstAmount.toLocaleString('en-IN')}`;
         } else {
@@ -2666,9 +2679,9 @@
       document.getElementById('chk-phone').value = profile.phone || '';
       document.getElementById('chk-address').value = profile.address || '';
       document.getElementById('chk-gstin').value = profile.gstin || '';
-      document.getElementById('chk-city').value = profile.city || 'Bengaluru';
-      document.getElementById('chk-state').value = profile.state || 'Karnataka';
-      document.getElementById('chk-pincode').value = profile.pincode || '560001';
+      document.getElementById('chk-city').value = profile.city || '';
+      document.getElementById('chk-state').value = profile.state || '';
+      document.getElementById('chk-pincode').value = profile.pincode || '';
 
       const miniList = document.getElementById('chk-mini-items');
       miniList.innerHTML = '';
@@ -2693,23 +2706,36 @@
       document.getElementById('chk-grand-total').innerText = `₹${portalCart.grandTotal.toLocaleString('en-IN')}`;
       document.getElementById('chk-pay-btn-label').innerText = `Pay ₹${portalCart.grandTotal.toLocaleString('en-IN')} securely`;
 
+      updateCheckoutTaxDisplay();
+
+      setPortalTab('cust-checkout');
+    }
+
+    function updateCheckoutTaxDisplay() {
       const chkTb = portalCart.taxBreakdown;
       const chkLabel = document.getElementById('chk-tax-label');
       const chkSub = document.getElementById('chk-tax-subdetails');
-      if (chkTb) {
-        if (chkTb.isIntraState || chkTb.taxType === 'intra_state') {
-          if (chkLabel) chkLabel.innerText = `GST (${portalCart.taxRate || 5}%) Intra-state`;
-          if (chkSub) chkSub.innerText = `CGST (${chkTb.cgstRate}%): ₹${chkTb.cgstAmount.toLocaleString('en-IN')} | SGST (${chkTb.sgstRate}%): ₹${chkTb.sgstAmount.toLocaleString('en-IN')}`;
-        } else {
-          if (chkLabel) chkLabel.innerText = `IGST (${chkTb.igstRate || portalCart.taxRate}%) Inter-state`;
-          if (chkSub) chkSub.innerText = `IGST: ₹${chkTb.igstAmount.toLocaleString('en-IN')} (${chkTb.placeOfSupply || 'Inter-state'})`;
-        }
-      } else {
-        if (chkLabel) chkLabel.innerText = `GST (${portalCart.taxRate || 5}%)`;
-        if (chkSub) chkSub.innerText = '';
-      }
+      const stateInput = (document.getElementById('chk-state') ? document.getElementById('chk-state').value : '').trim();
+      const gstinInput = (document.getElementById('chk-gstin') ? document.getElementById('chk-gstin').value : '').trim();
+      const rate = portalCart.taxRate || (chkTb && chkTb.taxRate) || 5;
+      const totalTax = portalCart.taxAmount || Math.round((portalCart.subtotal * rate) / 100);
 
-      setPortalTab('cust-checkout');
+      // Check if user has entered state or GSTIN in form
+      const effectiveState = stateInput || (chkTb && chkTb.placeOfSupply) || '';
+      const isKarnataka = (gstinInput && gstinInput.startsWith('29')) || (effectiveState && effectiveState.toLowerCase().includes('karnataka'));
+
+      if (!stateInput && !gstinInput && (!chkTb || chkTb.taxType === 'undetermined' || chkTb.isProvisional || chkTb.placeOfSupplyDetermined === false)) {
+        if (chkLabel) chkLabel.innerText = `Estimated GST (${rate}%)`;
+        if (chkSub) chkSub.innerText = 'Estimated GST — enter delivery state or GSTIN below to confirm CGST/SGST vs IGST.';
+      } else if (isKarnataka) {
+        const halfTax = Math.round(totalTax / 2);
+        const sgst = totalTax - halfTax;
+        if (chkLabel) chkLabel.innerText = `GST (${rate}%) Intra-state`;
+        if (chkSub) chkSub.innerText = `CGST (${(rate / 2).toFixed(1)}%): ₹${halfTax.toLocaleString('en-IN')} | SGST (${(rate / 2).toFixed(1)}%): ₹${sgst.toLocaleString('en-IN')}`;
+      } else {
+        if (chkLabel) chkLabel.innerText = `IGST (${rate}%) Inter-state`;
+        if (chkSub) chkSub.innerText = `IGST: ₹${totalTax.toLocaleString('en-IN')} (${effectiveState || 'Inter-state'})`;
+      }
     }
 
     /**
