@@ -120,6 +120,45 @@
       text-transform: uppercase;
       color: #4B5563 !important; /* Slate 600 */
     }
+
+    /* Cashfree In-Page Modal & Responsive Scroll System */
+    #uniwear-cashfree-mount {
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+      -webkit-overflow-scrolling: touch;
+      overflow-x: hidden !important;
+    }
+    #uniwear-cashfree-mount::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    #uniwear-cashfree-mount::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #uniwear-cashfree-mount::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 9999px;
+    }
+    #uniwear-cashfree-mount::-webkit-scrollbar-thumb:hover {
+      background-color: #94a3b8;
+    }
+    #uniwear-cashfree-mount #cashfree-modal-container {
+      max-width: 100% !important;
+      width: 100% !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: flex-start !important;
+      margin: 0 auto !important;
+      overflow-x: hidden !important;
+    }
+    #uniwear-cashfree-mount #cashfree-modal-container > div {
+      max-width: 100% !important;
+      margin: 0 auto !important;
+    }
+    #uniwear-cashfree-mount iframe {
+      max-width: 100% !important;
+      border: none !important;
+    }
   </style>
 
   <link rel="stylesheet" href="styles/main.css">
@@ -1368,39 +1407,45 @@
   </div>
 
   <!-- Dedicated In-Page Cashfree Payment Overlay Modal -->
-  <div id="uniwear-cashfree-modal-wrapper" class="fixed inset-0 z-[99999] hidden flex items-center justify-center bg-charcoal/70 backdrop-blur-sm p-3 sm:p-6 transition-all duration-300">
-    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden border border-lightBorder flex flex-col max-h-[94vh] animate-in fade-in zoom-in-95 duration-200">
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between px-6 py-4 border-b border-lightBorder bg-slate-50/80">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold shadow-sm">
-            <i class="ri-shield-check-line text-xl"></i>
+  <div id="uniwear-cashfree-modal-wrapper" class="fixed inset-0 z-[99999] hidden flex items-center justify-center bg-charcoal/75 backdrop-blur-sm p-2 sm:p-4 md:p-6 transition-all duration-300">
+    <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-4xl max-h-[96vh] sm:max-h-[90vh] md:max-h-[86vh] border border-lightBorder flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <!-- Modal Header (Fixed at top of modal) -->
+      <div class="flex-shrink-0 flex items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 border-b border-lightBorder bg-slate-50/95 backdrop-blur z-20">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold shadow-xs flex-shrink-0">
+            <i class="ri-shield-check-line text-lg sm:text-xl"></i>
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h4 class="font-heading font-bold text-sm text-charcoal">Secure Cashfree Payment</h4>
-              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h4 class="font-heading font-bold text-xs sm:text-sm text-charcoal truncate">Secure Cashfree Checkout</h4>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 flex-shrink-0">
                 <i class="ri-lock-line"></i> 256-Bit SSL
               </span>
             </div>
-            <p class="text-[11px] text-mutedText mt-0.5" id="cf-modal-subtitle">
-              Order <span id="cf-modal-order-id" class="font-mono font-bold text-charcoal">UW-ORD-0000</span> • Amount: <span id="cf-modal-amount" class="font-bold text-primary">₹0</span>
+            <p class="text-[10px] sm:text-[11px] text-mutedText mt-0.5 truncate" id="cf-modal-subtitle">
+              Order <span id="cf-modal-order-id" class="font-mono font-bold text-charcoal">UW-ORD-0000</span> • Payable: <span id="cf-modal-amount" class="font-bold text-primary">₹0</span>
             </p>
           </div>
         </div>
-        <div class="flex items-center gap-2">
-          <button type="button" id="cf-modal-cancel-btn" onclick="handleCashfreeModalCancel()" class="px-4 py-2 rounded-xl border border-lightBorder text-xs font-bold text-charcoal hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all flex items-center gap-1.5 shadow-sm">
-            <i class="ri-close-line text-base"></i> Cancel & Return
+        <div class="flex items-center gap-2 flex-shrink-0 ml-2">
+          <button type="button" id="cf-modal-cancel-btn" onclick="handleCashfreeModalCancel()" class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-lightBorder text-xs font-bold text-charcoal hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all flex items-center gap-1 shadow-xs">
+            <i class="ri-close-line text-base"></i> <span class="hidden sm:inline">Cancel &</span> Return
           </button>
         </div>
       </div>
 
-      <!-- Mount Container for Cashfree Hosted Checkout -->
-      <div id="uniwear-cashfree-mount" class="w-full h-[620px] relative overflow-hidden bg-white flex items-center justify-center">
-        <!-- Cashfree SDK mounts the checkout iframe directly inside this element -->
-        <div class="flex flex-col items-center justify-center space-y-3 text-mutedText p-8" id="cf-mount-loading-indicator">
-          <i class="ri-loader-4-line text-3xl animate-spin text-primary"></i>
-          <p class="text-xs font-medium">Initializing secure Cashfree gateway...</p>
+      <!-- Mount Container for Cashfree Hosted Checkout (Scrolls independently) -->
+      <div id="uniwear-cashfree-mount" class="flex-1 min-h-[380px] sm:min-h-[500px] max-h-[calc(86vh-72px)] w-full overflow-y-auto overflow-x-hidden bg-white relative flex flex-col items-center justify-start p-1 sm:p-2">
+        <!-- Loading indicator will be placed here initially and removed/hidden as soon as iframe mounts -->
+        <div class="my-auto flex flex-col items-center justify-center space-y-3 text-mutedText p-8 text-center" id="cf-mount-loading-indicator">
+          <div class="relative flex items-center justify-center">
+            <i class="ri-loader-4-line text-4xl animate-spin text-primary"></i>
+            <i class="ri-shield-keyhole-line text-base text-primary absolute"></i>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-charcoal">Connecting to Cashfree Secure Gateway...</p>
+            <p class="text-[11px] text-mutedText mt-0.5">Initializing 256-bit encrypted checkout session</p>
+          </div>
         </div>
       </div>
 
@@ -2837,9 +2882,125 @@
       }
     }
 
+    let lastCheckoutParams = null;
+    let cfMountObserver = null;
+    let cfLoadTimeout = null;
+
+    function cleanupCashfreeMountWatcher() {
+      if (cfMountObserver) {
+        try { cfMountObserver.disconnect(); } catch (_) {}
+        cfMountObserver = null;
+      }
+      if (cfLoadTimeout) {
+        clearTimeout(cfLoadTimeout);
+        cfLoadTimeout = null;
+      }
+    }
+
+    function showCashfreeMountError(mountEl, message) {
+      cleanupCashfreeMountWatcher();
+      if (!mountEl) return;
+      mountEl.innerHTML = `
+        <div id="cf-mount-error-state" class="my-auto flex flex-col items-center justify-center space-y-3 p-8 text-center max-w-md mx-auto animate-in fade-in duration-200">
+          <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl shadow-xs">
+            <i class="ri-error-warning-line"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-sm text-charcoal">Gateway Initialization Notice</h4>
+            <p class="text-xs text-mutedText mt-1">${message || 'Could not connect to Cashfree payment gateway.'}</p>
+          </div>
+          <div class="flex items-center gap-3 pt-3">
+            <button type="button" onclick="retryInPageCashfreeCheckout()" class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primaryHover transition-all flex items-center gap-1.5 shadow-sm">
+              <i class="ri-refresh-line"></i> Retry Checkout
+            </button>
+            <button type="button" onclick="handleCashfreeModalCancel()" class="px-4 py-2 rounded-xl border border-lightBorder text-xs font-bold text-charcoal hover:bg-lightCard transition-all">
+              Return to Cart
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function retryInPageCashfreeCheckout() {
+      if (lastCheckoutParams) {
+        launchInPageCashfreeCheckout(lastCheckoutParams);
+      } else {
+        closeCashfreeModalView();
+        setPortalTab('cust-checkout');
+      }
+    }
+
+    function attachCashfreeMountObserver(mountEl) {
+      cleanupCashfreeMountWatcher();
+      let hasHiddenLoader = false;
+
+      const hideLoader = () => {
+        if (hasHiddenLoader) return;
+        const loader = document.getElementById('cf-mount-loading-indicator');
+        if (loader) {
+          loader.classList.add('hidden');
+          loader.style.display = 'none';
+          hasHiddenLoader = true;
+          console.log('[Cashfree Modal] Checkout iframe/container mounted; loading indicator removed.');
+        }
+      };
+
+      const checkForIframe = () => {
+        const iframe = mountEl.querySelector('iframe');
+        const container = document.getElementById('cashfree-modal-container');
+        if (iframe || container) {
+          if (iframe) {
+            iframe.addEventListener('load', hideLoader);
+            // Once iframe or container has dimensions, hide loader immediately
+            if (iframe.offsetWidth > 0 || iframe.offsetHeight > 0) {
+              hideLoader();
+            } else {
+              setTimeout(hideLoader, 250);
+            }
+          } else {
+            setTimeout(hideLoader, 250);
+          }
+          return true;
+        }
+        return false;
+      };
+
+      if (!checkForIframe()) {
+        cfMountObserver = new MutationObserver(() => {
+          if (checkForIframe()) {
+            if (cfMountObserver) {
+              cfMountObserver.disconnect();
+              cfMountObserver = null;
+            }
+          }
+        });
+        cfMountObserver.observe(mountEl, { childList: true, subtree: true });
+
+        // Polling watcher to catch fast mounts or non-DOM mutations
+        let pollCount = 0;
+        const pollInterval = setInterval(() => {
+          pollCount++;
+          if (checkForIframe() || pollCount > 20) {
+            clearInterval(pollInterval);
+          }
+        }, 150);
+
+        // Timeout fallback: if no gateway iframe appears within 14 seconds, display helpful error & retry
+        cfLoadTimeout = setTimeout(() => {
+          cleanupCashfreeMountWatcher();
+          if (!mountEl.querySelector('iframe') && !document.getElementById('cashfree-modal-container')) {
+            showCashfreeMountError(mountEl, 'The Cashfree gateway response timed out. Please verify your connection or click Retry.');
+          } else {
+            hideLoader();
+          }
+        }, 14000);
+      }
+    }
+
     function launchInPageCashfreeCheckout({ orderId, paymentSessionId, cashfreeMode, orderAmount }) {
       activeCheckoutOrderId = orderId;
       lastFailedOrderId = orderId;
+      lastCheckoutParams = { orderId, paymentSessionId, cashfreeMode, orderAmount };
 
       const modalWrapper = document.getElementById('uniwear-cashfree-modal-wrapper');
       const mountEl = document.getElementById('uniwear-cashfree-mount');
@@ -2854,11 +3015,18 @@
 
       if (mountEl) {
         mountEl.innerHTML = `
-          <div class="flex flex-col items-center justify-center space-y-3 text-mutedText p-8" id="cf-mount-loading-indicator">
-            <i class="ri-loader-4-line text-3xl animate-spin text-primary"></i>
-            <p class="text-xs font-medium">Initializing secure Cashfree gateway...</p>
+          <div class="my-auto flex flex-col items-center justify-center space-y-3 text-mutedText p-8 text-center" id="cf-mount-loading-indicator">
+            <div class="relative flex items-center justify-center">
+              <i class="ri-loader-4-line text-4xl animate-spin text-primary"></i>
+              <i class="ri-shield-keyhole-line text-base text-primary absolute"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-charcoal">Connecting to Cashfree Secure Gateway...</p>
+              <p class="text-[11px] text-mutedText mt-0.5">Initializing 256-bit encrypted checkout session</p>
+            </div>
           </div>
         `;
+        attachCashfreeMountObserver(mountEl);
       }
 
       if (modalWrapper) modalWrapper.classList.remove('hidden');
@@ -2872,6 +3040,7 @@
           redirectTarget: mountEl
         }).then(async (result) => {
           disableWindowOpenGuard();
+          cleanupCashfreeMountWatcher();
           console.log('[Cashfree In-Page Checkout Resolved]', result);
 
           // Handle redirect gracefully: gateway handling external step or bank authentication
@@ -2884,18 +3053,26 @@
           await reconcilePaymentStatus(orderId, result);
         }).catch(async (err) => {
           disableWindowOpenGuard();
+          cleanupCashfreeMountWatcher();
           console.error('[Cashfree In-Page Checkout Error]', err);
           closeCashfreeModalView();
           await reconcilePaymentStatus(orderId, { error: err });
         });
       } catch (sdkInitErr) {
         disableWindowOpenGuard();
-        closeCashfreeModalView();
-        alert(sdkInitErr.message || 'Failed to initialize payment gateway.');
+        cleanupCashfreeMountWatcher();
+        console.error('[Cashfree SDK Init Error]', sdkInitErr);
+        if (mountEl) {
+          showCashfreeMountError(mountEl, sdkInitErr.message || 'Failed to initialize payment gateway.');
+        } else {
+          closeCashfreeModalView();
+          alert(sdkInitErr.message || 'Failed to initialize payment gateway.');
+        }
       }
     }
 
     function closeCashfreeModalView() {
+      cleanupCashfreeMountWatcher();
       const modalWrapper = document.getElementById('uniwear-cashfree-modal-wrapper');
       if (modalWrapper) modalWrapper.classList.add('hidden');
       const mountEl = document.getElementById('uniwear-cashfree-mount');
@@ -2904,6 +3081,7 @@
 
     async function handleCashfreeModalCancel() {
       disableWindowOpenGuard();
+      cleanupCashfreeMountWatcher();
       closeCashfreeModalView();
       if (activeCheckoutOrderId) {
         await reconcilePaymentStatus(activeCheckoutOrderId, { userCancelled: true });
