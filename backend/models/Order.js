@@ -120,6 +120,11 @@ const orderSchema = new mongoose.Schema({
   },
   payment: {
     gateway: { type: String, default: 'Cashfree' },
+    gatewayEnvironment: {
+      type: String,
+      enum: ['SANDBOX', 'PRODUCTION'],
+      default: () => ((process.env.CASHFREE_ENV || 'sandbox').toUpperCase() === 'PRODUCTION' ? 'PRODUCTION' : 'SANDBOX')
+    },
     paymentStatus: {
       type: String,
       enum: ['PENDING', 'PAID', 'FAILED', 'CANCELLED'],

@@ -9,14 +9,14 @@ const {
   archiveOrder,
   deleteOrder
 } = require('../controllers/orderController');
-const { protect } = require('../middleware/auth');
+const { protect, adminOnly } = require('../middleware/auth');
 
 router.get('/', protect, getOrders);
 router.get('/:id', protect, getOrderById);
-router.post('/', protect, createOrder);
-router.patch('/:id', protect, updateOrder);
-router.patch('/:id/mark-test', protect, markOrderTest);
-router.patch('/:id/archive', protect, archiveOrder);
-router.delete('/:id', protect, deleteOrder);
+router.post('/', protect, adminOnly, createOrder);
+router.patch('/:id', protect, adminOnly, updateOrder);
+router.patch('/:id/mark-test', protect, adminOnly, markOrderTest);
+router.patch('/:id/archive', protect, adminOnly, archiveOrder);
+router.delete('/:id', protect, adminOnly, deleteOrder);
 
 module.exports = router;

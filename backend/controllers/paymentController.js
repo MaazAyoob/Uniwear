@@ -241,6 +241,7 @@ exports.createCheckoutOrder = async (req, res) => {
       },
       payment: {
         gateway: 'Cashfree',
+        gatewayEnvironment: (process.env.CASHFREE_ENV || 'sandbox').toUpperCase(),
         paymentStatus: 'PENDING',
         cfOrderId: '',
         paymentSessionId: '',

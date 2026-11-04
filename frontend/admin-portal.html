@@ -2469,16 +2469,16 @@
               </div>
 
               <!-- Tax Calculation Status Box -->
-              <div class="p-2.5 rounded-xl border text-[11px] flex items-center justify-between" id="aod-tax-status-box">
-                <span class="font-semibold" id="aod-tax-status-label">Tax Calculation: Final Certified</span>
-                <span class="text-[10px] font-mono text-mutedText" id="aod-tax-status-sub">Determined via Place of Supply</span>
+              <div class="p-2.5 rounded-xl border border-blue-200 bg-blue-50/60 text-[11px] flex items-center justify-between text-blue-900" id="aod-tax-status-box">
+                <span class="font-semibold" id="aod-tax-status-label">Tax Calculation: Pending Verification</span>
+                <span class="text-[10px] font-mono text-mutedText" id="aod-tax-status-sub">Evaluating place of supply & HSN audit status</span>
               </div>
             </div>
           </div>
 
         </div>
 
-        <!-- SECTION F: Payment Information & Gateway Audit Trail -->
+        <!-- SECTION F: Payment Information & Cashfree Gateway Audit Trail -->
         <div class="bg-white rounded-2xl border border-lightBorder p-5 shadow-xs space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
             <div>
@@ -2496,6 +2496,10 @@
 
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
             <div>
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Merchant Order #</span>
+              <span class="font-bold text-charcoal font-mono" id="aod-sec-f-order-id">UW-ORD-0000</span>
+            </div>
+            <div>
               <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Payment Status</span>
               <span class="font-bold text-charcoal" id="aod-pay-status">PAID</span>
             </div>
@@ -2504,20 +2508,20 @@
               <span class="font-semibold text-charcoal" id="aod-pay-method">Online Gateway</span>
             </div>
             <div>
-              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Gateway Order ID</span>
-              <span class="font-mono text-charcoal font-semibold" id="aod-cf-order-id">—</span>
-            </div>
-            <div>
-              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Payment ID (cf_payment_id)</span>
-              <span class="font-mono font-bold text-primary" id="aod-cf-payment-id">—</span>
-            </div>
-            <div class="sm:col-span-2">
-              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Payment Session ID</span>
-              <span class="font-mono text-mutedText text-[10px] truncate block" id="aod-pay-session-id">—</span>
-            </div>
-            <div class="sm:col-span-2">
               <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Confirmation Timestamp</span>
               <span class="font-mono text-charcoal font-semibold" id="aod-pay-timestamp">—</span>
+            </div>
+            <div>
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Cashfree Gateway Order ID</span>
+              <span class="font-mono text-charcoal font-semibold select-all" id="aod-cf-order-id">—</span>
+            </div>
+            <div>
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Cashfree Payment ID (cf_payment_id)</span>
+              <span class="font-mono font-bold text-primary select-all" id="aod-cf-payment-id">—</span>
+            </div>
+            <div class="sm:col-span-2">
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Cashfree Payment Session ID</span>
+              <span class="font-mono text-mutedText text-[10px] truncate block select-all" id="aod-pay-session-id">—</span>
             </div>
           </div>
 
@@ -2533,7 +2537,8 @@
                     <th class="p-2.5">Method</th>
                     <th class="p-2.5">Amount</th>
                     <th class="p-2.5">Status</th>
-                    <th class="p-2.5">Gateway Transaction Ref</th>
+                    <th class="p-2.5">Cashfree Payment ID (cf_payment_id)</th>
+                    <th class="p-2.5">Gateway Order ID</th>
                   </tr>
                 </thead>
                 <tbody id="aod-payment-attempts-body">
@@ -5640,10 +5645,13 @@
                   </div>
                   <div>
                     <h5 class="font-bold text-charcoal text-xs">${it.name || 'Industrial Workwear'}</h5>
-                    <div class="flex items-center gap-2 text-[10px] text-mutedText mt-0.5">
+                    <div class="flex items-center gap-2 text-[10px] text-mutedText mt-0.5 flex-wrap">
                       <span class="font-mono font-semibold">SKU: ${it.sku || 'UW-PROD'}</span>
                       <span>•</span>
-                      <span>HSN: <strong class="text-charcoal font-mono">${it.hsn || '6203'}</strong></span>
+                      <span>HSN: <strong class="text-charcoal font-mono">${it.hsn || it.hsnCode || '6203'}</strong></span>
+                      ${it.hsnStatus === 'Verified by Accountant'
+                        ? `<span class="px-1.5 py-0.2 rounded text-[9px] bg-green-100 text-green-800 font-bold border border-green-200">CA Verified</span>`
+                        : `<span class="px-1.5 py-0.2 rounded text-[9px] bg-amber-50 text-amber-800 font-bold border border-amber-200" title="HSN pending final accountant audit sign-off">Pending Accountant Verification</span>`}
                       <span>•</span>
                       <span>GST Rate: <strong class="text-charcoal">${it.gstRate || 5}%</strong></span>
                     </div>
@@ -5719,17 +5727,31 @@
 
         document.getElementById('aod-fin-grand-total').innerText = `₹${grandTotal.toLocaleString('en-IN')}`;
 
+        // Tax Status & Accountant Verification Guard:
+        // Never display Certified or Accountant Verified unless explicitly recorded.
         const taxBox = document.getElementById('aod-tax-status-box');
         const taxLabel = document.getElementById('aod-tax-status-label');
         const taxSub = document.getElementById('aod-tax-status-sub');
-        if (tax.isProvisional) {
+
+        const isExplicitlyAccountantVerified = Boolean(
+          (tax && tax.hsnStatus === 'Verified by Accountant') ||
+          (o.taxBreakdown && o.taxBreakdown.hsnStatus === 'Verified by Accountant') ||
+          (o.isAccountantVerified === true) ||
+          (tax && tax.isAccountantVerified === true)
+        );
+
+        if (tax.isProvisional || tax.placeOfSupplyDetermined === false) {
           taxBox.className = 'p-2.5 rounded-xl border border-amber-200 bg-amber-50 text-[11px] flex items-center justify-between text-amber-900';
-          taxLabel.innerText = '⚠️ Tax Calculation: Provisional / Unverified';
-          taxSub.innerText = 'HSN classifications flagged for accountant review';
-        } else {
+          taxLabel.innerText = '⚠️ Tax Calculation: Provisional (Pending Place of Supply)';
+          taxSub.innerText = 'Place of supply undetermined; HSN pending accountant review';
+        } else if (isExplicitlyAccountantVerified) {
           taxBox.className = 'p-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-[11px] flex items-center justify-between text-emerald-900';
-          taxLabel.innerText = '✓ Tax Calculation: Final Certified';
-          taxSub.innerText = 'Determined via Place of Supply';
+          taxLabel.innerText = '✓ Tax Calculation: Verified by Accountant';
+          taxSub.innerText = 'Place of supply determined & HSN sign-off certified by CA';
+        } else {
+          taxBox.className = 'p-2.5 rounded-xl border border-blue-200 bg-blue-50 text-[11px] flex items-center justify-between text-blue-900';
+          taxLabel.innerText = 'ℹ️ Tax Calculation: Place of Supply Determined (Pending Accountant Verification)';
+          taxSub.innerText = 'Applicable GST jurisdiction established; HSN classification pending CA audit sign-off';
         }
 
         // SECTION F: Payment & Gateway Audit Trail
@@ -5752,32 +5774,35 @@
           hookBadge.innerHTML = '<i class="ri-time-line"></i> API Reconciliation / Webhook Pending';
         }
 
+        document.getElementById('aod-sec-f-order-id').innerText = ordId;
         document.getElementById('aod-pay-status').innerText = pay.paymentStatus || 'PENDING';
         document.getElementById('aod-pay-method').innerText = (pay.paymentMethod ? String(pay.paymentMethod).toUpperCase() : 'ONLINE GATEWAY');
-        document.getElementById('aod-cf-order-id').innerText = pay.cfOrderId || '—';
-        document.getElementById('aod-cf-payment-id').innerText = pay.cfPaymentId || '—';
-        document.getElementById('aod-pay-session-id').innerText = pay.cfPaymentSessionId || '—';
+        document.getElementById('aod-cf-order-id').innerText = pay.cfOrderId || 'Awaiting Gateway Order';
+        document.getElementById('aod-cf-payment-id').innerText = pay.cfPaymentId || (pay.paymentStatus === 'PAID' ? 'Settled (Ref on file)' : 'Awaiting Payment');
+        document.getElementById('aod-pay-session-id').innerText = pay.paymentSessionId || pay.cfPaymentSessionId || '—';
         document.getElementById('aod-pay-timestamp').innerText = pay.paymentTime ? new Date(pay.paymentTime).toLocaleString('en-IN') : 'Awaiting Settlement';
 
         const attemptsBody = document.getElementById('aod-payment-attempts-body');
         const attempts = Array.isArray(pay.attempts) && pay.attempts.length > 0 ? pay.attempts : [
           {
-            attemptId: pay.cfPaymentId || 'ATT-1',
+            attemptId: 'ATT-1',
             attemptTime: pay.paymentTime || o.createdAt,
             paymentMethod: pay.paymentMethod || 'Online Gateway',
             amount: grandTotal,
             status: pay.paymentStatus || 'PENDING',
-            transactionRef: pay.cfPaymentId || pay.cfOrderId || 'Awaiting'
+            cfPaymentId: pay.cfPaymentId || '—',
+            cfOrderId: pay.cfOrderId || '—'
           }
         ];
         attemptsBody.innerHTML = attempts.map(att => `
           <tr class="border-b border-lightBorder/50 font-mono text-[10px]">
-            <td class="p-2.5 font-bold text-charcoal">${att.attemptId || '—'}</td>
+            <td class="p-2.5 font-bold text-charcoal">${att.attemptId || 'ATT-1'}</td>
             <td class="p-2.5 text-mutedText">${att.attemptTime ? new Date(att.attemptTime).toLocaleTimeString('en-IN') : '—'}</td>
             <td class="p-2.5 font-sans">${att.paymentMethod || 'Gateway'}</td>
             <td class="p-2.5 font-bold text-charcoal">₹${Number(att.amount || grandTotal).toLocaleString('en-IN')}</td>
-            <td class="p-2.5"><span class="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${att.status === 'PAID' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${att.status || 'PENDING'}</span></td>
-            <td class="p-2.5 text-mutedText truncate max-w-[120px]" title="${att.transactionRef || ''}">${att.transactionRef || '—'}</td>
+            <td class="p-2.5"><span class="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${att.status === 'PAID' ? 'bg-emerald-100 text-emerald-800' : (att.status === 'FAILED' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800')}">${att.status || 'PENDING'}</span></td>
+            <td class="p-2.5 text-primary font-bold select-all">${att.cfPaymentId || pay.cfPaymentId || '—'}</td>
+            <td class="p-2.5 text-mutedText truncate max-w-[130px] select-all" title="${att.cfOrderId || pay.cfOrderId || ''}">${att.cfOrderId || pay.cfOrderId || '—'}</td>
           </tr>
         `).join('');
 

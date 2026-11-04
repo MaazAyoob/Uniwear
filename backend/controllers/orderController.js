@@ -205,13 +205,39 @@ const getOrderById = async (req, res, next) => {
 const markOrderTest = async (req, res, next) => {
   try {
     const targetQuery = getOrderQuery(req.params.id);
-    const isTest = req.body.isTestData !== undefined ? Boolean(req.body.isTestData) : true;
-    const order = await Order.findOneAndUpdate(
-      targetQuery,
-      { isTestData: isTest },
-      { new: true }
-    );
+    const order = await Order.findOne(targetQuery);
     if (!order) return res.status(404).json({ success: false, message: 'Order not found.' });
+
+    const isTest = req.body.isTestData !== undefined ? Boolean(req.body.isTestData) : true;
+
+    if (isTest) {
+      // FINANCIAL INTEGRITY & SECURITY GUARD:
+      // A genuine paid Production order or live non-sandbox transaction CANNOT be marked as test data.
+      const isPaid = order.payment && order.payment.paymentStatus === 'PAID';
+      const isProductionGateway = (order.payment && order.payment.gatewayEnvironment === 'PRODUCTION') ||
+                                  (order.gatewayEnvironment === 'PRODUCTION');
+      const isNonSandboxPaid = isPaid && (order.payment?.gatewayEnvironment !== 'SANDBOX');
+      const isLiveFactoryOrder = order.orderType === 'FactoryOrder' && order.currentStageIndex > 1;
+
+      if (isProductionGateway || isNonSandboxPaid || (isPaid && isProductionGateway)) {
+        return res.status(400).json({
+          success: false,
+          securityBlock: true,
+          message: `Security & Financial Integrity Block: Order ${order.id} is a genuine paid production record (Environment: ${order.payment?.gatewayEnvironment || 'PRODUCTION'}, Status: ${order.payment?.paymentStatus || 'PAID'}). Production financial records cannot be flagged as test data.`
+        });
+      }
+
+      if (isLiveFactoryOrder) {
+        return res.status(400).json({
+          success: false,
+          securityBlock: true,
+          message: `Security Block: Order ${order.id} is an active factory manufacturing order currently in Stage ${order.currentStageIndex}. Live production manufacturing orders cannot be flagged as test data.`
+        });
+      }
+    }
+
+    order.isTestData = isTest;
+    await order.save();
 
     await logActivity(
       isTest ? 'Order Flagged as Test Data' : 'Order Unflagged as Test Data',
@@ -266,17 +292,44 @@ const deleteOrder = async (req, res, next) => {
     const order = await Order.findOne(targetQuery);
     if (!order) return res.status(404).json({ success: false, message: 'Order record not found.' });
 
-    // CRITICAL PRODUCTION SAFETY GUARD:
-    // Only positively identified synthetic test records (isTestData === true) may be permanently deleted.
-    // Genuine customer orders and manufacturing records must be preserved or archived to protect financial and audit integrity.
+    // CRITICAL PRODUCTION SAFETY & FINANCIAL INTEGRITY DEFENSE:
+    // Defense Layer 1: Must be explicitly flagged as test data
     if (!order.isTestData) {
       return res.status(400).json({
         success: false,
         permanentDeletionBlocked: true,
+        securityBlock: true,
         message: `Deletion Blocked: Order ${order.id} is a live production record. Only orders explicitly marked as synthetic test data (isTestData) can be permanently deleted. You may archive this order instead.`
       });
     }
 
+    // Defense Layer 2: Reliable test-data provenance and non-production payment-environment checks
+    // Even if an administrator toggled isTestData, an order with Production gateway provenance or genuine paid status can NEVER be deleted!
+    const isProductionGateway = (order.payment && order.payment.gatewayEnvironment === 'PRODUCTION') ||
+                                (order.gatewayEnvironment === 'PRODUCTION');
+    const isNonSandboxPaid = (order.payment && order.payment.paymentStatus === 'PAID') &&
+                             (order.payment?.gatewayEnvironment !== 'SANDBOX');
+
+    if (isProductionGateway || isNonSandboxPaid) {
+      return res.status(403).json({
+        success: false,
+        permanentDeletionBlocked: true,
+        securityBlock: true,
+        message: `Financial Integrity Violation: Permanent deletion blocked for order ${order.id}. This order has Production gateway provenance (${order.payment?.gatewayEnvironment || 'PRODUCTION'}) or non-sandbox paid settlement. Production financial and audit records cannot be permanently deleted under any circumstances; archive the record instead.`
+      });
+    }
+
+    // Defense Layer 3: Completed offline/factory orders check
+    if (order.orderType === 'FactoryOrder' && order.currentStageIndex > 1) {
+      return res.status(403).json({
+        success: false,
+        permanentDeletionBlocked: true,
+        securityBlock: true,
+        message: `Manufacturing Integrity Block: Permanent deletion blocked for factory order ${order.id} in Stage ${order.currentStageIndex}. Orders in manufacturing workflow cannot be permanently deleted.`
+      });
+    }
+
+    // Passed all guards: Legitimate Sandbox test order or synthetic local test data cleanup
     await Order.findOneAndDelete(targetQuery);
 
     await logActivity(
