@@ -775,12 +775,24 @@
 
         <!-- Filter & Search Toolbar -->
         <div class="flex flex-wrap items-center justify-between gap-4 p-4 bg-white rounded-2xl border border-lightBorder shadow-sm">
-          <div class="flex flex-wrap items-center gap-3">
-            <span class="text-xs font-bold uppercase tracking-wider text-mutedText">Payment Status:</span>
-            <div class="flex items-center gap-1 bg-lightCard p-1 rounded-xl border border-lightBorder text-xs font-bold">
-              <button id="order-filter-all" onclick="setOrderPaymentFilter('ALL')" class="px-3 py-1.5 rounded-lg bg-white shadow-xs text-primary transition-all">All Orders</button>
-              <button id="order-filter-paid" onclick="setOrderPaymentFilter('PAID')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">Paid Orders</button>
-              <button id="order-filter-unpaid" onclick="setOrderPaymentFilter('UNPAID')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">Unpaid / Pending</button>
+          <div class="flex flex-wrap items-center gap-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-mutedText">Payment:</span>
+              <div class="flex items-center gap-1 bg-lightCard p-1 rounded-xl border border-lightBorder text-xs font-bold">
+                <button id="order-filter-all" onclick="setOrderPaymentFilter('ALL')" class="px-3 py-1.5 rounded-lg bg-white shadow-xs text-primary transition-all">All</button>
+                <button id="order-filter-paid" onclick="setOrderPaymentFilter('PAID')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">Paid</button>
+                <button id="order-filter-unpaid" onclick="setOrderPaymentFilter('UNPAID')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">Unpaid</button>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-mutedText">Lifecycle:</span>
+              <div class="flex items-center gap-1 bg-lightCard p-1 rounded-xl border border-lightBorder text-xs font-bold">
+                <button id="order-lifecycle-active" onclick="setOrderLifecycleFilter('ACTIVE')" class="px-3 py-1.5 rounded-lg bg-white shadow-xs text-primary transition-all">Active Orders</button>
+                <button id="order-lifecycle-all" onclick="setOrderLifecycleFilter('ALL')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">All</button>
+                <button id="order-lifecycle-archived" onclick="setOrderLifecycleFilter('ARCHIVED')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">Archived</button>
+                <button id="order-lifecycle-test" onclick="setOrderLifecycleFilter('TEST')" class="px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all">Test Orders</button>
+              </div>
             </div>
           </div>
           <div class="relative w-72">
@@ -2211,6 +2223,369 @@
     </div>
   </div>
 
+  <!-- COMPREHENSIVE ADMIN ORDER DETAIL VIEW MODAL (7 SECTIONS) -->
+  <div id="admin-order-detail-modal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center bg-charcoal/70 backdrop-blur-sm p-3 sm:p-6 transition-all duration-300">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-6xl overflow-hidden border border-lightBorder flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Top Modal Bar -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-lightBorder bg-slate-50/90 flex-wrap gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-bold shadow-sm">
+            <i class="ri-file-list-3-line text-xl"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="font-heading font-extrabold text-lg text-charcoal" id="aod-title-order-id">UW-ORD-0000</h3>
+              <span id="aod-badge-order-type" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-blue-50 text-blue-700 border border-blue-200">Portal Direct Order</span>
+              <span id="aod-badge-payment-status" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-800 border border-amber-200">PENDING</span>
+              <span id="aod-badge-schedule-status" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-green-50 text-green-700 border border-green-200">On Schedule</span>
+              <span id="aod-badge-test-data" class="hidden px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-100 text-amber-800 border border-amber-300">Test Order</span>
+              <span id="aod-badge-archived" class="hidden px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-gray-100 text-gray-700 border border-gray-300">Archived</span>
+            </div>
+            <p class="text-[11px] text-mutedText mt-0.5" id="aod-subtitle">Client: <strong class="text-charcoal" id="aod-sub-client">—</strong> • Placed: <span id="aod-sub-date">—</span></p>
+          </div>
+        </div>
+
+        <!-- Header Actions: Mark Test, Archive, Delete, Close -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <button type="button" id="aod-btn-toggle-test" onclick="handleDetailToggleTest()" class="px-3 py-1.5 rounded-xl border border-lightBorder text-xs font-bold text-charcoal hover:bg-amber-50 hover:text-amber-700 transition-colors flex items-center gap-1 shadow-xs">
+            <i class="ri-flask-line"></i> <span id="aod-btn-toggle-test-label">Mark as Test</span>
+          </button>
+          <button type="button" id="aod-btn-toggle-archive" onclick="handleDetailToggleArchive()" class="px-3 py-1.5 rounded-xl border border-lightBorder text-xs font-bold text-charcoal hover:bg-slate-100 transition-colors flex items-center gap-1 shadow-xs">
+            <i class="ri-archive-line"></i> <span id="aod-btn-toggle-archive-label">Archive</span>
+          </button>
+          <button type="button" id="aod-btn-delete-test" onclick="handleDetailDeleteTest()" class="px-3 py-1.5 rounded-xl border border-rose-200 text-xs font-bold text-rose-600 bg-rose-50/50 hover:bg-rose-600 hover:text-white transition-colors flex items-center gap-1 shadow-xs" title="Only synthetic test orders can be deleted">
+            <i class="ri-delete-bin-line"></i> Delete Test Order
+          </button>
+          <button type="button" onclick="closeOrderDetailModal()" class="w-8 h-8 rounded-full border border-lightBorder hover:bg-slate-200 text-charcoal flex items-center justify-center transition-colors">
+            <i class="ri-close-line text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-6 overflow-y-auto space-y-6 text-xs font-body max-h-[calc(92vh-80px)]">
+        
+        <!-- TOP ROW: SECTION A & SECTION B -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- SECTION A: Order Information -->
+          <div class="lg:col-span-7 bg-white rounded-2xl border border-lightBorder p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
+              <h4 class="font-heading font-bold text-sm text-charcoal flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">A</span>
+                Order Overview & Production Stage
+              </h4>
+              <span class="text-[11px] font-mono text-mutedText" id="aod-sec-a-order-id">UW-ORD-0000</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+              <div>
+                <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Order Type</span>
+                <span class="font-semibold text-charcoal" id="aod-order-type">Portal Direct Order</span>
+              </div>
+              <div>
+                <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Placed At</span>
+                <span class="font-semibold text-charcoal" id="aod-placed-at">—</span>
+              </div>
+              <div>
+                <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Last Updated</span>
+                <span class="font-semibold text-charcoal" id="aod-updated-at">—</span>
+              </div>
+              <div>
+                <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Current Stage</span>
+                <span class="font-semibold text-primary" id="aod-current-stage">01. Quotation & Contract Finalized</span>
+              </div>
+              <div>
+                <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Schedule Status</span>
+                <span class="font-semibold text-charcoal" id="aod-schedule-status">On Schedule</span>
+              </div>
+              <div>
+                <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">PO Reference</span>
+                <span class="font-mono font-semibold text-charcoal" id="aod-po-ref">—</span>
+              </div>
+              <div class="sm:col-span-3">
+                <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Quotation Reference</span>
+                <span class="font-mono font-semibold text-charcoal" id="aod-quotation-ref">—</span>
+              </div>
+              <div class="sm:col-span-3">
+                <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Customer Special Instructions & Notes</span>
+                <p class="text-charcoal bg-slate-50 p-2.5 rounded-xl border border-lightBorder text-[11px] leading-relaxed mt-1" id="aod-instructions">None specified.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION B: Corporate Customer & Company Information -->
+          <div class="lg:col-span-5 bg-white rounded-2xl border border-lightBorder p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
+              <h4 class="font-heading font-bold text-sm text-charcoal flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">B</span>
+                Customer & Company Profile
+              </h4>
+              <i class="ri-building-line text-mutedText text-base"></i>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between py-1 border-b border-lightBorder/50">
+                <span class="text-mutedText">Company Name</span>
+                <strong class="text-charcoal font-semibold text-right" id="aod-cust-company">—</strong>
+              </div>
+              <div class="flex justify-between py-1 border-b border-lightBorder/50">
+                <span class="text-mutedText">Contact Person</span>
+                <strong class="text-charcoal font-semibold text-right" id="aod-cust-name">—</strong>
+              </div>
+              <div class="flex justify-between py-1 border-b border-lightBorder/50">
+                <span class="text-mutedText">Email Address</span>
+                <span class="font-mono text-primary font-semibold text-right select-all" id="aod-cust-email">—</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-lightBorder/50">
+                <span class="text-mutedText">Phone Number</span>
+                <span class="font-mono text-charcoal font-semibold text-right" id="aod-cust-phone">—</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-lightBorder/50">
+                <span class="text-mutedText">Customer GSTIN</span>
+                <span class="font-mono font-bold text-charcoal text-right uppercase" id="aod-cust-gstin">—</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-mutedText">Customer ID / Ref</span>
+                <span class="font-mono text-mutedText text-right text-[11px]" id="aod-cust-id">—</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SECTION C: Complete Ordered Products (Multi-Product & Size-Wise Allocation Breakdown) -->
+        <div class="bg-white rounded-2xl border border-lightBorder p-5 shadow-xs space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
+            <div>
+              <h4 class="font-heading font-bold text-sm text-charcoal flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">C</span>
+                Complete Ordered Products & Size-Wise Allocation Breakdown
+              </h4>
+              <p class="text-[11px] text-mutedText mt-0.5">Manufacturing size allocations, unit rates, and HSN compliance per line item.</p>
+            </div>
+            <span class="font-bold text-charcoal bg-slate-100 px-3 py-1 rounded-full text-xs" id="aod-prod-item-count">1 Item</span>
+          </div>
+
+          <!-- Injected Product Items List -->
+          <div class="space-y-4" id="aod-products-container">
+            <!-- Dynamically populated per line item -->
+          </div>
+        </div>
+
+        <!-- MIDDLE ROW: SECTION D & SECTION E -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- SECTION D: Billing & Delivery Details -->
+          <div class="lg:col-span-6 bg-white rounded-2xl border border-lightBorder p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
+              <h4 class="font-heading font-bold text-sm text-charcoal flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">D</span>
+                Billing & Delivery Details
+              </h4>
+              <i class="ri-truck-line text-mutedText text-base"></i>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4 text-xs">
+              <!-- Billing Card -->
+              <div class="p-3 bg-lightCard/50 rounded-xl border border-lightBorder space-y-1.5">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-mutedText block">Billing Address</span>
+                <p class="font-bold text-charcoal" id="aod-bill-name">—</p>
+                <p class="text-mutedText leading-relaxed" id="aod-bill-address">—</p>
+                <p class="text-charcoal font-semibold" id="aod-bill-city-state-pin">—</p>
+                <p class="text-[11px] font-mono font-bold text-charcoal pt-1" id="aod-bill-gstin">GSTIN: —</p>
+              </div>
+
+              <!-- Delivery Card -->
+              <div class="p-3 bg-lightCard/50 rounded-xl border border-lightBorder space-y-1.5">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-mutedText block">Delivery Address</span>
+                <p class="font-bold text-charcoal" id="aod-ship-name">—</p>
+                <p class="text-mutedText leading-relaxed" id="aod-ship-address">—</p>
+                <p class="text-charcoal font-semibold" id="aod-ship-city-state-pin">—</p>
+                <p class="text-[11px] text-mutedText pt-1" id="aod-ship-phone">Contact: —</p>
+              </div>
+            </div>
+
+            <!-- Tax Jurisdiction & Place of Supply -->
+            <div class="p-3 bg-slate-50 rounded-xl border border-lightBorder space-y-2 text-xs">
+              <div class="flex justify-between items-center">
+                <span class="text-mutedText">Place of Supply</span>
+                <strong class="text-charcoal font-bold" id="aod-place-of-supply">Karnataka (Intrastate)</strong>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-mutedText">Supply Classification</span>
+                <span id="aod-tax-jurisdiction-badge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200">Intra-State (CGST + SGST)</span>
+              </div>
+              <div class="flex justify-between items-center text-[11px]">
+                <span class="text-mutedText">Supplier GSTIN</span>
+                <span class="font-mono text-charcoal" id="aod-supplier-gstin">29ABCDE1234F1ZH</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION E: Financial & Tax Summary -->
+          <div class="lg:col-span-6 bg-white rounded-2xl border border-lightBorder p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
+              <h4 class="font-heading font-bold text-sm text-charcoal flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">E</span>
+                Financial & GST Tax Summary
+              </h4>
+              <i class="ri-money-rupee-circle-line text-mutedText text-base"></i>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+              <div class="flex justify-between py-1 border-b border-lightBorder/50">
+                <span class="text-mutedText">Taxable Subtotal (Pre-tax)</span>
+                <strong class="text-charcoal font-semibold" id="aod-fin-subtotal">₹0</strong>
+              </div>
+              
+              <!-- CGST Row -->
+              <div class="flex justify-between py-1 border-b border-lightBorder/50" id="aod-row-cgst">
+                <span class="text-mutedText" id="aod-cgst-label">CGST (2.5%)</span>
+                <strong class="text-charcoal font-semibold" id="aod-fin-cgst">₹0</strong>
+              </div>
+
+              <!-- SGST Row -->
+              <div class="flex justify-between py-1 border-b border-lightBorder/50" id="aod-row-sgst">
+                <span class="text-mutedText" id="aod-sgst-label">SGST (2.5%)</span>
+                <strong class="text-charcoal font-semibold" id="aod-fin-sgst">₹0</strong>
+              </div>
+
+              <!-- IGST Row -->
+              <div class="flex justify-between py-1 border-b border-lightBorder/50" id="aod-row-igst">
+                <span class="text-mutedText" id="aod-igst-label">IGST (5%)</span>
+                <strong class="text-charcoal font-semibold" id="aod-fin-igst">₹0</strong>
+              </div>
+
+              <div class="flex justify-between py-1 border-b border-lightBorder/50">
+                <span class="text-mutedText">Shipping / Freight Delivery Charges</span>
+                <span class="font-bold text-emerald-700" id="aod-fin-shipping">Included (₹0)</span>
+              </div>
+
+              <div class="flex justify-between py-2 border-t-2 border-charcoal/10 font-heading text-base font-extrabold text-charcoal">
+                <span>Final Order Amount (INR)</span>
+                <span class="text-primary" id="aod-fin-grand-total">₹0</span>
+              </div>
+
+              <!-- Tax Calculation Status Box -->
+              <div class="p-2.5 rounded-xl border text-[11px] flex items-center justify-between" id="aod-tax-status-box">
+                <span class="font-semibold" id="aod-tax-status-label">Tax Calculation: Final Certified</span>
+                <span class="text-[10px] font-mono text-mutedText" id="aod-tax-status-sub">Determined via Place of Supply</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SECTION F: Payment Information & Gateway Audit Trail -->
+        <div class="bg-white rounded-2xl border border-lightBorder p-5 shadow-xs space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
+            <div>
+              <h4 class="font-heading font-bold text-sm text-charcoal flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">F</span>
+                Payment Information & Cashfree Gateway Audit Trail
+              </h4>
+              <p class="text-[11px] text-mutedText mt-0.5">Authoritative payment status, payment method, gateway transaction references and reconciliation events.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="aod-gateway-env-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-700 border border-slate-300">Sandbox Gateway</span>
+              <span id="aod-webhook-status-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200"><i class="ri-shield-keyhole-line"></i> Webhook Verified</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+            <div>
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Payment Status</span>
+              <span class="font-bold text-charcoal" id="aod-pay-status">PAID</span>
+            </div>
+            <div>
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Payment Method</span>
+              <span class="font-semibold text-charcoal" id="aod-pay-method">Online Gateway</span>
+            </div>
+            <div>
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Gateway Order ID</span>
+              <span class="font-mono text-charcoal font-semibold" id="aod-cf-order-id">—</span>
+            </div>
+            <div>
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Payment ID (cf_payment_id)</span>
+              <span class="font-mono font-bold text-primary" id="aod-cf-payment-id">—</span>
+            </div>
+            <div class="sm:col-span-2">
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Payment Session ID</span>
+              <span class="font-mono text-mutedText text-[10px] truncate block" id="aod-pay-session-id">—</span>
+            </div>
+            <div class="sm:col-span-2">
+              <span class="text-mutedText block text-[10px] uppercase font-bold tracking-wider">Confirmation Timestamp</span>
+              <span class="font-mono text-charcoal font-semibold" id="aod-pay-timestamp">—</span>
+            </div>
+          </div>
+
+          <!-- Payment Attempts History Table -->
+          <div class="pt-3 border-t border-lightBorder space-y-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-mutedText block">Payment Attempt History</span>
+            <div class="overflow-x-auto rounded-xl border border-lightBorder">
+              <table class="w-full text-left text-[11px] border-collapse">
+                <thead class="bg-lightCard border-b border-lightBorder text-mutedText font-bold uppercase text-[9px]">
+                  <tr>
+                    <th class="p-2.5">Attempt ID</th>
+                    <th class="p-2.5">Timestamp</th>
+                    <th class="p-2.5">Method</th>
+                    <th class="p-2.5">Amount</th>
+                    <th class="p-2.5">Status</th>
+                    <th class="p-2.5">Gateway Transaction Ref</th>
+                  </tr>
+                </thead>
+                <tbody id="aod-payment-attempts-body">
+                  <!-- Injected rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION G: 14-Stage Manufacturing Timeline & Lifecycle -->
+        <div class="bg-white rounded-2xl border border-lightBorder p-5 shadow-xs space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-lightBorder">
+            <div>
+              <h4 class="font-heading font-bold text-sm text-charcoal flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">G</span>
+                Order & Production Timeline (14 Stages)
+              </h4>
+              <p class="text-[11px] text-mutedText mt-0.5">Full manufacturing sequence from contract sign-off to logistics dispatch.</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-mutedText">Expected Delivery:</span>
+              <strong class="text-charcoal font-bold" id="aod-delivery-date">—</strong>
+            </div>
+          </div>
+
+          <!-- 14-Stage Visual List -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="aod-stages-container">
+            <!-- Dynamically populated stages 1 to 14 -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Modal Bar -->
+      <div class="px-6 py-4 bg-slate-50 border-t border-lightBorder flex items-center justify-between flex-wrap gap-3">
+        <div class="text-[11px] text-mutedText">
+          Authoritative database record • All timestamps formatted in Indian Standard Time (IST)
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="window.print()" class="px-4 py-2 rounded-xl border border-lightBorder hover:bg-white text-xs font-bold text-charcoal transition-colors flex items-center gap-1.5 shadow-xs">
+            <i class="ri-printer-line"></i> Print Order Sheet
+          </button>
+          <button type="button" onclick="closeOrderDetailModal()" class="px-5 py-2 rounded-xl bg-charcoal hover:bg-black text-white text-xs font-bold transition-all shadow-sm">
+            Close View
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script src="js/config/config.js"></script>
   <script src="js/api/api.js"></script>
   <script src="js/utils/shared.js"></script>
@@ -3551,7 +3926,8 @@
               </td>
               <td class="p-4 text-right flex justify-end gap-2 pt-6">
                 <button onclick="convertLeadToQuote('${l._id}')" class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm">Convert to Quote</button>
-                <button onclick="deleteLead('${l._id}')" class="bg-gray-100 hover:bg-red-50 text-mutedText hover:text-red-500 p-1.5 rounded transition-colors"><i class="ri-delete-bin-line"></i></button>
+                <button onclick="archiveLeadAction('${l._id}', ${!l.isArchived})" class="bg-gray-100 hover:bg-slate-200 text-mutedText p-1.5 rounded transition-colors" title="${l.isArchived ? 'Restore Lead' : 'Archive Lead'}"><i class="ri-archive-line"></i></button>
+                <button onclick="deleteLead('${l._id}')" class="bg-gray-100 hover:bg-red-50 text-mutedText hover:text-red-500 p-1.5 rounded transition-colors" title="Delete Lead"><i class="ri-delete-bin-line"></i></button>
               </td>
             `;
             tbodyLeads.appendChild(tr);
@@ -3574,14 +3950,22 @@
             let btnGroup = '';
             if (q.status !== 'Approved' && q.status !== 'Rejected' && q.status !== 'Declined' && q.status !== 'Converted to Order') {
               btnGroup = `
-                <div class="flex justify-end gap-2">
+                <div class="flex justify-end gap-1.5 items-center">
                   <button onclick="approveDirectQuote('${q.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Approve</button>
                   <button onclick="openReviseQuoteModal('${q.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Revise</button>
                   <button onclick="declineDirectQuote('${q.id}')" class="bg-charcoal hover:bg-black text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider transition-colors font-body">Reject</button>
+                  <button onclick="archiveQuoteAction('${q._id || q.id}', ${!q.isArchived})" class="bg-gray-100 hover:bg-slate-200 text-mutedText p-1 rounded text-[10px]" title="${q.isArchived ? 'Restore' : 'Archive'}"><i class="ri-archive-line"></i></button>
+                  <button onclick="deleteQuoteAction('${q._id || q.id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1 rounded text-[10px]" title="Delete Quotation"><i class="ri-delete-bin-line"></i></button>
                 </div>
               `;
             } else {
-              btnGroup = `<span class="text-gray-400 italic text-[10px]">Processed (${q.status})</span>`;
+              btnGroup = `
+                <div class="flex justify-end gap-1.5 items-center">
+                  <span class="text-gray-400 italic text-[10px]">Processed (${q.status})</span>
+                  <button onclick="archiveQuoteAction('${q._id || q.id}', ${!q.isArchived})" class="bg-gray-100 hover:bg-slate-200 text-mutedText p-1 rounded text-[10px]" title="${q.isArchived ? 'Restore' : 'Archive'}"><i class="ri-archive-line"></i></button>
+                  <button onclick="deleteQuoteAction('${q._id || q.id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1 rounded text-[10px]" title="Delete Quotation"><i class="ri-delete-bin-line"></i></button>
+                </div>
+              `;
             }
 
             const statusColors = { 'Approved': 'bg-green-100 text-green-700', 'Revised': 'bg-blue-100 text-blue-700', 'Rejected': 'bg-red-100 text-red-600', 'Declined': 'bg-red-100 text-red-600' };
@@ -3638,6 +4022,7 @@
                   <button onclick="triggerTableImageUpload('${p._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Upload/Replace Image"><i class="ri-image-add-line"></i></button>
                   ${(p.img && p.img !== 'assets/images/products/corporate-blazer-detail.png') ? `<button onclick="removeTableImage('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Remove Image"><i class="ri-close-line text-xs"></i></button>` : ''}
                   <button onclick="openProductModal('edit', '${p._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Product"><i class="ri-edit-line"></i></button>
+                  <button onclick="archiveProductAction('${p._id}', ${!p.isArchived})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="${p.isArchived ? 'Restore Product' : 'Archive Product'}"><i class="ri-archive-line"></i></button>
                   <button onclick="deleteProduct('${p._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Product"><i class="ri-delete-bin-line"></i></button>
                 </div>
               </td>
@@ -3675,6 +4060,7 @@
               </td>
               <td class="p-4 text-right flex justify-end gap-2 pt-6">
                 <button onclick="openCatalogModal('edit', '${cat._id}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit Collection"><i class="ri-edit-line"></i></button>
+                <button onclick="archiveCatalogAction('${cat._id}', ${!cat.isArchived})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="${cat.isArchived ? 'Restore Collection' : 'Archive Collection'}"><i class="ri-archive-line"></i></button>
                 <button onclick="deleteCatalog('${cat._id}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete Collection"><i class="ri-delete-bin-line"></i></button>
               </td>
             `;
@@ -3706,6 +4092,7 @@
               </td>
               <td class="p-4 text-right flex justify-end gap-2 pt-6">
                 <button onclick="openBlogModal('edit', '${b._id || String(b.id || '')}')" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="Edit"><i class="ri-edit-line"></i></button>
+                <button onclick="archiveBlogAction('${b._id || String(b.id || '')}', ${!b.isArchived})" class="bg-lightCard hover:bg-gray-200 border border-lightBorder text-charcoal p-1.5 rounded transition-colors" title="${b.isArchived ? 'Restore' : 'Archive'}"><i class="ri-archive-line"></i></button>
                 <button onclick="deleteBlog('${b._id || String(b.id || '')}')" class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded border border-red-100 transition-all" title="Delete"><i class="ri-delete-bin-line"></i></button>
               </td>
             `;
@@ -3741,6 +4128,17 @@
         alert(err.message || 'Failed to delete lead.');
       }
     }
+
+    async function archiveLeadAction(leadId, isArchived) {
+      try {
+        await window.api.archiveLead(leadId, isArchived);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to update lead archive status.');
+      }
+    }
+    window.archiveLeadAction = archiveLeadAction;
 
     async function convertLeadToQuote(leadId) {
       const lead = globalLeads.find(l => l._id === leadId);
@@ -3807,6 +4205,37 @@
         alert(err.message || 'Failed to reject quotation.');
       }
     }
+
+    async function archiveQuoteAction(quoteId, isArchived) {
+      try {
+        const q = (globalQuotations || []).find(item => item.id === quoteId || item._id === quoteId);
+        const targetId = q ? (q._id || q.id) : quoteId;
+        await window.api.archiveQuotation(targetId, isArchived);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to update quotation archive status.');
+      }
+    }
+    window.archiveQuoteAction = archiveQuoteAction;
+
+    async function deleteQuoteAction(quoteId) {
+      if (!confirm('Permanently delete this quotation?\n\nNote: Quotations linked to confirmed orders cannot be deleted.')) return;
+      try {
+        const q = (globalQuotations || []).find(item => item.id === quoteId || item._id === quoteId);
+        const targetId = q ? (q._id || q.id) : quoteId;
+        const res = await window.api.deleteQuotation(targetId);
+        if (res && res.success) {
+          await syncAdminData();
+          updateAdminDashboard();
+        } else {
+          alert((res && res.message) || 'Failed to delete quotation.');
+        }
+      } catch (err) {
+        alert(err.message || 'Failed to delete quotation.');
+      }
+    }
+    window.deleteQuoteAction = deleteQuoteAction;
 
     function openReviseQuoteModal(quoteId) {
       const q = globalQuotations.find(item => item.id === quoteId);
@@ -3995,15 +4424,30 @@
     }
 
     async function deleteProduct(prodId) {
-      if (!confirm('Delete this product?')) return;
+      if (!confirm('Permanently delete this product?\n\nNote: Products referenced in customer assignments, quotations, or orders cannot be deleted and must be archived instead.')) return;
       try {
-        await window.api.deleteProduct(prodId);
-        await syncAdminData();
-        updateAdminDashboard();
+        const res = await window.api.deleteProduct(prodId);
+        if (res && res.success) {
+          await syncAdminData();
+          updateAdminDashboard();
+        } else {
+          alert((res && res.message) || 'Failed to delete product.');
+        }
       } catch (err) {
         alert(err.message || 'Failed to delete product.');
       }
     }
+
+    async function archiveProductAction(prodId, isArchived) {
+      try {
+        await window.api.archiveProduct(prodId, isArchived);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to update product archive status.');
+      }
+    }
+    window.archiveProductAction = archiveProductAction;
 
     // ─── CATALOG CMS CRUD ──────────────────────────────────────────────────────
     function openCatalogModal(action, catalogId) {
@@ -4135,6 +4579,17 @@
       }
     }
 
+    async function archiveCatalogAction(catalogId, isArchived) {
+      try {
+        await window.api.archiveCatalog(catalogId, isArchived);
+        await syncAdminData();
+        updateAdminDashboard();
+      } catch (err) {
+        alert(err.message || 'Failed to update catalog archive status.');
+      }
+    }
+    window.archiveCatalogAction = archiveCatalogAction;
+
     // ─── BLOGS CRUD ────────────────────────────────────────────────────────────
     function openBlogModal(action, blogId) {
       document.getElementById('blog-modal-action').value = action;
@@ -4261,6 +4716,22 @@
       }
     }
 
+    async function archiveBlogAction(blogId, isArchived) {
+      if (!blogId || blogId === 'undefined') {
+        alert('Cannot archive: Blog ID is missing. Please refresh the page.');
+        return;
+      }
+      try {
+        await window.api.archiveBlog(blogId, isArchived);
+        await syncAdminData();
+        updateAdminDashboard();
+        if (typeof renderBlogsTable === 'function') renderBlogsTable();
+      } catch (err) {
+        alert(err.message || 'Failed to update blog archive status.');
+      }
+    }
+    window.archiveBlogAction = archiveBlogAction;
+
     // ─── CUSTOMER STATUS MANAGEMENT ────────────────────────────────────────────
     async function filterCustomersByStatus(status) {
       activeCustomerFilter = status;
@@ -4321,24 +4792,33 @@
         const statusStyle = statusBadges[u.status] || 'bg-gray-100 text-gray-600';
 
         let actionHtml = '';
+        const delBtnHtml = `<button onclick="confirmDeleteCustomer('${u._id}', '${u.email}')" class="p-1.5 text-mutedText hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors" title="Delete Customer Account"><i class="ri-delete-bin-line"></i></button>`;
+        
         if (u.status === 'Pending') {
           actionHtml = `
-            <div class="flex justify-end gap-1.5 font-body">
+            <div class="flex justify-end items-center gap-1.5 font-body">
               <button onclick="approveUser('${u._id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-check-line"></i> Approve</button>
               <button onclick="confirmRejectUser('${u._id}')" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-close-line"></i> Reject</button>
+              ${delBtnHtml}
             </div>`;
         } else if (u.status === 'Active') {
           actionHtml = `
-            <div class="flex justify-end font-body">
+            <div class="flex justify-end items-center gap-1.5 font-body">
               <button onclick="toggleUserStatus('${u._id}', 'Disabled')" class="bg-charcoal hover:bg-black text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-forbid-line"></i> Disable</button>
+              ${delBtnHtml}
             </div>`;
         } else if (u.status === 'Disabled') {
           actionHtml = `
-            <div class="flex justify-end font-body">
+            <div class="flex justify-end items-center gap-1.5 font-body">
               <button onclick="toggleUserStatus('${u._id}', 'Active')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2.5 py-1 rounded-lg text-[9px] uppercase tracking-wider transition-colors shadow-sm flex items-center gap-1 font-body"><i class="ri-shield-check-line"></i> Enable</button>
+              ${delBtnHtml}
             </div>`;
         } else if (u.status === 'Rejected') {
-          actionHtml = `<span class="text-gray-400 italic text-[10px] font-body">Rejected</span>`;
+          actionHtml = `
+            <div class="flex justify-end items-center gap-1.5 font-body">
+              <span class="text-gray-400 italic text-[10px] font-body">Rejected</span>
+              ${delBtnHtml}
+            </div>`;
         }
 
         ctr.innerHTML = `
@@ -4410,6 +4890,23 @@
         alert(err.message || 'Failed to toggle user status.');
       }
     }
+
+    async function confirmDeleteCustomer(userId, email) {
+      if (!confirm(`CAUTION: Permanently delete customer account (${email})?\n\nSafety Policy: If this customer has existing orders or quotes in the system, deletion will be blocked by the server.`)) return;
+      try {
+        const res = await window.api.deleteUser(userId);
+        if (res && res.success) {
+          alert('Customer account deleted successfully.');
+          await syncAdminData();
+          updateAdminDashboard();
+        } else {
+          alert((res && res.message) || 'Failed to delete customer.');
+        }
+      } catch (err) {
+        alert(err.message || 'Failed to delete customer.');
+      }
+    }
+    window.confirmDeleteCustomer = confirmDeleteCustomer;
 
     // ─── CUSTOMER PRODUCT ASSIGNMENT CONTROLLER ─────────────────────────────
     let currentAssignedProducts = [];
@@ -4687,8 +5184,11 @@
 
 
     // ─── ORDERS & 14-STAGE TRACKER TAB HANDLERS ─────────────────────────────
+    // ─── ORDERS & 14-STAGE TRACKER TAB HANDLERS ─────────────────────────────
     window.allAdminOrders = [];
     window.currentPaymentFilter = 'ALL';
+    window.currentLifecycleFilter = 'ACTIVE';
+    window.currentViewingOrder = null;
 
     function setOrderPaymentFilter(filter) {
       window.currentPaymentFilter = filter;
@@ -4706,6 +5206,22 @@
     }
     window.setOrderPaymentFilter = setOrderPaymentFilter;
 
+    function setOrderLifecycleFilter(filter) {
+      window.currentLifecycleFilter = filter;
+      ['active', 'all', 'archived', 'test'].forEach(f => {
+        const btn = document.getElementById(`order-lifecycle-${f}`);
+        if (btn) {
+          if (f.toUpperCase() === filter) {
+            btn.className = 'px-3 py-1.5 rounded-lg bg-white shadow-xs text-primary transition-all';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg text-mutedText hover:text-charcoal transition-all';
+          }
+        }
+      });
+      renderOrdersTable();
+    }
+    window.setOrderLifecycleFilter = setOrderLifecycleFilter;
+
     function filterAdminOrdersTable() {
       renderOrdersTable();
     }
@@ -4716,7 +5232,24 @@
       if (!body) return;
 
       try {
-        const res = await window.api.getOrders();
+        const queryParams = {};
+        if (window.currentLifecycleFilter === 'ACTIVE') {
+          queryParams.archived = 'false';
+          queryParams.testData = 'false';
+        } else if (window.currentLifecycleFilter === 'ARCHIVED') {
+          queryParams.archived = 'true';
+        } else if (window.currentLifecycleFilter === 'TEST') {
+          queryParams.testData = 'true';
+          queryParams.archived = 'all';
+        } else {
+          queryParams.archived = 'all';
+        }
+
+        if (window.currentPaymentFilter !== 'ALL') {
+          queryParams.paymentStatus = window.currentPaymentFilter;
+        }
+
+        const res = await window.api.getOrders(queryParams);
         const orders = (res.success && Array.isArray(res.data) && res.data.length > 0)
           ? res.data
           : (JSON.parse(localStorage.getItem('uniwear_orders')) || (typeof defaultOrders !== 'undefined' ? defaultOrders : []));
@@ -4741,9 +5274,18 @@
         if (document.getElementById('dash-orders-dispatch')) document.getElementById('dash-orders-dispatch').innerText = dispatch;
         if (document.getElementById('dash-orders-completed')) document.getElementById('dash-orders-completed').innerText = completed;
 
-        // Apply Payment Status and Search Filter
+        // Apply Lifecycle, Payment Status and Search Filter
         const searchInput = (document.getElementById('admin-orders-search')?.value || '').toLowerCase().trim();
         let filteredOrders = orders.filter(o => {
+          // Lifecycle Filter
+          if (window.currentLifecycleFilter === 'ACTIVE') {
+            if (o.isArchived || o.isTestData) return false;
+          } else if (window.currentLifecycleFilter === 'ARCHIVED') {
+            if (!o.isArchived) return false;
+          } else if (window.currentLifecycleFilter === 'TEST') {
+            if (!o.isTestData) return false;
+          }
+
           // Payment Filter
           if (window.currentPaymentFilter === 'PAID') {
             if (!o.payment || o.payment.paymentStatus !== 'PAID') return false;
@@ -4844,11 +5386,13 @@
 
           const orderRef = o.id || o.orderNo || ('UW-ORD-' + (o._id || '101'));
           const orderTypeSub = o.orderType === 'PortalDirectOrder' ? 'Portal Direct Order' : 'Factory Order';
+          const testTag = o.isTestData ? `<span class="inline-block ml-1 px-1.5 py-0.2 rounded text-[8px] font-bold uppercase bg-amber-100 text-amber-800 border border-amber-300">TEST</span>` : '';
+          const archTag = o.isArchived ? `<span class="inline-block ml-1 px-1.5 py-0.2 rounded text-[8px] font-bold uppercase bg-gray-100 text-gray-700 border border-gray-300">ARCHIVED</span>` : '';
 
           return `
             <tr class="border-b border-lightBorder hover:bg-lightCard transition-colors text-xs font-body">
               <td class="p-4 font-mono font-bold text-primary">
-                ${orderRef}
+                ${orderRef} ${testTag} ${archTag}
                 <span class="block text-[10px] font-sans font-normal text-mutedText">${orderTypeSub}</span>
               </td>
               <td class="p-4 font-bold text-charcoal">
@@ -4857,7 +5401,7 @@
               </td>
               <td class="p-4 font-semibold text-charcoal">
                 ${o.productName || 'Custom Workwear'}
-                <span class="block text-[10px] text-mutedText font-normal">${o.volume || '1,000 Pcs'}</span>
+                <span class="block text-[10px] text-mutedText font-normal">${o.volume || (o.totalQuantity ? o.totalQuantity + ' Pcs' : '1,000 Pcs')}</span>
               </td>
               <td class="p-4">${paymentHtml}</td>
               <td class="p-4">
@@ -4867,9 +5411,25 @@
               </td>
               <td class="p-4">${statusBadge}</td>
               <td class="p-4 text-right">
-                <button onclick="handleUpdateTrackerClick('${o._id || o.id}')" class="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-colors">
-                  Update Tracker
-                </button>
+                <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                  <button onclick="openOrderDetailModal('${o._id || o.id}')" class="px-2.5 py-1.5 bg-charcoal hover:bg-black text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1 shadow-xs" title="View complete order and payment details">
+                    <i class="ri-eye-line"></i> View Details
+                  </button>
+                  <button onclick="handleUpdateTrackerClick('${o._id || o.id}')" class="px-2.5 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-colors">
+                    Tracker
+                  </button>
+                  <button onclick="toggleOrderTestStatus('${o._id || o.id}', ${!o.isTestData})" title="${o.isTestData ? 'Unmark Test Order' : 'Mark as Test Order'}" class="p-1.5 rounded-lg border border-lightBorder text-mutedText hover:text-amber-700 hover:bg-amber-50 transition-colors">
+                    <i class="ri-flask-line"></i>
+                  </button>
+                  <button onclick="toggleOrderArchiveStatus('${o._id || o.id}', ${!o.isArchived})" title="${o.isArchived ? 'Restore Order' : 'Archive Order'}" class="p-1.5 rounded-lg border border-lightBorder text-mutedText hover:text-charcoal hover:bg-slate-100 transition-colors">
+                    <i class="ri-archive-line"></i>
+                  </button>
+                  ${o.isTestData ? `
+                    <button onclick="confirmDeleteOrder('${o._id || o.id}', true)" title="Permanently Delete Test Order" class="p-1.5 rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50 transition-colors">
+                      <i class="ri-delete-bin-line"></i>
+                    </button>
+                  ` : ''}
+                </div>
               </td>
             </tr>
           `;
@@ -4879,6 +5439,431 @@
       }
     }
     window.renderOrdersTable = renderOrdersTable;
+
+    // ─── ORDER LIFECYCLE & DETAIL MODAL LOGIC ─────────────────────────────
+    async function toggleOrderTestStatus(orderId, isTest) {
+      try {
+        const res = await window.api.markOrderTest(orderId, isTest);
+        if (res && res.success) {
+          await renderOrdersTable();
+          if (window.currentViewingOrder && (String(window.currentViewingOrder.id) === String(orderId) || String(window.currentViewingOrder._id) === String(orderId))) {
+            await openOrderDetailModal(orderId);
+          }
+        } else {
+          alert((res && res.message) || 'Failed to update test status.');
+        }
+      } catch (err) {
+        alert(err.message || 'Error updating order test status.');
+      }
+    }
+    window.toggleOrderTestStatus = toggleOrderTestStatus;
+
+    async function toggleOrderArchiveStatus(orderId, isArchived) {
+      try {
+        const res = await window.api.archiveOrder(orderId, isArchived);
+        if (res && res.success) {
+          await renderOrdersTable();
+          if (window.currentViewingOrder && (String(window.currentViewingOrder.id) === String(orderId) || String(window.currentViewingOrder._id) === String(orderId))) {
+            await openOrderDetailModal(orderId);
+          }
+        } else {
+          alert((res && res.message) || 'Failed to update archive status.');
+        }
+      } catch (err) {
+        alert(err.message || 'Error updating order archive status.');
+      }
+    }
+    window.toggleOrderArchiveStatus = toggleOrderArchiveStatus;
+
+    async function confirmDeleteOrder(orderId, isTestData) {
+      if (!isTestData) {
+        alert('Safety Block: Live production customer orders cannot be permanently deleted. Use "Archive" to remove them from active views.');
+        return;
+      }
+      if (!confirm(`CAUTION: Permanently delete synthetic test order ${orderId}?\n\nThis will remove the test order from the database permanently. This action is irreversible.`)) return;
+      try {
+        const res = await window.api.deleteOrder(orderId);
+        if (res && res.success) {
+          alert(`Test order ${orderId} permanently deleted.`);
+          closeOrderDetailModal();
+          await renderOrdersTable();
+        } else {
+          alert((res && res.message) || 'Failed to delete order.');
+        }
+      } catch (err) {
+        alert(err.message || 'Error deleting test order.');
+      }
+    }
+    window.confirmDeleteOrder = confirmDeleteOrder;
+
+    async function openOrderDetailModal(orderId) {
+      const modal = document.getElementById('admin-order-detail-modal');
+      if (!modal) return;
+
+      try {
+        const res = await window.api.getOrderById(orderId);
+        if (!res || !res.success || !res.data) {
+          alert('Failed to load order details.');
+          return;
+        }
+        const o = res.data;
+        window.currentViewingOrder = o;
+
+        const ordId = o.id || o.orderNo || o._id || 'UW-ORD';
+        document.getElementById('aod-title-order-id').innerText = ordId;
+        document.getElementById('aod-sec-a-order-id').innerText = ordId;
+        document.getElementById('aod-badge-order-type').innerText = o.orderType === 'PortalDirectOrder' ? 'Portal Direct Order' : 'Factory Order';
+
+        // Payment status badge
+        const pStatus = (o.payment && o.payment.paymentStatus) || 'PENDING';
+        const pBadge = document.getElementById('aod-badge-payment-status');
+        pBadge.innerText = pStatus;
+        if (pStatus === 'PAID') {
+          pBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
+        } else if (pStatus === 'PENDING') {
+          pBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-800 border border-amber-200';
+        } else if (pStatus === 'CANCELLED') {
+          pBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-700 border border-slate-300';
+        } else {
+          pBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-50 text-rose-800 border border-rose-200';
+        }
+
+        // Schedule badge
+        document.getElementById('aod-badge-schedule-status').innerText = o.status || 'On Schedule';
+
+        // Test data & archive badges
+        const testBadge = document.getElementById('aod-badge-test-data');
+        if (o.isTestData) testBadge.classList.remove('hidden'); else testBadge.classList.add('hidden');
+
+        const archBadge = document.getElementById('aod-badge-archived');
+        if (o.isArchived) archBadge.classList.remove('hidden'); else archBadge.classList.add('hidden');
+
+        // Subtitle
+        document.getElementById('aod-sub-client').innerText = o.clientCompany || o.clientEmail || 'Corporate Client';
+        document.getElementById('aod-sub-date').innerText = o.createdAt ? new Date(o.createdAt).toLocaleString('en-IN') : '—';
+
+        // Header Action buttons
+        document.getElementById('aod-btn-toggle-test-label').innerText = o.isTestData ? 'Unmark Test' : 'Mark as Test';
+        document.getElementById('aod-btn-toggle-archive-label').innerText = o.isArchived ? 'Restore Order' : 'Archive';
+
+        const delBtn = document.getElementById('aod-btn-delete-test');
+        if (o.isTestData) {
+          delBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+          delBtn.disabled = false;
+          delBtn.title = 'Permanently delete this synthetic test order';
+        } else {
+          delBtn.classList.add('opacity-40', 'cursor-not-allowed');
+          delBtn.disabled = true;
+          delBtn.title = 'Live production customer orders cannot be deleted; use Archive instead';
+        }
+
+        // SECTION A: Overview
+        document.getElementById('aod-order-type').innerText = o.orderType === 'PortalDirectOrder' ? 'Portal Direct Order' : 'Factory Order';
+        document.getElementById('aod-placed-at').innerText = o.createdAt ? new Date(o.createdAt).toLocaleString('en-IN') : '—';
+        document.getElementById('aod-updated-at').innerText = o.updatedAt ? new Date(o.updatedAt).toLocaleString('en-IN') : '—';
+        document.getElementById('aod-current-stage').innerText = o.currentStageName || `Stage ${o.currentStageIndex || 1}`;
+        document.getElementById('aod-schedule-status').innerText = o.status || 'On Schedule';
+        document.getElementById('aod-po-ref').innerText = o.poNumber || '—';
+        document.getElementById('aod-quotation-ref').innerText = o.quotationRef || o.quotationId || '—';
+        document.getElementById('aod-instructions').innerText = o.specialInstructions || o.notes || 'None specified.';
+
+        // SECTION B: Customer Profile
+        document.getElementById('aod-cust-company').innerText = o.clientCompany || 'Corporate Client';
+        document.getElementById('aod-cust-name').innerText = o.clientName || o.contactPerson || o.clientEmail || '—';
+        document.getElementById('aod-cust-email').innerText = o.clientEmail || '—';
+        document.getElementById('aod-cust-phone').innerText = o.clientPhone || (o.deliveryAddress && o.deliveryAddress.phone) || '—';
+        document.getElementById('aod-cust-gstin').innerText = (o.billingAddress && o.billingAddress.gstin) || (o.taxDetails && o.taxDetails.customerGstin) || o.gstin || 'Unregistered';
+        document.getElementById('aod-cust-id').innerText = o.customerId || o.userId || '—';
+
+        // SECTION C: Ordered Products & Size Allocation Breakdown
+        const prodContainer = document.getElementById('aod-products-container');
+        const items = Array.isArray(o.items) && o.items.length > 0 ? o.items : [
+          {
+            name: o.productName || 'Custom Workwear',
+            sku: o.sku || 'UW-PROD',
+            quantity: o.totalQuantity || parseInt(String(o.volume || '1').replace(/[^0-9]/g, '')) || 1,
+            unitPrice: o.subtotal ? Math.round(o.subtotal / (o.totalQuantity || 1)) : 0,
+            lineSubtotal: o.subtotal || 0,
+            hsn: (o.taxDetails && o.taxDetails.hsn) || '6203',
+            gstRate: (o.taxDetails && o.taxDetails.gstRate) || 5,
+            sizeBreakdown: o.sizeBreakdown || {}
+          }
+        ];
+        document.getElementById('aod-prod-item-count').innerText = `${items.length} Product${items.length !== 1 ? 's' : ''}`;
+
+        prodContainer.innerHTML = items.map((it, idx) => {
+          const sizeEntries = it.sizeBreakdown && typeof it.sizeBreakdown === 'object' ? Object.entries(it.sizeBreakdown).filter(([_, qty]) => Number(qty) > 0) : [];
+          
+          let sizeAllocationHtml = '';
+          if (sizeEntries.length > 0) {
+            const sizeHeaders = sizeEntries.map(([s]) => `<th class="p-2 border border-lightBorder text-center font-bold bg-slate-50">${s}</th>`).join('');
+            const sizeValues = sizeEntries.map(([_, q]) => `<td class="p-2 border border-lightBorder text-center font-mono font-bold text-primary">${q}</td>`).join('');
+            const totalAlloc = sizeEntries.reduce((acc, [_, q]) => acc + Number(q), 0);
+
+            sizeAllocationHtml = `
+              <div class="mt-3 bg-white rounded-xl border border-lightBorder overflow-hidden">
+                <div class="px-3 py-1.5 bg-slate-50/70 border-b border-lightBorder flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-mutedText">
+                  <span><i class="ri-layout-grid-line"></i> Production Size Allocation</span>
+                  <span class="text-charcoal font-mono">Total: ${totalAlloc.toLocaleString('en-IN')} pcs</span>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-xs border-collapse">
+                    <thead>
+                      <tr>
+                        ${sizeHeaders}
+                        <th class="p-2 border border-lightBorder text-center font-bold bg-primary/10 text-primary">SUM</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        ${sizeValues}
+                        <td class="p-2 border border-lightBorder text-center font-mono font-extrabold text-primary bg-primary/5">${totalAlloc}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            `;
+          } else {
+            sizeAllocationHtml = `<p class="mt-2 text-[11px] text-mutedText italic">Bulk order: ${it.quantity || 1} units (standard sizing)</p>`;
+          }
+
+          const itUnitRate = it.unitPrice ? `₹${Number(it.unitPrice).toLocaleString('en-IN')}` : '—';
+          const itLineTotal = it.lineSubtotal ? `₹${Number(it.lineSubtotal).toLocaleString('en-IN')}` : (it.quantity && it.unitPrice ? `₹${(it.quantity * it.unitPrice).toLocaleString('en-IN')}` : '—');
+
+          return `
+            <div class="p-4 rounded-xl border border-lightBorder bg-slate-50/40 space-y-2">
+              <div class="flex items-start justify-between flex-wrap gap-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-xl bg-white border border-lightBorder overflow-hidden flex items-center justify-center p-1 shrink-0">
+                    <img src="${it.image || it.img || 'assets/images/products/corporate-blazer-detail.png'}" class="w-full h-full object-contain" alt="">
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-charcoal text-xs">${it.name || 'Industrial Workwear'}</h5>
+                    <div class="flex items-center gap-2 text-[10px] text-mutedText mt-0.5">
+                      <span class="font-mono font-semibold">SKU: ${it.sku || 'UW-PROD'}</span>
+                      <span>•</span>
+                      <span>HSN: <strong class="text-charcoal font-mono">${it.hsn || '6203'}</strong></span>
+                      <span>•</span>
+                      <span>GST Rate: <strong class="text-charcoal">${it.gstRate || 5}%</strong></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-charcoal font-bold text-xs">${itLineTotal}</span>
+                  <span class="block text-[10px] text-mutedText font-mono">${it.quantity || 1} pcs × ${itUnitRate}</span>
+                </div>
+              </div>
+              ${sizeAllocationHtml}
+            </div>
+          `;
+        }).join('');
+
+        // SECTION D: Billing & Delivery
+        const bill = o.billingAddress || {};
+        const ship = o.deliveryAddress || {};
+        document.getElementById('aod-bill-name').innerText = bill.name || o.clientCompany || 'Corporate Client';
+        document.getElementById('aod-bill-address').innerText = bill.addressLine1 ? `${bill.addressLine1} ${bill.addressLine2 || ''}` : 'Same as registered corporate address';
+        document.getElementById('aod-bill-city-state-pin').innerText = `${bill.city || ''} ${bill.state || ''} ${bill.pincode || ''}`.trim() || '—';
+        document.getElementById('aod-bill-gstin').innerText = `GSTIN: ${bill.gstin || (o.taxDetails && o.taxDetails.customerGstin) || 'Unregistered'}`;
+
+        document.getElementById('aod-ship-name').innerText = ship.name || o.clientCompany || 'Corporate Client';
+        document.getElementById('aod-ship-address').innerText = ship.addressLine1 ? `${ship.addressLine1} ${ship.addressLine2 || ''}` : 'Same as corporate address';
+        document.getElementById('aod-ship-city-state-pin').innerText = `${ship.city || ''} ${ship.state || ''} ${ship.pincode || ''}`.trim() || '—';
+        document.getElementById('aod-ship-phone').innerText = `Contact: ${ship.phone || o.clientPhone || '—'}`;
+
+        // Tax Jurisdiction
+        const tax = o.taxDetails || {};
+        const pos = tax.placeOfSupply || ship.state || bill.state || 'Karnataka';
+        const isIgst = tax.taxType === 'IGST' || (tax.igstAmount > 0) || (pos.toLowerCase() !== 'karnataka');
+        document.getElementById('aod-place-of-supply').innerText = `${pos} (${isIgst ? 'Inter-state' : 'Intrastate'})`;
+        
+        const taxBadge = document.getElementById('aod-tax-jurisdiction-badge');
+        if (isIgst) {
+          taxBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-50 text-blue-800 border border-blue-200';
+          taxBadge.innerText = 'Inter-State (IGST 5%)';
+        } else {
+          taxBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
+          taxBadge.innerText = 'Intra-State (CGST 2.5% + SGST 2.5%)';
+        }
+        document.getElementById('aod-supplier-gstin').innerText = tax.supplierGstin || '29ABCDE1234F1ZH (Karnataka)';
+
+        // SECTION E: Financials
+        const subtotal = o.subtotal || 0;
+        const grandTotal = o.grandTotal || (o.value ? parseInt(String(o.value).replace(/[^0-9]/g, '')) : 0);
+        const cgst = o.cgst !== undefined ? o.cgst : (tax.cgstAmount || 0);
+        const sgst = o.sgst !== undefined ? o.sgst : (tax.sgstAmount || 0);
+        const igst = o.igst !== undefined ? o.igst : (tax.igstAmount || 0);
+
+        document.getElementById('aod-fin-subtotal').innerText = `₹${subtotal.toLocaleString('en-IN')}`;
+        
+        const rowCgst = document.getElementById('aod-row-cgst');
+        const rowSgst = document.getElementById('aod-row-sgst');
+        const rowIgst = document.getElementById('aod-row-igst');
+
+        if (isIgst || igst > 0) {
+          rowCgst.classList.add('hidden');
+          rowSgst.classList.add('hidden');
+          rowIgst.classList.remove('hidden');
+          document.getElementById('aod-igst-label').innerText = `IGST (${tax.igstRate || 5}%)`;
+          document.getElementById('aod-fin-igst').innerText = `₹${igst.toLocaleString('en-IN')}`;
+        } else {
+          rowCgst.classList.remove('hidden');
+          rowSgst.classList.remove('hidden');
+          rowIgst.classList.add('hidden');
+          document.getElementById('aod-cgst-label').innerText = `CGST (${tax.cgstRate || 2.5}%)`;
+          document.getElementById('aod-fin-cgst').innerText = `₹${cgst.toLocaleString('en-IN')}`;
+          document.getElementById('aod-sgst-label').innerText = `SGST (${tax.sgstRate || 2.5}%)`;
+          document.getElementById('aod-fin-sgst').innerText = `₹${sgst.toLocaleString('en-IN')}`;
+        }
+
+        document.getElementById('aod-fin-grand-total').innerText = `₹${grandTotal.toLocaleString('en-IN')}`;
+
+        const taxBox = document.getElementById('aod-tax-status-box');
+        const taxLabel = document.getElementById('aod-tax-status-label');
+        const taxSub = document.getElementById('aod-tax-status-sub');
+        if (tax.isProvisional) {
+          taxBox.className = 'p-2.5 rounded-xl border border-amber-200 bg-amber-50 text-[11px] flex items-center justify-between text-amber-900';
+          taxLabel.innerText = '⚠️ Tax Calculation: Provisional / Unverified';
+          taxSub.innerText = 'HSN classifications flagged for accountant review';
+        } else {
+          taxBox.className = 'p-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-[11px] flex items-center justify-between text-emerald-900';
+          taxLabel.innerText = '✓ Tax Calculation: Final Certified';
+          taxSub.innerText = 'Determined via Place of Supply';
+        }
+
+        // SECTION F: Payment & Gateway Audit Trail
+        const pay = o.payment || {};
+        const envBadge = document.getElementById('aod-gateway-env-badge');
+        if (pay.gatewayEnvironment === 'PRODUCTION') {
+          envBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300';
+          envBadge.innerText = 'Production Gateway';
+        } else {
+          envBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-700 border border-slate-300';
+          envBadge.innerText = 'Sandbox Gateway';
+        }
+
+        const hookBadge = document.getElementById('aod-webhook-status-badge');
+        if (pay.webhookVerified) {
+          hookBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
+          hookBadge.innerHTML = '<i class="ri-shield-keyhole-line"></i> Webhook Verified';
+        } else {
+          hookBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-800 border border-amber-200';
+          hookBadge.innerHTML = '<i class="ri-time-line"></i> API Reconciliation / Webhook Pending';
+        }
+
+        document.getElementById('aod-pay-status').innerText = pay.paymentStatus || 'PENDING';
+        document.getElementById('aod-pay-method').innerText = (pay.paymentMethod ? String(pay.paymentMethod).toUpperCase() : 'ONLINE GATEWAY');
+        document.getElementById('aod-cf-order-id').innerText = pay.cfOrderId || '—';
+        document.getElementById('aod-cf-payment-id').innerText = pay.cfPaymentId || '—';
+        document.getElementById('aod-pay-session-id').innerText = pay.cfPaymentSessionId || '—';
+        document.getElementById('aod-pay-timestamp').innerText = pay.paymentTime ? new Date(pay.paymentTime).toLocaleString('en-IN') : 'Awaiting Settlement';
+
+        const attemptsBody = document.getElementById('aod-payment-attempts-body');
+        const attempts = Array.isArray(pay.attempts) && pay.attempts.length > 0 ? pay.attempts : [
+          {
+            attemptId: pay.cfPaymentId || 'ATT-1',
+            attemptTime: pay.paymentTime || o.createdAt,
+            paymentMethod: pay.paymentMethod || 'Online Gateway',
+            amount: grandTotal,
+            status: pay.paymentStatus || 'PENDING',
+            transactionRef: pay.cfPaymentId || pay.cfOrderId || 'Awaiting'
+          }
+        ];
+        attemptsBody.innerHTML = attempts.map(att => `
+          <tr class="border-b border-lightBorder/50 font-mono text-[10px]">
+            <td class="p-2.5 font-bold text-charcoal">${att.attemptId || '—'}</td>
+            <td class="p-2.5 text-mutedText">${att.attemptTime ? new Date(att.attemptTime).toLocaleTimeString('en-IN') : '—'}</td>
+            <td class="p-2.5 font-sans">${att.paymentMethod || 'Gateway'}</td>
+            <td class="p-2.5 font-bold text-charcoal">₹${Number(att.amount || grandTotal).toLocaleString('en-IN')}</td>
+            <td class="p-2.5"><span class="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${att.status === 'PAID' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${att.status || 'PENDING'}</span></td>
+            <td class="p-2.5 text-mutedText truncate max-w-[120px]" title="${att.transactionRef || ''}">${att.transactionRef || '—'}</td>
+          </tr>
+        `).join('');
+
+        // SECTION G: 14 Stages Timeline
+        document.getElementById('aod-delivery-date').innerText = o.deliveryDate ? new Date(o.deliveryDate).toLocaleDateString('en-IN') : (o.expectedDeliveryDate || 'Standard Manufacturing Schedule');
+
+        const STAGES_LIST = [
+          "01. Quotation & Contract Finalized",
+          "02. Fabric Sourcing & Mill Reservation",
+          "03. Lab Dip & Color Dye Approval",
+          "04. Pre-Production Sample Sign-Off",
+          "05. Precision CNC Fabric Cutting",
+          "06. Logo Embroidery & Screen Printing",
+          "07. Component Bundling & Panel Prep",
+          "08. Sewing & Stitch Assembly",
+          "09. Quality Control & Inline Inspection",
+          "10. Thread Trimming & Steam Pressing",
+          "11. Poly-Bags & Barcode Labeling",
+          "12. Final Quality Audit & Metal Detect",
+          "13. Carton Packing & Palletization",
+          "14. Dispatch & Logistics Tracking"
+        ];
+
+        const currentIdx = Number(o.currentStageIndex || 1);
+        const stagesContainer = document.getElementById('aod-stages-container');
+        stagesContainer.innerHTML = STAGES_LIST.map((st, idx) => {
+          const stageNum = idx + 1;
+          let cardStyle = '';
+          let iconHtml = '';
+          if (stageNum < currentIdx) {
+            cardStyle = 'bg-emerald-50/60 border-emerald-200 text-emerald-950';
+            iconHtml = '<i class="ri-checkbox-circle-fill text-emerald-600 text-base"></i>';
+          } else if (stageNum === currentIdx) {
+            cardStyle = 'bg-primary/10 border-primary text-primary font-bold shadow-xs';
+            iconHtml = '<i class="ri-loader-4-line animate-spin text-primary text-base"></i>';
+          } else {
+            cardStyle = 'bg-slate-50 border-lightBorder text-mutedText opacity-75';
+            iconHtml = `<span class="w-4 h-4 rounded-full border border-mutedText flex items-center justify-center text-[9px] font-bold">${stageNum}</span>`;
+          }
+
+          return `
+            <div class="p-3 rounded-xl border flex items-center justify-between text-xs transition-colors ${cardStyle}">
+              <div class="flex items-center gap-2.5">
+                ${iconHtml}
+                <span>${st}</span>
+              </div>
+              <span class="text-[10px] font-mono font-bold uppercase">${stageNum < currentIdx ? 'Done' : (stageNum === currentIdx ? 'In Progress' : 'Upcoming')}</span>
+            </div>
+          `;
+        }).join('');
+
+        // Show modal
+        modal.classList.remove('hidden');
+      } catch (err) {
+        console.error('Error opening order detail modal:', err);
+        alert(err.message || 'Error opening order details.');
+      }
+    }
+    window.openOrderDetailModal = openOrderDetailModal;
+
+    function closeOrderDetailModal() {
+      const modal = document.getElementById('admin-order-detail-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+    window.closeOrderDetailModal = closeOrderDetailModal;
+
+    async function handleDetailToggleTest() {
+      if (!window.currentViewingOrder) return;
+      const orderId = window.currentViewingOrder._id || window.currentViewingOrder.id;
+      await toggleOrderTestStatus(orderId, !window.currentViewingOrder.isTestData);
+    }
+    window.handleDetailToggleTest = handleDetailToggleTest;
+
+    async function handleDetailToggleArchive() {
+      if (!window.currentViewingOrder) return;
+      const orderId = window.currentViewingOrder._id || window.currentViewingOrder.id;
+      await toggleOrderArchiveStatus(orderId, !window.currentViewingOrder.isArchived);
+    }
+    window.handleDetailToggleArchive = handleDetailToggleArchive;
+
+    async function handleDetailDeleteTest() {
+      if (!window.currentViewingOrder) return;
+      const orderId = window.currentViewingOrder._id || window.currentViewingOrder.id;
+      await confirmDeleteOrder(orderId, window.currentViewingOrder.isTestData);
+    }
+    window.handleDetailDeleteTest = handleDetailDeleteTest;
 
     async function updateOrderStage(orderId, newStageIndex, allowUnpaid = false) {
       try {

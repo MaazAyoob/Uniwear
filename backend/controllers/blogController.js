@@ -1,5 +1,12 @@
 const mongoose = require('mongoose');
 const Blog = require('../models/Blog');
+const Notification = require('../models/Notification');
+
+const logActivity = async (action, details) => {
+  try {
+    await Notification.create({ recipient: 'admin', title: action, text: details || action, time: 'Just now' });
+  } catch (err) {}
+};
 
 const getBlogQuery = (id) => {
   if (/^\d+$/.test(id)) return { id: parseInt(id) };
@@ -9,8 +16,16 @@ const getBlogQuery = (id) => {
 // GET /api/blogs
 const getBlogs = async (req, res, next) => {
   try {
-    const { search, category, status } = req.query;
+    const { search, category, status, archived } = req.query;
     const filter = {};
+
+    if (archived === 'true') {
+      filter.isArchived = true;
+    } else if (archived === 'all') {
+      // all
+    } else {
+      filter.isArchived = { $ne: true };
+    }
 
     if (category && category !== 'All') {
       filter.category = category;
@@ -150,6 +165,40 @@ const updateBlog = async (req, res, next) => {
   }
 };
 
+// PATCH /api/blogs/:id/archive
+const archiveBlog = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const isArchived = req.body.isArchived !== undefined ? Boolean(req.body.isArchived) : true;
+    const blog = await Blog.findOneAndUpdate(
+      getBlogQuery(id),
+      {
+        isArchived,
+        archivedAt: isArchived ? new Date() : null,
+        archivedBy: isArchived ? (req.user ? req.user.email : 'Admin') : ''
+      },
+      { new: true }
+    );
+
+    if (!blog) {
+      return res.status(404).json({ success: false, message: 'Blog article not found.' });
+    }
+
+    await logActivity(
+      isArchived ? 'Blog Archived' : 'Blog Restored',
+      `Blog "${blog.title}" (${blog.slug}) ${isArchived ? 'archived' : 'restored'} by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({
+      success: true,
+      data: blog,
+      message: isArchived ? `Blog article "${blog.title}" archived.` : `Blog article "${blog.title}" restored.`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // DELETE /api/blogs/:id
 const deleteBlog = async (req, res, next) => {
   try {
@@ -159,6 +208,11 @@ const deleteBlog = async (req, res, next) => {
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Blog article not found.' });
     }
+
+    await logActivity(
+      'Blog Deleted',
+      `Blog article "${blog.title}" (${blog.slug}) deleted by ${req.user ? req.user.email : 'Admin'}`
+    );
 
     res.json({ success: true, message: 'Blog article deleted successfully.' });
   } catch (err) {
@@ -171,5 +225,6 @@ module.exports = {
   getBlogById,
   createBlog,
   updateBlog,
+  archiveBlog,
   deleteBlog
 };

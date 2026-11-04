@@ -5,6 +5,7 @@ const {
   getProductById,
   createProduct,
   updateProduct,
+  archiveProduct,
   deleteProduct
 } = require('../controllers/productController');
 const { protect, adminOnly } = require('../middleware/auth');
@@ -14,6 +15,7 @@ router.get('/:id', getProductById);
 
 router.post('/', protect, adminOnly, createProduct);
 router.put('/:id', protect, adminOnly, updateProduct);
+router.patch('/:id/archive', protect, adminOnly, archiveProduct);
 router.patch('/:id', protect, adminOnly, updateProduct);
 router.delete('/:id', protect, adminOnly, deleteProduct);
 

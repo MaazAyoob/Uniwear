@@ -35,7 +35,7 @@ const logActivity = async (action, details, user = 'Admin') => {
 // GET /api/orders
 const getOrders = async (req, res, next) => {
   try {
-    const { search, stage, onSchedule, delayed, paymentStatus } = req.query;
+    const { search, stage, onSchedule, delayed, paymentStatus, archived, testData } = req.query;
     const filter = {};
 
     // SECURITY: Customers can only view their own orders.
@@ -44,6 +44,22 @@ const getOrders = async (req, res, next) => {
       filter.clientEmail = req.user.email.toLowerCase();
     } else if (req.query.clientEmail) {
       filter.clientEmail = req.query.clientEmail.toLowerCase();
+    }
+
+    // Archive filtering: default to active (non-archived) orders
+    if (archived === 'true') {
+      filter.isArchived = true;
+    } else if (archived === 'all') {
+      // Do not filter out archived
+    } else {
+      filter.isArchived = { $ne: true };
+    }
+
+    // Test data filtering
+    if (testData === 'true') {
+      filter.isTestData = true;
+    } else if (testData === 'false') {
+      filter.isTestData = { $ne: true };
     }
 
     // Payment Status Filter (PAID, UNPAID, or ALL)
@@ -167,4 +183,119 @@ const updateOrder = async (req, res, next) => {
   }
 };
 
-module.exports = { getOrders, createOrder, updateOrder };
+// GET /api/orders/:id
+const getOrderById = async (req, res, next) => {
+  try {
+    const targetQuery = getOrderQuery(req.params.id);
+    const order = await Order.findOne(targetQuery).lean();
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order record not found.' });
+    }
+    // Security: Customer can only view their own order
+    if (req.user && req.user.role === 'Customer' && order.clientEmail !== req.user.email.toLowerCase()) {
+      return res.status(403).json({ success: false, message: 'Access denied: Customer cannot access foreign orders.' });
+    }
+    res.json({ success: true, data: order });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// PATCH /api/orders/:id/mark-test
+const markOrderTest = async (req, res, next) => {
+  try {
+    const targetQuery = getOrderQuery(req.params.id);
+    const isTest = req.body.isTestData !== undefined ? Boolean(req.body.isTestData) : true;
+    const order = await Order.findOneAndUpdate(
+      targetQuery,
+      { isTestData: isTest },
+      { new: true }
+    );
+    if (!order) return res.status(404).json({ success: false, message: 'Order not found.' });
+
+    await logActivity(
+      isTest ? 'Order Flagged as Test Data' : 'Order Unflagged as Test Data',
+      `Order ${order.id} marked as ${isTest ? 'Synthetic Test Order' : 'Production Live Order'} by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({
+      success: true,
+      data: order,
+      message: isTest ? `Order ${order.id} marked as test data.` : `Order ${order.id} marked as live order.`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// PATCH /api/orders/:id/archive
+const archiveOrder = async (req, res, next) => {
+  try {
+    const targetQuery = getOrderQuery(req.params.id);
+    const isArchived = req.body.isArchived !== undefined ? Boolean(req.body.isArchived) : true;
+    const order = await Order.findOneAndUpdate(
+      targetQuery,
+      {
+        isArchived,
+        archivedAt: isArchived ? new Date() : null,
+        archivedBy: isArchived ? (req.user ? req.user.email : 'Admin') : ''
+      },
+      { new: true }
+    );
+    if (!order) return res.status(404).json({ success: false, message: 'Order not found.' });
+
+    await logActivity(
+      isArchived ? 'Order Archived' : 'Order Restored',
+      `Order ${order.id} ${isArchived ? 'archived' : 'restored from archive'} by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({
+      success: true,
+      data: order,
+      message: isArchived ? `Order ${order.id} archived successfully.` : `Order ${order.id} restored successfully.`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/orders/:id
+const deleteOrder = async (req, res, next) => {
+  try {
+    const targetQuery = getOrderQuery(req.params.id);
+    const order = await Order.findOne(targetQuery);
+    if (!order) return res.status(404).json({ success: false, message: 'Order record not found.' });
+
+    // CRITICAL PRODUCTION SAFETY GUARD:
+    // Only positively identified synthetic test records (isTestData === true) may be permanently deleted.
+    // Genuine customer orders and manufacturing records must be preserved or archived to protect financial and audit integrity.
+    if (!order.isTestData) {
+      return res.status(400).json({
+        success: false,
+        permanentDeletionBlocked: true,
+        message: `Deletion Blocked: Order ${order.id} is a live production record. Only orders explicitly marked as synthetic test data (isTestData) can be permanently deleted. You may archive this order instead.`
+      });
+    }
+
+    await Order.findOneAndDelete(targetQuery);
+
+    await logActivity(
+      'Test Order Deleted',
+      `Synthetic test order ${order.id} (${order.productName || 'Order'}, ₹${order.grandTotal || 0}) permanently deleted by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({ success: true, message: `Synthetic test order ${order.id} has been permanently removed.` });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  getOrders,
+  getOrderById,
+  createOrder,
+  updateOrder,
+  markOrderTest,
+  archiveOrder,
+  deleteOrder
+};

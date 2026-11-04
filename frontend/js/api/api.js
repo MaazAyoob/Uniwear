@@ -507,17 +507,24 @@ const api = {
   getLeads: (params) => apiGet('/leads', params),
   createLead: (data) => apiPost('/leads', data, false), // public: contact form, no auth needed
   updateLead: (id, data) => apiPatch(`/leads/${id}`, data),
+  archiveLead: (id, isArchived = true) => apiPatch(`/leads/${id}/archive`, { isArchived }),
   deleteLead: (id) => apiDelete(`/leads/${id}`),
 
   // Quotations
   getQuotations: (param) => apiGet('/quotations', param ? (typeof param === 'string' ? { clientEmail: param } : param) : {}),
   createQuotation: (data) => apiPost('/quotations', data),
   updateQuotation: (id, data) => apiPatch(`/quotations/${id}`, data),
+  archiveQuotation: (id, isArchived = true) => apiPatch(`/quotations/${id}/archive`, { isArchived }),
+  deleteQuotation: (id) => apiDelete(`/quotations/${id}`),
 
   // Orders
   getOrders: (param) => apiGet('/orders', param ? (typeof param === 'string' ? { clientEmail: param } : param) : {}),
+  getOrderById: (id) => apiGet(`/orders/${id}`),
   createOrder: (data) => apiPost('/orders', data),
   updateOrder: (id, data) => apiPatch(`/orders/${id}`, data),
+  markOrderTest: (id, isTestData = true) => apiPatch(`/orders/${id}/mark-test`, { isTestData }),
+  archiveOrder: (id, isArchived = true) => apiPatch(`/orders/${id}/archive`, { isArchived }),
+  deleteOrder: (id) => apiDelete(`/orders/${id}`),
 
   // Tickets
   getTickets: (param) => apiGet('/tickets', param ? (typeof param === 'string' ? { clientEmail: param } : param) : {}),
@@ -546,18 +553,21 @@ const api = {
   getProducts: (params) => apiGet('/products', params),
   createProduct: (data) => apiPost('/products', data),
   updateProduct: (id, data) => apiPatch(`/products/${id}`, data),
+  archiveProduct: (id, isArchived = true) => apiPatch(`/products/${id}/archive`, { isArchived }),
   deleteProduct: (id) => apiDelete(`/products/${id}`),
 
   // Catalog (CMS)
   getCatalogs: (params) => apiGet('/catalog', params),
   createCatalog: (data) => apiPost('/catalog', data),
   updateCatalog: (id, data) => apiPatch(`/catalog/${id}`, data),
+  archiveCatalog: (id, isArchived = true) => apiPatch(`/catalog/${id}/archive`, { isArchived }),
   deleteCatalog: (id) => apiDelete(`/catalog/${id}`),
 
   // Blogs (CMS)
   getBlogs: (params) => apiGet('/blogs', params),
   createBlog: (data) => apiPost('/blogs', data),
   updateBlog: (id, data) => apiPatch(`/blogs/${id}`, data),
+  archiveBlog: (id, isArchived = true) => apiPatch(`/blogs/${id}/archive`, { isArchived }),
   deleteBlog: (id) => apiDelete(`/blogs/${id}`),
 
   // Dashboard Stats

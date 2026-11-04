@@ -17,7 +17,7 @@ const logActivity = async (action, details, user = 'Admin') => {
 // GET /api/quotations
 const getQuotations = async (req, res, next) => {
   try {
-    const { search, status, salesperson, dateFrom, dateTo, minAmount, maxAmount } = req.query;
+    const { search, status, salesperson, dateFrom, dateTo, minAmount, maxAmount, archived } = req.query;
     const filter = {};
 
     // SECURITY: Customers can only view their own quotations.
@@ -26,6 +26,14 @@ const getQuotations = async (req, res, next) => {
       filter.clientEmail = req.user.email.toLowerCase();
     } else if (req.query.clientEmail) {
       filter.clientEmail = req.query.clientEmail.toLowerCase();
+    }
+
+    if (archived === 'true') {
+      filter.isArchived = true;
+    } else if (archived === 'all') {
+      // all
+    } else {
+      filter.isArchived = { $ne: true };
     }
     if (status && status !== 'All') filter.status = status;
     if (salesperson) filter.assignedSalesperson = salesperson;
@@ -159,4 +167,77 @@ const updateQuotation = async (req, res, next) => {
   }
 };
 
-module.exports = { getQuotations, createQuotation, updateQuotation };
+// PATCH /api/quotations/:id/archive
+const archiveQuotation = async (req, res, next) => {
+  try {
+    const targetQuery = getQuotationQuery(req.params.id);
+    const isArchived = req.body.isArchived !== undefined ? Boolean(req.body.isArchived) : true;
+    const quotation = await Quotation.findOneAndUpdate(
+      targetQuery,
+      {
+        isArchived,
+        archivedAt: isArchived ? new Date() : null,
+        archivedBy: isArchived ? (req.user ? req.user.email : 'Admin') : ''
+      },
+      { new: true }
+    );
+    if (!quotation) return res.status(404).json({ success: false, message: 'Quotation not found.' });
+
+    await logActivity(
+      isArchived ? 'Quotation Archived' : 'Quotation Restored',
+      `Quotation ${quotation.id} ${isArchived ? 'archived' : 'restored'} by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({
+      success: true,
+      data: quotation,
+      message: isArchived ? `Quotation ${quotation.id} archived.` : `Quotation ${quotation.id} restored.`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/quotations/:id
+const deleteQuotation = async (req, res, next) => {
+  try {
+    const targetQuery = getQuotationQuery(req.params.id);
+    const quotation = await Quotation.findOne(targetQuery);
+    if (!quotation) return res.status(404).json({ success: false, message: 'Quotation not found.' });
+
+    // Guard: Check if linked to an existing order
+    const linkedOrder = await Order.findOne({
+      $or: [
+        { quotationId: quotation.id },
+        { quotationId: quotation.quotationNumber },
+        { quotationId: String(quotation._id) }
+      ]
+    });
+    if (linkedOrder) {
+      return res.status(400).json({
+        success: false,
+        linkedToOrder: true,
+        message: `Deletion Blocked: Quotation ${quotation.id} is linked to active/confirmed Order ${linkedOrder.id}. Please archive this quotation instead of deleting it to protect financial traceability.`
+      });
+    }
+
+    await Quotation.findOneAndDelete(targetQuery);
+
+    await logActivity(
+      'Quotation Deleted',
+      `Quotation ${quotation.id} (${quotation.clientCompany || quotation.clientEmail}) deleted by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({ success: true, message: `Quotation ${quotation.id} deleted successfully.` });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  getQuotations,
+  createQuotation,
+  updateQuotation,
+  archiveQuotation,
+  deleteQuotation
+};

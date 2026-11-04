@@ -1367,6 +1367,48 @@
     </div>
   </div>
 
+  <!-- Dedicated In-Page Cashfree Payment Overlay Modal -->
+  <div id="uniwear-cashfree-modal-wrapper" class="fixed inset-0 z-[99999] hidden flex items-center justify-center bg-charcoal/70 backdrop-blur-sm p-3 sm:p-6 transition-all duration-300">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden border border-lightBorder flex flex-col max-h-[94vh] animate-in fade-in zoom-in-95 duration-200">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-lightBorder bg-slate-50/80">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold shadow-sm">
+            <i class="ri-shield-check-line text-xl"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h4 class="font-heading font-bold text-sm text-charcoal">Secure Cashfree Payment</h4>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <i class="ri-lock-line"></i> 256-Bit SSL
+              </span>
+            </div>
+            <p class="text-[11px] text-mutedText mt-0.5" id="cf-modal-subtitle">
+              Order <span id="cf-modal-order-id" class="font-mono font-bold text-charcoal">UW-ORD-0000</span> • Amount: <span id="cf-modal-amount" class="font-bold text-primary">₹0</span>
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" id="cf-modal-cancel-btn" onclick="handleCashfreeModalCancel()" class="px-4 py-2 rounded-xl border border-lightBorder text-xs font-bold text-charcoal hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all flex items-center gap-1.5 shadow-sm">
+            <i class="ri-close-line text-base"></i> Cancel & Return
+          </button>
+        </div>
+      </div>
+
+      <!-- Mount Container for Cashfree Hosted Checkout -->
+      <div id="uniwear-cashfree-mount" class="w-full h-[620px] relative overflow-hidden bg-white flex items-center justify-center">
+        <!-- Cashfree SDK mounts the checkout iframe directly inside this element -->
+        <div class="flex flex-col items-center justify-center space-y-3 text-mutedText p-8" id="cf-mount-loading-indicator">
+          <i class="ri-loader-4-line text-3xl animate-spin text-primary"></i>
+          <p class="text-xs font-medium">Initializing secure Cashfree gateway...</p>
+        </div>
+      </div>
+
+      <!-- Safety frame guard: catches any unexpected target="_modal" form submissions in-page -->
+      <iframe name="_modal" id="_modal_target_guard" class="hidden w-0 h-0 border-0 pointer-events-none" tabindex="-1" aria-hidden="true"></iframe>
+    </div>
+  </div>
+
   <script src="js/config/config.js"></script>
   <script src="js/api/api.js"></script>
   <script src="js/utils/shared.js"></script>
@@ -1420,6 +1462,7 @@
           }
           if (cartR && cartR.status === 'fulfilled' && cartR.value && cartR.value.success && cartR.value.cart) {
             portalCart = cartR.value.cart;
+            window.portalCart = portalCart;
             updateCartBadges();
           }
         } finally {
@@ -2089,6 +2132,7 @@
     // CLIENT PORTAL ORDERING, CART & CHECKOUT LOGIC
     // ==========================================
     let portalCart = { items: [], subtotal: 0, taxAmount: 0, deliveryCharge: 0, grandTotal: 0 };
+    window.portalCart = portalCart;
     let currentConfigProduct = null;
     let currentConfigAllocations = {};
     let currentQuotationPreview = null;
@@ -2102,6 +2146,7 @@
         const res = await window.api.getPortalCart();
         if (res && res.success && res.cart) {
           portalCart = res.cart;
+          window.portalCart = portalCart;
           updateCartBadges();
           renderPortalCartView();
         }
@@ -2304,6 +2349,7 @@
 
         if (res.success && res.cart) {
           portalCart = res.cart;
+          window.portalCart = portalCart;
           updateCartBadges();
           renderPortalCartView();
           setPortalTab('cust-cart');
@@ -2466,6 +2512,7 @@
         const res = await window.api.transferQuoteToCart(quoteNumber);
         if (res.success && res.cart) {
           portalCart = res.cart;
+          window.portalCart = portalCart;
           updateCartBadges();
           renderPortalCartView();
           setPortalTab('cust-cart');
@@ -2530,6 +2577,7 @@
         const res = await window.api.transferQuoteToCart(currentQuotationPreview.quotationNumber);
         if (res.success && res.cart) {
           portalCart = res.cart;
+          window.portalCart = portalCart;
           updateCartBadges();
           renderPortalCartView();
           setPortalTab('cust-cart');
@@ -2645,6 +2693,7 @@
         const res = await window.api.removePortalCartItem(productId);
         if (res.success && res.cart) {
           portalCart = res.cart;
+          window.portalCart = portalCart;
           updateCartBadges();
           renderPortalCartView();
         }
@@ -2755,6 +2804,114 @@
       return Cashfree({ mode });
     }
 
+    let activeCheckoutOrderId = null;
+    let originalWindowOpen = window.open;
+    let windowOpenGuarded = false;
+
+    function enableWindowOpenGuard(orderId) {
+      if (windowOpenGuarded) return;
+      windowOpenGuarded = true;
+      window.open = function(url, target, features) {
+        console.log('[Cashfree Checkout Guard: Intercepted window.open]', { url, target });
+        // Handle bank / 3DS gateway external redirect within same tab
+        if (url && typeof url === 'string') {
+          if (url !== 'about:blank') {
+            sessionStorage.setItem('uniwear_pending_checkout_order', orderId);
+            window.location.href = url;
+            return window;
+          }
+        }
+        // Handle about:blank (used by SDK for form submit) inside guard iframe
+        const guardFrame = document.getElementById('_modal_target_guard');
+        if (guardFrame && guardFrame.contentWindow) {
+          return guardFrame.contentWindow;
+        }
+        return window;
+      };
+    }
+
+    function disableWindowOpenGuard() {
+      if (windowOpenGuarded) {
+        window.open = originalWindowOpen;
+        windowOpenGuarded = false;
+      }
+    }
+
+    function launchInPageCashfreeCheckout({ orderId, paymentSessionId, cashfreeMode, orderAmount }) {
+      activeCheckoutOrderId = orderId;
+      lastFailedOrderId = orderId;
+
+      const modalWrapper = document.getElementById('uniwear-cashfree-modal-wrapper');
+      const mountEl = document.getElementById('uniwear-cashfree-mount');
+      const orderIdEl = document.getElementById('cf-modal-order-id');
+      const amountEl = document.getElementById('cf-modal-amount');
+
+      if (orderIdEl) orderIdEl.innerText = orderId;
+      if (amountEl) {
+        const amtVal = orderAmount || portalCart.grandTotal || 0;
+        amountEl.innerText = `₹${amtVal.toLocaleString('en-IN')}`;
+      }
+
+      if (mountEl) {
+        mountEl.innerHTML = `
+          <div class="flex flex-col items-center justify-center space-y-3 text-mutedText p-8" id="cf-mount-loading-indicator">
+            <i class="ri-loader-4-line text-3xl animate-spin text-primary"></i>
+            <p class="text-xs font-medium">Initializing secure Cashfree gateway...</p>
+          </div>
+        `;
+      }
+
+      if (modalWrapper) modalWrapper.classList.remove('hidden');
+
+      enableWindowOpenGuard(orderId);
+
+      try {
+        const cashfree = initializeCashfreeSDK(cashfreeMode);
+        cashfree.checkout({
+          paymentSessionId: paymentSessionId,
+          redirectTarget: mountEl
+        }).then(async (result) => {
+          disableWindowOpenGuard();
+          console.log('[Cashfree In-Page Checkout Resolved]', result);
+
+          // Handle redirect gracefully: gateway handling external step or bank authentication
+          if (result && result.redirect) {
+            console.log('[Cashfree] Gateway redirect action in progress.');
+            return;
+          }
+
+          closeCashfreeModalView();
+          await reconcilePaymentStatus(orderId, result);
+        }).catch(async (err) => {
+          disableWindowOpenGuard();
+          console.error('[Cashfree In-Page Checkout Error]', err);
+          closeCashfreeModalView();
+          await reconcilePaymentStatus(orderId, { error: err });
+        });
+      } catch (sdkInitErr) {
+        disableWindowOpenGuard();
+        closeCashfreeModalView();
+        alert(sdkInitErr.message || 'Failed to initialize payment gateway.');
+      }
+    }
+
+    function closeCashfreeModalView() {
+      const modalWrapper = document.getElementById('uniwear-cashfree-modal-wrapper');
+      if (modalWrapper) modalWrapper.classList.add('hidden');
+      const mountEl = document.getElementById('uniwear-cashfree-mount');
+      if (mountEl) mountEl.innerHTML = '';
+    }
+
+    async function handleCashfreeModalCancel() {
+      disableWindowOpenGuard();
+      closeCashfreeModalView();
+      if (activeCheckoutOrderId) {
+        await reconcilePaymentStatus(activeCheckoutOrderId, { userCancelled: true });
+      } else {
+        setPortalTab('cust-checkout');
+      }
+    }
+
     async function handleCheckoutSubmit(event) {
       event.preventDefault();
 
@@ -2796,14 +2953,11 @@
         }
 
         if (typeof Cashfree !== 'undefined') {
-          const cashfree = initializeCashfreeSDK(chkRes.cashfreeMode);
-          cashfree.checkout({
+          launchInPageCashfreeCheckout({
+            orderId,
             paymentSessionId: chkRes.paymentSessionId,
-            redirectTarget: '_modal'
-          }).then(async (result) => {
-            // CRITICAL: A generic browser callback, modal close, or error must NEVER determine the final financial state.
-            // ALWAYS reconcile the authoritative state with the Cashfree gateway via the backend.
-            await reconcilePaymentStatus(orderId, result);
+            cashfreeMode: chkRes.cashfreeMode,
+            orderAmount: chkRes.orderAmount || portalCart.grandTotal
           });
         } else {
           await reconcilePaymentStatus(orderId);
@@ -2844,6 +2998,17 @@
           updateCartBadges();
           await syncCustomerData();
           showOrderConfirmed(res.order);
+          return;
+        }
+
+        // Check if user explicitly closed or cancelled the modal overlay
+        if (sdkResult && sdkResult.userCancelled) {
+          if (pendingPollTimer) clearInterval(pendingPollTimer);
+          renderPaymentStateUI('CANCELLED', {
+            orderId,
+            title: 'Payment Window Closed',
+            desc: 'You closed the Cashfree payment overlay. No amount has been deducted, and no confirmed order has been placed. Your cart and size selections remain safely preserved.'
+          });
           return;
         }
 
@@ -3015,12 +3180,11 @@
         if (res.canRetry && res.paymentSessionId) {
           // Reuse existing active session to prevent duplicate orders
           if (typeof Cashfree !== 'undefined') {
-            const cashfree = initializeCashfreeSDK(res.cashfreeMode);
-            cashfree.checkout({
+            launchInPageCashfreeCheckout({
+              orderId,
               paymentSessionId: res.paymentSessionId,
-              redirectTarget: '_modal'
-            }).then(async (result) => {
-              await reconcilePaymentStatus(orderId, result);
+              cashfreeMode: res.cashfreeMode,
+              orderAmount: res.orderAmount || portalCart.grandTotal
             });
           }
           return;

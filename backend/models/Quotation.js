@@ -70,7 +70,10 @@ const quotationSchema = new mongoose.Schema({
   deliveryTerms: { type: String, default: 'Ex-factory Bengaluru. Transport charges as applicable.' },
   validity: { type: String, default: '30 Days from Date of Quotation' },
   termsConditions: { type: String, default: 'Standard Uniwear Terms: Custom embroidered/branded goods cannot be returned once sample is approved.' },
-  specs: { type: String, default: '' }
+  specs: { type: String, default: '' },
+  isArchived: { type: Boolean, default: false },
+  archivedAt: { type: Date, default: null },
+  archivedBy: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Quotation', quotationSchema);

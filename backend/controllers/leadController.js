@@ -6,8 +6,17 @@ const CompanySettings = require('../models/CompanySettings');
 // GET /api/leads
 const getLeads = async (req, res, next) => {
   try {
-    const { search, source, stage } = req.query;
+    const { search, source, stage, archived } = req.query;
     const filter = {};
+
+    if (archived === 'true') {
+      filter.isArchived = true;
+    } else if (archived === 'all') {
+      // all
+    } else {
+      filter.isArchived = { $ne: true };
+    }
+
     if (source && source !== 'All') {
       if (source === 'Chatbot') {
         filter.$or = [{ source: 'Chatbot' }, { source: 'AI Assistant' }];
@@ -82,10 +91,50 @@ const updateLead = async (req, res, next) => {
   }
 };
 
+// PATCH /api/leads/:id/archive
+const archiveLead = async (req, res, next) => {
+  try {
+    const isArchived = req.body.isArchived !== undefined ? Boolean(req.body.isArchived) : true;
+    const lead = await Lead.findByIdAndUpdate(
+      req.params.id,
+      {
+        isArchived,
+        archivedAt: isArchived ? new Date() : null,
+        archivedBy: isArchived ? (req.user ? req.user.email : 'Admin') : ''
+      },
+      { new: true }
+    );
+    if (!lead) return res.status(404).json({ success: false, message: 'Lead not found.' });
+
+    await Notification.create({
+      recipient: 'admin',
+      title: isArchived ? 'Lead Archived' : 'Lead Restored',
+      text: `Lead for ${lead.name} (${lead.company || lead.email}) was ${isArchived ? 'archived' : 'restored'} by ${req.user ? req.user.email : 'Admin'}.`,
+      time: 'Just now'
+    });
+
+    res.json({
+      success: true,
+      data: lead,
+      message: isArchived ? 'Lead archived successfully.' : 'Lead restored successfully.'
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const deleteLead = async (req, res, next) => {
   try {
     const lead = await Lead.findByIdAndDelete(req.params.id);
     if (!lead) return res.status(404).json({ success: false, message: 'Lead not found.' });
+
+    await Notification.create({
+      recipient: 'admin',
+      title: 'Lead Deleted',
+      text: `Lead record for ${lead.name} (${lead.company || lead.email}) was deleted by ${req.user ? req.user.email : 'Admin'}.`,
+      time: 'Just now'
+    });
+
     res.json({ success: true, message: 'Lead deleted successfully.' });
   } catch (err) {
     next(err);
@@ -124,5 +173,5 @@ const subscribeNewsletter = async (req, res, next) => {
   }
 };
 
-module.exports = { getLeads, createLead, updateLead, deleteLead, subscribeNewsletter };
+module.exports = { getLeads, createLead, updateLead, archiveLead, deleteLead, subscribeNewsletter };
 

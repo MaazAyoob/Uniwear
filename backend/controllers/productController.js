@@ -1,9 +1,19 @@
 const Product = require('../models/Product');
+const Order = require('../models/Order');
+const Quotation = require('../models/Quotation');
+const CustomerProduct = require('../models/CustomerProduct');
+const Notification = require('../models/Notification');
+
+const logActivity = async (action, details) => {
+  try {
+    await Notification.create({ recipient: 'admin', title: action, text: details || action, time: 'Just now' });
+  } catch (err) {}
+};
 
 // GET /api/products
 const getProducts = async (req, res, next) => {
   try {
-    const { page, limit, search, category, status, featured, isPublic, location, sort = 'sortOrder', order = 'asc' } = req.query;
+    const { page, limit, search, category, status, featured, isPublic, location, sort = 'sortOrder', order = 'asc', archived } = req.query;
 
     const filter = {};
     if (category && category !== 'All') {
@@ -11,6 +21,11 @@ const getProducts = async (req, res, next) => {
     }
     if (status && status !== 'All') {
       filter.status = status;
+    } else if (archived === 'true') {
+      filter.$or = [{ status: 'Archived' }, { isArchived: true }];
+    } else if (archived !== 'all') {
+      filter.status = { $ne: 'Archived' };
+      filter.isArchived = { $ne: true };
     }
     if (featured !== undefined) {
       filter.featured = featured === 'true';
@@ -216,23 +231,105 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-// DELETE /api/products/:id
-const deleteProduct = async (req, res, next) => {
+// PATCH /api/products/:id/archive
+const archiveProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    let product;
+    const isArchived = req.body.isArchived !== undefined ? Boolean(req.body.isArchived) : true;
+    const query = /^\d+$/.test(id) ? { id: parseInt(id) } : { _id: id };
 
-    if (/^\d+$/.test(id)) {
-      product = await Product.findOneAndDelete({ id: parseInt(id) });
-    } else {
-      product = await Product.findByIdAndDelete(id);
-    }
+    const product = await Product.findOneAndUpdate(
+      query,
+      {
+        isArchived,
+        status: isArchived ? 'Archived' : 'Active',
+        archivedAt: isArchived ? new Date() : null,
+        archivedBy: isArchived ? (req.user ? req.user.email : 'Admin') : ''
+      },
+      { new: true }
+    );
 
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found.' });
     }
 
-    res.json({ success: true, message: 'Product deleted successfully.' });
+    await logActivity(
+      isArchived ? 'Product Archived' : 'Product Restored',
+      `Product "${product.name}" (${product.sku || product.id}) ${isArchived ? 'archived' : 'restored'} by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({
+      success: true,
+      data: product,
+      message: isArchived ? `Product "${product.name}" archived.` : `Product "${product.name}" restored.`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/products/:id
+const deleteProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const query = /^\d+$/.test(id) ? { id: parseInt(id) } : { _id: id };
+    const product = await Product.findOne(query);
+
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found.' });
+    }
+
+    // CRITICAL SAFETY CHECK:
+    // Check references in Orders, Quotations, and CustomerProduct assignments
+    const pId = product.id;
+    const pObjId = product._id;
+    const pIdStr = String(product._id);
+
+    const [orderRef, quoteRef, assignRef] = await Promise.all([
+      Order.findOne({
+        $or: [
+          { 'items.productId': pId },
+          { 'items.productId': pObjId },
+          { 'items.productId': pIdStr },
+          { productName: product.name }
+        ]
+      }),
+      Quotation.findOne({
+        $or: [
+          { 'items.productId': pId },
+          { 'items.productId': pObjId },
+          { 'items.productId': pIdStr }
+        ]
+      }),
+      CustomerProduct.findOne({
+        $or: [
+          { productId: pId },
+          { productId: pObjId },
+          { productId: pIdStr }
+        ]
+      })
+    ]);
+
+    if (orderRef || quoteRef || assignRef) {
+      const reasons = [];
+      if (orderRef) reasons.push(`Order ${orderRef.id}`);
+      if (quoteRef) reasons.push(`Quotation ${quoteRef.id}`);
+      if (assignRef) reasons.push('Customer Catalog Assignment');
+      return res.status(400).json({
+        success: false,
+        dependencyBlocked: true,
+        message: `Deletion Blocked: Product "${product.name}" cannot be deleted because it is referenced in: ${reasons.join(', ')}. Please archive or deactivate the product instead to preserve historical records.`
+      });
+    }
+
+    await Product.findOneAndDelete(query);
+
+    await logActivity(
+      'Product Deleted',
+      `Product "${product.name}" (${product.sku || product.id}) permanently deleted by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({ success: true, message: `Product "${product.name}" deleted successfully.` });
   } catch (err) {
     next(err);
   }
@@ -243,5 +340,6 @@ module.exports = {
   getProductById,
   createProduct,
   updateProduct,
+  archiveProduct,
   deleteProduct
 };

@@ -5,6 +5,7 @@ const {
   getCatalogById,
   createCatalog,
   updateCatalog,
+  archiveCatalog,
   deleteCatalog
 } = require('../controllers/catalogController');
 const { protect, adminOnly } = require('../middleware/auth');
@@ -14,6 +15,7 @@ router.get('/:id', getCatalogById);
 
 router.post('/', protect, adminOnly, createCatalog);
 router.put('/:id', protect, adminOnly, updateCatalog);
+router.patch('/:id/archive', protect, adminOnly, archiveCatalog);
 router.patch('/:id', protect, adminOnly, updateCatalog);
 router.delete('/:id', protect, adminOnly, deleteCatalog);
 

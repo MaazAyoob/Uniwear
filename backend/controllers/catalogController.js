@@ -1,13 +1,28 @@
 const mongoose = require('mongoose');
 const Catalog = require('../models/Catalog');
+const Notification = require('../models/Notification');
+
+const logActivity = async (action, details) => {
+  try {
+    await Notification.create({ recipient: 'admin', title: action, text: details || action, time: 'Just now' });
+  } catch (err) {}
+};
 
 const getCatalogQuery = (id) => (mongoose.isValidObjectId(id) ? { $or: [{ _id: id }, { slug: id }] } : { slug: id });
 
 // GET /api/catalog
 const getCatalogs = async (req, res, next) => {
   try {
-    const { search, category, status } = req.query;
+    const { search, category, status, archived } = req.query;
     const filter = {};
+
+    if (archived === 'true') {
+      filter.isArchived = true;
+    } else if (archived === 'all') {
+      // all
+    } else {
+      filter.isArchived = { $ne: true };
+    }
 
     if (category && category !== 'All') {
       filter.category = category;
@@ -136,6 +151,40 @@ const updateCatalog = async (req, res, next) => {
   }
 };
 
+// PATCH /api/catalog/:id/archive
+const archiveCatalog = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const isArchived = req.body.isArchived !== undefined ? Boolean(req.body.isArchived) : true;
+    const catalog = await Catalog.findOneAndUpdate(
+      getCatalogQuery(id),
+      {
+        isArchived,
+        archivedAt: isArchived ? new Date() : null,
+        archivedBy: isArchived ? (req.user ? req.user.email : 'Admin') : ''
+      },
+      { new: true }
+    );
+
+    if (!catalog) {
+      return res.status(404).json({ success: false, message: 'Catalog not found.' });
+    }
+
+    await logActivity(
+      isArchived ? 'Catalog Archived' : 'Catalog Restored',
+      `Catalog "${catalog.title}" (${catalog.slug}) ${isArchived ? 'archived' : 'restored'} by ${req.user ? req.user.email : 'Admin'}`
+    );
+
+    res.json({
+      success: true,
+      data: catalog,
+      message: isArchived ? `Catalog "${catalog.title}" archived.` : `Catalog "${catalog.title}" restored.`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // DELETE /api/catalog/:id
 const deleteCatalog = async (req, res, next) => {
   try {
@@ -145,6 +194,11 @@ const deleteCatalog = async (req, res, next) => {
     if (!catalog) {
       return res.status(404).json({ success: false, message: 'Catalog not found.' });
     }
+
+    await logActivity(
+      'Catalog Deleted',
+      `Catalog "${catalog.title}" (${catalog.slug}) deleted by ${req.user ? req.user.email : 'Admin'}`
+    );
 
     res.json({ success: true, message: 'Catalog deleted successfully.' });
   } catch (err) {
@@ -157,5 +211,6 @@ module.exports = {
   getCatalogById,
   createCatalog,
   updateCatalog,
+  archiveCatalog,
   deleteCatalog
 };

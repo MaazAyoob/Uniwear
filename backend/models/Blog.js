@@ -14,7 +14,10 @@ const blogSchema = new mongoose.Schema({
   img: { type: String, default: '' },
   featuredImage: { type: String, default: '' },
   images: [{ type: String }],
-  featured: { type: Boolean, default: false }
+  featured: { type: Boolean, default: false },
+  isArchived: { type: Boolean, default: false },
+  archivedAt: { type: Date, default: null },
+  archivedBy: { type: String, default: '' }
 }, { timestamps: true });
 
 // Sync featuredImage and img

@@ -140,7 +140,13 @@ const orderSchema = new mongoose.Schema({
       time: { type: Date, default: Date.now },
       rawResponse: { type: mongoose.Schema.Types.Mixed }
     }]
-  }
+  },
+  isTestData: { type: Boolean, default: false },
+  isArchived: { type: Boolean, default: false },
+  archivedAt: { type: Date, default: null },
+  archivedBy: { type: String, default: '' },
+  notes: { type: String, default: '' },
+  specialInstructions: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);

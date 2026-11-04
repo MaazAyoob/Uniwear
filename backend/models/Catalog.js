@@ -20,7 +20,10 @@ const catalogSchema = new mongoose.Schema({
   status: { type: String, enum: ['Publish', 'Draft'], default: 'Publish' },
   seoTitle: { type: String, default: '' },
   seoDescription: { type: String, default: '' },
-  metaImage: { type: String, default: '' }
+  metaImage: { type: String, default: '' },
+  isArchived: { type: Boolean, default: false },
+  archivedAt: { type: Date, default: null },
+  archivedBy: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Catalog', catalogSchema);

@@ -40,7 +40,10 @@ const productSchema = new mongoose.Schema({
   specifications: { type: String, default: '' },
   sizes: { type: [String], default: ['S', 'M', 'L', 'XL', '2XL'] },
   tags: [{ type: String }],
-  displayOrder: { type: Number, default: 0 }
+  displayOrder: { type: Number, default: 0 },
+  isArchived: { type: Boolean, default: false },
+  archivedAt: { type: Date, default: null },
+  archivedBy: { type: String, default: '' }
 }, { timestamps: true });
 
 // Pre-save hook to keep image, desc, and sync defaults

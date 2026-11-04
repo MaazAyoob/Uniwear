@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const Order = require('../models/Order');
+const CustomerProduct = require('../models/CustomerProduct');
 const Notification = require('../models/Notification');
 const bcrypt = require('bcryptjs');
 const { sendMail, emailTemplates } = require('../config/mailer');
@@ -99,6 +101,17 @@ const deleteUser = async (req, res, next) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
 
+    // CRITICAL SAFETY GUARD:
+    // Block deleting customer accounts that have active or historical orders
+    const linkedOrder = await Order.findOne({ clientEmail: user.email.toLowerCase() });
+    if (linkedOrder) {
+      return res.status(400).json({
+        success: false,
+        hasOrdersBlocked: true,
+        message: `Deletion Blocked: Customer "${user.email}" has order records (e.g. ${linkedOrder.id}). Deleting this account would break financial and audit traceability. Please deactivate or set the status to 'Disabled' instead.`
+      });
+    }
+
     // 4. Account Rejection (Delete scenario for pending users)
     if (user.role === 'Customer' && user.status === 'Pending') {
       try {
@@ -109,8 +122,19 @@ const deleteUser = async (req, res, next) => {
       }
     }
 
+    // Clean up customer-product assignments if any
+    await CustomerProduct.deleteMany({ customerId: user.email.toLowerCase() });
+
     await User.findByIdAndDelete(req.params.id);
-    res.json({ success: true, message: 'User deleted successfully.' });
+
+    await Notification.create({
+      recipient: 'admin',
+      title: 'User Account Deleted',
+      text: `User account for ${user.companyName || user.email} (${user.email}, ${user.role}) was deleted by ${req.user ? req.user.email : 'Admin'}.`,
+      time: 'Just now'
+    });
+
+    res.json({ success: true, message: 'User account and customer catalog assignments removed successfully.' });
   } catch (err) {
     next(err);
   }
