@@ -576,7 +576,7 @@ const api = {
 
   // Customer Specific Products Assignment
   getCustomerProducts: async (customerId) => {
-    return await apiGet(`/customer/${customerId}/products`);
+    return await apiGet(`/customer/${encodeURIComponent(customerId)}/products`);
   },
   assignCustomerProducts: async (data) => {
     return await apiPost('/customer-products', data);

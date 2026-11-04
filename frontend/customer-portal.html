@@ -184,7 +184,7 @@
           <p class="text-[10px] text-mutedText font-mono truncate max-w-[140px]" id="sidebar-company-name">Taj Resorts</p>
         </div>
       </div>
-      <button onclick="handleLogout()" class="w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
+      <button id="sidebar-logout-btn" onclick="handleLogout()" class="w-full flex items-center gap-3 py-3 px-4 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
         <i class="ri-logout-box-r-line"></i> Sign Out
       </button>
     </div>
@@ -221,7 +221,7 @@
           <i class="ri-notification-3-line"></i>
           <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full hidden" id="cust-noti-dot"></span>
         </button>
-        <button onclick="handleLogout()" class="md:hidden text-red-500 text-xs font-semibold px-2 py-1 rounded hover:bg-red-50">Sign Out</button>
+        <button id="mobile-logout-btn" onclick="handleLogout()" class="md:hidden text-red-500 text-xs font-semibold px-2 py-1 rounded hover:bg-red-50">Sign Out</button>
       </div>
     </header>
 
@@ -1463,7 +1463,6 @@
       document.getElementById('prof-address').value = profile.address || '';
 
       // Check return URL from Cashfree PG
-      const urlParams = new URLSearchParams(window.location.search);
       const redirectOrderId = urlParams.get('order_id') || urlParams.get('orderId');
       if (redirectOrderId) {
         window.history.replaceState({}, document.title, window.location.pathname);
@@ -1521,19 +1520,25 @@
     }
 
     function handleLogout() {
-      if (window.api && typeof window.api.logout === 'function') {
-        window.api.logout();
-      } else {
-        localStorage.removeItem('uniwear_jwt_token');
-        localStorage.removeItem('uniwear_auth_token');
-        localStorage.removeItem('uniwear_auth_role');
-        localStorage.removeItem('uniwear_auth_role_details');
-        localStorage.removeItem('uniwear_auth_email');
-        localStorage.removeItem('uniwear_auth_id');
-        localStorage.removeItem('uniwear_profile');
+      try {
+        if (window.api && typeof window.api.logout === 'function') {
+          window.api.logout();
+        }
+      } catch (err) {
+        console.error("Logout API error:", err);
       }
+      localStorage.removeItem('uniwear_jwt_token');
+      localStorage.removeItem('uniwear_auth_token');
+      localStorage.removeItem('uniwear_auth_role');
+      localStorage.removeItem('uniwear_auth_role_details');
+      localStorage.removeItem('uniwear_auth_email');
+      localStorage.removeItem('uniwear_auth_id');
+      localStorage.removeItem('uniwear_profile');
+      localStorage.removeItem('uniwear_admin_token');
+      sessionStorage.clear();
       window.location.href = 'login.html';
     }
+    window.handleLogout = handleLogout;
 
     function togglePortalNotifications() {
       const popover = document.getElementById('cust-notifications-popover');
