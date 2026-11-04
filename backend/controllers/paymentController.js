@@ -190,7 +190,9 @@ exports.createCheckoutOrder = async (req, res) => {
     const host = req.get('host');
     const protocol = req.protocol;
     const defaultReturnUrl = `${protocol}://${host}/customer-portal.html?order_id=${internalOrderId}&payment_status=return`;
-    const defaultNotifyUrl = `${protocol}://${host}/api/portal/payment/webhook`;
+    const defaultNotifyUrl = process.env.WEBHOOK_BASE_URL
+      ? `${process.env.WEBHOOK_BASE_URL.replace(/\/+$/, '')}/api/portal/payment/webhook`
+      : `${protocol}://${host}/api/portal/payment/webhook`;
 
     // 1. Create or retrieve pending Order in database first
     const pendingOrder = await Order.create({
