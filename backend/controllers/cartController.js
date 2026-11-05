@@ -57,16 +57,31 @@ async function getOrCreateCart(req) {
 
 // Helper: Find customer-product assignment & product info
 async function resolveProductAssignment(customerId, userEmail, productId) {
+  const prodMatchIds = [productId, String(productId)];
+  if (typeof productId === 'string' && productId.length === 24 && /^[0-9a-fA-F]{24}$/.test(productId)) {
+    try { prodMatchIds.push(new mongoose.Types.ObjectId(productId)); } catch (_) {}
+  } else if (productId instanceof mongoose.Types.ObjectId) {
+    prodMatchIds.push(productId.toString());
+  }
+
+  const custMatchIds = [customerId, String(customerId)];
+  if (userEmail) custMatchIds.push(userEmail, userEmail.toLowerCase());
+  if (typeof customerId === 'string' && customerId.length === 24 && /^[0-9a-fA-F]{24}$/.test(customerId)) {
+    try { custMatchIds.push(new mongoose.Types.ObjectId(customerId)); } catch (_) {}
+  } else if (customerId instanceof mongoose.Types.ObjectId) {
+    custMatchIds.push(customerId.toString());
+  }
+
   const assignment = await CustomerProduct.findOne({
-    $or: [{ customerId: customerId }, { customerId: String(customerId) }, { customerId: userEmail }],
-    productId: productId
+    customerId: { $in: custMatchIds },
+    productId: { $in: prodMatchIds }
   }).lean() || await CustomerProduct.findOne({
-    productId: String(productId)
+    productId: { $in: prodMatchIds }
   }).lean();
 
   const isObjectId = typeof productId === 'string' && productId.length === 24 && /^[0-9a-fA-F]{24}$/.test(productId);
   let productQuery;
-  if (isObjectId) {
+  if (isObjectId || productId instanceof mongoose.Types.ObjectId) {
     productQuery = { _id: productId };
   } else if (!isNaN(productId) && String(productId).trim() !== '') {
     productQuery = { id: Number(productId) };
@@ -124,10 +139,25 @@ exports.addItem = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Product is not available for this account.' });
     }
 
-    // Rate & MOQ authority from backend
-    const unitRate = assignment && assignment.customPrice !== null && assignment.customPrice !== undefined
-      ? assignment.customPrice
-      : (product && product.price ? product.price : 0);
+    // Rate & MOQ authority from backend (Never trust client-submitted rates or totals)
+    let authoritativePrice = null;
+    if (assignment && assignment.customPrice !== null && assignment.customPrice !== undefined && assignment.customPrice > 0) {
+      authoritativePrice = assignment.customPrice;
+    } else if (product && product.pricePerPiece !== null && product.pricePerPiece !== undefined && product.pricePerPiece > 0) {
+      authoritativePrice = product.pricePerPiece;
+    } else if (product && product.price && product.price > 0) {
+      authoritativePrice = product.price;
+    }
+
+    // Reject items without an authoritative positive price
+    if (!authoritativePrice || authoritativePrice <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: `Product "${(product && product.name) || 'Selected product'}" does not have a configured price for online ordering. Please contact sales for a custom quotation or configure a price in the Admin Portal.`
+      });
+    }
+
+    const unitRate = authoritativePrice;
 
     const moq = assignment && assignment.customMOQ !== null && assignment.customMOQ !== undefined
       ? assignment.customMOQ
@@ -284,7 +314,17 @@ exports.transferQuoteToCart = async (req, res) => {
       const pId = qItem.productId || qItem.product;
       const { assignment, product } = await resolveProductAssignment(req.user.id, userEmail, pId);
 
-      const unitRate = qItem.unitPrice || (assignment && assignment.customPrice) || (product && product.price) || 0;
+      const baseProductPrice = (product && product.pricePerPiece !== null && product.pricePerPiece !== undefined && product.pricePerPiece > 0)
+        ? product.pricePerPiece
+        : (product && product.price && product.price > 0 ? product.price : 0);
+      const unitRate = qItem.unitPrice || (assignment && assignment.customPrice && assignment.customPrice > 0 ? assignment.customPrice : null) || baseProductPrice || 0;
+
+      if (!unitRate || unitRate <= 0) {
+        return res.status(400).json({
+          success: false,
+          message: `Item "${qItem.product || (product && product.name) || 'Quote Item'}" does not have a valid unit price. Cannot transfer to cart.`
+        });
+      }
       const totalQty = qItem.quantity || 1;
       const sizeBreakdown = qItem.sizeBreakdown || {};
 

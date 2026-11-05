@@ -350,8 +350,8 @@
                 <span id="modal-product-gsm" class="font-semibold text-charcoal mt-0.5 block">N/A</span>
               </div>
               <div class="p-3 bg-lightCard border border-lightBorder rounded-xl">
-                <span class="text-gray-400 block">Branding SLA</span>
-                <span id="modal-product-moisture" class="font-semibold text-charcoal mt-0.5 block">High SLA</span>
+                <span class="text-gray-400 block">Unit Price (excl. GST)</span>
+                <span id="modal-product-price" class="font-semibold text-primary mt-0.5 block">Price on Request</span>
               </div>
               <div class="p-3 bg-lightCard border border-lightBorder rounded-xl">
                 <span class="text-gray-400 block">Minimum Order (MOQ)</span>
@@ -412,6 +412,13 @@
         const card = document.createElement('div');
         card.className = "product-card bg-white rounded-2xl overflow-hidden border border-lightBorder hover:shadow-xl hover:border-primary/20 transition-all duration-300 group flex flex-col justify-between cursor-pointer";
         card.setAttribute('onclick', `openQuickView(${prod.id})`);
+        const priceVal = (prod.pricePerPiece !== undefined && prod.pricePerPiece !== null && prod.pricePerPiece > 0)
+          ? prod.pricePerPiece
+          : (prod.price && prod.price > 0 ? prod.price : null);
+        const priceSnippet = priceVal
+          ? `<div class="mt-2 text-xs font-bold text-primary">₹${Number(priceVal).toLocaleString('en-IN')} <span class="text-[10px] text-mutedText font-normal">/ piece</span></div>`
+          : `<div class="mt-2 text-[11px] font-semibold text-mutedText">Price on Request</div>`;
+
         card.innerHTML = `
           <div>
             <div class="product-card__image-container product-card-image-wrap relative bg-white dark:bg-stone-900 border-b border-lightBorder/50">
@@ -425,6 +432,7 @@
                   <i class="ri-file-list-3-line text-sm"></i>
                 </a>
               </div>
+              ${priceSnippet}
               <p class="text-xs text-mutedText mt-2 line-clamp-2">${prod.desc}</p>
             </div>
           </div>
@@ -446,6 +454,13 @@
       document.getElementById('modal-product-fabric').innerText = prod.fabric;
       document.getElementById('modal-product-gsm').innerText = prod.gsm;
       document.getElementById('modal-product-moq').innerText = `${prod.moq} Sets`;
+      const priceVal = (prod.pricePerPiece !== undefined && prod.pricePerPiece !== null && prod.pricePerPiece > 0)
+        ? prod.pricePerPiece
+        : (prod.price && prod.price > 0 ? prod.price : null);
+      const priceEl = document.getElementById('modal-product-price');
+      if (priceEl) {
+        priceEl.innerText = priceVal ? `₹${Number(priceVal).toLocaleString('en-IN')} / piece` : 'Price on Request';
+      }
       
       // Modal action btn is now a link; no dynamic binding needed
 

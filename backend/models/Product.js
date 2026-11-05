@@ -11,6 +11,11 @@ const productSchema = new mongoose.Schema({
   description: { type: String }, // Backwards compatible duplicate
   shortDescription: { type: String, default: '' },
   sku: { type: String, unique: true, sparse: true },
+  pricePerPiece: {
+    type: Number,
+    min: [0, 'Price per piece cannot be negative'],
+    default: null
+  },
   price: { type: Number, default: 0 },
   hsnCode: { type: String, default: '6109' },
   hsnStatus: {
@@ -46,13 +51,18 @@ const productSchema = new mongoose.Schema({
   archivedBy: { type: String, default: '' }
 }, { timestamps: true });
 
-// Pre-save hook to keep image, desc, and sync defaults
+// Pre-save hook to keep image, desc, price sync, and defaults
 productSchema.pre('save', function (next) {
   if (this.img && !this.image) this.image = this.img;
   if (this.image && !this.img) this.img = this.image;
   if (this.desc && !this.description) this.description = this.desc;
   if (this.description && !this.desc) this.desc = this.description;
   if (this.sortOrder === undefined && this.displayOrder !== undefined) this.sortOrder = this.displayOrder;
+  if (this.pricePerPiece !== undefined && this.pricePerPiece !== null && !isNaN(this.pricePerPiece)) {
+    this.price = this.pricePerPiece;
+  } else if (this.price !== undefined && this.price !== null && !isNaN(this.price) && this.price > 0 && (this.pricePerPiece === undefined || this.pricePerPiece === null)) {
+    this.pricePerPiece = this.price;
+  }
   next();
 });
 

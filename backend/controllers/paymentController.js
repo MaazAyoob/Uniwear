@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/User');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
@@ -79,10 +80,27 @@ exports.createCheckoutOrder = async (req, res) => {
     const orderItems = [];
 
     for (const item of cart.items) {
+      const prodMatchIds = [item.productId, String(item.productId)];
+      if (typeof item.productId === 'string' && item.productId.length === 24 && /^[0-9a-fA-F]{24}$/.test(item.productId)) {
+        try { prodMatchIds.push(new mongoose.Types.ObjectId(item.productId)); } catch (_) {}
+      } else if (item.productId instanceof mongoose.Types.ObjectId) {
+        prodMatchIds.push(item.productId.toString());
+      }
+
+      const custMatchIds = [customerId, String(customerId)];
+      if (clientEmail) custMatchIds.push(clientEmail, clientEmail.toLowerCase());
+      if (typeof customerId === 'string' && customerId.length === 24 && /^[0-9a-fA-F]{24}$/.test(customerId)) {
+        try { custMatchIds.push(new mongoose.Types.ObjectId(customerId)); } catch (_) {}
+      } else if (customerId instanceof mongoose.Types.ObjectId) {
+        custMatchIds.push(customerId.toString());
+      }
+
       const assignment = await CustomerProduct.findOne({
-        $or: [{ customerId }, { customerId: String(customerId) }, { customerId: clientEmail }],
-        productId: item.productId
-      }).lean() || await CustomerProduct.findOne({ productId: String(item.productId) }).lean();
+        customerId: { $in: custMatchIds },
+        productId: { $in: prodMatchIds }
+      }).lean() || await CustomerProduct.findOne({
+        productId: { $in: prodMatchIds }
+      }).lean();
 
       const isObjectId = typeof item.productId === 'string' && item.productId.length === 24 && /^[0-9a-fA-F]{24}$/.test(item.productId);
       let productQuery;
@@ -99,9 +117,24 @@ exports.createCheckoutOrder = async (req, res) => {
         product = await Product.findOne({ sku: item.productId }).lean();
       }
 
-      const unitRate = assignment && assignment.customPrice !== null && assignment.customPrice !== undefined
-        ? assignment.customPrice
-        : (product && product.price ? product.price : item.unitRate);
+      // Authoritative unit price from MongoDB (never trust cart item or client rate)
+      let authoritativePrice = null;
+      if (assignment && assignment.customPrice !== null && assignment.customPrice !== undefined && assignment.customPrice > 0) {
+        authoritativePrice = assignment.customPrice;
+      } else if (product && product.pricePerPiece !== null && product.pricePerPiece !== undefined && product.pricePerPiece > 0) {
+        authoritativePrice = product.pricePerPiece;
+      } else if (product && product.price && product.price > 0) {
+        authoritativePrice = product.price;
+      }
+
+      if (!authoritativePrice || authoritativePrice <= 0) {
+        return res.status(400).json({
+          success: false,
+          message: `Product "${item.name}" does not have a valid unit price for online checkout. Please remove it from your cart or request a custom quotation.`
+        });
+      }
+
+      const unitRate = authoritativePrice;
 
       const moq = assignment && assignment.customMOQ !== null && assignment.customMOQ !== undefined
         ? assignment.customMOQ
@@ -143,6 +176,13 @@ exports.createCheckoutOrder = async (req, res) => {
     const deliveryCharge = (freeThreshold > 0 && subtotal >= freeThreshold) ? 0 : stdDelivery;
     const taxAmount = totalTax;
     const grandTotal = isTaxInclusive ? (subtotal + deliveryCharge) : (subtotal + taxAmount + deliveryCharge);
+
+    if (grandTotal <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Order grand total must be greater than ₹0 to initiate online checkout.'
+      });
+    }
 
     const orderTaxBreakdown = taxService.calculateTaxBreakdown(subtotal, dominantTaxRate, supplyInfo.isIntraState, isTaxInclusive);
     orderTaxBreakdown.totalTax = totalTax;

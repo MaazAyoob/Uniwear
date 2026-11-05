@@ -145,10 +145,10 @@
     #uniwear-cashfree-mount::-webkit-scrollbar-thumb:hover {
       background-color: #94a3b8;
     }
-    /* Prevent Cashfree from being squished by flexbox; ensure minimum height to show Pay button */
+    /* Prevent Cashfree from being squished by flexbox; ensure ample height to show Pay button */
     #uniwear-cashfree-mount #cashfree-modal-container {
       flex-shrink: 0 !important;
-      min-height: 680px !important;
+      min-height: 980px !important;
       height: auto !important;
       max-width: 100% !important;
       width: 100% !important;
@@ -160,7 +160,7 @@
     }
     #uniwear-cashfree-mount #cashfree-modal-container > div {
       flex-shrink: 0 !important;
-      min-height: 680px !important;
+      min-height: 980px !important;
       height: auto !important;
       max-width: 100% !important;
       margin: 0 auto !important;
@@ -168,8 +168,8 @@
     }
     #uniwear-cashfree-mount iframe {
       flex-shrink: 0 !important;
-      min-height: 680px !important;
-      height: 680px !important;
+      min-height: 980px !important;
+      height: 980px !important;
       max-width: 100% !important;
       width: 100% !important;
       display: block !important;
@@ -2142,7 +2142,14 @@
         const card = document.createElement('div');
         card.className = "product-card bg-white rounded-3xl border border-lightBorder overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between font-body";
 
-        const priceText = p.effectivePrice ? `₹${p.effectivePrice.toLocaleString()}` : (p.price ? `₹${p.price}` : 'Custom Quote');
+        const unitPrice = (p.effectivePrice !== undefined && p.effectivePrice !== null && p.effectivePrice > 0)
+          ? p.effectivePrice
+          : ((p.pricePerPiece && p.pricePerPiece > 0) ? p.pricePerPiece : (p.price && p.price > 0 ? p.price : null));
+        const hasPrice = Boolean(unitPrice && unitPrice > 0);
+        const priceText = hasPrice ? `₹${unitPrice.toLocaleString('en-IN')}` : 'Quote on Request';
+        const priceBadge = hasPrice
+          ? `<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">Fixed price / pc</span>`
+          : `<span class="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">Custom quote</span>`;
         const moqText = p.effectiveMOQ || p.customMOQ || p.moq || 100;
         const notesHtml = p.customerNotes ? `<div class="p-2.5 bg-yellow-50/80 rounded-xl border border-yellow-100 text-[10px] text-yellow-800 font-medium mb-3"><strong>Account Note:</strong> ${p.customerNotes}</div>` : '';
 
@@ -2174,10 +2181,10 @@
           </div>
           <div class="p-6 pt-0 border-t border-lightBorder/50 flex items-center justify-between gap-4 mt-2">
             <div>
-              <span class="text-[9px] uppercase font-bold text-gray-400 block">Your unit price</span>
+              <span class="text-[9px] uppercase font-bold text-gray-400 block">Unit price</span>
               <div class="flex items-center gap-1.5">
                 <span class="font-heading text-lg font-extrabold text-primary">${priceText}</span>
-                <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">Client price</span>
+                ${priceBadge}
               </div>
             </div>
             <button onclick="openProductConfig('${p.id || p._id}')" class="bg-primary hover:bg-primaryHover text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm hover:scale-[1.02]">
@@ -2253,8 +2260,14 @@
       document.getElementById('cfg-gsm').innerText = prod.gsm || '220 GSM';
       document.getElementById('cfg-img').src = prod.img || prod.image || 'assets/images/products/corporate-blazer-detail.png';
 
-      const unitRate = prod.effectivePrice !== undefined && prod.effectivePrice !== null ? prod.effectivePrice : (prod.price || 0);
-      document.getElementById('cfg-rate').innerText = `₹${unitRate.toLocaleString('en-IN')}`;
+      const unitRate = (prod.effectivePrice !== undefined && prod.effectivePrice !== null && prod.effectivePrice > 0)
+        ? prod.effectivePrice
+        : ((prod.pricePerPiece && prod.pricePerPiece > 0) ? prod.pricePerPiece : (prod.price && prod.price > 0 ? prod.price : 0));
+      if (unitRate > 0) {
+        document.getElementById('cfg-rate').innerText = `₹${unitRate.toLocaleString('en-IN')}`;
+      } else {
+        document.getElementById('cfg-rate').innerHTML = `<span class="text-amber-700 font-bold text-sm">Quote on Request</span>`;
+      }
 
       const moq = prod.effectiveMOQ || prod.customMOQ || prod.moq || 100;
       document.getElementById('cfg-moq-badge').innerText = `${moq} pcs per design`;
@@ -2351,9 +2364,9 @@
       const totalInput = document.getElementById('cfg-total-qty');
       const totalQty = parseInt(totalInput.value, 10) || 0;
       const moq = currentConfigProduct.effectiveMOQ || currentConfigProduct.customMOQ || currentConfigProduct.moq || 100;
-      const unitRate = currentConfigProduct.effectivePrice !== undefined && currentConfigProduct.effectivePrice !== null
+      const unitRate = (currentConfigProduct.effectivePrice !== undefined && currentConfigProduct.effectivePrice !== null && currentConfigProduct.effectivePrice > 0)
         ? currentConfigProduct.effectivePrice
-        : (currentConfigProduct.price || 0);
+        : ((currentConfigProduct.pricePerPiece && currentConfigProduct.pricePerPiece > 0) ? currentConfigProduct.pricePerPiece : (currentConfigProduct.price && currentConfigProduct.price > 0 ? currentConfigProduct.price : 0));
 
       let allocatedSum = 0;
       Object.values(currentConfigAllocations).forEach(qty => {
@@ -2365,6 +2378,20 @@
       const statusDiff = document.getElementById('cfg-allocation-diff');
       const previewBtn = document.getElementById('cfg-preview-btn');
       const addBtn = document.getElementById('cfg-add-btn');
+
+      if (unitRate <= 0) {
+        statusBar.className = 'p-3 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 flex items-center justify-between text-xs';
+        statusText.innerHTML = `<i class="ri-error-warning-fill text-amber-600 text-base"></i> Pricing pending: this item requires a custom quote before ordering`;
+        statusDiff.innerText = 'Quote required';
+        if (previewBtn) previewBtn.disabled = false;
+        if (addBtn) {
+          addBtn.disabled = true;
+          addBtn.title = 'Cannot add unpriced item to cart';
+        }
+        document.getElementById('cfg-calc-text').innerText = `${totalQty} pcs (Quote required)`;
+        document.getElementById('cfg-subtotal').innerText = 'Quote on Request';
+        return;
+      }
 
       if (totalQty < moq) {
         statusBar.className = 'p-3 rounded-xl border border-red-200 bg-red-50 text-red-700 flex items-center justify-between text-xs';
@@ -2707,7 +2734,7 @@
           <div class="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-0 border-lightBorder">
             <div class="text-left sm:text-right">
               <span class="font-heading text-lg font-extrabold text-charcoal block">₹${item.lineTotal.toLocaleString('en-IN')}</span>
-              <span class="text-[10px] text-mutedText">${item.totalQuantity} × ₹${item.unitRate}</span>
+              <span class="text-[10px] text-mutedText font-medium">${item.totalQuantity} pcs × ₹${item.unitRate.toLocaleString('en-IN')} / pc</span>
             </div>
             <div class="flex items-center gap-3 mt-2">
               <button onclick="openProductConfig('${item.productId}')" class="text-xs font-semibold text-charcoal hover:text-primary transition-colors">
@@ -3053,7 +3080,11 @@
         const cashfree = initializeCashfreeSDK(cashfreeMode);
         cashfree.checkout({
           paymentSessionId: paymentSessionId,
-          redirectTarget: mountEl
+          redirectTarget: mountEl,
+          appearance: {
+            width: "100%",
+            height: "980px"
+          }
         }).then(async (result) => {
           disableWindowOpenGuard();
           cleanupCashfreeMountWatcher();

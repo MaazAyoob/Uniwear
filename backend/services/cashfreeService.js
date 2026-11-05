@@ -59,6 +59,10 @@ async function createOrder(params) {
     notifyUrl
   } = params;
 
+  if (typeof orderAmount !== 'number' || isNaN(orderAmount) || orderAmount <= 0) {
+    throw new Error(`Invalid order amount: ${orderAmount}. Cashfree orders must have a positive order amount greater than 0.`);
+  }
+
   // Fail closed if real credentials are not set and simulator is not explicitly enabled
   if (!isConfigured()) {
     if (!isSimulatorAllowed()) {

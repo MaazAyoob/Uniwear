@@ -62,19 +62,31 @@ exports.getCustomerProducts = async (req, res) => {
           name: 'Custom Assigned Uniform',
           category: 'Corporate Workwear',
           desc: 'Special contract uniform assigned to account.',
+          pricePerPiece: null,
           price: null,
           moq: 100
         };
       }
+      const basePrice = (p.pricePerPiece !== undefined && p.pricePerPiece !== null && p.pricePerPiece > 0)
+        ? p.pricePerPiece
+        : (p.price && p.price > 0 ? p.price : null);
+      const effectivePrice = (a.customPrice !== undefined && a.customPrice !== null && a.customPrice > 0)
+        ? a.customPrice
+        : basePrice;
+      const effectiveMOQ = (a.customMOQ !== undefined && a.customMOQ !== null && a.customMOQ > 0)
+        ? a.customMOQ
+        : (p.moq || 100);
+
       return {
         ...p,
         assignmentId: a._id,
         customerId: a.customerId,
         assignedDate: a.assignedDate,
-        customPrice: a.customPrice !== undefined && a.customPrice !== null ? a.customPrice : (p.price || null),
-        customMOQ: a.customMOQ !== undefined && a.customMOQ !== null ? a.customMOQ : (p.moq || 100),
-        effectivePrice: a.customPrice !== undefined && a.customPrice !== null ? a.customPrice : (p.price || null),
-        effectiveMOQ: a.customMOQ !== undefined && a.customMOQ !== null ? a.customMOQ : (p.moq || 100),
+        pricePerPiece: basePrice,
+        customPrice: effectivePrice,
+        customMOQ: effectiveMOQ,
+        effectivePrice,
+        effectiveMOQ,
         availableSizes: a.availableSizes && a.availableSizes.length > 0 ? a.availableSizes : (p.sizes && p.sizes.length > 0 ? p.sizes : ['S', 'M', 'L', 'XL', '2XL']),
         taxPercent: a.taxPercent !== undefined && a.taxPercent !== null ? a.taxPercent : 5,
         hsnCode: a.hsnCode || '6109',

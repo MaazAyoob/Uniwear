@@ -148,9 +148,25 @@ const createProduct = async (req, res, next) => {
       });
     }
 
+    // Validate and normalize pricePerPiece
+    let parsedPricePerPiece = null;
+    if (req.body.pricePerPiece !== undefined && req.body.pricePerPiece !== '' && req.body.pricePerPiece !== null) {
+      parsedPricePerPiece = Number(req.body.pricePerPiece);
+      if (isNaN(parsedPricePerPiece) || parsedPricePerPiece < 0) {
+        return res.status(400).json({ success: false, message: 'Price per piece must be a valid non-negative number.' });
+      }
+    } else if (req.body.price !== undefined && req.body.price !== '' && req.body.price !== null) {
+      const p = Number(req.body.price);
+      if (!isNaN(p) && p >= 0) {
+        parsedPricePerPiece = p;
+      }
+    }
+
     const payload = {
       ...req.body,
       id: nextId,
+      pricePerPiece: parsedPricePerPiece,
+      price: parsedPricePerPiece !== null ? parsedPricePerPiece : 0,
       desc: desc || description,
       description: description || desc,
       isPublic: isPublic !== undefined ? isPublic : false,
@@ -221,6 +237,27 @@ const updateProduct = async (req, res, next) => {
 
     if (updates.desc && !updates.description) updates.description = updates.desc;
     if (updates.description && !updates.desc) updates.desc = updates.description;
+
+    // Validate and synchronize pricePerPiece in updates
+    if (updates.pricePerPiece !== undefined) {
+      if (updates.pricePerPiece === '' || updates.pricePerPiece === null) {
+        updates.pricePerPiece = null;
+        updates.price = 0;
+      } else {
+        const num = Number(updates.pricePerPiece);
+        if (isNaN(num) || num < 0) {
+          return res.status(400).json({ success: false, message: 'Price per piece must be a valid non-negative number.' });
+        }
+        updates.pricePerPiece = num;
+        updates.price = num;
+      }
+    } else if (updates.price !== undefined) {
+      const num = Number(updates.price);
+      if (!isNaN(num) && num >= 0) {
+        updates.price = num;
+        if (num > 0) updates.pricePerPiece = num;
+      }
+    }
 
     Object.assign(product, updates);
     await product.save();
